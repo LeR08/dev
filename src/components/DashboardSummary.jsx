@@ -5,7 +5,7 @@ import { formatCurrency } from '../utils/constants'
 
 const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4', '#ef4444', '#84cc16']
 
-export default function DashboardSummary({ subscriptions }) {
+export default function DashboardSummary({ subscriptions, chartUnlocked = true }) {
   const totalsByCurrency = useMemo(() => computeTotalsByCurrency(subscriptions), [subscriptions])
   const byCategory = useMemo(() => computeByCategory(subscriptions), [subscriptions])
   const imminentCount = useMemo(
@@ -54,7 +54,13 @@ export default function DashboardSummary({ subscriptions }) {
         )}
       </div>
 
-      {byCategory.length > 0 && (
+      {byCategory.length > 0 && !chartUnlocked && (
+        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-4 text-sm text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400">
+          Graphique de répartition par catégorie disponible à partir du palier Basic.
+        </div>
+      )}
+
+      {byCategory.length > 0 && chartUnlocked && (
         <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800">
           <p className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
             Répartition mensuelle par catégorie
