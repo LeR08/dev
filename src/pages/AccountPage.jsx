@@ -2,11 +2,14 @@ import { useState } from 'react'
 import { api } from '../utils/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import ChangePasswordForm from '../components/ChangePasswordForm.jsx'
+import AiAdvisorPanel from '../components/AiAdvisorPanel.jsx'
+import BankConnectionPanel from '../components/BankConnectionPanel.jsx'
 
 const TIER_OPTIONS = [
   { value: 'free', label: 'Free — 5 abonnements max, alertes in-app' },
-  { value: 'basic', label: 'Basic — illimité, alertes Discord, graphique par catégorie' },
-  { value: 'pro', label: 'Pro — tout Basic + multi-devises, export avancé' },
+  { value: 'basic', label: 'Basic — illimité, alertes Discord, graphique par catégorie, 3 conseils IA/mois' },
+  { value: 'pro', label: 'Pro — tout Basic + multi-devises, export avancé, 3 conseils IA/mois' },
+  { value: 'vip', label: 'VIP — tout Pro + connexion bancaire automatique, conseiller IA illimité' },
 ]
 
 export default function AccountPage({ onBack }) {
@@ -96,6 +99,10 @@ export default function AccountPage({ onBack }) {
           </form>
         </section>
       )}
+
+      <AiAdvisorPanel tier={user.tier} />
+
+      <BankConnectionPanel tier={user.tier} />
 
       <section className="space-y-2 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800">
         <h2 className="font-semibold text-slate-800 dark:text-slate-200">Mot de passe</h2>

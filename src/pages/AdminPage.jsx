@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { api } from '../utils/api.js'
 import { formatCurrency } from '../utils/constants.js'
 
-const TIER_OPTIONS = ['free', 'basic', 'pro']
+const TIER_OPTIONS = ['free', 'basic', 'pro', 'vip']
 
 export default function AdminPage({ onBack }) {
   const [users, setUsers] = useState([])
@@ -52,11 +52,12 @@ export default function AdminPage({ onBack }) {
       )}
 
       {stats && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           <StatCard label="Utilisateurs" value={stats.totalUsers} />
           <StatCard label="Free" value={stats.byTier.free ?? 0} />
           <StatCard label="Basic" value={stats.byTier.basic ?? 0} />
           <StatCard label="Pro" value={stats.byTier.pro ?? 0} />
+          <StatCard label="VIP" value={stats.byTier.vip ?? 0} />
         </div>
       )}
 

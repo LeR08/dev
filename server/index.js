@@ -6,6 +6,9 @@ import authRoutes from './routes/auth.js'
 import subscriptionsRoutes from './routes/subscriptions.js'
 import userRoutes from './routes/user.js'
 import adminRoutes from './routes/admin.js'
+import aiRoutes from './routes/ai.js'
+import bankRoutes from './routes/bank.js'
+import bankCallbackRoutes from './routes/bankCallback.js'
 import { requireAuth, attachUser, requireAdmin } from './auth.js'
 import { startNotificationJob } from './notifications.js'
 
@@ -17,6 +20,9 @@ app.use('/api/auth', authRoutes)
 app.use('/api/subscriptions', requireAuth, attachUser, subscriptionsRoutes)
 app.use('/api/user', requireAuth, attachUser, userRoutes)
 app.use('/api/admin', requireAuth, attachUser, requireAdmin, adminRoutes)
+app.use('/api/ai', requireAuth, attachUser, aiRoutes)
+app.use('/api/bank/callback', bankCallbackRoutes)
+app.use('/api/bank', requireAuth, attachUser, bankRoutes)
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Route introuvable' })

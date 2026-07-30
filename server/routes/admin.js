@@ -21,7 +21,7 @@ router.get('/users', (req, res) => {
 })
 
 router.get('/stats', (req, res) => {
-  const byTier = { free: 0, basic: 0, pro: 0 }
+  const byTier = { free: 0, basic: 0, pro: 0, vip: 0 }
   for (const row of db.prepare('SELECT tier, COUNT(*) AS n FROM users GROUP BY tier').all()) {
     byTier[row.tier] = row.n
   }

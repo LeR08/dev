@@ -40,6 +40,49 @@ db.exec(`
   );
 
   CREATE INDEX IF NOT EXISTS idx_subscriptions_userId ON subscriptions(userId);
+
+  CREATE TABLE IF NOT EXISTS ai_usage (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    yearMonth TEXT NOT NULL,
+    count INTEGER NOT NULL DEFAULT 0,
+    UNIQUE(userId, yearMonth)
+  );
+
+  -- "encryptedRequisition" holds the GoCardless requisition id + linked account ids
+  -- (AES-256-GCM, see server/bank/crypto.js) — these, combined with our platform
+  -- secret, are what grants read access to the user's bank transactions, so they're
+  -- treated as the sensitive credential here (GoCardless Bank Account Data has no
+  -- long-lived per-user bearer token the way classic OAuth does).
+  CREATE TABLE IF NOT EXISTS bank_connections (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    provider TEXT NOT NULL DEFAULT 'gocardless',
+    institutionId TEXT NOT NULL,
+    reference TEXT NOT NULL UNIQUE,
+    status TEXT NOT NULL DEFAULT 'pending',
+    encryptedRequisition TEXT,
+    expiresAt TEXT,
+    createdAt TEXT NOT NULL,
+    linkedAt TEXT,
+    revokedAt TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS bank_suggestions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    bankConnectionId INTEGER REFERENCES bank_connections(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    price REAL NOT NULL,
+    currency TEXT NOT NULL DEFAULT 'EUR',
+    frequency TEXT NOT NULL,
+    nextChargeDate TEXT,
+    status TEXT NOT NULL DEFAULT 'pending',
+    createdAt TEXT NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_bank_connections_userId ON bank_connections(userId);
+  CREATE INDEX IF NOT EXISTS idx_bank_suggestions_userId ON bank_suggestions(userId);
 `)
 
 const ADMIN_EMAIL = process.env.ADMIN_SEED_EMAIL || 'admin@subtrack.local'

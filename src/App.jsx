@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from './context/AuthContext.jsx'
 import { useSubscriptions } from './hooks/useSubscriptions.js'
 import { computeTotalsByCurrency, computeByCategory } from './utils/calculations.js'
+import { canUseMultiCurrency } from '../server/tiers.js'
 import AuthForm from './components/AuthForm.jsx'
 import ChangePasswordForm from './components/ChangePasswordForm.jsx'
 import SubscriptionForm from './components/SubscriptionForm.jsx'
@@ -26,7 +27,7 @@ function useDarkMode() {
   return [dark, setDark]
 }
 
-const TIER_LABELS = { free: 'Free', basic: 'Basic', pro: 'Pro' }
+const TIER_LABELS = { free: 'Free', basic: 'Basic', pro: 'Pro', vip: 'VIP' }
 
 export default function App() {
   const { user, loading: authLoading, logout } = useAuth()
@@ -78,8 +79,19 @@ function AuthenticatedApp({ user, dark, setDark, logout }) {
   const [view, setView] = useState('app')
   const [formOpen, setFormOpen] = useState(false)
   const [editingSub, setEditingSub] = useState(null)
+  const [bankRedirectNotice, setBankRedirectNotice] = useState(null)
 
-  const multiCurrency = user.tier === 'pro'
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const bankStatus = params.get('bank')
+    if (bankStatus) {
+      setBankRedirectNotice(bankStatus)
+      setView('account')
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+  }, [])
+
+  const multiCurrency = canUseMultiCurrency(user.tier)
   const chartUnlocked = user.tier !== 'free'
 
   const openAddForm = () => {
@@ -153,7 +165,26 @@ function AuthenticatedApp({ user, dark, setDark, logout }) {
         </div>
       </header>
 
-      {view === 'account' && <AccountPage onBack={() => setView('app')} />}
+      {view === 'account' && (
+        <>
+          {bankRedirectNotice && (
+            <div className="mx-auto max-w-2xl px-4 pt-4">
+              <p
+                className={`rounded-md px-3 py-2 text-sm ${
+                  bankRedirectNotice === 'linked'
+                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
+                    : 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
+                }`}
+              >
+                {bankRedirectNotice === 'linked'
+                  ? 'Connexion bancaire réussie. Vous pouvez maintenant rechercher des abonnements détectés.'
+                  : "La connexion bancaire a échoué ou a été annulée."}
+              </p>
+            </div>
+          )}
+          <AccountPage onBack={() => setView('app')} />
+        </>
+      )}
       {view === 'admin' && user.role === 'admin' && <AdminPage onBack={() => setView('app')} />}
 
       {view === 'app' && (
@@ -179,7 +210,7 @@ function AuthenticatedApp({ user, dark, setDark, logout }) {
                   subscriptions={subscriptions}
                   onAddSubscription={addSubscription}
                   onTogglePause={togglePause}
-                  advancedExport={user.tier === 'pro'}
+                  advancedExport={multiCurrency}
                   summary={summary}
                 />
 
