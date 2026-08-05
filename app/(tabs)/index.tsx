@@ -10,19 +10,15 @@ import { StreakCard } from '@/components/StreakCard';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
+import { FadeInView } from '@/components/ui/FadeInView';
 import { Icon } from '@/components/ui/Icon';
+import { LanguagePill } from '@/components/ui/LanguagePill';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { gramsToIntake } from '@/domain/alcohol';
 import { dayKey, periodRange, trailingRange } from '@/domain/dates';
 import { greeting } from '@/domain/encouragement';
-import {
-  formatIntake,
-  formatLongDate,
-  formatMoney,
-  formatWeekdayShort,
-  pluralize,
-} from '@/domain/format';
+import { formatIntakeValue, formatLongDate, formatMoney, formatWeekdayShort } from '@/domain/format';
 import {
   bucketize,
   currentAlcoholFreeStreak,
@@ -34,6 +30,7 @@ import {
 import type { Drink, Entry } from '@/domain/types';
 import { useNow } from '@/hooks/useNow';
 import { useQuickLog } from '@/hooks/useQuickLog';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -43,6 +40,7 @@ export default function TodayScreen() {
   const theme = useTheme();
   const router = useRouter();
   const now = useNow();
+  const { t } = useTranslation();
   const { entries, drinks, settings, profile } = useApp();
   const quickLog = useQuickLog();
 
@@ -76,113 +74,146 @@ export default function TodayScreen() {
 
   const todayIntake = gramsToIntake(todayTotals.grams, settings.intakeUnit, settings.standardDrinkGrams);
   const weekIntake = gramsToIntake(weekTotals.grams, settings.intakeUnit, settings.standardDrinkGrams);
+  const greetingCopy = greeting(now);
 
   return (
     <Screen bottomInset={theme.spacing(4)}>
-      <View style={{ gap: theme.spacing(2), paddingTop: theme.spacing(8), paddingBottom: theme.spacing(5) }}>
-        <Text variant="caption" tone="muted" overline>
-          {formatLongDate(now)}
-        </Text>
-        <Text variant="title">{greeting(now)}</Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          gap: theme.spacing(2),
+          paddingTop: theme.spacing(8),
+          paddingBottom: theme.spacing(5),
+        }}
+      >
+        <View style={{ gap: theme.spacing(2), flex: 1 }}>
+          <Text variant="caption" tone="muted" overline>
+            {formatLongDate(now)}
+          </Text>
+          <Text variant="title">
+            {profile?.name ? `${t(greetingCopy.key as never)}, ${profile.name}` : t(greetingCopy.key as never)}
+          </Text>
+        </View>
+        <LanguagePill onPress={() => router.push('/settings/language')} />
       </View>
 
       <View style={{ gap: theme.spacing(4) }}>
-        <Button
-          label="Log a drink"
-          size="lg"
-          onPress={() => router.push('/log')}
-          icon={<Icon name="plus" size={20} color={theme.accent.onBase} strokeWidth={2.2} />}
-        />
+        <FadeInView delay={0}>
+          <Button
+            label={t('today.logButton')}
+            size="lg"
+            onPress={() => router.push('/log')}
+            icon={<Icon name="plus" size={20} color={theme.accent.onBase} strokeWidth={2.2} />}
+          />
+        </FadeInView>
 
         {quickDrinks.length > 0 ? (
-          <View style={{ gap: theme.spacing(2) }}>
-            <Text variant="caption" tone="muted" overline>
-              One tap
-            </Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: theme.spacing(2), paddingRight: theme.spacing(4) }}
-            >
-              {quickDrinks.map((drink) => (
-                <Chip
-                  key={drink.id}
-                  label={drink.name}
-                  dotColor={theme.categoryColor(drink.category)}
-                  onPress={() => {
-                    quickLog(drink);
-                  }}
-                />
-              ))}
-            </ScrollView>
-          </View>
+          <FadeInView delay={40}>
+            <View style={{ gap: theme.spacing(2) }}>
+              <Text variant="caption" tone="muted" overline>
+                {t('today.oneTap')}
+              </Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: theme.spacing(2), paddingRight: theme.spacing(4) }}
+              >
+                {quickDrinks.map((drink) => (
+                  <Chip
+                    key={drink.id}
+                    label={drink.name}
+                    dotColor={theme.categoryColor(drink.category)}
+                    onPress={() => {
+                      quickLog(drink);
+                    }}
+                  />
+                ))}
+              </ScrollView>
+            </View>
+          </FadeInView>
         ) : null}
 
-        <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
-          <StatCard
-            label="Today"
-            value={formatIntake(todayIntake, settings.intakeUnit)}
-            detail={
-              todayTotals.entries === 0
-                ? 'Nothing logged yet'
-                : `${todayTotals.entries} ${pluralize(todayTotals.entries, 'entry', 'entries')}`
-            }
-          />
-          <StatCard
-            label="This week"
-            value={formatIntake(weekIntake, settings.intakeUnit)}
-            detail={weekTotals.spend > 0 ? formatMoney(weekTotals.spend, settings.currency, { compact: true }) : undefined}
-          />
-        </View>
-
-        <StreakCard streak={streak} longest={longestStreak} />
-
-        <BacCard profile={profile} entries={entries} now={now} />
-
-        <Card style={{ gap: theme.spacing(3) }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text variant="heading">Last 7 days</Text>
-            <Text variant="caption" tone="muted">
-              {settings.intakeUnit === 'grams' ? 'grams of alcohol' : 'standard drinks'}
-            </Text>
+        <FadeInView delay={80}>
+          <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
+            <StatCard
+              label={t('today.todayLabel')}
+              value={`${formatIntakeValue(todayIntake, settings.intakeUnit)} ${settings.intakeUnit === 'grams' ? t('today.unitGrams') : t('today.unitStandardDrinks')}`}
+              detail={
+                todayTotals.entries === 0
+                  ? t('today.nothingLoggedYet')
+                  : t(todayTotals.entries === 1 ? 'today.entryCountOne' : 'today.entryCountOther', {
+                      count: todayTotals.entries,
+                    })
+              }
+            />
+            <StatCard
+              label={t('today.weekLabel')}
+              value={`${formatIntakeValue(weekIntake, settings.intakeUnit)} ${settings.intakeUnit === 'grams' ? t('today.unitGrams') : t('today.unitStandardDrinks')}`}
+              detail={weekTotals.spend > 0 ? formatMoney(weekTotals.spend, settings.currency, { compact: true }) : undefined}
+            />
           </View>
-          <BarChart data={lastSevenDays} height={132} />
-        </Card>
+        </FadeInView>
 
-        <Card style={{ gap: theme.spacing(1) }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: theme.spacing(1),
-            }}
-          >
-            <Text variant="heading">Today's log</Text>
-            {todayEntries.length > 0 ? (
+        <FadeInView delay={120}>
+          <StreakCard streak={streak} longest={longestStreak} />
+        </FadeInView>
+
+        <FadeInView delay={160}>
+          <BacCard profile={profile} entries={entries} now={now} />
+        </FadeInView>
+
+        <FadeInView delay={200}>
+          <Card style={{ gap: theme.spacing(3) }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Text variant="heading">{t('today.last7Days')}</Text>
               <Text variant="caption" tone="muted">
-                {todayEntries.length} {pluralize(todayEntries.length, 'entry', 'entries')}
+                {settings.intakeUnit === 'grams' ? t('today.unitGrams') : t('today.unitStandardDrinks')}
               </Text>
-            ) : null}
-          </View>
+            </View>
+            <BarChart data={lastSevenDays} height={132} />
+          </Card>
+        </FadeInView>
 
-          {todayEntries.length === 0 ? (
-            <Text variant="body" tone="muted">
-              Nothing logged today. That's just information, not a verdict.
-            </Text>
-          ) : (
-            todayEntries.map((entry, index) => (
-              <View key={entry.id}>
-                {index > 0 ? <View style={{ height: 1, backgroundColor: theme.colors.border }} /> : null}
-                <EntryRow
-                  entry={entry}
-                  settings={settings}
-                  onPress={() => router.push({ pathname: '/entry/[id]', params: { id: entry.id } })}
-                />
-              </View>
-            ))
-          )}
-        </Card>
+        <FadeInView delay={240}>
+          <Card style={{ gap: theme.spacing(1) }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: theme.spacing(1),
+              }}
+            >
+              <Text variant="heading">{t('today.todaysLog')}</Text>
+              {todayEntries.length > 0 ? (
+                <Text variant="caption" tone="muted">
+                  {t(todayEntries.length === 1 ? 'today.entryCountOne' : 'today.entryCountOther', {
+                    count: todayEntries.length,
+                  })}
+                </Text>
+              ) : null}
+            </View>
+
+            {todayEntries.length === 0 ? (
+              <Text variant="body" tone="muted">
+                {t('today.nothingLoggedToday')}
+              </Text>
+            ) : (
+              todayEntries.map((entry, index) => (
+                <View key={entry.id}>
+                  {index > 0 ? <View style={{ height: 1, backgroundColor: theme.colors.border }} /> : null}
+                  <EntryRow
+                    entry={entry}
+                    settings={settings}
+                    onPress={() => router.push({ pathname: '/entry/[id]', params: { id: entry.id } })}
+                  />
+                </View>
+              ))
+            )}
+          </Card>
+        </FadeInView>
       </View>
     </Screen>
   );

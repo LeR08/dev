@@ -23,7 +23,7 @@ import { newId, type Store } from './store';
 
 export const DATABASE_NAME = 'tally.db';
 
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 type DrinkRow = {
   id: string;
@@ -88,6 +88,8 @@ function toEntry(row: EntryRow): Entry {
 }
 
 type ProfileRow = {
+  name: string | null;
+  email: string | null;
   sex: string;
   age: number | null;
   weight_kg: number | null;
@@ -108,6 +110,8 @@ function toProfile(row: ProfileRow): Profile {
     reasons = [];
   }
   return {
+    name: row.name,
+    email: row.email,
     sex: row.sex as BiologicalSex,
     age: row.age,
     weightKg: row.weight_kg,
@@ -261,6 +265,15 @@ export class SqliteStore implements Store {
         );
 
         CREATE INDEX IF NOT EXISTS idx_tickets_created_at ON tickets (created_at DESC);
+      `);
+    }
+
+    if (current < 3) {
+      // Mock sign-in step added post-launch: name/email collected up front,
+      // local-only, never sent anywhere. Existing profiles just get NULLs.
+      await db.execAsync(`
+        ALTER TABLE profile ADD COLUMN name TEXT;
+        ALTER TABLE profile ADD COLUMN email TEXT;
       `);
     }
 
@@ -545,9 +558,11 @@ export class SqliteStore implements Store {
   async saveProfile(profile: Profile): Promise<void> {
     await this.database.runAsync(
       `INSERT OR REPLACE INTO profile
-         (id, sex, age, weight_kg, height_cm, spend_before_tracking_per_day, spend_period, reasons, other_reason, created_at, updated_at)
-       VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         (id, name, email, sex, age, weight_kg, height_cm, spend_before_tracking_per_day, spend_period, reasons, other_reason, created_at, updated_at)
+       VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
+        profile.name,
+        profile.email,
         profile.sex,
         profile.age,
         profile.weightKg,

@@ -20,9 +20,19 @@
     "yes": "Yes",
     "no": "No",
     "optional": "Optional",
-    "beta": "Beta",
     "notSet": "Not set",
     "preferNotToSay": "Prefer not to say"
+  },
+  "signIn": {
+    "title": "Welcome",
+    "subtitle": "This app is offline and local-only — signing in here doesn't create a real account or send anything anywhere. It's just how the app greets you.",
+    "nameLabel": "What should we call you?",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email (optional)",
+    "emailPlaceholder": "you@example.com",
+    "emailHint": "Never sent anywhere — stored only on this device, in case you want it later.",
+    "continueAction": "Continue",
+    "testModeNotice": "Test build — no account is created, nothing leaves this device."
   },
   "onboarding": {
     "startTracking": "Start tracking",
@@ -54,8 +64,70 @@
       "reasonOther": "Other",
       "reasonOtherPlaceholder": "Say more, if you like",
       "contextTitle": "What brought you here?",
-      "contextSubtitle": "This only changes what's emphasized first — everything stays reachable from the menu either way."
+      "contextSubtitle": "This only changes what's emphasized first — everything stays reachable from the menu either way.",
+      "doneTitle": "You're set up",
+      "doneSubtitle": "Everything above is editable any time in Settings → Profile."
     }
+  },
+  "today": {
+    "logButton": "Log a drink",
+    "oneTap": "One tap",
+    "todayLabel": "Today",
+    "weekLabel": "This week",
+    "nothingLoggedYet": "Nothing logged yet",
+    "entryCountOne": "{{count}} entry",
+    "entryCountOther": "{{count}} entries",
+    "streakLabel": "Alcohol-free streak",
+    "longestRun": "Your longest run so far: {{count}} days",
+    "last7Days": "Last 7 days",
+    "unitStandardDrinks": "standard drinks",
+    "unitGrams": "grams of alcohol",
+    "todaysLog": "Today's log",
+    "nothingLoggedToday": "Nothing logged today. That's just information, not a verdict."
+  },
+  "history": {
+    "title": "History",
+    "searchPlaceholder": "Search names, notes, places…",
+    "period30d": "30 days",
+    "period90d": "3 months",
+    "period365d": "Year",
+    "periodAll": "All time",
+    "allDrinks": "All drinks",
+    "emptyTitle": "Your log is empty",
+    "emptyBody": "Whatever you log stays on this device. Start whenever you like.",
+    "emptyAction": "Log a drink",
+    "noMatchTitle": "Nothing matches",
+    "noMatchBody": "Try a wider date range or a different category."
+  },
+  "insights": {
+    "title": "Insights",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "todayStats": "Today",
+    "vsYesterday": "vs yesterday",
+    "byHour": "Through the day",
+    "emptyTodayTitle": "Nothing logged today",
+    "emptyTodayBody": "Once you log something, today's breakdown shows up here.",
+    "emptyTitle": "Nothing to chart yet",
+    "emptyBody": "Once you log a few drinks, this is where the patterns show up — units, spending, categories, and alcohol-free days."
+  },
+  "settingsHome": {
+    "unitsRow": "Units",
+    "unitsRowSubtitle": "Volume, standard drinks, currency",
+    "currencyRow": "Currency",
+    "goalsRow": "Personal goals",
+    "goalsRowSubtitle": "Optional, and only yours",
+    "goalsNoneSet": "None set",
+    "appearanceRow": "Appearance",
+    "appearanceRowSubtitle": "Theme and accent colour",
+    "myDrinksRow": "My drinks",
+    "myDrinksRowSubtitle": "Your own presets",
+    "pricesRow": "Default prices",
+    "pricesRowSubtitle": "Price templates per drink",
+    "dataRow": "Data & privacy",
+    "footerNote": "Tally keeps everything locally. No account, no server, no analytics — nothing leaves this device unless you export it yourself."
   },
   "settings": {
     "profileRow": "Profile",
@@ -75,8 +147,7 @@
     },
     "language": {
       "title": "Language",
-      "intro": "Changes the app's own text. Independent from your phone's language.",
-      "incompleteNotice": "Not fully translated yet — English is shown wherever a translation is missing."
+      "intro": "Changes the app's own text. Independent from your phone's language."
     }
   },
   "savings": {
@@ -101,6 +172,9 @@
     "countryUS": "United States",
     "countryGB": "United Kingdom",
     "countryCA": "Canada",
+    "countryCN": "China",
+    "countrySA": "Saudi Arabia",
+    "countryAE": "United Arab Emirates",
     "countryOTHER": "Other / general",
     "disclaimer": "This app is not a medical device and does not replace professional diagnosis or care. If you are in immediate danger, contact local emergency services.",
     "harmReductionTitle": "A few approaches people use",
@@ -143,5 +217,35 @@
     "title": "Rough estimate",
     "disclaimer": "A textbook calculation, not a measurement — never rely on this to decide whether to drive.",
     "soberNote": "Back to zero, going by this estimate."
+  },
+  "encouragement": {
+    "trackingToday": "Tracking today",
+    "streakOneDay": "1 alcohol-free day",
+    "streakDays": "{{count}} alcohol-free days",
+    "subtitleZero": "Every day logged is useful data. No judgement here.",
+    "subtitleOne": "Day one counts. Nice.",
+    "subtitleForming": "A run is forming.",
+    "subtitleRemarkable": "Remarkable run.",
+    "subtitleToNext": "{{remaining}} more days to reach {{next}}.",
+    "milestone1": "First alcohol-free day logged.",
+    "milestone3": "Three days in a row.",
+    "milestone7": "A full alcohol-free week.",
+    "milestone14": "Two weeks. That is a real stretch.",
+    "milestone30": "A whole month.",
+    "milestone100": "One hundred days.",
+    "milestone365": "A full year.",
+    "milestoneDefault": "{{count}} alcohol-free days in a row.",
+    "greetingLate": "Late one",
+    "greetingMorning": "Good morning",
+    "greetingAfternoon": "Good afternoon",
+    "greetingEvening": "Good evening",
+    "noGoalSet": "No goal set",
+    "goalRemaining": "{{remaining}} left of your {{goal}} this week",
+    "goalOver": "{{over}} above the {{goal}} you set",
+    "freeDaysReached": "{{count}} alcohol-free days this week — goal reached.",
+    "freeDaysProgress": "{{count}} of {{goal}} alcohol-free days so far. {{remaining}} to go.",
+    "emptyState1": "Nothing logged yet. Add a drink whenever you like.",
+    "emptyState2": "Your log is private and stays on this device.",
+    "emptyState3": "Start whenever. There is no streak to break here."
   }
 }

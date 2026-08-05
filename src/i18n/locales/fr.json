@@ -20,9 +20,19 @@
     "yes": "Oui",
     "no": "Non",
     "optional": "Optionnel",
-    "beta": "Bêta",
     "notSet": "Non renseigné",
     "preferNotToSay": "Préfère ne pas dire"
+  },
+  "signIn": {
+    "title": "Bienvenue",
+    "subtitle": "Cette application fonctionne hors ligne, en local uniquement — se connecter ici ne crée pas de vrai compte et n'envoie rien nulle part. C'est juste la façon dont l'application vous accueille.",
+    "nameLabel": "Comment doit-on vous appeler ?",
+    "namePlaceholder": "Votre prénom",
+    "emailLabel": "E-mail (optionnel)",
+    "emailPlaceholder": "vous@exemple.com",
+    "emailHint": "Jamais envoyé nulle part — stocké uniquement sur cet appareil, au cas où vous en ayez besoin plus tard.",
+    "continueAction": "Continuer",
+    "testModeNotice": "Version de test — aucun compte n'est créé, rien ne quitte cet appareil."
   },
   "onboarding": {
     "startTracking": "Commencer le suivi",
@@ -54,8 +64,70 @@
       "reasonOther": "Autre",
       "reasonOtherPlaceholder": "Précisez si vous le souhaitez",
       "contextTitle": "Qu'est-ce qui vous amène ?",
-      "contextSubtitle": "Cela ne change que ce qui est mis en avant en premier — tout reste accessible depuis le menu dans tous les cas."
+      "contextSubtitle": "Cela ne change que ce qui est mis en avant en premier — tout reste accessible depuis le menu dans tous les cas.",
+      "doneTitle": "C'est configuré",
+      "doneSubtitle": "Tout ce qui précède est modifiable à tout moment dans Réglages → Profil."
     }
+  },
+  "today": {
+    "logButton": "Enregistrer un verre",
+    "oneTap": "En un geste",
+    "todayLabel": "Aujourd'hui",
+    "weekLabel": "Cette semaine",
+    "nothingLoggedYet": "Rien enregistré pour l'instant",
+    "entryCountOne": "{{count}} entrée",
+    "entryCountOther": "{{count}} entrées",
+    "streakLabel": "Série sans alcool",
+    "longestRun": "Votre plus longue série : {{count}} jours",
+    "last7Days": "7 derniers jours",
+    "unitStandardDrinks": "verres standards",
+    "unitGrams": "grammes d'alcool",
+    "todaysLog": "Journal du jour",
+    "nothingLoggedToday": "Rien enregistré aujourd'hui. C'est juste une information, pas un jugement."
+  },
+  "history": {
+    "title": "Historique",
+    "searchPlaceholder": "Rechercher un nom, une note, un lieu…",
+    "period30d": "30 jours",
+    "period90d": "3 mois",
+    "period365d": "Année",
+    "periodAll": "Depuis le début",
+    "allDrinks": "Toutes les boissons",
+    "emptyTitle": "Votre journal est vide",
+    "emptyBody": "Tout ce que vous enregistrez reste sur cet appareil. Commencez quand vous voulez.",
+    "emptyAction": "Enregistrer un verre",
+    "noMatchTitle": "Aucun résultat",
+    "noMatchBody": "Essayez une période plus large ou une autre catégorie."
+  },
+  "insights": {
+    "title": "Statistiques",
+    "day": "Jour",
+    "week": "Semaine",
+    "month": "Mois",
+    "year": "Année",
+    "todayStats": "Aujourd'hui",
+    "vsYesterday": "par rapport à hier",
+    "byHour": "Au fil de la journée",
+    "emptyTodayTitle": "Rien enregistré aujourd'hui",
+    "emptyTodayBody": "Dès que vous enregistrez quelque chose, le détail du jour apparaît ici.",
+    "emptyTitle": "Rien à afficher pour l'instant",
+    "emptyBody": "Dès que vous aurez enregistré quelques boissons, les tendances apparaîtront ici — quantités, dépenses, catégories et jours sans alcool."
+  },
+  "settingsHome": {
+    "unitsRow": "Unités",
+    "unitsRowSubtitle": "Volume, verres standards, devise",
+    "currencyRow": "Devise",
+    "goalsRow": "Objectifs personnels",
+    "goalsRowSubtitle": "Optionnel, et rien qu'à vous",
+    "goalsNoneSet": "Aucun défini",
+    "appearanceRow": "Apparence",
+    "appearanceRowSubtitle": "Thème et couleur d'accent",
+    "myDrinksRow": "Mes boissons",
+    "myDrinksRowSubtitle": "Vos propres préréglages",
+    "pricesRow": "Prix par défaut",
+    "pricesRowSubtitle": "Modèles de prix par boisson",
+    "dataRow": "Données & confidentialité",
+    "footerNote": "Tally conserve tout localement. Pas de compte, pas de serveur, pas d'analytique — rien ne quitte cet appareil sauf si vous l'exportez vous-même."
   },
   "settings": {
     "profileRow": "Profil",
@@ -75,8 +147,7 @@
     },
     "language": {
       "title": "Langue",
-      "intro": "Change la langue de l'application elle-même. Indépendant de la langue de votre téléphone.",
-      "incompleteNotice": "Pas encore entièrement traduit — l'anglais s'affiche là où une traduction manque."
+      "intro": "Change la langue de l'application elle-même. Indépendant de la langue de votre téléphone."
     }
   },
   "savings": {
@@ -101,6 +172,9 @@
     "countryUS": "États-Unis",
     "countryGB": "Royaume-Uni",
     "countryCA": "Canada",
+    "countryCN": "Chine",
+    "countrySA": "Arabie saoudite",
+    "countryAE": "Émirats arabes unis",
     "countryOTHER": "Autre / général",
     "disclaimer": "Cette application n'est pas un dispositif médical et ne remplace pas un diagnostic ou un suivi professionnel. En cas de danger immédiat, contactez les services d'urgence.",
     "harmReductionTitle": "Quelques approches possibles",
@@ -143,5 +217,35 @@
     "title": "Estimation approximative",
     "disclaimer": "Un calcul théorique, pas une mesure — ne vous en servez jamais pour décider de prendre le volant.",
     "soberNote": "Retour à zéro, selon cette estimation."
+  },
+  "encouragement": {
+    "trackingToday": "Suivi en cours",
+    "streakOneDay": "1 jour sans alcool",
+    "streakDays": "{{count}} jours sans alcool",
+    "subtitleZero": "Chaque jour enregistré est une donnée utile. Aucun jugement ici.",
+    "subtitleOne": "Le premier jour compte déjà. Bien joué.",
+    "subtitleForming": "Une série se dessine.",
+    "subtitleRemarkable": "Une série remarquable.",
+    "subtitleToNext": "Encore {{remaining}} jours pour atteindre {{next}}.",
+    "milestone1": "Premier jour sans alcool enregistré.",
+    "milestone3": "Trois jours d'affilée.",
+    "milestone7": "Une semaine complète sans alcool.",
+    "milestone14": "Deux semaines. C'est du solide.",
+    "milestone30": "Un mois entier.",
+    "milestone100": "Cent jours.",
+    "milestone365": "Une année complète.",
+    "milestoneDefault": "{{count}} jours sans alcool d'affilée.",
+    "greetingLate": "Bonne nuit",
+    "greetingMorning": "Bonjour",
+    "greetingAfternoon": "Bon après-midi",
+    "greetingEvening": "Bonsoir",
+    "noGoalSet": "Aucun objectif défini",
+    "goalRemaining": "Encore {{remaining}} avant votre objectif de {{goal}} cette semaine",
+    "goalOver": "{{over}} au-dessus de l'objectif de {{goal}} que vous avez fixé",
+    "freeDaysReached": "{{count}} jours sans alcool cette semaine — objectif atteint.",
+    "freeDaysProgress": "{{count}} jours sans alcool sur {{goal}} pour l'instant. Encore {{remaining}}.",
+    "emptyState1": "Rien enregistré pour l'instant. Ajoutez un verre quand vous voulez.",
+    "emptyState2": "Votre journal est privé et reste sur cet appareil.",
+    "emptyState3": "Commencez quand vous voulez. Il n'y a pas de série à casser ici."
   }
 }

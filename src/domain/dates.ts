@@ -7,7 +7,7 @@
  * correct across daylight-saving transitions.
  */
 
-export type Granularity = 'day' | 'week' | 'month';
+export type Granularity = 'hour' | 'day' | 'week' | 'month';
 
 export type Range = {
   /** Inclusive start, epoch ms. */
@@ -17,6 +17,18 @@ export type Range = {
 };
 
 export type WeekStart = 0 | 1;
+
+export function startOfHour(date: Date | number): Date {
+  const d = new Date(date);
+  d.setMinutes(0, 0, 0);
+  return d;
+}
+
+export function addHours(date: Date | number, hours: number): Date {
+  const d = new Date(date);
+  d.setHours(d.getHours() + hours);
+  return d;
+}
 
 export function startOfDay(date: Date | number): Date {
   const d = new Date(date);
@@ -66,6 +78,8 @@ export function startOfPeriod(
   weekStartsOn: WeekStart = 1
 ): Date {
   switch (granularity) {
+    case 'hour':
+      return startOfHour(date);
     case 'day':
       return startOfDay(date);
     case 'week':
@@ -82,6 +96,8 @@ export function nextPeriod(
 ): Date {
   const start = startOfPeriod(date, granularity, weekStartsOn);
   switch (granularity) {
+    case 'hour':
+      return addHours(start, 1);
     case 'day':
       return addDays(start, 1);
     case 'week':
@@ -155,6 +171,9 @@ export function trailingRange(
   let start = startOfPeriod(now, granularity, weekStartsOn);
   for (let i = 1; i < count; i++) {
     switch (granularity) {
+      case 'hour':
+        start = addHours(start, -1);
+        break;
       case 'day':
         start = addDays(start, -1);
         break;
@@ -179,6 +198,9 @@ export function periodRange(
   let start = startOfPeriod(date, granularity, weekStartsOn);
   if (offset !== 0) {
     switch (granularity) {
+      case 'hour':
+        start = addHours(start, offset);
+        break;
       case 'day':
         start = addDays(start, offset);
         break;

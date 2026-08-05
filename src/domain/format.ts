@@ -19,6 +19,9 @@ export const CURRENCIES = [
   { code: 'DKK', symbol: 'kr', label: 'Danish krone' },
   { code: 'PLN', symbol: 'zł', label: 'Polish złoty' },
   { code: 'JPY', symbol: '¥', label: 'Japanese yen' },
+  { code: 'CNY', symbol: '¥', label: 'Chinese yuan' },
+  { code: 'SAR', symbol: 'ر.س', label: 'Saudi riyal' },
+  { code: 'AED', symbol: 'د.إ', label: 'UAE dirham' },
 ] as const;
 
 export function currencySymbol(code: string): string {
@@ -72,6 +75,20 @@ export function formatIntake(value: number, unit: IntakeUnit): string {
   }
   if (value > 0 && value < 0.05) return '<0.1 drinks';
   return `${trimNumber(value, 1)} ${intakeUnitLabel(unit, value)}`;
+}
+
+/**
+ * Just the number (or "<1"/"<0.1" for a real-but-tiny amount), with no unit
+ * word attached — for screens that translate the unit word themselves rather
+ * than using the English one baked into {@link formatIntake}.
+ */
+export function formatIntakeValue(value: number, unit: IntakeUnit): string {
+  if (unit === 'grams') {
+    if (value > 0 && value < 0.5) return '<1';
+    return trimNumber(value, 0);
+  }
+  if (value > 0 && value < 0.05) return '<0.1';
+  return trimNumber(value, 1);
 }
 
 export function formatAbv(abv: number): string {

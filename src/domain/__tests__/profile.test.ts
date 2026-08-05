@@ -4,12 +4,15 @@ import {
   draftFromProfile,
   emptyProfileDraft,
   isValidAge,
+  isValidEmail,
   toggleReason,
 } from '../profile';
 
 describe('emptyProfileDraft', () => {
   it('starts with every field unset', () => {
     const draft = emptyProfileDraft();
+    expect(draft.name).toBeNull();
+    expect(draft.email).toBeNull();
     expect(draft.sex).toBe('unspecified');
     expect(draft.age).toBeNull();
     expect(draft.weightKg).toBeNull();
@@ -21,6 +24,8 @@ describe('draftFromProfile', () => {
   it('copies every field from an existing profile', () => {
     const profile = makeProfile({ age: 41, reasons: ['medical', 'other'], otherReason: 'x' });
     expect(draftFromProfile(profile)).toEqual({
+      name: profile.name,
+      email: profile.email,
       sex: profile.sex,
       age: 41,
       weightKg: profile.weightKg,
@@ -85,5 +90,18 @@ describe('isValidAge', () => {
     expect(isValidAge(12)).toBe(false);
     expect(isValidAge(121)).toBe(false);
     expect(isValidAge(Number.NaN)).toBe(false);
+  });
+});
+
+describe('isValidEmail', () => {
+  it('accepts a plausible address', () => {
+    expect(isValidEmail('a@b.com')).toBe(true);
+    expect(isValidEmail('  a@b.com  ')).toBe(true);
+  });
+
+  it('rejects anything without an @ and a domain', () => {
+    expect(isValidEmail('not an email')).toBe(false);
+    expect(isValidEmail('a@b')).toBe(false);
+    expect(isValidEmail('')).toBe(false);
   });
 });

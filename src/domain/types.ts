@@ -124,22 +124,22 @@ export type Goals = {
 
 /**
  * In-app language, independent of the OS/store locale used for the display
- * name (spec v1.2 §3.2). French and English ship fully translated; the rest
- * are scaffolded (keys present, English text) and shown as "beta" in the
- * picker until translated.
+ * name (spec v1.2 §3.2). Deliberately a curated set — major European
+ * languages plus Chinese and Arabic — rather than every locale, so each one
+ * can be a real, complete translation instead of a placeholder.
  */
-export const LANGUAGES = ['en', 'fr', 'es', 'de', 'it', 'pt'] as const;
+export const LANGUAGES = ['en', 'fr', 'es', 'de', 'it', 'pt', 'zh', 'ar'] as const;
 export type LanguageCode = (typeof LANGUAGES)[number];
 
-/** Languages with a complete, reviewed translation. The rest fall back to English text. */
-export const COMPLETE_LANGUAGES: readonly LanguageCode[] = ['en', 'fr'];
+/** Languages read right-to-left — affects only inline text runs; see LanguagePill/i18n notes on RTL scope. */
+export const RTL_LANGUAGES: readonly LanguageCode[] = ['ar'];
 
 /**
  * Country used to pick which help/resources content to show (spec v1.2 §8).
  * Deliberately a small, curated list rather than every ISO country — each
- * entry needs a matching resources JSON file.
+ * entry needs a matching resources JSON file with real, verified contacts.
  */
-export const RESOURCE_COUNTRIES = ['FR', 'US', 'GB', 'CA', 'OTHER'] as const;
+export const RESOURCE_COUNTRIES = ['FR', 'US', 'GB', 'CA', 'CN', 'SA', 'AE', 'OTHER'] as const;
 export type ResourceCountry = (typeof RESOURCE_COUNTRIES)[number];
 
 export type Settings = {
@@ -203,6 +203,10 @@ export type SpendPeriod = 'day' | 'week';
  * notes warn against. Settings stays the single source for all of them.
  */
 export type Profile = {
+  /** Collected at the mock sign-in step (spec follow-up: "sign in pour test"). Never sent anywhere. */
+  name: string | null;
+  /** Optional; also collected at sign-in. Local-only, never sent anywhere. */
+  email: string | null;
   sex: BiologicalSex;
   /** Null when skipped. 13–120 when set; the app never invents a value. */
   age: number | null;
@@ -222,6 +226,8 @@ export type Profile = {
 };
 
 export const EMPTY_PROFILE: Profile = {
+  name: null,
+  email: null,
   sex: 'unspecified',
   age: null,
   weightKg: null,

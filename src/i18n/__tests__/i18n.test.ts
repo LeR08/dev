@@ -1,5 +1,5 @@
 import { LANGUAGES } from '@/domain/types';
-import { CATALOGS, isLanguageComplete } from '../index';
+import { CATALOGS } from '../index';
 import { translate, type Catalog } from '../translate';
 
 /** Every dot-path present in a catalog, e.g. ["common.save", "common.cancel", ...]. */
@@ -32,21 +32,22 @@ describe('translation catalogs', () => {
     }
   });
 
-  it('marks French complete and the rest as scaffolded', () => {
-    expect(isLanguageComplete('en')).toBe(true);
-    expect(isLanguageComplete('fr')).toBe(true);
-    expect(isLanguageComplete('es')).toBe(false);
-    expect(isLanguageComplete('de')).toBe(false);
-    expect(isLanguageComplete('it')).toBe(false);
-    expect(isLanguageComplete('pt')).toBe(false);
+  it('ships exactly the curated language set: European languages plus Chinese and Arabic', () => {
+    expect([...LANGUAGES].sort()).toEqual(['ar', 'de', 'en', 'es', 'fr', 'it', 'pt', 'zh']);
   });
 
-  it('French text actually differs from English for a representative sample', () => {
-    // Guards against fr.json silently regressing into an English copy like the
-    // scaffolded languages.
-    const sample = ['common.save', 'onboarding.profile.title', 'help.disclaimer'];
-    for (const key of sample) {
-      expect(translate(CATALOGS.fr, CATALOGS.en, key)).not.toBe(translate(CATALOGS.en, CATALOGS.en, key));
+  it('every non-English language actually differs from English for a representative sample', () => {
+    // Guards against any locale file silently regressing into an English
+    // copy — every one of the eight is meant to be a real translation now,
+    // not a placeholder.
+    const sample = ['common.save', 'onboarding.profile.title', 'help.disclaimer', 'today.logButton'];
+    const nonEnglish = LANGUAGES.filter((language) => language !== 'en');
+    for (const language of nonEnglish) {
+      for (const key of sample) {
+        expect(translate(CATALOGS[language], CATALOGS.en, key)).not.toBe(
+          translate(CATALOGS.en, CATALOGS.en, key)
+        );
+      }
     }
   });
 });

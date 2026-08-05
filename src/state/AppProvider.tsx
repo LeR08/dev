@@ -23,7 +23,7 @@ import {
   type TicketInput,
   type TicketStatus,
 } from '@/domain/types';
-import { detectLanguage, detectResourceCountry } from '@/i18n/detectLocale';
+import { detectCurrency, detectLanguage, detectResourceCountry } from '@/i18n/detectLocale';
 
 type Status = 'loading' | 'ready' | 'error';
 
@@ -85,13 +85,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setEntries(loadedEntries);
     setDrinks(loadedDrinks);
 
-    // On a genuinely fresh install — nothing saved yet — the language and
-    // help-resources country default to the device locale when it's one we
-    // support, else fall back to English / general (spec v1.2 §3.2, §8.1).
-    // Anything the user has explicitly set (or that a previous session wrote)
-    // is left untouched.
+    // On a genuinely fresh install — nothing saved yet — the language,
+    // help-resources country and currency default from the device locale
+    // when it's one we recognise, else fall back to English / general / EUR
+    // (spec v1.2 §3.2, §8.1). Anything the user has explicitly set (or that a
+    // previous session wrote) is left untouched. Currency detection also
+    // replaces the currency step onboarding used to have, now that the first
+    // run goes straight from sign-in to the profile screen.
     let detectedDefaults: Partial<Settings> = {};
-    if (!('language' in storedSettings) || !('resourceCountry' in storedSettings)) {
+    if (
+      !('language' in storedSettings) ||
+      !('resourceCountry' in storedSettings) ||
+      !('currency' in storedSettings)
+    ) {
       const locales = Localization.getLocales();
       detectedDefaults = {
         ...(!('language' in storedSettings) && {
@@ -99,6 +105,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }),
         ...(!('resourceCountry' in storedSettings) && {
           resourceCountry: detectResourceCountry(locales[0]?.regionCode),
+        }),
+        ...(!('currency' in storedSettings) && {
+          currency: detectCurrency(locales[0]?.regionCode),
         }),
       };
     }

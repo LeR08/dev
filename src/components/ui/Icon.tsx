@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ColorValue } from 'react-native';
-import Svg, { Circle, Line, Path, Rect } from 'react-native-svg';
+import Svg, { Circle, Ellipse, Line, Path, Rect } from 'react-native-svg';
 
 export type IconName =
   | 'glass'
@@ -11,7 +11,9 @@ export type IconName =
   | 'chevronLeft'
   | 'close'
   | 'check'
-  | 'lifebuoy';
+  | 'lifebuoy'
+  | 'globe'
+  | 'user';
 
 export type IconProps = {
   name: IconName;
@@ -99,6 +101,23 @@ export function Icon({ name, size = 24, color, strokeWidth = 1.8 }: IconProps) {
           <Line x1="12" y1="15.4" x2="12" y2="20" {...common} />
           <Line x1="4" y1="12" x2="8.6" y2="12" {...common} />
           <Line x1="15.4" y1="12" x2="20" y2="12" {...common} />
+        </>
+      ) : null}
+
+      {name === 'globe' ? (
+        <>
+          <Circle cx="12" cy="12" r="8.5" {...common} />
+          <Ellipse cx="12" cy="12" rx="3.6" ry="8.5" {...common} />
+          <Line x1="3.5" y1="12" x2="20.5" y2="12" {...common} />
+          <Path d="M5 7.5c1.8 1 4.4 1.6 7 1.6s5.2-.6 7-1.6" {...common} />
+          <Path d="M5 16.5c1.8-1 4.4-1.6 7-1.6s5.2.6 7 1.6" {...common} />
+        </>
+      ) : null}
+
+      {name === 'user' ? (
+        <>
+          <Circle cx="12" cy="8.2" r="3.4" {...common} />
+          <Path d="M5 20c0-3.6 3.1-6.2 7-6.2s7 2.6 7 6.2" {...common} />
         </>
       ) : null}
     </Svg>

@@ -4,6 +4,7 @@ import {
   formatChange,
   formatComparison,
   formatIntake,
+  formatIntakeValue,
   formatMoney,
   formatRelativeDay,
   formatVolume,
@@ -49,6 +50,18 @@ describe('formatIntake', () => {
     expect(formatIntake(0.3, 'grams')).toBe('<1 g');
     expect(formatIntake(0, 'standardDrinks')).toBe('0 drinks');
     expect(formatIntake(0, 'grams')).toBe('0 g');
+  });
+});
+
+describe('formatIntakeValue', () => {
+  it('matches formatIntake\'s number, without an English unit word attached', () => {
+    expect(formatIntakeValue(2.5, 'standardDrinks')).toBe('2.5');
+    expect(formatIntakeValue(19.7, 'grams')).toBe('20');
+  });
+
+  it('keeps the same tiny-amount handling as formatIntake', () => {
+    expect(formatIntakeValue(0.02, 'standardDrinks')).toBe('<0.1');
+    expect(formatIntakeValue(0.3, 'grams')).toBe('<1');
   });
 });
 

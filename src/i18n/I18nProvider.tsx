@@ -1,13 +1,15 @@
 import React, { createContext, useCallback, useContext, useMemo } from 'react';
 
 import { useSettings } from '@/state/AppProvider';
-import { CATALOGS, isLanguageComplete, type TranslationKey } from './index';
+import { CATALOGS, isRtl, type TranslationKey } from './index';
 import { translate } from './translate';
 
 type I18nContextValue = {
   language: ReturnType<typeof useSettings>['language'];
-  /** False for the four scaffolded languages — screens can show a beta note. */
-  isComplete: boolean;
+  /** True for Arabic. Text itself renders correctly either way (React Native
+   *  resolves bidi runs on its own) — this flag is for the handful of spots
+   *  that mirror layout (e.g. leading/trailing icon order), not full RTL. */
+  isRtl: boolean;
   t: (key: TranslationKey, vars?: Record<string, string | number>) => string;
 };
 
@@ -25,7 +27,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   );
 
   const value = useMemo<I18nContextValue>(
-    () => ({ language, isComplete: isLanguageComplete(language), t }),
+    () => ({ language, isRtl: isRtl(language), t }),
     [language, t]
   );
 

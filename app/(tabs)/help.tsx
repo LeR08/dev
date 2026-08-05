@@ -3,6 +3,7 @@ import { Linking, Platform, Pressable, View } from 'react-native';
 
 import { Card } from '@/components/ui/Card';
 import { Chip } from '@/components/ui/Chip';
+import { FadeInView } from '@/components/ui/FadeInView';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { approachesFor, seekHelpFor } from '@/data/harm-reduction/content';
@@ -17,6 +18,9 @@ const COUNTRY_LABEL_KEY: Record<ResourceCountry, string> = {
   US: 'help.countryUS',
   GB: 'help.countryGB',
   CA: 'help.countryCA',
+  CN: 'help.countryCN',
+  SA: 'help.countrySA',
+  AE: 'help.countryAE',
   OTHER: 'help.countryOTHER',
 };
 
@@ -47,98 +51,110 @@ export default function HelpScreen() {
       </View>
 
       <View style={{ gap: theme.spacing(4) }}>
-        <Card tone="muted" style={{ gap: theme.spacing(1) }}>
-          <Text variant="caption" tone="muted">
-            {t('help.disclaimer')}
-          </Text>
-        </Card>
-
-        <View style={{ gap: theme.spacing(2) }}>
-          <Text variant="caption" tone="muted" overline>
-            {t('help.countryLabel')}
-          </Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing(2) }}>
-            {RESOURCE_COUNTRIES.map((item) => (
-              <Chip
-                key={item}
-                label={t(COUNTRY_LABEL_KEY[item] as never)}
-                selected={country === item}
-                onPress={() => selectCountry(item)}
-              />
-            ))}
-          </View>
-        </View>
-
-        <Card style={{ gap: theme.spacing(3) }}>
-          <Text variant="heading">{t('help.resourcesTitle')}</Text>
-          {resources.entries.length === 0 ? (
-            <Text variant="body" tone="muted">
-              {t('help.noResourcesForCountry')}
+        <FadeInView delay={0}>
+          <Card tone="muted" style={{ gap: theme.spacing(1) }}>
+            <Text variant="caption" tone="muted">
+              {t('help.disclaimer')}
             </Text>
-          ) : (
-            resources.entries.map((entry, index) => (
-              <View key={entry.name} style={{ gap: 2 }}>
-                {index > 0 ? <View style={{ height: 1, backgroundColor: theme.colors.border, marginVertical: theme.spacing(2) }} /> : null}
-                <Text variant="body">{entry.name}</Text>
-                {isDialable(entry.contact) ? (
-                  <Pressable
-                    accessibilityRole="link"
-                    onPress={() => {
-                      if (Platform.OS !== 'web') {
-                        Linking.openURL(`tel:${entry.contact.replace(/[^\d+]/g, '')}`).catch(() => {});
-                      }
-                    }}
-                  >
-                    <Text variant="label" tone="accent">
+          </Card>
+        </FadeInView>
+
+        <FadeInView delay={60}>
+          <View style={{ gap: theme.spacing(2) }}>
+            <Text variant="caption" tone="muted" overline>
+              {t('help.countryLabel')}
+            </Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing(2) }}>
+              {RESOURCE_COUNTRIES.map((item) => (
+                <Chip
+                  key={item}
+                  label={t(COUNTRY_LABEL_KEY[item] as never)}
+                  selected={country === item}
+                  onPress={() => selectCountry(item)}
+                />
+              ))}
+            </View>
+          </View>
+        </FadeInView>
+
+        <FadeInView delay={120}>
+          <Card style={{ gap: theme.spacing(3) }}>
+            <Text variant="heading">{t('help.resourcesTitle')}</Text>
+            {resources.entries.length === 0 ? (
+              <Text variant="body" tone="muted">
+                {t('help.noResourcesForCountry')}
+              </Text>
+            ) : (
+              resources.entries.map((entry, index) => (
+                <View key={entry.name} style={{ gap: 2 }}>
+                  {index > 0 ? (
+                    <View style={{ height: 1, backgroundColor: theme.colors.border, marginVertical: theme.spacing(2) }} />
+                  ) : null}
+                  <Text variant="body">{entry.name}</Text>
+                  {isDialable(entry.contact) ? (
+                    <Pressable
+                      accessibilityRole="link"
+                      onPress={() => {
+                        if (Platform.OS !== 'web') {
+                          Linking.openURL(`tel:${entry.contact.replace(/[^\d+]/g, '')}`).catch(() => {});
+                        }
+                      }}
+                    >
+                      <Text variant="label" tone="accent">
+                        {entry.contact}
+                      </Text>
+                    </Pressable>
+                  ) : (
+                    <Text variant="label" tone="muted">
                       {entry.contact}
                     </Text>
-                  </Pressable>
-                ) : (
-                  <Text variant="label" tone="muted">
-                    {entry.contact}
+                  )}
+                  <Text variant="caption" tone="faint">
+                    {entry.notes}
                   </Text>
-                )}
-                <Text variant="caption" tone="faint">
-                  {entry.notes}
-                </Text>
-              </View>
-            ))
-          )}
-          <Text variant="caption" tone="faint">
-            {t('help.verifyContacts')}
-          </Text>
-        </Card>
+                </View>
+              ))
+            )}
+            <Text variant="caption" tone="faint">
+              {t('help.verifyContacts')}
+            </Text>
+          </Card>
+        </FadeInView>
 
-        <Card style={{ gap: theme.spacing(3) }}>
-          <Text variant="heading">{t('help.harmReductionTitle')}</Text>
-          {approaches.map((approach) => (
-            <View key={approach.title} style={{ gap: 2 }}>
-              <Text variant="label">{approach.title}</Text>
-              <Text variant="body" tone="muted">
-                {approach.body}
-              </Text>
-            </View>
-          ))}
-        </Card>
-
-        <Card style={{ gap: theme.spacing(3) }}>
-          <Text variant="heading">{t('help.seekHelpTitle')}</Text>
-          <Text variant="body" tone="muted">
-            {seekHelp.intro}
-          </Text>
-          <View style={{ gap: theme.spacing(1.5) }}>
-            {seekHelp.signals.map((signal) => (
-              <View key={signal} style={{ flexDirection: 'row', gap: theme.spacing(2) }}>
+        <FadeInView delay={180}>
+          <Card style={{ gap: theme.spacing(3) }}>
+            <Text variant="heading">{t('help.harmReductionTitle')}</Text>
+            {approaches.map((approach) => (
+              <View key={approach.title} style={{ gap: 2 }}>
+                <Text variant="label">{approach.title}</Text>
                 <Text variant="body" tone="muted">
-                  ·
-                </Text>
-                <Text variant="body" tone="muted" style={{ flex: 1 }}>
-                  {signal}
+                  {approach.body}
                 </Text>
               </View>
             ))}
-          </View>
-        </Card>
+          </Card>
+        </FadeInView>
+
+        <FadeInView delay={240}>
+          <Card style={{ gap: theme.spacing(3) }}>
+            <Text variant="heading">{t('help.seekHelpTitle')}</Text>
+            <Text variant="body" tone="muted">
+              {seekHelp.intro}
+            </Text>
+            <View style={{ gap: theme.spacing(1.5) }}>
+              {seekHelp.signals.map((signal) => (
+                <View key={signal} style={{ flexDirection: 'row', gap: theme.spacing(2) }}>
+                  <Text variant="body" tone="muted">
+                    ·
+                  </Text>
+                  <Text variant="body" tone="muted" style={{ flex: 1 }}>
+                    {signal}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </Card>
+        </FadeInView>
       </View>
     </Screen>
   );

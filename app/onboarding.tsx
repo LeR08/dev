@@ -7,40 +7,38 @@ import { ProfileFields } from '@/components/ProfileFields';
 import { Button } from '@/components/ui/Button';
 import { USE_NATIVE_DRIVER } from '@/components/ui/animation';
 import { Card } from '@/components/ui/Card';
-import { Chip } from '@/components/ui/Chip';
 import { Field } from '@/components/ui/Field';
+import { FadeInView } from '@/components/ui/FadeInView';
+import { Icon } from '@/components/ui/Icon';
 import { Screen } from '@/components/ui/Screen';
-import { Segmented } from '@/components/ui/Segmented';
 import { Text } from '@/components/ui/Text';
-import { STANDARD_DRINK_PRESETS } from '@/domain/alcohol';
-import { CURRENCIES } from '@/domain/format';
-import { buildProfile, emptyProfileDraft, type ProfileDraft } from '@/domain/profile';
-import type { IntakeUnit, VolumeUnit } from '@/domain/types';
+import { buildProfile, emptyProfileDraft, isValidEmail, type ProfileDraft } from '@/domain/profile';
 import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
-const STEP_COUNT = 5;
+const STEP_COUNT = 3;
 
 /**
- * First-run flow.
+ * First-run flow: sign in (local-only, sets the tone) → profile → done.
  *
- * Steps whose real job is to set the tone: this is private, it is yours, and
- * nothing here is going to judge you. Every choice has a sensible default and
- * can be changed later, so skipping straight through is fine — including the
- * v1.2 profile steps, which are the one place spec v1.2 §4 calls
- * "identified" data: it still never leaves this device, and every field but
- * the reasons list can be left blank.
+ * Units, currency and a weekly goal used to be separate mandatory steps here;
+ * currency now comes from the device locale (§21) and the rest are reasonable
+ * defaults the user can revisit in Settings whenever they like, so the wizard
+ * stays to the one thing spec asked to happen "at app opening": who you are
+ * and the identified profile fields (v1.2 §4) — still never leaving the
+ * device, still optional wherever a field can't be guessed.
  */
 export default function OnboardingScreen() {
   const theme = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const { settings, updateSettings, saveProfile } = useApp();
+  const { profile, saveProfile, updateSettings } = useApp();
 
   const [step, setStep] = useState(0);
-  const [weeklyGoal, setWeeklyGoal] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [profileDraft, setProfileDraft] = useState<ProfileDraft>(emptyProfileDraft());
   const fade = useRef(new Animated.Value(1)).current;
 
@@ -49,15 +47,17 @@ export default function OnboardingScreen() {
     Animated.timing(fade, { toValue: 1, duration: 320, useNativeDriver: USE_NATIVE_DRIVER }).start();
   }, [fade, step]);
 
+  const emailInvalid = email.trim() !== '' && !isValidEmail(email);
+
   const finish = async () => {
-    const parsed = Number(weeklyGoal.replace(',', '.').trim());
-    const weeklyIntake = weeklyGoal.trim() !== '' && Number.isFinite(parsed) && parsed > 0 ? parsed : null;
     const now = Date.now();
-    await saveProfile(buildProfile(profileDraft, null, now));
-    await updateSettings({
-      goals: { ...settings.goals, weeklyIntake },
-      onboardingCompletedAt: now,
-    });
+    const draft: ProfileDraft = {
+      ...profileDraft,
+      name: name.trim() === '' ? null : name.trim(),
+      email: email.trim() === '' || emailInvalid ? null : email.trim(),
+    };
+    await saveProfile(buildProfile(draft, profile, now));
+    await updateSettings({ onboardingCompletedAt: now });
     router.replace('/');
   };
 
@@ -70,11 +70,11 @@ export default function OnboardingScreen() {
     <View style={{ flex: 1, backgroundColor: theme.colors.background, paddingTop: insets.top }}>
       <Screen scrollProps={{ contentInsetAdjustmentBehavior: 'automatic' }}>
         <Animated.View style={{ opacity: fade, gap: theme.spacing(5), paddingTop: theme.spacing(10) }}>
-          {step === 0 ? <Welcome /> : null}
-          {step === 1 ? <UnitsStep /> : null}
-          {step === 2 ? <AboutYouStep value={profileDraft} onChange={setProfileDraft} /> : null}
-          {step === 3 ? <ReasonsStep value={profileDraft} onChange={setProfileDraft} /> : null}
-          {step === 4 ? <GoalStep value={weeklyGoal} onChange={setWeeklyGoal} /> : null}
+          {step === 0 ? (
+            <SignInStep name={name} onName={setName} email={email} onEmail={setEmail} emailInvalid={emailInvalid} />
+          ) : null}
+          {step === 1 ? <ProfileStep value={profileDraft} onChange={setProfileDraft} /> : null}
+          {step === 2 ? <DoneStep name={name} /> : null}
         </Animated.View>
       </Screen>
 
@@ -103,7 +103,7 @@ export default function OnboardingScreen() {
         </View>
 
         <Button
-          label={step === STEP_COUNT - 1 ? t('onboarding.startTracking') : t('common.continue')}
+          label={step === STEP_COUNT - 1 ? t('onboarding.startTracking') : t('signIn.continueAction')}
           size="lg"
           onPress={next}
         />
@@ -116,171 +116,128 @@ export default function OnboardingScreen() {
   );
 }
 
-function Welcome() {
-  const theme = useTheme();
-  return (
-    <View style={{ gap: theme.spacing(4) }}>
-      <Text variant="display">Tally</Text>
-      <Text variant="heading" tone="muted">
-        A quiet place to keep track of what you drink.
-      </Text>
-      <Card tone="accent" style={{ gap: theme.spacing(2) }}>
-        <Text variant="body">
-          No account. No cloud. Everything you log stays in a database on this phone, and nothing
-          leaves it unless you export it yourself.
-        </Text>
-        <Text variant="body" tone="muted">
-          There are no warnings here, no red numbers and no lectures. Just what you logged, shown
-          clearly, plus a count of your alcohol-free days.
-        </Text>
-      </Card>
-    </View>
-  );
-}
-
-function UnitsStep() {
-  const theme = useTheme();
-  const { settings, updateSettings } = useApp();
-
-  return (
-    <View style={{ gap: theme.spacing(4) }}>
-      <Text variant="title">How should we count?</Text>
-      <Text variant="body" tone="muted">
-        All of this is changeable later in Settings.
-      </Text>
-
-      <View style={{ gap: theme.spacing(2) }}>
-        <Text variant="caption" tone="muted" overline>
-          Volumes
-        </Text>
-        <Segmented<VolumeUnit>
-          options={[
-            { value: 'cl', label: 'Centilitres' },
-            { value: 'ml', label: 'Millilitres' },
-          ]}
-          value={settings.volumeUnit}
-          onChange={(volumeUnit) => updateSettings({ volumeUnit })}
-        />
-      </View>
-
-      <View style={{ gap: theme.spacing(2) }}>
-        <Text variant="caption" tone="muted" overline>
-          Intake shown as
-        </Text>
-        <Segmented<IntakeUnit>
-          options={[
-            { value: 'standardDrinks', label: 'Standard drinks' },
-            { value: 'grams', label: 'Grams of alcohol' },
-          ]}
-          value={settings.intakeUnit}
-          onChange={(intakeUnit) => updateSettings({ intakeUnit })}
-        />
-      </View>
-
-      <View style={{ gap: theme.spacing(2) }}>
-        <Text variant="caption" tone="muted" overline>
-          One standard drink is
-        </Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing(2) }}>
-          {STANDARD_DRINK_PRESETS.map((preset) => (
-            <Chip
-              key={preset.grams}
-              label={`${preset.grams} g · ${preset.label}`}
-              selected={settings.standardDrinkGrams === preset.grams}
-              onPress={() => updateSettings({ standardDrinkGrams: preset.grams })}
-            />
-          ))}
-        </View>
-      </View>
-
-      <View style={{ gap: theme.spacing(2) }}>
-        <Text variant="caption" tone="muted" overline>
-          Currency
-        </Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing(2) }}>
-          {CURRENCIES.slice(0, 6).map((currency) => (
-            <Chip
-              key={currency.code}
-              label={`${currency.symbol} ${currency.code}`}
-              selected={settings.currency === currency.code}
-              onPress={() => updateSettings({ currency: currency.code })}
-            />
-          ))}
-        </View>
-      </View>
-    </View>
-  );
-}
-
-type ProfileStepProps = {
-  value: ProfileDraft;
-  onChange: (next: ProfileDraft) => void;
+type SignInStepProps = {
+  name: string;
+  onName: (value: string) => void;
+  email: string;
+  onEmail: (value: string) => void;
+  emailInvalid: boolean;
 };
 
-function AboutYouStep({ value, onChange }: ProfileStepProps) {
+function SignInStep({ name, onName, email, onEmail, emailInvalid }: SignInStepProps) {
+  const theme = useTheme();
+  const { t } = useTranslation();
+
+  return (
+    <View style={{ gap: theme.spacing(5) }}>
+      <FadeInView delay={0}>
+        <View style={{ gap: theme.spacing(3), alignItems: 'flex-start' }}>
+          <View
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 28,
+              backgroundColor: theme.accent.soft,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Icon name="user" size={26} color={theme.accent.base} strokeWidth={2} />
+          </View>
+          <Text variant="display">{t('signIn.title')}</Text>
+          <Text variant="body" tone="muted">
+            {t('signIn.subtitle')}
+          </Text>
+        </View>
+      </FadeInView>
+
+      <FadeInView delay={80}>
+        <View style={{ gap: theme.spacing(4) }}>
+          <Field
+            label={t('signIn.nameLabel')}
+            value={name}
+            onChangeText={onName}
+            placeholder={t('signIn.namePlaceholder')}
+            autoCapitalize="words"
+          />
+          <View>
+            <Field
+              label={t('signIn.emailLabel')}
+              value={email}
+              onChangeText={onEmail}
+              placeholder={t('signIn.emailPlaceholder')}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              hint={emailInvalid ? undefined : t('signIn.emailHint')}
+            />
+            {emailInvalid ? (
+              <Text variant="caption" tone="muted" style={{ marginTop: theme.spacing(1) }}>
+                {t('signIn.emailHint')}
+              </Text>
+            ) : null}
+          </View>
+        </View>
+      </FadeInView>
+
+      <FadeInView delay={140}>
+        <Card tone="muted">
+          <Text variant="caption" tone="muted">
+            {t('signIn.testModeNotice')}
+          </Text>
+        </Card>
+      </FadeInView>
+    </View>
+  );
+}
+
+function ProfileStep({ value, onChange }: { value: ProfileDraft; onChange: (next: ProfileDraft) => void }) {
   const theme = useTheme();
   const { settings } = useApp();
   const { t } = useTranslation();
 
   return (
     <View style={{ gap: theme.spacing(4) }}>
-      <Text variant="title">{t('onboarding.profile.title')}</Text>
-      <Text variant="body" tone="muted">
-        {t('onboarding.profile.subtitle')}
-      </Text>
-      <ProfileFields value={value} onChange={onChange} settings={settings} section="about" />
+      <FadeInView delay={0}>
+        <View style={{ gap: theme.spacing(2) }}>
+          <Text variant="title">{t('onboarding.profile.title')}</Text>
+          <Text variant="body" tone="muted">
+            {t('onboarding.profile.subtitle')}
+          </Text>
+        </View>
+      </FadeInView>
+      <FadeInView delay={60}>
+        <ProfileFields value={value} onChange={onChange} settings={settings} section="all" />
+      </FadeInView>
     </View>
   );
 }
 
-function ReasonsStep({ value, onChange }: ProfileStepProps) {
+function DoneStep({ name }: { name: string }) {
   const theme = useTheme();
-  const { settings } = useApp();
   const { t } = useTranslation();
 
   return (
-    <View style={{ gap: theme.spacing(4) }}>
-      <Text variant="title">{t('onboarding.profile.contextTitle')}</Text>
-      <Text variant="body" tone="muted">
-        {t('onboarding.profile.contextSubtitle')}
-      </Text>
-      <ProfileFields value={value} onChange={onChange} settings={settings} section="context" />
-    </View>
-  );
-}
-
-function GoalStep({ value, onChange }: { value: string; onChange: (value: string) => void }) {
-  const theme = useTheme();
-  const { settings } = useApp();
-  const unit = settings.intakeUnit === 'grams' ? 'g per week' : 'drinks per week';
-
-  return (
-    <View style={{ gap: theme.spacing(4) }}>
-      <Text variant="title">Want a personal marker?</Text>
-      <Text variant="body" tone="muted">
-        Some people find a weekly number useful to aim at. Plenty of people would rather just watch
-        the numbers for a while first — that is a perfectly good answer, and you can leave this
-        empty.
-      </Text>
-
-      <Field
-        label="Weekly intake goal (optional)"
-        value={value}
-        onChangeText={onChange}
-        keyboardType="decimal-pad"
-        placeholder="Leave empty for none"
-        suffix={unit}
-      />
-
-      <Card style={{ gap: theme.spacing(1) }}>
-        <Text variant="caption" tone="muted" overline>
-          What a goal does
+    <FadeInView delay={0}>
+      <View style={{ gap: theme.spacing(4) }}>
+        <View
+          style={{
+            width: 56,
+            height: 56,
+            borderRadius: 28,
+            backgroundColor: theme.accent.soft,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Icon name="check" size={26} color={theme.accent.base} strokeWidth={2.4} />
+        </View>
+        <Text variant="display">
+          {name.trim() !== '' ? `${t('onboarding.profile.doneTitle')}, ${name.trim()}` : t('onboarding.profile.doneTitle')}
         </Text>
-        <Text variant="body" tone="muted">
-          It draws a dashed line on your chart. That is all. Going past it changes nothing about how
-          the app talks to you.
-        </Text>
-      </Card>
-    </View>
+        <Card tone="accent" style={{ gap: theme.spacing(2) }}>
+          <Text variant="body">{t('onboarding.profile.doneSubtitle')}</Text>
+        </Card>
+      </View>
+    </FadeInView>
   );
 }

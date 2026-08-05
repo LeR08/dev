@@ -5,6 +5,7 @@ import { ScrollView, SectionList, View } from 'react-native';
 import { EntryRow } from '@/components/EntryRow';
 import { Chip } from '@/components/ui/Chip';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { FadeInView } from '@/components/ui/FadeInView';
 import { Field } from '@/components/ui/Field';
 import { Text } from '@/components/ui/Text';
 import { gramsToIntake } from '@/domain/alcohol';
@@ -68,57 +69,59 @@ export default function HistoryScreen() {
           alignSelf: 'center',
         }}
         ListHeaderComponent={
-          <View style={{ gap: theme.spacing(3), paddingTop: theme.spacing(8), paddingBottom: theme.spacing(3) }}>
-            <Text variant="title">History</Text>
+          <FadeInView>
+            <View style={{ gap: theme.spacing(3), paddingTop: theme.spacing(8), paddingBottom: theme.spacing(3) }}>
+              <Text variant="title">History</Text>
 
-            <Field
-              placeholder="Search names, notes, places…"
-              value={query}
-              onChangeText={setQuery}
-              autoCapitalize="none"
-              autoCorrect={false}
-              accessibilityLabel="Search your log"
-            />
+              <Field
+                placeholder="Search names, notes, places…"
+                value={query}
+                onChangeText={setQuery}
+                autoCapitalize="none"
+                autoCorrect={false}
+                accessibilityLabel="Search your log"
+              />
 
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: theme.spacing(2), paddingRight: theme.spacing(5) }}
-            >
-              {PERIODS.map((item) => (
-                <Chip
-                  key={item.value}
-                  label={item.label}
-                  selected={period === item.value}
-                  onPress={() => setPeriod(item.value)}
-                />
-              ))}
-            </ScrollView>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: theme.spacing(2), paddingRight: theme.spacing(5) }}
+              >
+                {PERIODS.map((item) => (
+                  <Chip
+                    key={item.value}
+                    label={item.label}
+                    selected={period === item.value}
+                    onPress={() => setPeriod(item.value)}
+                  />
+                ))}
+              </ScrollView>
 
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: theme.spacing(2), paddingRight: theme.spacing(5) }}
-            >
-              <Chip label="All drinks" selected={category === 'all'} onPress={() => setCategory('all')} />
-              {CATEGORIES.map((item) => (
-                <Chip
-                  key={item}
-                  label={CATEGORY_LABELS[item]}
-                  dotColor={theme.categoryColor(item)}
-                  selected={category === item}
-                  onPress={() => setCategory(item)}
-                />
-              ))}
-            </ScrollView>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: theme.spacing(2), paddingRight: theme.spacing(5) }}
+              >
+                <Chip label="All drinks" selected={category === 'all'} onPress={() => setCategory('all')} />
+                {CATEGORIES.map((item) => (
+                  <Chip
+                    key={item}
+                    label={CATEGORY_LABELS[item]}
+                    dotColor={theme.categoryColor(item)}
+                    selected={category === item}
+                    onPress={() => setCategory(item)}
+                  />
+                ))}
+              </ScrollView>
 
-            {filtered.length > 0 ? (
-              <Text variant="caption" tone="muted">
-                {summary.entries} entries · {formatIntake(summaryIntake, settings.intakeUnit)}
-                {summary.spend > 0 ? ` · ${formatMoney(summary.spend, settings.currency, { compact: true })}` : ''}
-              </Text>
-            ) : null}
-          </View>
+              {filtered.length > 0 ? (
+                <Text variant="caption" tone="muted">
+                  {summary.entries} entries · {formatIntake(summaryIntake, settings.intakeUnit)}
+                  {summary.spend > 0 ? ` · ${formatMoney(summary.spend, settings.currency, { compact: true })}` : ''}
+                </Text>
+              ) : null}
+            </View>
+          </FadeInView>
         }
         ListEmptyComponent={
           hasFilters && entries.length > 0 ? (

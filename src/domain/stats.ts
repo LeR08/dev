@@ -63,6 +63,14 @@ export function filterByRange(entries: Entry[], range: Range): Entry[] {
   return entries.filter((e) => e.consumedAt >= range.start && e.consumedAt < range.end);
 }
 
+/**
+ * Stable bucket identity. `dayKey` alone collides for hourly buckets — every
+ * hour of the same day would share one key — so hour buckets fold the hour in.
+ */
+function periodKey(start: Date, granularity: Granularity): string {
+  return granularity === 'hour' ? `${dayKey(start)}T${start.getHours()}` : dayKey(start);
+}
+
 export function totals(entries: Entry[]): Totals {
   const days = new Set<string>();
   let grams = 0;
@@ -92,7 +100,7 @@ export function bucketize(
   const starts = eachPeriod(range.start, range.end, granularity, weekStartsOn);
   const buckets: Bucket[] = starts.map((start) => ({
     ...EMPTY_TOTALS,
-    key: dayKey(start),
+    key: periodKey(start, granularity),
     start: start.getTime(),
     end: nextPeriod(start, granularity, weekStartsOn).getTime(),
   }));
@@ -104,7 +112,7 @@ export function bucketize(
 
   for (const entry of entries) {
     if (entry.consumedAt < range.start || entry.consumedAt >= range.end) continue;
-    const key = dayKey(startOfPeriod(entry.consumedAt, granularity, weekStartsOn));
+    const key = periodKey(startOfPeriod(entry.consumedAt, granularity, weekStartsOn), granularity);
     const bucket = byKey.get(key);
     if (!bucket) continue;
 

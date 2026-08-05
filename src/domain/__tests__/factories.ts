@@ -38,6 +38,8 @@ export function at(
 export function makeProfile(overrides: Partial<Profile> = {}): Profile {
   const now = at(2026, 1, 1);
   return {
+    name: 'Alex',
+    email: null,
     sex: 'female',
     age: 30,
     weightKg: 65,

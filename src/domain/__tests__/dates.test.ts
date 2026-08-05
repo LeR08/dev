@@ -1,5 +1,6 @@
 import {
   addDays,
+  addHours,
   addMonths,
   dayKey,
   daysBetween,
@@ -8,6 +9,7 @@ import {
   periodRange,
   previousRange,
   startOfDay,
+  startOfHour,
   startOfMonth,
   startOfWeek,
   trailingRange,
@@ -24,6 +26,26 @@ describe('day boundaries', () => {
   it('keys days by local calendar date', () => {
     expect(dayKey(at(2026, 3, 14, 23, 59))).toBe('2026-03-14');
     expect(dayKey(at(2026, 3, 15, 0, 1))).toBe('2026-03-15');
+  });
+});
+
+describe('hour boundaries (daily statistics)', () => {
+  it('rounds down to the start of the hour', () => {
+    const start = startOfHour(at(2026, 3, 14, 9, 45));
+    expect(start.getMinutes()).toBe(0);
+    expect(start.getHours()).toBe(9);
+  });
+
+  it('steps by whole hours, including across a day boundary', () => {
+    expect(addHours(at(2026, 3, 14, 23), 2).getHours()).toBe(1);
+    expect(dayKey(addHours(at(2026, 3, 14, 23), 2))).toBe('2026-03-15');
+  });
+
+  it('builds a 24-bucket hour range for a single day', () => {
+    const range = periodRange(at(2026, 5, 4, 9), 'hour', 1, 0);
+    expect(range.end - range.start).toBe(3_600_000);
+    const day = trailingRange(at(2026, 5, 4, 23), 'hour', 24);
+    expect(eachPeriod(day.start, day.end, 'hour')).toHaveLength(24);
   });
 });
 

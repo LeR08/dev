@@ -9,6 +9,7 @@ import { StatCard } from '@/components/StatCard';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { FadeInView } from '@/components/ui/FadeInView';
 import { Screen } from '@/components/ui/Screen';
 import { Segmented } from '@/components/ui/Segmented';
 import { Text } from '@/components/ui/Text';
@@ -17,6 +18,7 @@ import {
   addDays,
   eachDay,
   periodRange,
+  previousRange,
   startOfWeek,
   trailingRange,
   type Granularity,
@@ -48,13 +50,21 @@ import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
-type Window = 'week' | 'month' | 'year';
+type Window = 'day' | 'week' | 'month' | 'year';
 
-const VIEWS: { value: Window; label: string; granularity: Granularity; count: number }[] = [
-  { value: 'week', label: 'Week', granularity: 'day', count: 7 },
-  { value: 'month', label: 'Month', granularity: 'day', count: 30 },
-  { value: 'year', label: 'Year', granularity: 'month', count: 12 },
+const VIEWS: { value: Window; granularity: Granularity; count: number }[] = [
+  { value: 'day', granularity: 'hour', count: 24 },
+  { value: 'week', granularity: 'day', count: 7 },
+  { value: 'month', granularity: 'day', count: 30 },
+  { value: 'year', granularity: 'month', count: 12 },
 ];
+
+const VIEW_LABEL_KEY: Record<Window, string> = {
+  day: 'insights.day',
+  week: 'insights.week',
+  month: 'insights.month',
+  year: 'insights.year',
+};
 
 export default function InsightsScreen() {
   const theme = useTheme();
@@ -66,15 +76,23 @@ export default function InsightsScreen() {
 
   const config = VIEWS.find((item) => item.value === view) ?? VIEWS[0];
 
+  // The day view tracks the calendar day (for a clean "today vs yesterday"
+  // comparison) rather than a trailing 24h window like the other views use.
   const range = useMemo(
-    () => trailingRange(now, config.granularity, config.count, settings.weekStartsOn),
-    [config.count, config.granularity, now, settings.weekStartsOn]
+    () =>
+      view === 'day'
+        ? periodRange(now, 'day', settings.weekStartsOn)
+        : trailingRange(now, config.granularity, config.count, settings.weekStartsOn),
+    [config.count, config.granularity, now, settings.weekStartsOn, view]
   );
 
   /** The equally sized window immediately before this one. */
   const previous = useMemo<Range>(
-    () => ({ start: range.start - (range.end - range.start), end: range.start }),
-    [range]
+    () =>
+      view === 'day'
+        ? previousRange(range, 'day', settings.weekStartsOn)
+        : { start: range.start - (range.end - range.start), end: range.start },
+    [range, settings.weekStartsOn, view]
   );
 
   const current = useMemo(() => filterByRange(entries, range), [entries, range]);
@@ -148,24 +166,29 @@ export default function InsightsScreen() {
   const goalPerBucket =
     view === 'week' && weeklyGoalIntake !== null ? weeklyGoalIntake / 7 : null;
 
-  const periodName = view === 'week' ? 'previous 7 days' : view === 'month' ? 'previous 30 days' : 'previous year';
+  const periodName =
+    view === 'day'
+      ? 'day before'
+      : view === 'week'
+        ? 'previous 7 days'
+        : view === 'month'
+          ? 'previous 30 days'
+          : 'previous year';
 
   const savings = useMemo(
     () => computeSavings(profile?.spendBeforeTrackingPerDay ?? null, entries, range),
     [entries, profile?.spendBeforeTrackingPerDay, range]
   );
 
+  const showTodayEmptyNotice = view === 'day' && current.length === 0;
+
   if (entries.length === 0) {
     return (
       <Screen>
         <View style={{ paddingTop: theme.spacing(8) }}>
-          <Text variant="title">Insights</Text>
+          <Text variant="title">{t('insights.title')}</Text>
         </View>
-        <EmptyState
-          title="Nothing to chart yet"
-          body="Once you log a few drinks, this is where the patterns show up — units, spending, categories, and alcohol-free days."
-          glyph="◔"
-        />
+        <EmptyState title={t('insights.emptyTitle')} body={t('insights.emptyBody')} glyph="◔" />
       </Screen>
     );
   }
@@ -173,135 +196,176 @@ export default function InsightsScreen() {
   return (
     <Screen>
       <View style={{ gap: theme.spacing(3), paddingTop: theme.spacing(8), paddingBottom: theme.spacing(4) }}>
-        <Text variant="title">Insights</Text>
+        <Text variant="title">{t('insights.title')}</Text>
         <Segmented
-          options={VIEWS.map((item) => ({ value: item.value, label: item.label }))}
+          options={VIEWS.map((item) => ({ value: item.value, label: t(VIEW_LABEL_KEY[item.value] as never) }))}
           value={view}
           onChange={setView}
         />
       </View>
 
       <View style={{ gap: theme.spacing(4) }}>
-        <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
-          <StatCard
-            label={view === 'year' ? 'This year' : view === 'month' ? 'Last 30 days' : 'Last 7 days'}
-            value={formatIntake(toIntake(currentTotals.grams), settings.intakeUnit)}
-            detail={formatComparison(intakeComparison, periodName)}
-          />
-          <StatCard
-            label="Spent"
-            value={formatMoney(currentTotals.spend, settings.currency, { compact: true })}
-            detail={formatComparison(spendComparison, periodName)}
-          />
-        </View>
-
-        <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
-          <StatCard
-            label="Average per day"
-            value={formatIntake(toIntake(perDay), settings.intakeUnit)}
-            detail="Across days you tracked"
-          />
-          <StatCard
-            label="Alcohol-free days"
-            value={`${freeDays}`}
-            detail={`Out of ${elapsedDays} tracked ${pluralize(elapsedDays, "day")}`}
-          />
-        </View>
-
-        <Card style={{ gap: theme.spacing(3) }}>
-          <View style={{ gap: 2 }}>
-            <Text variant="heading">
-              {settings.intakeUnit === 'grams' ? 'Pure alcohol' : 'Standard drinks'}
-            </Text>
-            <Text variant="caption" tone="muted">
-              {view === 'year' ? 'By month' : 'By day'}
-            </Text>
+        <FadeInView delay={0}>
+          <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
+            <StatCard
+              label={
+                view === 'day'
+                  ? t('insights.todayStats')
+                  : view === 'year'
+                    ? 'This year'
+                    : view === 'month'
+                      ? 'Last 30 days'
+                      : 'Last 7 days'
+              }
+              value={formatIntake(toIntake(currentTotals.grams), settings.intakeUnit)}
+              detail={formatComparison(intakeComparison, periodName)}
+            />
+            <StatCard
+              label="Spent"
+              value={formatMoney(currentTotals.spend, settings.currency, { compact: true })}
+              detail={formatComparison(spendComparison, periodName)}
+            />
           </View>
-          <BarChart
-            data={intakeBars}
-            height={170}
-            goal={goalPerBucket}
-            goalLabel={goalPerBucket ? 'daily share of your weekly goal' : undefined}
-          />
-        </Card>
+        </FadeInView>
 
-        <Card style={{ gap: theme.spacing(3) }}>
-          <View style={{ gap: 2 }}>
-            <Text variant="heading">Money spent</Text>
-            <Text variant="caption" tone="muted">
-              {currentTotals.spend > 0
-                ? `${formatMoney(currentTotals.spend, settings.currency)} in this window`
-                : 'Add prices when you log to see this fill in'}
-            </Text>
-          </View>
-          <BarChart data={spendBars} height={130} color={theme.colors.textMuted} />
-        </Card>
-
-        <SavingsCard
-          saved={savings?.saved ?? null}
-          onPress={() => router.push('/savings')}
-        />
-
-        <Card style={{ gap: theme.spacing(3) }}>
-          <Text variant="heading">By category</Text>
-          {slices.length === 0 ? (
-            <Text variant="body" tone="muted">
-              Nothing logged in this window.
-            </Text>
-          ) : (
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing(4) }}>
-              <DonutChart
-                slices={slices}
-                centerValue={formatIntake(toIntake(currentTotals.grams), settings.intakeUnit)}
-                centerLabel="total"
-                size={150}
+        {!showTodayEmptyNotice ? (
+          <FadeInView delay={40}>
+            <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
+              <StatCard
+                label="Average per day"
+                value={formatIntake(toIntake(perDay), settings.intakeUnit)}
+                detail="Across days you tracked"
               />
-              <View style={{ flex: 1, gap: theme.spacing(2) }}>
-                {categories.slice(0, 5).map((item) => (
-                  <View
-                    key={item.category}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing(2) }}
-                  >
-                    <View
-                      style={{
-                        width: 10,
-                        height: 10,
-                        borderRadius: 5,
-                        backgroundColor: theme.categoryColor(item.category),
-                      }}
-                    />
-                    <Text variant="label" style={{ flex: 1 }} numberOfLines={1}>
-                      {CATEGORY_LABELS[item.category]}
-                    </Text>
-                    <Text variant="caption" tone="muted">
-                      {Math.round(item.share * 100)}%
-                    </Text>
-                  </View>
-                ))}
-              </View>
+              <StatCard
+                label="Alcohol-free days"
+                value={`${freeDays}`}
+                detail={`Out of ${elapsedDays} tracked ${pluralize(elapsedDays, "day")}`}
+              />
             </View>
-          )}
-        </Card>
+          </FadeInView>
+        ) : null}
 
-        <Card style={{ gap: theme.spacing(3) }}>
-          <View style={{ gap: 2 }}>
-            <Text variant="heading">This week, day by day</Text>
-            <Text variant="caption" tone="muted">
-              {settings.goals.alcoholFreeDaysPerWeek !== null
-                ? freeDaysStatus(weekFreeDays, settings.goals.alcoholFreeDaysPerWeek)
-                : `${weekFreeDays} alcohol-free ${pluralize(weekFreeDays, 'day')} so far`}
+        {showTodayEmptyNotice ? (
+          <FadeInView delay={40}>
+            <Card tone="muted" style={{ gap: theme.spacing(1) }}>
+              <Text variant="heading">{t('insights.emptyTodayTitle')}</Text>
+              <Text variant="body" tone="muted">
+                {t('insights.emptyTodayBody')}
+              </Text>
+            </Card>
+          </FadeInView>
+        ) : (
+          <FadeInView delay={80}>
+            <Card style={{ gap: theme.spacing(3) }}>
+              <View style={{ gap: 2 }}>
+                <Text variant="heading">
+                  {settings.intakeUnit === 'grams' ? 'Pure alcohol' : 'Standard drinks'}
+                </Text>
+                <Text variant="caption" tone="muted">
+                  {view === 'day' ? t('insights.byHour') : view === 'year' ? 'By month' : 'By day'}
+                </Text>
+              </View>
+              <BarChart
+                data={intakeBars}
+                height={170}
+                goal={goalPerBucket}
+                goalLabel={goalPerBucket ? 'daily share of your weekly goal' : undefined}
+              />
+            </Card>
+          </FadeInView>
+        )}
+
+        {!showTodayEmptyNotice ? (
+          <FadeInView delay={120}>
+            <Card style={{ gap: theme.spacing(3) }}>
+              <View style={{ gap: 2 }}>
+                <Text variant="heading">Money spent</Text>
+                <Text variant="caption" tone="muted">
+                  {currentTotals.spend > 0
+                    ? `${formatMoney(currentTotals.spend, settings.currency)} in this window`
+                    : 'Add prices when you log to see this fill in'}
+                </Text>
+              </View>
+              <BarChart data={spendBars} height={130} color={theme.colors.textMuted} />
+            </Card>
+          </FadeInView>
+        ) : null}
+
+        <FadeInView delay={160}>
+          <SavingsCard saved={savings?.saved ?? null} onPress={() => router.push('/savings')} />
+        </FadeInView>
+
+        {!showTodayEmptyNotice ? (
+          <FadeInView delay={200}>
+            <Card style={{ gap: theme.spacing(3) }}>
+              <Text variant="heading">By category</Text>
+              {slices.length === 0 ? (
+                <Text variant="body" tone="muted">
+                  Nothing logged in this window.
+                </Text>
+              ) : (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing(4) }}>
+                  <DonutChart
+                    slices={slices}
+                    centerValue={formatIntake(toIntake(currentTotals.grams), settings.intakeUnit)}
+                    centerLabel="total"
+                    size={150}
+                  />
+                  <View style={{ flex: 1, gap: theme.spacing(2) }}>
+                    {categories.slice(0, 5).map((item) => (
+                      <View
+                        key={item.category}
+                        style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing(2) }}
+                      >
+                        <View
+                          style={{
+                            width: 10,
+                            height: 10,
+                            borderRadius: 5,
+                            backgroundColor: theme.categoryColor(item.category),
+                          }}
+                        />
+                        <Text variant="label" style={{ flex: 1 }} numberOfLines={1}>
+                          {CATEGORY_LABELS[item.category]}
+                        </Text>
+                        <Text variant="caption" tone="muted">
+                          {Math.round(item.share * 100)}%
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+            </Card>
+          </FadeInView>
+        ) : null}
+
+        <FadeInView delay={240}>
+          <Card style={{ gap: theme.spacing(3) }}>
+            <View style={{ gap: 2 }}>
+              <Text variant="heading">This week, day by day</Text>
+              <Text variant="caption" tone="muted">
+                {settings.goals.alcoholFreeDaysPerWeek !== null
+                  ? (() => {
+                      const status = freeDaysStatus(weekFreeDays, settings.goals.alcoholFreeDaysPerWeek);
+                      return t(status.key as never, status.params);
+                    })()
+                  : `${weekFreeDays} alcohol-free ${pluralize(weekFreeDays, 'day')} so far`}
+              </Text>
+            </View>
+            <DayGrid days={weekDays} weekdayLabels={weekdayLabels} columns={7} />
+            <Text variant="caption" tone="faint">
+              Filled squares are alcohol-free days.
             </Text>
-          </View>
-          <DayGrid days={weekDays} weekdayLabels={weekdayLabels} columns={7} />
-          <Text variant="caption" tone="faint">
-            Filled squares are alcohol-free days.
-          </Text>
-        </Card>
+          </Card>
+        </FadeInView>
 
-        <Card style={{ gap: theme.spacing(2) }}>
-          <Text variant="heading">{formatMonth(now)}</Text>
-          <MonthGrid />
-        </Card>
+        <FadeInView delay={280}>
+          <Card style={{ gap: theme.spacing(2) }}>
+            <Text variant="heading">{formatMonth(now)}</Text>
+            <MonthGrid />
+          </Card>
+        </FadeInView>
       </View>
     </Screen>
   );
@@ -399,6 +463,11 @@ function bucketLabel(start: number, view: Window, index: number, count: number):
   }
   if (view === 'week') {
     return formatWeekdayShort(start);
+  }
+  if (view === 'day') {
+    const step = 3;
+    if (index % step !== 0 && index !== count - 1) return '';
+    return `${new Date(start).getHours()}h`;
   }
   const step = Math.ceil(count / 6);
   if (index % step !== 0 && index !== count - 1) return '';

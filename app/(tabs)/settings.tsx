@@ -3,6 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { Card } from '@/components/ui/Card';
+import { FadeInView } from '@/components/ui/FadeInView';
 import { Row, RowDivider } from '@/components/ui/Row';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
@@ -39,112 +40,124 @@ export default function SettingsScreen() {
       </View>
 
       <View style={{ gap: theme.spacing(4) }}>
-        <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
-          <Row
-            title="Units"
-            subtitle="Volume, standard drinks, currency"
-            value={settings.volumeUnit}
-            onPress={() => router.push('/settings/units')}
-          />
-          <RowDivider />
-          <Row
-            title="Currency"
-            value={currencyLabel}
-            onPress={() => router.push('/settings/units')}
-          />
-          <RowDivider />
-          <Row
-            title="Personal goals"
-            subtitle="Optional, and only yours"
-            value={goalSummary()}
-            onPress={() => router.push('/settings/goals')}
-          />
-        </Card>
+        <FadeInView delay={0}>
+          <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
+            <Row
+              title="Units"
+              subtitle="Volume, standard drinks, currency"
+              value={settings.volumeUnit}
+              onPress={() => router.push('/settings/units')}
+            />
+            <RowDivider />
+            <Row
+              title="Currency"
+              value={currencyLabel}
+              onPress={() => router.push('/settings/units')}
+            />
+            <RowDivider />
+            <Row
+              title="Personal goals"
+              subtitle="Optional, and only yours"
+              value={goalSummary()}
+              onPress={() => router.push('/settings/goals')}
+            />
+          </Card>
+        </FadeInView>
 
-        <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
-          <Row
-            title="Appearance"
-            subtitle="Theme and accent colour"
-            value={ACCENTS[settings.accent].label}
-            onPress={() => router.push('/settings/appearance')}
-          />
-          <RowDivider />
-          <Row
-            title="My drinks"
-            subtitle="Your own presets"
-            value={`${customCount}`}
-            onPress={() => router.push('/drinks')}
-          />
-          <RowDivider />
-          <Row
-            title="Default prices"
-            subtitle="Price templates per drink"
-            onPress={() => router.push('/settings/prices')}
-          />
-        </Card>
+        <FadeInView delay={40}>
+          <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
+            <Row
+              title="Appearance"
+              subtitle="Theme and accent colour"
+              value={ACCENTS[settings.accent].label}
+              onPress={() => router.push('/settings/appearance')}
+            />
+            <RowDivider />
+            <Row
+              title="My drinks"
+              subtitle="Your own presets"
+              value={`${customCount}`}
+              onPress={() => router.push('/drinks')}
+            />
+            <RowDivider />
+            <Row
+              title="Default prices"
+              subtitle="Price templates per drink"
+              onPress={() => router.push('/settings/prices')}
+            />
+          </Card>
+        </FadeInView>
 
-        <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
-          <Row
-            title={t('settings.profileRow')}
-            subtitle={t('settings.profileRowSubtitle')}
-            value={profile ? undefined : t('common.notSet')}
-            onPress={() => router.push('/settings/profile')}
-          />
-          <RowDivider />
-          <Row
-            title={t('settings.languageRow')}
-            value={LANGUAGE_NAMES[settings.language]}
-            onPress={() => router.push('/settings/language')}
-          />
-        </Card>
+        <FadeInView delay={80}>
+          <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
+            <Row
+              title={t('settings.profileRow')}
+              subtitle={t('settings.profileRowSubtitle')}
+              value={profile ? undefined : t('common.notSet')}
+              onPress={() => router.push('/settings/profile')}
+            />
+            <RowDivider />
+            <Row
+              title={t('settings.languageRow')}
+              value={LANGUAGE_NAMES[settings.language]}
+              onPress={() => router.push('/settings/language')}
+            />
+          </Card>
+        </FadeInView>
 
-        <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
-          <Row
-            title="Data & privacy"
-            subtitle={`${entries.length} entries, stored on this device only`}
-            onPress={() => router.push('/settings/data')}
-          />
-        </Card>
+        <FadeInView delay={120}>
+          <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
+            <Row
+              title="Data & privacy"
+              subtitle={`${entries.length} entries, stored on this device only`}
+              onPress={() => router.push('/settings/data')}
+            />
+          </Card>
+        </FadeInView>
 
-        <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
-          <Row title={t('settings.helpRow')} onPress={() => router.push('/help')} />
-          <RowDivider />
-          <Row
-            title={t('settings.reportRow')}
-            onPress={() => router.push('/settings/report')}
-          />
-          <RowDivider />
-          <Row
-            title={t('settings.myTicketsRow')}
-            value={tickets.length > 0 ? `${tickets.length}` : undefined}
-            onPress={() => router.push('/settings/tickets')}
-          />
-        </Card>
+        <FadeInView delay={160}>
+          <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
+            <Row title={t('settings.helpRow')} onPress={() => router.push('/help')} />
+            <RowDivider />
+            <Row
+              title={t('settings.reportRow')}
+              onPress={() => router.push('/settings/report')}
+            />
+            <RowDivider />
+            <Row
+              title={t('settings.myTicketsRow')}
+              value={tickets.length > 0 ? `${tickets.length}` : undefined}
+              onPress={() => router.push('/settings/tickets')}
+            />
+          </Card>
+        </FadeInView>
 
-        <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
-          <Text
-            variant="caption"
-            tone="muted"
-            overline
-            style={{ paddingTop: theme.spacing(3), paddingBottom: theme.spacing(1) }}
-          >
-            {t('settings.legalSectionTitle')}
-          </Text>
-          <Row
-            title={t('settings.termsRow')}
-            onPress={() => router.push({ pathname: '/settings/legal/[doc]', params: { doc: 'terms' } })}
-          />
-          <RowDivider />
-          <Row
-            title={t('settings.legalNoticeRow')}
-            onPress={() => router.push({ pathname: '/settings/legal/[doc]', params: { doc: 'notice' } })}
-          />
-          <RowDivider />
-          <Row
-            title={t('settings.privacyRow')}
-            onPress={() => router.push({ pathname: '/settings/legal/[doc]', params: { doc: 'privacy' } })}
-          />
-        </Card>
+        <FadeInView delay={200}>
+          <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
+            <Text
+              variant="caption"
+              tone="muted"
+              overline
+              style={{ paddingTop: theme.spacing(3), paddingBottom: theme.spacing(1) }}
+            >
+              {t('settings.legalSectionTitle')}
+            </Text>
+            <Row
+              title={t('settings.termsRow')}
+              onPress={() => router.push({ pathname: '/settings/legal/[doc]', params: { doc: 'terms' } })}
+            />
+            <RowDivider />
+            <Row
+              title={t('settings.legalNoticeRow')}
+              onPress={() => router.push({ pathname: '/settings/legal/[doc]', params: { doc: 'notice' } })}
+            />
+            <RowDivider />
+            <Row
+              title={t('settings.privacyRow')}
+              onPress={() => router.push({ pathname: '/settings/legal/[doc]', params: { doc: 'privacy' } })}
+            />
+          </Card>
+        </FadeInView>
 
         <View style={{ gap: theme.spacing(1), paddingHorizontal: theme.spacing(2) }}>
           <Text variant="caption" tone="faint">

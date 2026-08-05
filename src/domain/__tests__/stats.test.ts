@@ -62,6 +62,25 @@ describe('bucketize', () => {
     expect(buckets[6].key).toBe('2026-02-10');
   });
 
+  it('groups by hour without colliding same-day buckets (daily statistics)', () => {
+    const range = periodRange(at(2026, 2, 10, 12), 'day');
+    const buckets = bucketize(
+      [
+        makeEntry({ consumedAt: at(2026, 2, 10, 9) }),
+        makeEntry({ consumedAt: at(2026, 2, 10, 9, 40) }),
+        makeEntry({ consumedAt: at(2026, 2, 10, 21) }),
+      ],
+      range,
+      'hour'
+    );
+
+    expect(buckets).toHaveLength(24);
+    expect(new Set(buckets.map((bucket) => bucket.key)).size).toBe(24);
+    expect(buckets[9].entries).toBe(2);
+    expect(buckets[21].entries).toBe(1);
+    expect(buckets.filter((bucket) => bucket.entries > 0)).toHaveLength(2);
+  });
+
   it('groups by week using the configured week start', () => {
     const range = trailingRange(at(2026, 2, 12), 'week', 2, 1);
     const buckets = bucketize(

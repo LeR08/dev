@@ -7,6 +7,8 @@ import { EMPTY_PROFILE, type Profile, type ReasonKey, type SpendPeriod } from '.
  * pieces, without either one committing a half-filled Profile to storage.
  */
 export type ProfileDraft = {
+  name: string | null;
+  email: string | null;
   sex: Profile['sex'];
   age: number | null;
   weightKg: number | null;
@@ -19,6 +21,8 @@ export type ProfileDraft = {
 
 export function emptyProfileDraft(): ProfileDraft {
   return {
+    name: null,
+    email: null,
     sex: EMPTY_PROFILE.sex,
     age: null,
     weightKg: null,
@@ -33,6 +37,8 @@ export function emptyProfileDraft(): ProfileDraft {
 export function draftFromProfile(profile: Profile | null): ProfileDraft {
   if (!profile) return emptyProfileDraft();
   return {
+    name: profile.name,
+    email: profile.email,
     sex: profile.sex,
     age: profile.age,
     weightKg: profile.weightKg,
@@ -47,6 +53,8 @@ export function draftFromProfile(profile: Profile | null): ProfileDraft {
 /** Turns a draft into a storable Profile, preserving createdAt across edits. */
 export function buildProfile(draft: ProfileDraft, existing: Profile | null, now: number): Profile {
   return {
+    name: draft.name,
+    email: draft.email,
     sex: draft.sex,
     age: draft.age,
     weightKg: draft.weightKg,
@@ -70,4 +78,11 @@ export const LEGAL_DRINKING_AGE = 18;
 
 export function isValidAge(age: number): boolean {
   return Number.isFinite(age) && age >= MIN_AGE && age <= MAX_AGE;
+}
+
+/** Loose format check only — optional field, never verified against anything. */
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export function isValidEmail(email: string): boolean {
+  return EMAIL_PATTERN.test(email.trim());
 }
