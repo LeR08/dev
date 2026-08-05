@@ -2,7 +2,7 @@
   "expo": {
     "name": "Tally",
     "slug": "tally",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "scheme": "tally",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -40,14 +40,23 @@
       "expo-sqlite",
       "expo-sharing",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Used only if you attach a screenshot to a bug report or suggestion. Nothing is uploaded — it stays on this device."
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#F7F5F2",
-          "dark": { "backgroundColor": "#14120F" },
+          "dark": {
+            "backgroundColor": "#14120F"
+          },
           "image": "./assets/splash-icon.png",
           "imageWidth": 180
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

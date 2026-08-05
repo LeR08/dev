@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React, { useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
 
+import { BacCard } from '@/components/BacCard';
 import { BarChart, type BarDatum } from '@/components/charts/BarChart';
 import { EntryRow } from '@/components/EntryRow';
 import { StatCard } from '@/components/StatCard';
@@ -42,7 +43,7 @@ export default function TodayScreen() {
   const theme = useTheme();
   const router = useRouter();
   const now = useNow();
-  const { entries, drinks, settings } = useApp();
+  const { entries, drinks, settings, profile } = useApp();
   const quickLog = useQuickLog();
 
   const today = useMemo(() => periodRange(now, 'day', settings.weekStartsOn), [now, settings.weekStartsOn]);
@@ -135,6 +136,8 @@ export default function TodayScreen() {
         </View>
 
         <StreakCard streak={streak} longest={longestStreak} />
+
+        <BacCard profile={profile} entries={entries} now={now} />
 
         <Card style={{ gap: theme.spacing(3) }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

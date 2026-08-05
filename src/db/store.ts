@@ -1,5 +1,14 @@
 import type { Range } from '@/domain/dates';
-import type { Drink, DrinkInput, Entry, EntryInput, Settings } from '@/domain/types';
+import type {
+  Drink,
+  DrinkInput,
+  Entry,
+  EntryInput,
+  Profile,
+  Settings,
+  Ticket,
+  TicketInput,
+} from '@/domain/types';
 
 /**
  * Storage contract.
@@ -33,7 +42,16 @@ export interface Store {
   getSettings(): Promise<Partial<Settings>>;
   saveSettings(settings: Settings): Promise<void>;
 
-  /** Wipes entries, custom drinks and settings, then re-seeds the catalog. */
+  /** Null when onboarding has not collected a profile yet. */
+  getProfile(): Promise<Profile | null>;
+  saveProfile(profile: Profile): Promise<void>;
+
+  listTickets(): Promise<Ticket[]>;
+  createTicket(input: TicketInput): Promise<Ticket>;
+  updateTicket(id: string, patch: { status: Ticket['status'] }): Promise<Ticket>;
+  deleteTicket(id: string): Promise<void>;
+
+  /** Wipes entries, custom drinks, settings, profile and tickets, then re-seeds the catalog. */
   clearAll(): Promise<void>;
 }
 
@@ -44,6 +62,8 @@ export type Backup = {
   settings: Partial<Settings>;
   customDrinks: Drink[];
   entries: Entry[];
+  profile: Profile | null;
+  tickets: Ticket[];
 };
 
 /** Collision-resistant enough for a single-user local log. */

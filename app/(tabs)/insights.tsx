@@ -1,10 +1,12 @@
+import { useRouter } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { BarChart, type BarDatum } from '@/components/charts/BarChart';
 import { DayGrid } from '@/components/charts/DayGrid';
 import { DonutChart, type DonutSlice } from '@/components/charts/DonutChart';
 import { StatCard } from '@/components/StatCard';
+import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Screen } from '@/components/ui/Screen';
@@ -29,6 +31,7 @@ import {
   formatWeekdayShort,
   pluralize,
 } from '@/domain/format';
+import { computeSavings, savingsHeadline } from '@/domain/savings';
 import {
   alcoholFreeDays,
   averagePerDay,
@@ -41,6 +44,7 @@ import {
 } from '@/domain/stats';
 import { CATEGORY_LABELS } from '@/domain/types';
 import { useNow } from '@/hooks/useNow';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -54,8 +58,10 @@ const VIEWS: { value: Window; label: string; granularity: Granularity; count: nu
 
 export default function InsightsScreen() {
   const theme = useTheme();
+  const router = useRouter();
   const now = useNow();
-  const { entries, settings } = useApp();
+  const { t } = useTranslation();
+  const { entries, settings, profile } = useApp();
   const [view, setView] = useState<Window>('week');
 
   const config = VIEWS.find((item) => item.value === view) ?? VIEWS[0];
@@ -144,6 +150,11 @@ export default function InsightsScreen() {
 
   const periodName = view === 'week' ? 'previous 7 days' : view === 'month' ? 'previous 30 days' : 'previous year';
 
+  const savings = useMemo(
+    () => computeSavings(profile?.spendBeforeTrackingPerDay ?? null, entries, range),
+    [entries, profile?.spendBeforeTrackingPerDay, range]
+  );
+
   if (entries.length === 0) {
     return (
       <Screen>
@@ -226,6 +237,11 @@ export default function InsightsScreen() {
           <BarChart data={spendBars} height={130} color={theme.colors.textMuted} />
         </Card>
 
+        <SavingsCard
+          saved={savings?.saved ?? null}
+          onPress={() => router.push('/savings')}
+        />
+
         <Card style={{ gap: theme.spacing(3) }}>
           <Text variant="heading">By category</Text>
           {slices.length === 0 ? (
@@ -288,6 +304,51 @@ export default function InsightsScreen() {
         </Card>
       </View>
     </Screen>
+  );
+}
+
+/**
+ * Savings summary for the window Insights is already showing.
+ *
+ * Shown as a prompt to add a baseline when there is none (spec v1.2 §7.3),
+ * rather than being hidden entirely — the dedicated Savings screen explains
+ * why it is worth adding one.
+ */
+function SavingsCard({ saved, onPress }: { saved: number | null; onPress: () => void }) {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const { settings } = useApp();
+
+  if (saved === null) {
+    return (
+      <Card style={{ gap: theme.spacing(2) }}>
+        <Text variant="heading">{t('savings.cardTitle')}</Text>
+        <Text variant="body" tone="muted">
+          {t('savings.noBaselinePrompt')}
+        </Text>
+        <Button label={t('savings.addBaselineAction')} variant="secondary" onPress={onPress} />
+      </Card>
+    );
+  }
+
+  const headline = savingsHeadline(saved);
+  const label =
+    headline === 'saved' ? t('savings.savedLabel') : headline === 'spentMore' ? t('savings.spentMoreLabel') : t('savings.evenLabel');
+
+  return (
+    <Pressable accessibilityRole="button" onPress={onPress}>
+      <Card tone="accent" style={{ gap: theme.spacing(1) }}>
+        <Text variant="caption" tone="accent" overline>
+          {t('savings.cardTitle')}
+        </Text>
+        <Text variant="title">
+          {formatMoney(Math.abs(saved), settings.currency)} {label}
+        </Text>
+        <Text variant="caption" tone="muted">
+          {t('savings.disclaimerNeutral')}
+        </Text>
+      </Card>
+    </Pressable>
   );
 }
 

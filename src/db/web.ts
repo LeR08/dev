@@ -5,7 +5,11 @@ import {
   type DrinkInput,
   type Entry,
   type EntryInput,
+  type Profile,
   type Settings,
+  type Ticket,
+  type TicketInput,
+  type TicketStatus,
 } from '@/domain/types';
 import { CATALOG_VERSION, SEED_DRINKS, seedToDrink } from './seed';
 import { newId, type Store } from './store';
@@ -17,10 +21,12 @@ type Snapshot = {
   drinks: Drink[];
   entries: Entry[];
   settings: Partial<Settings>;
+  profile: Profile | null;
+  tickets: Ticket[];
 };
 
 function emptySnapshot(): Snapshot {
-  return { catalogVersion: 0, drinks: [], entries: [], settings: {} };
+  return { catalogVersion: 0, drinks: [], entries: [], settings: {}, profile: null, tickets: [] };
 }
 
 /**
@@ -64,6 +70,8 @@ export class WebStore implements Store {
         drinks: parsed.drinks ?? [],
         entries: parsed.entries ?? [],
         settings: parsed.settings ?? {},
+        profile: parsed.profile ?? null,
+        tickets: parsed.tickets ?? [],
       };
     } catch {
       // Unparseable data is left in place rather than overwritten, so it can
@@ -211,6 +219,55 @@ export class WebStore implements Store {
 
   async saveSettings(settings: Settings): Promise<void> {
     this.snapshot.settings = settings;
+    this.persist();
+  }
+
+  async getProfile(): Promise<Profile | null> {
+    return this.snapshot.profile;
+  }
+
+  async saveProfile(profile: Profile): Promise<void> {
+    this.snapshot.profile = profile;
+    this.persist();
+  }
+
+  async listTickets(): Promise<Ticket[]> {
+    // Reverse before the (stable) sort so two tickets created in the same
+    // millisecond still list most-recently-created first, rather than in
+    // whatever order the tie happens to resolve to.
+    return [...this.snapshot.tickets].reverse().sort((a, b) => b.createdAt - a.createdAt);
+  }
+
+  async createTicket(input: TicketInput): Promise<Ticket> {
+    const now = Date.now();
+    const ticket: Ticket = {
+      id: newId(),
+      type: input.type,
+      title: input.title,
+      description: input.description,
+      screenshotUri: input.screenshotUri ?? null,
+      appVersion: input.appVersion,
+      platform: input.platform,
+      status: 'open',
+      createdAt: now,
+      updatedAt: now,
+    };
+    this.snapshot.tickets = [...this.snapshot.tickets, ticket];
+    this.persist();
+    return ticket;
+  }
+
+  async updateTicket(id: string, patch: { status: TicketStatus }): Promise<Ticket> {
+    const existing = this.snapshot.tickets.find((ticket) => ticket.id === id);
+    if (!existing) throw new Error(`Ticket ${id} not found`);
+    const next: Ticket = { ...existing, status: patch.status, updatedAt: Date.now() };
+    this.snapshot.tickets = this.snapshot.tickets.map((ticket) => (ticket.id === id ? next : ticket));
+    this.persist();
+    return next;
+  }
+
+  async deleteTicket(id: string): Promise<void> {
+    this.snapshot.tickets = this.snapshot.tickets.filter((ticket) => ticket.id !== id);
     this.persist();
   }
 

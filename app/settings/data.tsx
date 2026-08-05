@@ -7,7 +7,7 @@ import { Field } from '@/components/ui/Field';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
-import { backupFileName, buildBackup, toCsv, toJson } from '@/export/backup';
+import { backupFileName, buildBackup, ticketsFileName, ticketsToCsv, toCsv, toJson } from '@/export/backup';
 import { exportText } from '@/export/share';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -16,10 +16,10 @@ const CONFIRM_WORD = 'DELETE';
 
 export default function DataScreen() {
   const theme = useTheme();
-  const { entries, drinks, settings, clearAllData } = useApp();
+  const { entries, drinks, settings, profile, tickets, clearAllData } = useApp();
   const toast = useToast();
 
-  const [busy, setBusy] = useState<'csv' | 'json' | null>(null);
+  const [busy, setBusy] = useState<'csv' | 'json' | 'tickets' | null>(null);
   const [confirmText, setConfirmText] = useState('');
   const [deleting, setDeleting] = useState(false);
 
@@ -34,9 +34,33 @@ export default function DataScreen() {
       const content =
         kind === 'csv'
           ? toCsv(entries, settings.currency)
-          : toJson(buildBackup(entries, drinks, settings));
+          : toJson(buildBackup(entries, drinks, settings, profile, tickets));
       const result = await exportText(fileName, content, kind === 'csv' ? 'text/csv' : 'application/json');
 
+      toast.show({
+        message:
+          result === 'downloaded'
+            ? `${fileName} downloaded`
+            : result === 'shared'
+              ? 'Export ready'
+              : 'Sharing is not available on this device',
+      });
+    } catch (error) {
+      toast.show({ message: error instanceof Error ? error.message : 'Export failed' });
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const runTicketExport = async () => {
+    if (tickets.length === 0) {
+      toast.show({ message: 'No tickets to export yet' });
+      return;
+    }
+    setBusy('tickets');
+    try {
+      const fileName = ticketsFileName('csv');
+      const result = await exportText(fileName, ticketsToCsv(tickets), 'text/csv');
       toast.show({
         message:
           result === 'downloaded'
@@ -119,10 +143,28 @@ export default function DataScreen() {
 
         <Card style={{ gap: theme.spacing(3) }}>
           <View style={{ gap: theme.spacing(1) }}>
+            <Text variant="heading">Export tickets</Text>
+            <Text variant="body" tone="muted">
+              Bug reports and suggestions you logged from Settings → Report a problem. Nothing is
+              sent anywhere automatically in this version — export is how you get them off the
+              device.
+            </Text>
+          </View>
+          <Button
+            label="Export tickets CSV"
+            variant="secondary"
+            loading={busy === 'tickets'}
+            onPress={() => void runTicketExport()}
+          />
+        </Card>
+
+        <Card style={{ gap: theme.spacing(3) }}>
+          <View style={{ gap: theme.spacing(1) }}>
             <Text variant="heading">Delete all my data</Text>
             <Text variant="body" tone="muted">
-              Removes every entry, custom drink and setting from this device. The built-in drink
-              catalog is restored so the app still works afterwards.
+              Removes every entry, custom drink, your profile, tickets and settings from this
+              device, and brings back onboarding. The built-in drink catalog is restored so the app
+              still works afterwards.
             </Text>
           </View>
           <Field

@@ -3,37 +3,45 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ProfileFields } from '@/components/ProfileFields';
 import { Button } from '@/components/ui/Button';
 import { USE_NATIVE_DRIVER } from '@/components/ui/animation';
 import { Card } from '@/components/ui/Card';
+import { Chip } from '@/components/ui/Chip';
 import { Field } from '@/components/ui/Field';
 import { Screen } from '@/components/ui/Screen';
 import { Segmented } from '@/components/ui/Segmented';
 import { Text } from '@/components/ui/Text';
 import { STANDARD_DRINK_PRESETS } from '@/domain/alcohol';
 import { CURRENCIES } from '@/domain/format';
+import { buildProfile, emptyProfileDraft, type ProfileDraft } from '@/domain/profile';
 import type { IntakeUnit, VolumeUnit } from '@/domain/types';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
-import { Chip } from '@/components/ui/Chip';
 
-const STEP_COUNT = 3;
+const STEP_COUNT = 5;
 
 /**
  * First-run flow.
  *
- * Three short steps whose real job is to set the tone: this is private, it is
- * yours, and nothing here is going to judge you. Every choice has a sensible
- * default and can be changed later, so skipping straight through is fine.
+ * Steps whose real job is to set the tone: this is private, it is yours, and
+ * nothing here is going to judge you. Every choice has a sensible default and
+ * can be changed later, so skipping straight through is fine — including the
+ * v1.2 profile steps, which are the one place spec v1.2 §4 calls
+ * "identified" data: it still never leaves this device, and every field but
+ * the reasons list can be left blank.
  */
 export default function OnboardingScreen() {
   const theme = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { settings, updateSettings } = useApp();
+  const { t } = useTranslation();
+  const { settings, updateSettings, saveProfile } = useApp();
 
   const [step, setStep] = useState(0);
   const [weeklyGoal, setWeeklyGoal] = useState('');
+  const [profileDraft, setProfileDraft] = useState<ProfileDraft>(emptyProfileDraft());
   const fade = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
@@ -44,9 +52,11 @@ export default function OnboardingScreen() {
   const finish = async () => {
     const parsed = Number(weeklyGoal.replace(',', '.').trim());
     const weeklyIntake = weeklyGoal.trim() !== '' && Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+    const now = Date.now();
+    await saveProfile(buildProfile(profileDraft, null, now));
     await updateSettings({
       goals: { ...settings.goals, weeklyIntake },
-      onboardingCompletedAt: Date.now(),
+      onboardingCompletedAt: now,
     });
     router.replace('/');
   };
@@ -62,7 +72,9 @@ export default function OnboardingScreen() {
         <Animated.View style={{ opacity: fade, gap: theme.spacing(5), paddingTop: theme.spacing(10) }}>
           {step === 0 ? <Welcome /> : null}
           {step === 1 ? <UnitsStep /> : null}
-          {step === 2 ? <GoalStep value={weeklyGoal} onChange={setWeeklyGoal} /> : null}
+          {step === 2 ? <AboutYouStep value={profileDraft} onChange={setProfileDraft} /> : null}
+          {step === 3 ? <ReasonsStep value={profileDraft} onChange={setProfileDraft} /> : null}
+          {step === 4 ? <GoalStep value={weeklyGoal} onChange={setWeeklyGoal} /> : null}
         </Animated.View>
       </Screen>
 
@@ -90,10 +102,14 @@ export default function OnboardingScreen() {
           ))}
         </View>
 
-        <Button label={step === STEP_COUNT - 1 ? 'Start tracking' : 'Continue'} size="lg" onPress={next} />
+        <Button
+          label={step === STEP_COUNT - 1 ? t('onboarding.startTracking') : t('common.continue')}
+          size="lg"
+          onPress={next}
+        />
 
         {step < STEP_COUNT - 1 ? (
-          <Button label="Skip setup" variant="ghost" haptic={false} onPress={() => void finish()} />
+          <Button label={t('onboarding.skipSetup')} variant="ghost" haptic={false} onPress={() => void finish()} />
         ) : null}
       </View>
     </View>
@@ -192,6 +208,43 @@ function UnitsStep() {
           ))}
         </View>
       </View>
+    </View>
+  );
+}
+
+type ProfileStepProps = {
+  value: ProfileDraft;
+  onChange: (next: ProfileDraft) => void;
+};
+
+function AboutYouStep({ value, onChange }: ProfileStepProps) {
+  const theme = useTheme();
+  const { settings } = useApp();
+  const { t } = useTranslation();
+
+  return (
+    <View style={{ gap: theme.spacing(4) }}>
+      <Text variant="title">{t('onboarding.profile.title')}</Text>
+      <Text variant="body" tone="muted">
+        {t('onboarding.profile.subtitle')}
+      </Text>
+      <ProfileFields value={value} onChange={onChange} settings={settings} section="about" />
+    </View>
+  );
+}
+
+function ReasonsStep({ value, onChange }: ProfileStepProps) {
+  const theme = useTheme();
+  const { settings } = useApp();
+  const { t } = useTranslation();
+
+  return (
+    <View style={{ gap: theme.spacing(4) }}>
+      <Text variant="title">{t('onboarding.profile.contextTitle')}</Text>
+      <Text variant="body" tone="muted">
+        {t('onboarding.profile.contextSubtitle')}
+      </Text>
+      <ProfileFields value={value} onChange={onChange} settings={settings} section="context" />
     </View>
   );
 }

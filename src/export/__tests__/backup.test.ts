@@ -1,7 +1,7 @@
 import { seedToDrink, SEED_DRINKS } from '@/db/seed';
-import { at, makeEntry } from '@/domain/__tests__/factories';
+import { at, makeEntry, makeProfile, makeTicket } from '@/domain/__tests__/factories';
 import { DEFAULT_SETTINGS, type Drink } from '@/domain/types';
-import { backupFileName, buildBackup, toCsv, toJson } from '../backup';
+import { backupFileName, buildBackup, ticketsFileName, ticketsToCsv, toCsv, toJson } from '../backup';
 
 const customDrink: Drink = {
   ...seedToDrink(SEED_DRINKS[0], 0),
@@ -11,19 +11,58 @@ const customDrink: Drink = {
 };
 
 describe('buildBackup', () => {
-  it('carries entries, settings and only the user’s own drinks', () => {
+  it('carries entries, settings, profile, tickets and only the user’s own drinks', () => {
     const entries = [makeEntry()];
-    const backup = buildBackup(entries, [seedToDrink(SEED_DRINKS[0], 0), customDrink], DEFAULT_SETTINGS);
+    const profile = makeProfile();
+    const tickets = [makeTicket()];
+    const backup = buildBackup(
+      entries,
+      [seedToDrink(SEED_DRINKS[0], 0), customDrink],
+      DEFAULT_SETTINGS,
+      profile,
+      tickets
+    );
 
     expect(backup.app).toBe('tally');
     expect(backup.formatVersion).toBe(1);
     expect(backup.entries).toHaveLength(1);
     expect(backup.customDrinks).toEqual([customDrink]);
+    expect(backup.profile).toEqual(profile);
+    expect(backup.tickets).toEqual(tickets);
+  });
+
+  it('accepts a null profile — onboarding may not have run yet', () => {
+    const backup = buildBackup([], [], DEFAULT_SETTINGS, null, []);
+    expect(backup.profile).toBeNull();
   });
 
   it('serialises to valid JSON', () => {
-    const backup = buildBackup([makeEntry()], [], DEFAULT_SETTINGS);
+    const backup = buildBackup([makeEntry()], [], DEFAULT_SETTINGS, null, []);
     expect(JSON.parse(toJson(backup))).toMatchObject({ app: 'tally', formatVersion: 1 });
+  });
+});
+
+describe('ticketsToCsv', () => {
+  it('writes a header and one row per ticket, oldest first', () => {
+    const csv = ticketsToCsv([
+      makeTicket({ title: 'later', createdAt: at(2026, 3, 5) }),
+      makeTicket({ title: 'earlier', createdAt: at(2026, 3, 1) }),
+    ]);
+    const lines = csv.split('\n');
+    expect(lines[0]).toBe('id,type,status,title,description,app_version,platform,created_at_iso');
+    expect(lines[1]).toContain('earlier');
+    expect(lines[2]).toContain('later');
+  });
+
+  it('escapes free text the same way the entry export does', () => {
+    const csv = ticketsToCsv([makeTicket({ description: 'crashes on "log", every time' })]);
+    expect(csv).toContain('"crashes on ""log"", every time"');
+  });
+});
+
+describe('ticketsFileName', () => {
+  it('is dated and namespaced separately from the data export', () => {
+    expect(ticketsFileName('csv', at(2026, 8, 5))).toBe('tally-tickets-2026-08-05.csv');
   });
 });
 

@@ -3,19 +3,27 @@ import * as SQLite from 'expo-sqlite';
 import type { Range } from '@/domain/dates';
 import {
   DEFAULT_SETTINGS,
+  type BiologicalSex,
   type Category,
   type Drink,
   type DrinkInput,
   type Entry,
   type EntryInput,
+  type Profile,
+  type ReasonKey,
   type Settings,
+  type SpendPeriod,
+  type Ticket,
+  type TicketInput,
+  type TicketStatus,
+  type TicketType,
 } from '@/domain/types';
 import { CATALOG_VERSION, SEED_DRINKS } from './seed';
 import { newId, type Store } from './store';
 
 export const DATABASE_NAME = 'tally.db';
 
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 type DrinkRow = {
   id: string;
@@ -74,6 +82,68 @@ function toEntry(row: EntryRow): Entry {
     consumedAt: row.consumed_at,
     note: row.note,
     location: row.location,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+type ProfileRow = {
+  sex: string;
+  age: number | null;
+  weight_kg: number | null;
+  height_cm: number | null;
+  spend_before_tracking_per_day: number | null;
+  spend_period: string;
+  reasons: string;
+  other_reason: string | null;
+  created_at: number;
+  updated_at: number;
+};
+
+function toProfile(row: ProfileRow): Profile {
+  let reasons: ReasonKey[] = [];
+  try {
+    reasons = JSON.parse(row.reasons);
+  } catch {
+    reasons = [];
+  }
+  return {
+    sex: row.sex as BiologicalSex,
+    age: row.age,
+    weightKg: row.weight_kg,
+    heightCm: row.height_cm,
+    spendBeforeTrackingPerDay: row.spend_before_tracking_per_day,
+    spendPeriod: row.spend_period as SpendPeriod,
+    reasons,
+    otherReason: row.other_reason,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+type TicketRow = {
+  id: string;
+  type: string;
+  title: string;
+  description: string;
+  screenshot_uri: string | null;
+  app_version: string;
+  platform: string;
+  status: string;
+  created_at: number;
+  updated_at: number;
+};
+
+function toTicket(row: TicketRow): Ticket {
+  return {
+    id: row.id,
+    type: row.type as TicketType,
+    title: row.title,
+    description: row.description,
+    screenshotUri: row.screenshot_uri,
+    appVersion: row.app_version,
+    platform: row.platform,
+    status: row.status as TicketStatus,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -156,6 +226,41 @@ export class SqliteStore implements Store {
           key TEXT PRIMARY KEY NOT NULL,
           value TEXT NOT NULL
         );
+      `);
+    }
+
+    if (current < 2) {
+      await db.execAsync(`
+        -- Single-row table: the CHECK pins every insert to id = 1, so
+        -- "INSERT OR REPLACE" always updates the one profile record.
+        CREATE TABLE IF NOT EXISTS profile (
+          id INTEGER PRIMARY KEY CHECK (id = 1),
+          sex TEXT NOT NULL,
+          age INTEGER,
+          weight_kg REAL,
+          height_cm REAL,
+          spend_before_tracking_per_day REAL,
+          spend_period TEXT NOT NULL,
+          reasons TEXT NOT NULL,
+          other_reason TEXT,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS tickets (
+          id TEXT PRIMARY KEY NOT NULL,
+          type TEXT NOT NULL,
+          title TEXT NOT NULL,
+          description TEXT NOT NULL,
+          screenshot_uri TEXT,
+          app_version TEXT NOT NULL,
+          platform TEXT NOT NULL,
+          status TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_tickets_created_at ON tickets (created_at DESC);
       `);
     }
 
@@ -432,11 +537,97 @@ export class SqliteStore implements Store {
     });
   }
 
+  async getProfile(): Promise<Profile | null> {
+    const row = await this.database.getFirstAsync<ProfileRow>('SELECT * FROM profile WHERE id = 1');
+    return row ? toProfile(row) : null;
+  }
+
+  async saveProfile(profile: Profile): Promise<void> {
+    await this.database.runAsync(
+      `INSERT OR REPLACE INTO profile
+         (id, sex, age, weight_kg, height_cm, spend_before_tracking_per_day, spend_period, reasons, other_reason, created_at, updated_at)
+       VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        profile.sex,
+        profile.age,
+        profile.weightKg,
+        profile.heightCm,
+        profile.spendBeforeTrackingPerDay,
+        profile.spendPeriod,
+        JSON.stringify(profile.reasons),
+        profile.otherReason,
+        profile.createdAt,
+        profile.updatedAt,
+      ]
+    );
+  }
+
+  async listTickets(): Promise<Ticket[]> {
+    // rowid as a secondary key breaks ties deterministically when two tickets
+    // share a created_at millisecond.
+    const rows = await this.database.getAllAsync<TicketRow>(
+      'SELECT * FROM tickets ORDER BY created_at DESC, rowid DESC'
+    );
+    return rows.map(toTicket);
+  }
+
+  async createTicket(input: TicketInput): Promise<Ticket> {
+    const now = Date.now();
+    const ticket: Ticket = {
+      id: newId(),
+      type: input.type,
+      title: input.title,
+      description: input.description,
+      screenshotUri: input.screenshotUri ?? null,
+      appVersion: input.appVersion,
+      platform: input.platform,
+      status: 'open',
+      createdAt: now,
+      updatedAt: now,
+    };
+    await this.database.runAsync(
+      `INSERT INTO tickets
+         (id, type, title, description, screenshot_uri, app_version, platform, status, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        ticket.id,
+        ticket.type,
+        ticket.title,
+        ticket.description,
+        ticket.screenshotUri,
+        ticket.appVersion,
+        ticket.platform,
+        ticket.status,
+        ticket.createdAt,
+        ticket.updatedAt,
+      ]
+    );
+    return ticket;
+  }
+
+  async updateTicket(id: string, patch: { status: TicketStatus }): Promise<Ticket> {
+    const row = await this.database.getFirstAsync<TicketRow>('SELECT * FROM tickets WHERE id = ?', [id]);
+    if (!row) throw new Error(`Ticket ${id} not found`);
+    const updatedAt = Date.now();
+    await this.database.runAsync('UPDATE tickets SET status = ?, updated_at = ? WHERE id = ?', [
+      patch.status,
+      updatedAt,
+      id,
+    ]);
+    return { ...toTicket(row), status: patch.status, updatedAt };
+  }
+
+  async deleteTicket(id: string): Promise<void> {
+    await this.database.runAsync('DELETE FROM tickets WHERE id = ?', [id]);
+  }
+
   async clearAll(): Promise<void> {
     await this.database.withTransactionAsync(async () => {
       await this.database.runAsync('DELETE FROM entries');
       await this.database.runAsync('DELETE FROM drinks');
       await this.database.runAsync('DELETE FROM settings');
+      await this.database.runAsync('DELETE FROM profile');
+      await this.database.runAsync('DELETE FROM tickets');
     });
     await this.seedCatalog(this.database);
   }

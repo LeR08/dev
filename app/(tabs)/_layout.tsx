@@ -3,10 +3,12 @@ import React from 'react';
 import type { ColorValue } from 'react-native';
 
 import { Icon, type IconName } from '@/components/ui/Icon';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function TabsLayout() {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const icon =
     (name: IconName) =>
@@ -33,10 +35,11 @@ export default function TabsLayout() {
         sceneStyle: { backgroundColor: theme.colors.background },
       }}
     >
-      <Tabs.Screen name="index" options={{ title: 'Today', tabBarIcon: icon('glass') }} />
-      <Tabs.Screen name="history" options={{ title: 'History', tabBarIcon: icon('list') }} />
-      <Tabs.Screen name="insights" options={{ title: 'Insights', tabBarIcon: icon('chart') }} />
-      <Tabs.Screen name="settings" options={{ title: 'Settings', tabBarIcon: icon('sliders') }} />
+      <Tabs.Screen name="index" options={{ title: t('tabs.today'), tabBarIcon: icon('glass') }} />
+      <Tabs.Screen name="history" options={{ title: t('tabs.history'), tabBarIcon: icon('list') }} />
+      <Tabs.Screen name="insights" options={{ title: t('tabs.insights'), tabBarIcon: icon('chart') }} />
+      <Tabs.Screen name="help" options={{ title: t('help.tabLabel'), tabBarIcon: icon('lifebuoy') }} />
+      <Tabs.Screen name="settings" options={{ title: t('tabs.settings'), tabBarIcon: icon('sliders') }} />
     </Tabs>
   );
 }

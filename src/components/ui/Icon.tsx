@@ -2,7 +2,16 @@ import React from 'react';
 import type { ColorValue } from 'react-native';
 import Svg, { Circle, Line, Path, Rect } from 'react-native-svg';
 
-export type IconName = 'glass' | 'list' | 'chart' | 'sliders' | 'plus' | 'chevronLeft' | 'close' | 'check';
+export type IconName =
+  | 'glass'
+  | 'list'
+  | 'chart'
+  | 'sliders'
+  | 'plus'
+  | 'chevronLeft'
+  | 'close'
+  | 'check'
+  | 'lifebuoy';
 
 export type IconProps = {
   name: IconName;
@@ -81,6 +90,17 @@ export function Icon({ name, size = 24, color, strokeWidth = 1.8 }: IconProps) {
       ) : null}
 
       {name === 'check' ? <Path d="m5 12.5 4.5 4.5L19 7" {...common} /> : null}
+
+      {name === 'lifebuoy' ? (
+        <>
+          <Circle cx="12" cy="12" r="8" {...common} />
+          <Circle cx="12" cy="12" r="3.4" {...common} />
+          <Line x1="12" y1="4" x2="12" y2="8.6" {...common} />
+          <Line x1="12" y1="15.4" x2="12" y2="20" {...common} />
+          <Line x1="4" y1="12" x2="8.6" y2="12" {...common} />
+          <Line x1="15.4" y1="12" x2="20" y2="12" {...common} />
+        </>
+      ) : null}
     </Svg>
   );
 }

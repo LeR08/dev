@@ -1,4 +1,4 @@
-import type { Category, Entry } from '../types';
+import type { Category, Entry, Profile, Ticket } from '../types';
 
 let counter = 0;
 
@@ -33,4 +33,39 @@ export function at(
   minutes = 0
 ): number {
   return new Date(year, month - 1, day, hours, minutes).getTime();
+}
+
+export function makeProfile(overrides: Partial<Profile> = {}): Profile {
+  const now = at(2026, 1, 1);
+  return {
+    sex: 'female',
+    age: 30,
+    weightKg: 65,
+    heightCm: 168,
+    spendBeforeTrackingPerDay: 8,
+    spendPeriod: 'week',
+    reasons: ['curiosity'],
+    otherReason: null,
+    createdAt: now,
+    updatedAt: now,
+    ...overrides,
+  };
+}
+
+export function makeTicket(overrides: Partial<Ticket> = {}): Ticket {
+  counter += 1;
+  const now = overrides.createdAt ?? at(2026, 1, 1);
+  return {
+    id: `ticket-${counter}`,
+    type: 'bug',
+    title: 'Something broke',
+    description: 'Steps to reproduce...',
+    screenshotUri: null,
+    appVersion: '1.2.0',
+    platform: 'ios',
+    status: 'open',
+    createdAt: now,
+    updatedAt: now,
+    ...overrides,
+  };
 }

@@ -101,6 +101,8 @@ export type EntryInput = {
 };
 
 export type VolumeUnit = 'ml' | 'cl';
+export type WeightUnit = 'kg' | 'lb';
+export type HeightUnit = 'cm' | 'in';
 
 /** Which metric the dashboard uses when it says "how much". */
 export type IntakeUnit = 'standardDrinks' | 'grams';
@@ -120,6 +122,26 @@ export type Goals = {
   alcoholFreeDaysPerWeek: number | null;
 };
 
+/**
+ * In-app language, independent of the OS/store locale used for the display
+ * name (spec v1.2 §3.2). French and English ship fully translated; the rest
+ * are scaffolded (keys present, English text) and shown as "beta" in the
+ * picker until translated.
+ */
+export const LANGUAGES = ['en', 'fr', 'es', 'de', 'it', 'pt'] as const;
+export type LanguageCode = (typeof LANGUAGES)[number];
+
+/** Languages with a complete, reviewed translation. The rest fall back to English text. */
+export const COMPLETE_LANGUAGES: readonly LanguageCode[] = ['en', 'fr'];
+
+/**
+ * Country used to pick which help/resources content to show (spec v1.2 §8).
+ * Deliberately a small, curated list rather than every ISO country — each
+ * entry needs a matching resources JSON file.
+ */
+export const RESOURCE_COUNTRIES = ['FR', 'US', 'GB', 'CA', 'OTHER'] as const;
+export type ResourceCountry = (typeof RESOURCE_COUNTRIES)[number];
+
 export type Settings = {
   volumeUnit: VolumeUnit;
   intakeUnit: IntakeUnit;
@@ -132,6 +154,14 @@ export type Settings = {
   accent: AccentName;
   goals: Goals;
   onboardingCompletedAt: number | null;
+  /** In-app language (spec v1.2 §3.2) — independent of the OS locale. */
+  language: LanguageCode;
+  /** Which country's help & resources content to show (spec v1.2 §8.1). */
+  resourceCountry: ResourceCountry;
+  /** Display unit for the profile's weight field (used by the BAC estimate). */
+  weightUnit: WeightUnit;
+  /** Display unit for the profile's height field (stats only, spec v1.2 §4.1). */
+  heightUnit: HeightUnit;
 };
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -144,4 +174,97 @@ export const DEFAULT_SETTINGS: Settings = {
   accent: 'sage',
   goals: { weeklyIntake: null, alcoholFreeDaysPerWeek: null },
   onboardingCompletedAt: null,
+  language: 'en',
+  resourceCountry: 'OTHER',
+  weightUnit: 'kg',
+  heightUnit: 'cm',
+};
+
+/** Biological sex as used by the Widmark BAC formula. Never guessed or defaulted. */
+export type BiologicalSex = 'male' | 'female' | 'unspecified';
+
+export const REASON_KEYS = ['sevrage', 'financial', 'curiosity', 'medical', 'other'] as const;
+export type ReasonKey = (typeof REASON_KEYS)[number];
+
+export type SpendPeriod = 'day' | 'week';
+
+/**
+ * The onboarding profile (spec v1.2 §4).
+ *
+ * Per §4.4 this is *identified, non-anonymous* data by product decision, but it
+ * is still local-only: no account, no server, no sync in this version. It
+ * lives in the same on-device Store as everything else.
+ *
+ * Language, country and currency are deliberately NOT duplicated here even
+ * though the spec's §11 table lists them on both Profile and a separate
+ * "SettingsExtras" entity — those already have one home in `Settings`
+ * (currency did even before v1.2), and giving them a second copy on Profile
+ * would create exactly the two-sources-of-truth risk the v1.1 architecture
+ * notes warn against. Settings stays the single source for all of them.
+ */
+export type Profile = {
+  sex: BiologicalSex;
+  /** Null when skipped. 13–120 when set; the app never invents a value. */
+  age: number | null;
+  /** Null when skipped. */
+  weightKg: number | null;
+  /** Null when skipped — optional per spec, stats-only, never used for BAC. */
+  heightCm: number | null;
+  /** Daily spend before the user started tracking, normalized from spendPeriod. Null if skipped. */
+  spendBeforeTrackingPerDay: number | null;
+  /** The period the user actually entered the figure in — kept so the settings screen can round-trip it. */
+  spendPeriod: SpendPeriod;
+  reasons: ReasonKey[];
+  /** Free text for the "Autre" reason. */
+  otherReason: string | null;
+  createdAt: number;
+  updatedAt: number;
+};
+
+export const EMPTY_PROFILE: Profile = {
+  sex: 'unspecified',
+  age: null,
+  weightKg: null,
+  heightCm: null,
+  spendBeforeTrackingPerDay: null,
+  spendPeriod: 'week',
+  reasons: [],
+  otherReason: null,
+  createdAt: 0,
+  updatedAt: 0,
+};
+
+export const TICKET_TYPES = ['bug', 'suggestion'] as const;
+export type TicketType = (typeof TICKET_TYPES)[number];
+
+export const TICKET_STATUSES = ['open', 'closed'] as const;
+export type TicketStatus = (typeof TICKET_STATUSES)[number];
+
+/**
+ * A locally-logged bug report or suggestion (spec v1.2 §9).
+ *
+ * v1.2 is local-only: nothing here is transmitted anywhere. The export screen
+ * can write these out to JSON/CSV so they can be reviewed on a computer.
+ */
+export type Ticket = {
+  id: string;
+  type: TicketType;
+  title: string;
+  description: string;
+  /** file:// URI of an attached screenshot, if any. */
+  screenshotUri: string | null;
+  appVersion: string;
+  platform: string;
+  status: TicketStatus;
+  createdAt: number;
+  updatedAt: number;
+};
+
+export type TicketInput = {
+  type: TicketType;
+  title: string;
+  description: string;
+  screenshotUri?: string | null;
+  appVersion: string;
+  platform: string;
 };

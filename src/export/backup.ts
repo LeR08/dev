@@ -1,6 +1,6 @@
 import { entryGrams } from '@/domain/alcohol';
 import type { Backup } from '@/db/store';
-import type { Drink, Entry, Settings } from '@/domain/types';
+import type { Drink, Entry, Profile, Settings, Ticket } from '@/domain/types';
 
 export const BACKUP_FORMAT_VERSION = 1;
 
@@ -8,6 +8,8 @@ export function buildBackup(
   entries: Entry[],
   drinks: Drink[],
   settings: Settings,
+  profile: Profile | null,
+  tickets: Ticket[],
   now = Date.now()
 ): Backup {
   return {
@@ -19,6 +21,8 @@ export function buildBackup(
     // worth carrying in a backup.
     customDrinks: drinks.filter((drink) => drink.isCustom),
     entries,
+    profile,
+    tickets,
   };
 }
 
@@ -102,4 +106,43 @@ function formatLocalTime(date: Date): string {
 
 export function backupFileName(kind: 'json' | 'csv', now = Date.now()): string {
   return `tally-export-${formatLocalDate(new Date(now))}.${kind}`;
+}
+
+const TICKET_CSV_COLUMNS = [
+  'id',
+  'type',
+  'status',
+  'title',
+  'description',
+  'app_version',
+  'platform',
+  'created_at_iso',
+] as const;
+
+/**
+ * CSV export for tickets (spec v1.2 §9.1) — a stand-in for real submission
+ * while the app has no backend: this is how they get off the device.
+ */
+export function ticketsToCsv(tickets: Ticket[]): string {
+  const rows = tickets
+    .slice()
+    .sort((a, b) => a.createdAt - b.createdAt)
+    .map((ticket) =>
+      [
+        ticket.id,
+        ticket.type,
+        ticket.status,
+        ticket.title,
+        ticket.description,
+        ticket.appVersion,
+        ticket.platform,
+        new Date(ticket.createdAt).toISOString(),
+      ].map(csvCell)
+    );
+
+  return [TICKET_CSV_COLUMNS.join(','), ...rows.map((row) => row.join(','))].join('\n');
+}
+
+export function ticketsFileName(kind: 'json' | 'csv', now = Date.now()): string {
+  return `tally-tickets-${formatLocalDate(new Date(now))}.${kind}`;
 }

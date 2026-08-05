@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { Text } from '@/components/ui/Text';
 import { ToastProvider } from '@/components/ui/Toast';
+import { I18nProvider, useTranslation } from '@/i18n/I18nProvider';
 import { AppProvider, useApp } from '@/state/AppProvider';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 
@@ -20,11 +21,13 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <AppProvider>
-          <ThemeProvider>
-            <ToastProvider>
-              <Boot />
-            </ToastProvider>
-          </ThemeProvider>
+          <I18nProvider>
+            <ThemeProvider>
+              <ToastProvider>
+                <Boot />
+              </ToastProvider>
+            </ThemeProvider>
+          </I18nProvider>
         </AppProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
@@ -35,6 +38,7 @@ export default function RootLayout() {
 function Boot() {
   const { status, error, settings } = useApp();
   const theme = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const segments = useSegments();
 
@@ -113,6 +117,12 @@ function Boot() {
         <Stack.Screen name="settings/appearance" options={{ title: 'Appearance' }} />
         <Stack.Screen name="settings/prices" options={{ title: 'Default prices' }} />
         <Stack.Screen name="settings/data" options={{ title: 'Data & privacy' }} />
+        <Stack.Screen name="settings/profile" options={{ title: t('settings.profile.title') }} />
+        <Stack.Screen name="settings/language" options={{ title: t('settings.language.title') }} />
+        <Stack.Screen name="settings/legal/[doc]" options={{ title: '' }} />
+        <Stack.Screen name="settings/report" options={{ title: t('tickets.reportTitle'), presentation: 'modal' }} />
+        <Stack.Screen name="settings/tickets" options={{ title: t('tickets.myTicketsTitle') }} />
+        <Stack.Screen name="savings" options={{ title: t('savings.title') }} />
       </Stack>
     </>
   );

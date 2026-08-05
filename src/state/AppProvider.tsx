@@ -1,3 +1,4 @@
+import * as Localization from 'expo-localization';
 import React, {
   createContext,
   useCallback,
@@ -16,8 +17,13 @@ import {
   type DrinkInput,
   type Entry,
   type EntryInput,
+  type Profile,
   type Settings,
+  type Ticket,
+  type TicketInput,
+  type TicketStatus,
 } from '@/domain/types';
+import { detectLanguage, detectResourceCountry } from '@/i18n/detectLocale';
 
 type Status = 'loading' | 'ready' | 'error';
 
@@ -28,6 +34,9 @@ type AppContextValue = {
   entries: Entry[];
   drinks: Drink[];
   settings: Settings;
+  /** Null until onboarding collects one (spec v1.2 §4). */
+  profile: Profile | null;
+  tickets: Ticket[];
   addEntry: (input: EntryInput) => Promise<Entry>;
   editEntry: (id: string, patch: Partial<EntryInput>) => Promise<Entry>;
   removeEntry: (id: string) => Promise<void>;
@@ -35,6 +44,10 @@ type AppContextValue = {
   editDrink: (id: string, patch: Partial<DrinkInput> & { archived?: boolean }) => Promise<Drink>;
   removeDrink: (id: string) => Promise<void>;
   updateSettings: (patch: Partial<Settings>) => Promise<void>;
+  saveProfile: (profile: Profile) => Promise<void>;
+  addTicket: (input: TicketInput) => Promise<Ticket>;
+  setTicketStatus: (id: string, status: TicketStatus) => Promise<Ticket>;
+  removeTicket: (id: string) => Promise<void>;
   clearAllData: () => Promise<void>;
   reload: () => Promise<void>;
 };
@@ -56,22 +69,48 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [drinks, setDrinks] = useState<Drink[]>([]);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const mounted = useRef(true);
 
   const load = useCallback(async () => {
-    const [loadedEntries, loadedDrinks, storedSettings] = await Promise.all([
+    const [loadedEntries, loadedDrinks, storedSettings, loadedProfile, loadedTickets] = await Promise.all([
       store.listEntries(),
       store.listDrinks(),
       store.getSettings(),
+      store.getProfile(),
+      store.listTickets(),
     ]);
     if (!mounted.current) return;
     setEntries(loadedEntries);
     setDrinks(loadedDrinks);
+
+    // On a genuinely fresh install — nothing saved yet — the language and
+    // help-resources country default to the device locale when it's one we
+    // support, else fall back to English / general (spec v1.2 §3.2, §8.1).
+    // Anything the user has explicitly set (or that a previous session wrote)
+    // is left untouched.
+    let detectedDefaults: Partial<Settings> = {};
+    if (!('language' in storedSettings) || !('resourceCountry' in storedSettings)) {
+      const locales = Localization.getLocales();
+      detectedDefaults = {
+        ...(!('language' in storedSettings) && {
+          language: detectLanguage(locales.map((locale) => locale.languageCode)),
+        }),
+        ...(!('resourceCountry' in storedSettings) && {
+          resourceCountry: detectResourceCountry(locales[0]?.regionCode),
+        }),
+      };
+    }
+
     setSettings({
       ...DEFAULT_SETTINGS,
+      ...detectedDefaults,
       ...storedSettings,
       goals: { ...DEFAULT_SETTINGS.goals, ...(storedSettings.goals ?? {}) },
     });
+    setProfile(loadedProfile);
+    setTickets(loadedTickets);
   }, [store]);
 
   useEffect(() => {
@@ -163,11 +202,49 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     [settings, store]
   );
 
+  const saveProfile = useCallback(
+    async (next: Profile) => {
+      await store.saveProfile(next);
+      setProfile(next);
+    },
+    [store]
+  );
+
+  const addTicket = useCallback(
+    async (input: TicketInput) => {
+      const ticket = await store.createTicket(input);
+      setTickets((current) => [ticket, ...current]);
+      return ticket;
+    },
+    [store]
+  );
+
+  const setTicketStatus = useCallback(
+    async (id: string, ticketStatus: TicketStatus) => {
+      const updated = await store.updateTicket(id, { status: ticketStatus });
+      setTickets((current) => current.map((ticket) => (ticket.id === id ? updated : ticket)));
+      return updated;
+    },
+    [store]
+  );
+
+  const removeTicket = useCallback(
+    async (id: string) => {
+      await store.deleteTicket(id);
+      setTickets((current) => current.filter((ticket) => ticket.id !== id));
+    },
+    [store]
+  );
+
   const clearAllData = useCallback(async () => {
     await store.clearAll();
     setEntries([]);
     setSettings(DEFAULT_SETTINGS);
     setDrinks(await store.listDrinks());
+    // Wiped along with everything else (spec v1.2 §4.4): the profile table is
+    // gone and the caller is expected to route back to onboarding.
+    setProfile(null);
+    setTickets([]);
   }, [store]);
 
   const value = useMemo<AppContextValue>(
@@ -178,6 +255,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       entries,
       drinks,
       settings,
+      profile,
+      tickets,
       addEntry,
       editEntry,
       removeEntry,
@@ -185,6 +264,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       editDrink,
       removeDrink,
       updateSettings,
+      saveProfile,
+      addTicket,
+      setTicketStatus,
+      removeTicket,
       clearAllData,
       reload: load,
     }),
@@ -195,6 +278,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       entries,
       drinks,
       settings,
+      profile,
+      tickets,
       addEntry,
       editEntry,
       removeEntry,
@@ -202,6 +287,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       editDrink,
       removeDrink,
       updateSettings,
+      saveProfile,
+      addTicket,
+      setTicketStatus,
+      removeTicket,
       clearAllData,
       load,
     ]

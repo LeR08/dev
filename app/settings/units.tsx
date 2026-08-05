@@ -8,7 +8,7 @@ import { Segmented } from '@/components/ui/Segmented';
 import { Text } from '@/components/ui/Text';
 import { STANDARD_DRINK_PRESETS } from '@/domain/alcohol';
 import { CURRENCIES } from '@/domain/format';
-import type { IntakeUnit, VolumeUnit } from '@/domain/types';
+import type { HeightUnit, IntakeUnit, VolumeUnit, WeightUnit } from '@/domain/types';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -61,6 +61,28 @@ export default function UnitsScreen() {
               </View>
             ))}
           </Card>
+        </Section>
+
+        <Section title="Weight" caption="Used for the profile's blood alcohol estimate.">
+          <Segmented<WeightUnit>
+            options={[
+              { value: 'kg', label: 'Kilograms' },
+              { value: 'lb', label: 'Pounds' },
+            ]}
+            value={settings.weightUnit}
+            onChange={(weightUnit) => updateSettings({ weightUnit })}
+          />
+        </Section>
+
+        <Section title="Height">
+          <Segmented<HeightUnit>
+            options={[
+              { value: 'cm', label: 'Centimetres' },
+              { value: 'in', label: 'Inches' },
+            ]}
+            value={settings.heightUnit}
+            onChange={(heightUnit) => updateSettings({ heightUnit })}
+          />
         </Section>
 
         <Section title="Week starts on">

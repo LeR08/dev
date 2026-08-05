@@ -7,14 +7,17 @@ import { Row, RowDivider } from '@/components/ui/Row';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { CURRENCIES } from '@/domain/format';
-import { ACCENTS } from '@/theme/palette';
+import { LANGUAGE_NAMES } from '@/i18n';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
+import { ACCENTS } from '@/theme/palette';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function SettingsScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { settings, drinks, entries } = useApp();
+  const { t } = useTranslation();
+  const { settings, drinks, entries, profile, tickets } = useApp();
 
   const customCount = drinks.filter((drink) => drink.isCustom).length;
   const currencyLabel =
@@ -82,9 +85,64 @@ export default function SettingsScreen() {
 
         <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
           <Row
+            title={t('settings.profileRow')}
+            subtitle={t('settings.profileRowSubtitle')}
+            value={profile ? undefined : t('common.notSet')}
+            onPress={() => router.push('/settings/profile')}
+          />
+          <RowDivider />
+          <Row
+            title={t('settings.languageRow')}
+            value={LANGUAGE_NAMES[settings.language]}
+            onPress={() => router.push('/settings/language')}
+          />
+        </Card>
+
+        <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
+          <Row
             title="Data & privacy"
             subtitle={`${entries.length} entries, stored on this device only`}
             onPress={() => router.push('/settings/data')}
+          />
+        </Card>
+
+        <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
+          <Row title={t('settings.helpRow')} onPress={() => router.push('/help')} />
+          <RowDivider />
+          <Row
+            title={t('settings.reportRow')}
+            onPress={() => router.push('/settings/report')}
+          />
+          <RowDivider />
+          <Row
+            title={t('settings.myTicketsRow')}
+            value={tickets.length > 0 ? `${tickets.length}` : undefined}
+            onPress={() => router.push('/settings/tickets')}
+          />
+        </Card>
+
+        <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
+          <Text
+            variant="caption"
+            tone="muted"
+            overline
+            style={{ paddingTop: theme.spacing(3), paddingBottom: theme.spacing(1) }}
+          >
+            {t('settings.legalSectionTitle')}
+          </Text>
+          <Row
+            title={t('settings.termsRow')}
+            onPress={() => router.push({ pathname: '/settings/legal/[doc]', params: { doc: 'terms' } })}
+          />
+          <RowDivider />
+          <Row
+            title={t('settings.legalNoticeRow')}
+            onPress={() => router.push({ pathname: '/settings/legal/[doc]', params: { doc: 'notice' } })}
+          />
+          <RowDivider />
+          <Row
+            title={t('settings.privacyRow')}
+            onPress={() => router.push({ pathname: '/settings/legal/[doc]', params: { doc: 'privacy' } })}
           />
         </Card>
 

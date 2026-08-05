@@ -1,0 +1,20 @@
+{
+  "country": "GB",
+  "entries": [
+    {
+      "name": "Drinkline",
+      "contact": "0300 123 1110",
+      "notes": "Free and confidential, England, weekdays 9am–8pm and weekends 11am–4pm."
+    },
+    {
+      "name": "NHS — alcohol support",
+      "contact": "Search \"NHS alcohol support\"",
+      "notes": "General information and local service directory."
+    },
+    {
+      "name": "Samaritans",
+      "contact": "116 123",
+      "notes": "Immediate danger only — not an alcohol-specific line."
+    }
+  ]
+}

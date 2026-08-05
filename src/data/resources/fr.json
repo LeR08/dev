@@ -1,0 +1,30 @@
+{
+  "country": "FR",
+  "entries": [
+    {
+      "name": "Alcool Info Service",
+      "contact": "0 980 980 930",
+      "notes": "Appel non surtaxé, anonyme. Ligne nationale d'information et d'écoute sur l'alcool."
+    },
+    {
+      "name": "Fil Santé Jeunes",
+      "contact": "0 800 235 236",
+      "notes": "Pour les moins de 25 ans."
+    },
+    {
+      "name": "3114 — Numéro national de prévention du suicide",
+      "contact": "3114",
+      "notes": "Uniquement en cas de danger immédiat — ce n'est pas une ligne spécifique à l'alcool."
+    },
+    {
+      "name": "CSAPA (Centre de Soins, d'Accompagnement et de Prévention en Addictologie)",
+      "contact": "Annuaire par département — voir drogues-info-service.fr",
+      "notes": "Centres de soins en addictologie près de chez vous."
+    },
+    {
+      "name": "SOS Addictions",
+      "contact": "01 40 22 03 40",
+      "notes": "Association d'aide et d'accompagnement."
+    }
+  ]
+}
