@@ -35,7 +35,12 @@ npm test           # unit tests
 npm run typecheck  # TypeScript
 ```
 
-To install it on a phone as a real app, build with EAS:
+This is an **Expo SDK 57** project, so `npm start` needs **Expo Go 57.x** on the phone.
+An older Expo Go answers with *"Project is incompatible with this version of Expo Go"* —
+update it from the store, or grab the matching build directly from
+<https://expo.dev/go?sdkVersion=57&platform=android&device=true>.
+
+To install it as a real standalone app, with no Expo Go in the picture, build with EAS:
 
 ```bash
 npx eas build --profile preview --platform android   # or ios

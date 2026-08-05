@@ -108,8 +108,8 @@ export function BarChart({
       <View style={{ height, flexDirection: 'row', alignItems: 'flex-end', gap }}>
         {goalFraction !== null ? (
           <View
-            pointerEvents="none"
             style={{
+              pointerEvents: 'none',
               position: 'absolute',
               left: 0,
               right: 0,

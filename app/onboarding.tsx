@@ -4,6 +4,7 @@ import { Animated, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/Button';
+import { USE_NATIVE_DRIVER } from '@/components/ui/animation';
 import { Card } from '@/components/ui/Card';
 import { Field } from '@/components/ui/Field';
 import { Screen } from '@/components/ui/Screen';
@@ -37,7 +38,7 @@ export default function OnboardingScreen() {
 
   useEffect(() => {
     fade.setValue(0);
-    Animated.timing(fade, { toValue: 1, duration: 320, useNativeDriver: true }).start();
+    Animated.timing(fade, { toValue: 1, duration: 320, useNativeDriver: USE_NATIVE_DRIVER }).start();
   }, [fade, step]);
 
   const finish = async () => {

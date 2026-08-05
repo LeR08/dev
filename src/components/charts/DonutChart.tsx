@@ -3,6 +3,7 @@ import { Animated, View } from 'react-native';
 import Svg, { Circle, G } from 'react-native-svg';
 
 import { useTheme } from '@/theme/ThemeProvider';
+import { USE_NATIVE_DRIVER } from '../ui/animation';
 import { Text } from '../ui/Text';
 
 export type DonutSlice = {
@@ -41,7 +42,7 @@ export function DonutChart({
   const appear = useRef(new Animated.Value(0)).current;
   useEffect(() => {
     appear.setValue(0);
-    Animated.timing(appear, { toValue: 1, duration: 450, useNativeDriver: true }).start();
+    Animated.timing(appear, { toValue: 1, duration: 450, useNativeDriver: USE_NATIVE_DRIVER }).start();
   }, [appear, slices]);
 
   let offset = 0;
@@ -58,7 +59,13 @@ export function DonutChart({
       }}
     >
       <Svg width={size} height={size} style={{ position: 'absolute' }}>
-        <G rotation={-90} originX={size / 2} originY={size / 2}>
+        {/*
+          Rotated with an explicit SVG transform rather than the rotation /
+          originX / originY props: those compile down to a `transform-origin`
+          DOM attribute on web, which React rejects as invalid. A transform
+          string behaves identically on native and in the browser.
+        */}
+        <G transform={`rotate(-90 ${size / 2} ${size / 2})`}>
           <Circle
             cx={size / 2}
             cy={size / 2}

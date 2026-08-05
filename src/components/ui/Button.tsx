@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import { useTheme } from '@/theme/ThemeProvider';
+import { USE_NATIVE_DRIVER } from './animation';
 import { Text } from './Text';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'destructive';
@@ -43,7 +44,7 @@ export function Button({
   const useHaptic = haptic ?? variant === 'primary';
 
   const press = (toValue: number) => {
-    Animated.spring(scale, { toValue, useNativeDriver: true, speed: 40, bounciness: 4 }).start();
+    Animated.spring(scale, { toValue, useNativeDriver: USE_NATIVE_DRIVER, speed: 40, bounciness: 4 }).start();
   };
 
   const background: Record<Variant, string> = {

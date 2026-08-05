@@ -3,6 +3,7 @@ import { Animated, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTheme } from '@/theme/ThemeProvider';
+import { USE_NATIVE_DRIVER } from './animation';
 import { Text } from './Text';
 
 type ToastAction = { label: string; onPress: () => void };
@@ -39,8 +40,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const hide = useCallback(() => {
     if (timer.current) clearTimeout(timer.current);
     Animated.parallel([
-      Animated.timing(opacity, { toValue: 0, duration: 160, useNativeDriver: true }),
-      Animated.timing(translate, { toValue: 16, duration: 160, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 0, duration: 160, useNativeDriver: USE_NATIVE_DRIVER }),
+      Animated.timing(translate, { toValue: 16, duration: 160, useNativeDriver: USE_NATIVE_DRIVER }),
     ]).start(({ finished }) => {
       if (finished) setToast(null);
     });
@@ -53,8 +54,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       opacity.setValue(0);
       translate.setValue(16);
       Animated.parallel([
-        Animated.timing(opacity, { toValue: 1, duration: 200, useNativeDriver: true }),
-        Animated.spring(translate, { toValue: 0, useNativeDriver: true, speed: 16, bounciness: 6 }),
+        Animated.timing(opacity, { toValue: 1, duration: 200, useNativeDriver: USE_NATIVE_DRIVER }),
+        Animated.spring(translate, { toValue: 0, useNativeDriver: USE_NATIVE_DRIVER, speed: 16, bounciness: 6 }),
       ]).start();
       timer.current = setTimeout(hide, payload.durationMs ?? DEFAULT_DURATION);
     },
@@ -68,8 +69,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       {children}
       {toast ? (
         <Animated.View
-          pointerEvents="box-none"
           style={{
+            pointerEvents: 'box-none',
             position: 'absolute',
             left: theme.spacing(4),
             right: theme.spacing(4),
