@@ -1,0 +1,345 @@
+import React, { useMemo, useState } from 'react';
+import { View } from 'react-native';
+
+import { BarChart, type BarDatum } from '@/components/charts/BarChart';
+import { DayGrid } from '@/components/charts/DayGrid';
+import { DonutChart, type DonutSlice } from '@/components/charts/DonutChart';
+import { StatCard } from '@/components/StatCard';
+import { Card } from '@/components/ui/Card';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Screen } from '@/components/ui/Screen';
+import { Segmented } from '@/components/ui/Segmented';
+import { Text } from '@/components/ui/Text';
+import { gramsToIntake } from '@/domain/alcohol';
+import {
+  addDays,
+  eachDay,
+  periodRange,
+  startOfWeek,
+  trailingRange,
+  type Granularity,
+  type Range,
+} from '@/domain/dates';
+import { freeDaysStatus } from '@/domain/encouragement';
+import {
+  formatComparison,
+  formatIntake,
+  formatMoney,
+  formatMonth,
+  formatWeekdayShort,
+  pluralize,
+} from '@/domain/format';
+import {
+  alcoholFreeDays,
+  averagePerDay,
+  bucketize,
+  categoryTotals,
+  compare,
+  dayFlags,
+  filterByRange,
+  totals,
+} from '@/domain/stats';
+import { CATEGORY_LABELS } from '@/domain/types';
+import { useNow } from '@/hooks/useNow';
+import { useApp } from '@/state/AppProvider';
+import { useTheme } from '@/theme/ThemeProvider';
+
+type Window = 'week' | 'month' | 'year';
+
+const VIEWS: { value: Window; label: string; granularity: Granularity; count: number }[] = [
+  { value: 'week', label: 'Week', granularity: 'day', count: 7 },
+  { value: 'month', label: 'Month', granularity: 'day', count: 30 },
+  { value: 'year', label: 'Year', granularity: 'month', count: 12 },
+];
+
+export default function InsightsScreen() {
+  const theme = useTheme();
+  const now = useNow();
+  const { entries, settings } = useApp();
+  const [view, setView] = useState<Window>('week');
+
+  const config = VIEWS.find((item) => item.value === view) ?? VIEWS[0];
+
+  const range = useMemo(
+    () => trailingRange(now, config.granularity, config.count, settings.weekStartsOn),
+    [config.count, config.granularity, now, settings.weekStartsOn]
+  );
+
+  /** The equally sized window immediately before this one. */
+  const previous = useMemo<Range>(
+    () => ({ start: range.start - (range.end - range.start), end: range.start }),
+    [range]
+  );
+
+  const current = useMemo(() => filterByRange(entries, range), [entries, range]);
+  const currentTotals = useMemo(() => totals(current), [current]);
+  const previousTotals = useMemo(() => totals(filterByRange(entries, previous)), [entries, previous]);
+
+  const buckets = useMemo(
+    () => bucketize(entries, range, config.granularity, settings.weekStartsOn),
+    [config.granularity, entries, range, settings.weekStartsOn]
+  );
+
+  const toIntake = (grams: number) =>
+    gramsToIntake(grams, settings.intakeUnit, settings.standardDrinkGrams);
+
+  const intakeBars = useMemo<BarDatum[]>(
+    () =>
+      buckets.map((bucket, index) => ({
+        key: bucket.key,
+        label: bucketLabel(bucket.start, view, index, buckets.length),
+        value: gramsToIntake(bucket.grams, settings.intakeUnit, settings.standardDrinkGrams),
+        highlight: index === buckets.length - 1,
+      })),
+    [buckets, settings.intakeUnit, settings.standardDrinkGrams, view]
+  );
+
+  const spendBars = useMemo<BarDatum[]>(
+    () =>
+      buckets.map((bucket, index) => ({
+        key: bucket.key,
+        label: bucketLabel(bucket.start, view, index, buckets.length),
+        value: bucket.spend,
+        highlight: index === buckets.length - 1,
+      })),
+    [buckets, view]
+  );
+
+  const categories = useMemo(() => categoryTotals(current), [current]);
+  const slices = useMemo<DonutSlice[]>(
+    () =>
+      categories.map((item) => ({
+        key: item.category,
+        label: CATEGORY_LABELS[item.category],
+        value: item.grams,
+        color: theme.categoryColor(item.category),
+      })),
+    [categories, theme]
+  );
+
+  const intakeComparison = compare(toIntake(currentTotals.grams), toIntake(previousTotals.grams));
+  const spendComparison = compare(currentTotals.spend, previousTotals.spend);
+  const perDay = useMemo(() => averagePerDay(entries, range, now), [entries, now, range]);
+  const freeDays = useMemo(() => alcoholFreeDays(entries, range, now), [entries, now, range]);
+  const elapsedDays = useMemo(
+    () => dayFlags(entries, range, now).filter((day) => day.elapsed).length,
+    [entries, now, range]
+  );
+
+  // The calendar strip always shows the running week, whatever the chart window.
+  const weekRange = useMemo(
+    () => periodRange(now, 'week', settings.weekStartsOn),
+    [now, settings.weekStartsOn]
+  );
+  const weekDays = useMemo(() => dayFlags(entries, weekRange, now), [entries, now, weekRange]);
+  const weekFreeDays = weekDays.filter((day) => day.elapsed && !day.hasDrink).length;
+  const weekdayLabels = useMemo(() => {
+    const start = startOfWeek(now, settings.weekStartsOn);
+    return eachDay(start, addDays(start, 7)).map((day) => formatWeekdayShort(day));
+  }, [now, settings.weekStartsOn]);
+
+  const weeklyGoalIntake = settings.goals.weeklyIntake;
+  const goalPerBucket =
+    view === 'week' && weeklyGoalIntake !== null ? weeklyGoalIntake / 7 : null;
+
+  const periodName = view === 'week' ? 'previous 7 days' : view === 'month' ? 'previous 30 days' : 'previous year';
+
+  if (entries.length === 0) {
+    return (
+      <Screen>
+        <View style={{ paddingTop: theme.spacing(8) }}>
+          <Text variant="title">Insights</Text>
+        </View>
+        <EmptyState
+          title="Nothing to chart yet"
+          body="Once you log a few drinks, this is where the patterns show up — units, spending, categories, and alcohol-free days."
+          glyph="◔"
+        />
+      </Screen>
+    );
+  }
+
+  return (
+    <Screen>
+      <View style={{ gap: theme.spacing(3), paddingTop: theme.spacing(8), paddingBottom: theme.spacing(4) }}>
+        <Text variant="title">Insights</Text>
+        <Segmented
+          options={VIEWS.map((item) => ({ value: item.value, label: item.label }))}
+          value={view}
+          onChange={setView}
+        />
+      </View>
+
+      <View style={{ gap: theme.spacing(4) }}>
+        <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
+          <StatCard
+            label={view === 'year' ? 'This year' : view === 'month' ? 'Last 30 days' : 'Last 7 days'}
+            value={formatIntake(toIntake(currentTotals.grams), settings.intakeUnit)}
+            detail={formatComparison(intakeComparison, periodName)}
+          />
+          <StatCard
+            label="Spent"
+            value={formatMoney(currentTotals.spend, settings.currency, { compact: true })}
+            detail={formatComparison(spendComparison, periodName)}
+          />
+        </View>
+
+        <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
+          <StatCard
+            label="Average per day"
+            value={formatIntake(toIntake(perDay), settings.intakeUnit)}
+            detail="Across days you tracked"
+          />
+          <StatCard
+            label="Alcohol-free days"
+            value={`${freeDays}`}
+            detail={`Out of ${elapsedDays} tracked ${pluralize(elapsedDays, "day")}`}
+          />
+        </View>
+
+        <Card style={{ gap: theme.spacing(3) }}>
+          <View style={{ gap: 2 }}>
+            <Text variant="heading">
+              {settings.intakeUnit === 'grams' ? 'Pure alcohol' : 'Standard drinks'}
+            </Text>
+            <Text variant="caption" tone="muted">
+              {view === 'year' ? 'By month' : 'By day'}
+            </Text>
+          </View>
+          <BarChart
+            data={intakeBars}
+            height={170}
+            goal={goalPerBucket}
+            goalLabel={goalPerBucket ? 'daily share of your weekly goal' : undefined}
+          />
+        </Card>
+
+        <Card style={{ gap: theme.spacing(3) }}>
+          <View style={{ gap: 2 }}>
+            <Text variant="heading">Money spent</Text>
+            <Text variant="caption" tone="muted">
+              {currentTotals.spend > 0
+                ? `${formatMoney(currentTotals.spend, settings.currency)} in this window`
+                : 'Add prices when you log to see this fill in'}
+            </Text>
+          </View>
+          <BarChart data={spendBars} height={130} color={theme.colors.textMuted} />
+        </Card>
+
+        <Card style={{ gap: theme.spacing(3) }}>
+          <Text variant="heading">By category</Text>
+          {slices.length === 0 ? (
+            <Text variant="body" tone="muted">
+              Nothing logged in this window.
+            </Text>
+          ) : (
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing(4) }}>
+              <DonutChart
+                slices={slices}
+                centerValue={formatIntake(toIntake(currentTotals.grams), settings.intakeUnit)}
+                centerLabel="total"
+                size={150}
+              />
+              <View style={{ flex: 1, gap: theme.spacing(2) }}>
+                {categories.slice(0, 5).map((item) => (
+                  <View
+                    key={item.category}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing(2) }}
+                  >
+                    <View
+                      style={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 5,
+                        backgroundColor: theme.categoryColor(item.category),
+                      }}
+                    />
+                    <Text variant="label" style={{ flex: 1 }} numberOfLines={1}>
+                      {CATEGORY_LABELS[item.category]}
+                    </Text>
+                    <Text variant="caption" tone="muted">
+                      {Math.round(item.share * 100)}%
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
+        </Card>
+
+        <Card style={{ gap: theme.spacing(3) }}>
+          <View style={{ gap: 2 }}>
+            <Text variant="heading">This week, day by day</Text>
+            <Text variant="caption" tone="muted">
+              {settings.goals.alcoholFreeDaysPerWeek !== null
+                ? freeDaysStatus(weekFreeDays, settings.goals.alcoholFreeDaysPerWeek)
+                : `${weekFreeDays} alcohol-free ${pluralize(weekFreeDays, 'day')} so far`}
+            </Text>
+          </View>
+          <DayGrid days={weekDays} weekdayLabels={weekdayLabels} columns={7} />
+          <Text variant="caption" tone="faint">
+            Filled squares are alcohol-free days.
+          </Text>
+        </Card>
+
+        <Card style={{ gap: theme.spacing(2) }}>
+          <Text variant="heading">{formatMonth(now)}</Text>
+          <MonthGrid />
+        </Card>
+      </View>
+    </Screen>
+  );
+}
+
+/** Calendar view of the running month, aligned to the user's week start. */
+function MonthGrid() {
+  const theme = useTheme();
+  const now = useNow();
+  const { entries, settings } = useApp();
+
+  const month = useMemo(() => periodRange(now, 'month', settings.weekStartsOn), [now, settings.weekStartsOn]);
+  const days = useMemo(() => dayFlags(entries, month, now), [entries, month, now]);
+
+  // Pad the first row so the 1st lands under the right weekday.
+  const firstWeekday = new Date(month.start).getDay();
+  const leading = (firstWeekday - settings.weekStartsOn + 7) % 7;
+  const padded = [
+    ...Array.from({ length: leading }, (_, index) => ({
+      key: `pad-${index}`,
+      start: 0,
+      hasDrink: false,
+      grams: 0,
+      elapsed: false,
+    })),
+    ...days,
+  ];
+
+  const weekdayLabels = useMemo(() => {
+    const start = startOfWeek(now, settings.weekStartsOn);
+    return eachDay(start, addDays(start, 7)).map((day) => formatWeekdayShort(day));
+  }, [now, settings.weekStartsOn]);
+
+  const free = days.filter((day) => day.elapsed && !day.hasDrink).length;
+
+  return (
+    <View style={{ gap: theme.spacing(2) }}>
+      <DayGrid days={padded} weekdayLabels={weekdayLabels} columns={7} />
+      <Text variant="caption" tone="muted">
+        {free} alcohol-free {pluralize(free, 'day')} this month.
+      </Text>
+    </View>
+  );
+}
+
+/** Keeps long axes readable by labelling only a few evenly spaced buckets. */
+function bucketLabel(start: number, view: Window, index: number, count: number): string {
+  if (view === 'year') {
+    return new Date(start).toLocaleDateString(undefined, { month: 'narrow' });
+  }
+  if (view === 'week') {
+    return formatWeekdayShort(start);
+  }
+  const step = Math.ceil(count / 6);
+  if (index % step !== 0 && index !== count - 1) return '';
+  return `${new Date(start).getDate()}`;
+}
