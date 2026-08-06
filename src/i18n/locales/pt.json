@@ -588,5 +588,11 @@
       "helpAction": "Ajuda e recursos",
       "skipAction": "Saltar"
     }
+  },
+  "shop": {
+    "badge": "Loja",
+    "title": "Passar a Premium",
+    "body": "Remove a mensagem ao abrir a app e a pequena faixa de apoio — {{price}}.",
+    "action": "Ver a oferta"
   }
 }

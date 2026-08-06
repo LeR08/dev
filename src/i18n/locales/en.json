@@ -588,5 +588,11 @@
       "helpAction": "Help & Resources",
       "skipAction": "Skip"
     }
+  },
+  "shop": {
+    "badge": "Shop",
+    "title": "Go Premium",
+    "body": "Removes the launch message and the small support banner — {{price}}.",
+    "action": "See the offer"
   }
 }

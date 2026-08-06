@@ -588,5 +588,11 @@
       "helpAction": "Aiuto e risorse",
       "skipAction": "Salta"
     }
+  },
+  "shop": {
+    "badge": "Negozio",
+    "title": "Passa a Premium",
+    "body": "Rimuove il messaggio all'avvio e il piccolo banner di supporto — {{price}}.",
+    "action": "Vedi l'offerta"
   }
 }

@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
 
+import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { FadeInView } from '@/components/ui/FadeInView';
 import { Row, RowDivider } from '@/components/ui/Row';
@@ -43,7 +44,22 @@ export default function SettingsScreen() {
       </View>
 
       <View style={{ gap: theme.spacing(4) }}>
-        <FadeInView delay={0}>
+        {settings.subscription.status !== 'active' ? (
+          <FadeInView delay={0}>
+            <Card tone="accent" style={{ gap: theme.spacing(2) }}>
+              <Text variant="caption" tone="muted" overline>
+                {t('shop.badge')}
+              </Text>
+              <Text variant="heading">{t('shop.title')}</Text>
+              <Text variant="body" tone="muted">
+                {t('shop.body', { price: t('subscriptionScreen.priceLabel') })}
+              </Text>
+              <Button label={t('shop.action')} onPress={() => router.push('/settings/subscription')} />
+            </Card>
+          </FadeInView>
+        ) : null}
+
+        <FadeInView delay={40}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Row
               title={t('nav.units')}
@@ -67,7 +83,7 @@ export default function SettingsScreen() {
           </Card>
         </FadeInView>
 
-        <FadeInView delay={40}>
+        <FadeInView delay={120}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Row
               title={t('nav.appearance')}
@@ -91,7 +107,7 @@ export default function SettingsScreen() {
           </Card>
         </FadeInView>
 
-        <FadeInView delay={80}>
+        <FadeInView delay={120}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Row
               title={t('settings.profileRow')}
@@ -108,7 +124,7 @@ export default function SettingsScreen() {
           </Card>
         </FadeInView>
 
-        <FadeInView delay={120}>
+        <FadeInView delay={160}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Row
               title={t('nav.dataPrivacy')}
@@ -131,7 +147,7 @@ export default function SettingsScreen() {
           </Card>
         </FadeInView>
 
-        <FadeInView delay={160}>
+        <FadeInView delay={200}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Row title={t('settings.helpRow')} onPress={() => router.push('/help')} />
             <RowDivider />
@@ -148,7 +164,7 @@ export default function SettingsScreen() {
           </Card>
         </FadeInView>
 
-        <FadeInView delay={200}>
+        <FadeInView delay={240}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Text
               variant="caption"

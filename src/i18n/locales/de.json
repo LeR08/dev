@@ -588,5 +588,11 @@
       "helpAction": "Hilfe & Ressourcen",
       "skipAction": "Überspringen"
     }
+  },
+  "shop": {
+    "badge": "Shop",
+    "title": "Zu Premium wechseln",
+    "body": "Entfernt die Startmeldung und das kleine Support-Banner — {{price}}.",
+    "action": "Angebot ansehen"
   }
 }

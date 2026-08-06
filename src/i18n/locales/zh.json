@@ -588,5 +588,11 @@
       "helpAction": "帮助与资源",
       "skipAction": "跳过"
     }
+  },
+  "shop": {
+    "badge": "商店",
+    "title": "升级到高级版",
+    "body": "移除启动时的提示信息和小型支持横幅——{{price}}。",
+    "action": "查看优惠"
   }
 }

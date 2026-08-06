@@ -588,5 +588,11 @@
       "helpAction": "Aide et ressources",
       "skipAction": "Passer"
     }
+  },
+  "shop": {
+    "badge": "Boutique",
+    "title": "Passer à Premium",
+    "body": "Retire le message au lancement et la petite bannière de soutien — {{price}}.",
+    "action": "Voir l'offre"
   }
 }
