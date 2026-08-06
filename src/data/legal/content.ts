@@ -1,10 +1,11 @@
 /**
  * Legal document content (spec v1.2 §10).
  *
- * These are editable placeholder templates, not legal advice — the spec is
- * explicit that a legal professional should review them before the app
- * leaves test mode or reaches a public store listing. Bracketed text like
- * "[Your name]" is exactly what it looks like: fill in your own details.
+ * Editable templates, not legal advice — the spec is explicit that a legal
+ * professional should review them before the app leaves test mode or reaches
+ * a public store listing. The identity/contact fields (publisher, SIRET,
+ * address, director of publication) are filled in with the site owner's own
+ * details; update them directly here if that information ever changes.
  *
  * Written out in all 8 UI languages so these documents follow whichever
  * language the reader has chosen, same as the rest of the app.
@@ -57,12 +58,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Intellectual property',
-          body: ['[Your name/company] retains rights to the app\'s design and code, except for open-source components used under their own licenses.'],
+          body: ['LaSolutionDigital retains rights to the app\'s design and code, except for open-source components used under their own licenses.'],
         },
         {
           heading: 'Limitation of liability',
           body: [
-            'The app is provided "as is". To the extent permitted by law, [your name/company] is not liable for decisions made based on figures or estimates shown in the app.',
+            'The app is provided "as is". To the extent permitted by law, LaSolutionDigital is not liable for decisions made based on figures or estimates shown in the app.',
           ],
         },
         {
@@ -82,10 +83,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Contact',
           body: [
-            'Name or company name: [fill in]',
-            'Business registration number — SIRET in France, if applicable: [fill in]',
-            'Address: [fill in]',
-            'Contact email: [fill in]',
+            'Name or company name: LaSolutionDigital',
+            'Business registration number — SIRET: 93866525400018',
+            'Address: 6 rue du Fort, 08260 Eteignières, France',
+            'Contact email: romainlambert@lasolutiondigital.com',
+            'Phone: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -97,11 +99,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Publisher',
           body: [
-            'Name or company name: [fill in]',
-            'Legal form, if a registered company (e.g. sole trader, SARL, auto-entrepreneur): [fill in]',
-            'Business registration number — SIRET in France: [fill in]',
-            'Registered / postal address: [fill in]',
-            'Contact email: [fill in]',
+            'Name or company name: LaSolutionDigital',
+            'Legal form: micro-entreprise (French sole-trader status)',
+            'Business registration number — SIRET: 93866525400018',
+            'Registered / postal address: 6 rue du Fort, 08260 Eteignières, France',
+            'Contact email: romainlambert@lasolutiondigital.com',
+            'Phone: +33 6 43 50 16 37',
           ],
         },
         {
@@ -110,10 +113,10 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
             'Not applicable yet — the app has no server and stores everything locally on your device. Add a hosting provider here if that changes.',
           ],
         },
-        { heading: 'Director of publication', body: ['[Your name]'] },
+        { heading: 'Director of publication', body: ['Romain Lambert'] },
         {
           heading: 'Intellectual property',
-          body: ['The app\'s content, design and code are the property of [your name/company] except where otherwise licensed.'],
+          body: ['The app\'s content, design and code are the property of LaSolutionDigital except where otherwise licensed.'],
         },
         {
           heading: 'Personal data',
@@ -163,10 +166,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Data controller & contact',
           body: [
-            'Name or company name (data controller): [fill in]',
-            'Business registration number — SIRET in France, if applicable: [fill in]',
-            'Address: [fill in]',
-            'Contact email: [fill in]',
+            'Name or company name (data controller): LaSolutionDigital',
+            'Business registration number — SIRET: 93866525400018',
+            'Address: 6 rue du Fort, 08260 Eteignières, France',
+            'Contact email: romainlambert@lasolutiondigital.com',
+            'Phone: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -206,12 +210,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Propriété intellectuelle',
-          body: ["[Votre nom / société] conserve les droits sur la conception et le code de l'application, à l'exception des composants open source utilisés sous leurs propres licences."],
+          body: ["LaSolutionDigital conserve les droits sur la conception et le code de l'application, à l'exception des composants open source utilisés sous leurs propres licences."],
         },
         {
           heading: 'Limitation de responsabilité',
           body: [
-            "L'application est fournie « en l'état ». Dans la limite permise par la loi, [votre nom / société] ne peut être tenu responsable des décisions prises sur la base des chiffres ou estimations affichés.",
+            "L'application est fournie « en l'état ». Dans la limite permise par la loi, LaSolutionDigital ne peut être tenu responsable des décisions prises sur la base des chiffres ou estimations affichés.",
           ],
         },
         {
@@ -231,10 +235,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Contact',
           body: [
-            'Nom ou raison sociale : [à compléter]',
-            'SIRET, si applicable : [à compléter]',
-            'Adresse : [à compléter]',
-            'E-mail de contact : [à compléter]',
+            'Nom ou raison sociale : LaSolutionDigital',
+            'SIRET : 93866525400018',
+            'Adresse : 6 rue du Fort, 08260 Eteignières',
+            'E-mail de contact : romainlambert@lasolutiondigital.com',
+            'Téléphone : +33 6 43 50 16 37',
           ],
         },
       ],
@@ -246,11 +251,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Éditeur',
           body: [
-            'Nom ou raison sociale : [à compléter]',
-            'Forme juridique, si société (ex. SARL, auto-entrepreneur) : [à compléter]',
-            'SIRET : [à compléter]',
-            'Adresse du siège / adresse postale : [à compléter]',
-            'E-mail de contact : [à compléter]',
+            'Nom ou raison sociale : LaSolutionDigital',
+            'Forme juridique : micro-entreprise',
+            'SIRET : 93866525400018',
+            'Adresse du siège / adresse postale : 6 rue du Fort, 08260 Eteignières',
+            'E-mail de contact : romainlambert@lasolutiondigital.com',
+            'Téléphone : +33 6 43 50 16 37',
           ],
         },
         {
@@ -259,10 +265,10 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
             "Non applicable pour l'instant — l'application n'a pas de serveur et stocke tout localement sur votre appareil. Ajoutez un hébergeur ici si cela change.",
           ],
         },
-        { heading: 'Directeur de la publication', body: ['[Votre nom]'] },
+        { heading: 'Directeur de la publication', body: ['Romain Lambert'] },
         {
           heading: 'Propriété intellectuelle',
-          body: ["Le contenu, la conception et le code de l'application sont la propriété de [votre nom / société], sauf mention contraire."],
+          body: ["Le contenu, la conception et le code de l'application sont la propriété de LaSolutionDigital, sauf mention contraire."],
         },
         {
           heading: 'Données personnelles',
@@ -312,10 +318,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Responsable du traitement & contact',
           body: [
-            'Nom ou raison sociale (responsable du traitement) : [à compléter]',
-            'SIRET, si applicable : [à compléter]',
-            'Adresse : [à compléter]',
-            'E-mail de contact : [à compléter]',
+            'Nom ou raison sociale (responsable du traitement) : LaSolutionDigital',
+            'SIRET : 93866525400018',
+            'Adresse : 6 rue du Fort, 08260 Eteignières',
+            'E-mail de contact : romainlambert@lasolutiondigital.com',
+            'Téléphone : +33 6 43 50 16 37',
           ],
         },
       ],
@@ -355,12 +362,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Propiedad intelectual',
-          body: ['[Tu nombre / empresa] conserva los derechos sobre el diseño y el código de la aplicación, salvo los componentes de código abierto utilizados bajo sus propias licencias.'],
+          body: ['LaSolutionDigital conserva los derechos sobre el diseño y el código de la aplicación, salvo los componentes de código abierto utilizados bajo sus propias licencias.'],
         },
         {
           heading: 'Limitación de responsabilidad',
           body: [
-            'La aplicación se ofrece «tal cual». En la medida en que lo permita la ley, [tu nombre / empresa] no será responsable de las decisiones tomadas a partir de las cifras o estimaciones mostradas en la aplicación.',
+            'La aplicación se ofrece «tal cual». En la medida en que lo permita la ley, LaSolutionDigital no será responsable de las decisiones tomadas a partir de las cifras o estimaciones mostradas en la aplicación.',
           ],
         },
         {
@@ -380,10 +387,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Contacto',
           body: [
-            'Nombre o razón social: [completar]',
-            'Número de identificación fiscal / registro mercantil — SIRET en Francia, si corresponde: [completar]',
-            'Dirección: [completar]',
-            'Correo de contacto: [completar]',
+            'Nombre o razón social: LaSolutionDigital',
+            'Número de identificación fiscal / registro mercantil — SIRET: 93866525400018',
+            'Dirección: 6 rue du Fort, 08260 Eteignières, Francia',
+            'Correo de contacto: romainlambert@lasolutiondigital.com',
+            'Teléfono: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -395,11 +403,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Editor',
           body: [
-            'Nombre o razón social: [completar]',
-            'Forma jurídica, si es una empresa (p. ej. autónomo, SL): [completar]',
-            'Número de identificación fiscal / registro mercantil — SIRET en Francia: [completar]',
-            'Domicilio social / dirección postal: [completar]',
-            'Correo de contacto: [completar]',
+            'Nombre o razón social: LaSolutionDigital',
+            'Forma jurídica: micro-entreprise (régimen francés de autónomo)',
+            'Número de identificación fiscal / registro mercantil — SIRET: 93866525400018',
+            'Domicilio social / dirección postal: 6 rue du Fort, 08260 Eteignières, Francia',
+            'Correo de contacto: romainlambert@lasolutiondigital.com',
+            'Teléfono: +33 6 43 50 16 37',
           ],
         },
         {
@@ -408,10 +417,10 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
             'No aplicable por ahora — la aplicación no tiene servidor y almacena todo localmente en tu dispositivo. Añade aquí un proveedor de alojamiento si eso cambia.',
           ],
         },
-        { heading: 'Director de publicación', body: ['[Tu nombre]'] },
+        { heading: 'Director de publicación', body: ['Romain Lambert'] },
         {
           heading: 'Propiedad intelectual',
-          body: ['El contenido, el diseño y el código de la aplicación son propiedad de [tu nombre / empresa], salvo que se indique lo contrario.'],
+          body: ['El contenido, el diseño y el código de la aplicación son propiedad de LaSolutionDigital, salvo que se indique lo contrario.'],
         },
         {
           heading: 'Datos personales',
@@ -461,10 +470,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Responsable del tratamiento y contacto',
           body: [
-            'Nombre o razón social (responsable del tratamiento): [completar]',
-            'Número de identificación fiscal / registro mercantil — SIRET en Francia, si corresponde: [completar]',
-            'Dirección: [completar]',
-            'Correo de contacto: [completar]',
+            'Nombre o razón social (responsable del tratamiento): LaSolutionDigital',
+            'Número de identificación fiscal / registro mercantil — SIRET: 93866525400018',
+            'Dirección: 6 rue du Fort, 08260 Eteignières, Francia',
+            'Correo de contacto: romainlambert@lasolutiondigital.com',
+            'Teléfono: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -504,12 +514,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Geistiges Eigentum',
-          body: ['[Dein Name/Unternehmen] behält die Rechte am Design und Code der App, mit Ausnahme von Open-Source-Komponenten, die unter ihren eigenen Lizenzen verwendet werden.'],
+          body: ['LaSolutionDigital behält die Rechte am Design und Code der App, mit Ausnahme von Open-Source-Komponenten, die unter ihren eigenen Lizenzen verwendet werden.'],
         },
         {
           heading: 'Haftungsbeschränkung',
           body: [
-            'Die App wird „wie besehen" bereitgestellt. Soweit gesetzlich zulässig, haftet [dein Name/Unternehmen] nicht für Entscheidungen, die auf Grundlage der in der App angezeigten Zahlen oder Schätzungen getroffen werden.',
+            'Die App wird „wie besehen" bereitgestellt. Soweit gesetzlich zulässig, haftet LaSolutionDigital nicht für Entscheidungen, die auf Grundlage der in der App angezeigten Zahlen oder Schätzungen getroffen werden.',
           ],
         },
         {
@@ -529,10 +539,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Kontakt',
           body: [
-            'Name oder Firmenname: [ausfüllen]',
-            'Handelsregisternummer — SIRET in Frankreich, falls zutreffend: [ausfüllen]',
-            'Adresse: [ausfüllen]',
-            'Kontakt-E-Mail: [ausfüllen]',
+            'Name oder Firmenname: LaSolutionDigital',
+            'Handelsregisternummer — SIRET: 93866525400018',
+            'Adresse: 6 rue du Fort, 08260 Eteignières, Frankreich',
+            'Kontakt-E-Mail: romainlambert@lasolutiondigital.com',
+            'Telefon: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -544,11 +555,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Herausgeber',
           body: [
-            'Name oder Firmenname: [ausfüllen]',
-            'Rechtsform, falls Unternehmen (z. B. Einzelunternehmen, GmbH): [ausfüllen]',
-            'Handelsregisternummer — SIRET in Frankreich: [ausfüllen]',
-            'Sitz / Postanschrift: [ausfüllen]',
-            'Kontakt-E-Mail: [ausfüllen]',
+            'Name oder Firmenname: LaSolutionDigital',
+            'Rechtsform: micro-entreprise (französischer Einzelunternehmer-Status)',
+            'Handelsregisternummer — SIRET: 93866525400018',
+            'Sitz / Postanschrift: 6 rue du Fort, 08260 Eteignières, Frankreich',
+            'Kontakt-E-Mail: romainlambert@lasolutiondigital.com',
+            'Telefon: +33 6 43 50 16 37',
           ],
         },
         {
@@ -557,10 +569,10 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
             'Derzeit nicht zutreffend — die App hat keinen Server und speichert alles lokal auf deinem Gerät. Trage hier einen Hosting-Anbieter ein, falls sich das ändert.',
           ],
         },
-        { heading: 'Verantwortlich für den Inhalt (Direktor der Veröffentlichung)', body: ['[Dein Name]'] },
+        { heading: 'Verantwortlich für den Inhalt (Direktor der Veröffentlichung)', body: ['Romain Lambert'] },
         {
           heading: 'Geistiges Eigentum',
-          body: ['Inhalt, Design und Code der App sind Eigentum von [dein Name/Unternehmen], sofern nicht anders lizenziert.'],
+          body: ['Inhalt, Design und Code der App sind Eigentum von LaSolutionDigital, sofern nicht anders lizenziert.'],
         },
         {
           heading: 'Personenbezogene Daten',
@@ -610,10 +622,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Verantwortlicher & Kontakt',
           body: [
-            'Name oder Firmenname (Verantwortlicher): [ausfüllen]',
-            'Handelsregisternummer — SIRET in Frankreich, falls zutreffend: [ausfüllen]',
-            'Adresse: [ausfüllen]',
-            'Kontakt-E-Mail: [ausfüllen]',
+            'Name oder Firmenname (Verantwortlicher): LaSolutionDigital',
+            'Handelsregisternummer — SIRET: 93866525400018',
+            'Adresse: 6 rue du Fort, 08260 Eteignières, Frankreich',
+            'Kontakt-E-Mail: romainlambert@lasolutiondigital.com',
+            'Telefon: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -653,12 +666,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Proprietà intellettuale',
-          body: ["[Il tuo nome/azienda] conserva i diritti sul design e sul codice dell'app, ad eccezione dei componenti open source utilizzati secondo le proprie licenze."],
+          body: ["LaSolutionDigital conserva i diritti sul design e sul codice dell'app, ad eccezione dei componenti open source utilizzati secondo le proprie licenze."],
         },
         {
           heading: 'Limitazione di responsabilità',
           body: [
-            "L'app è fornita «così com'è». Nei limiti consentiti dalla legge, [il tuo nome/azienda] non è responsabile delle decisioni prese sulla base dei valori o delle stime mostrati nell'app.",
+            "L'app è fornita «così com'è». Nei limiti consentiti dalla legge, LaSolutionDigital non è responsabile delle decisioni prese sulla base dei valori o delle stime mostrati nell'app.",
           ],
         },
         {
@@ -678,10 +691,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Contatto',
           body: [
-            "Nome o ragione sociale: [da completare]",
-            "Numero di registrazione dell'attività — SIRET in Francia, se applicabile: [da completare]",
-            'Indirizzo: [da completare]',
-            'E-mail di contatto: [da completare]',
+            "Nome o ragione sociale: LaSolutionDigital",
+            "Numero di registrazione dell'attività — SIRET: 93866525400018",
+            'Indirizzo: 6 rue du Fort, 08260 Eteignières, Francia',
+            'E-mail di contatto: romainlambert@lasolutiondigital.com',
+            'Telefono: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -693,11 +707,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Editore',
           body: [
-            'Nome o ragione sociale: [da completare]',
-            'Forma giuridica, se azienda (es. ditta individuale, SRL): [da completare]',
-            "Numero di registrazione dell'attività — SIRET in Francia: [da completare]",
-            'Sede legale / indirizzo postale: [da completare]',
-            'E-mail di contatto: [da completare]',
+            'Nome o ragione sociale: LaSolutionDigital',
+            'Forma giuridica: micro-entreprise (regime francese per ditta individuale)',
+            "Numero di registrazione dell'attività — SIRET: 93866525400018",
+            'Sede legale / indirizzo postale: 6 rue du Fort, 08260 Eteignières, Francia',
+            'E-mail di contatto: romainlambert@lasolutiondigital.com',
+            'Telefono: +33 6 43 50 16 37',
           ],
         },
         {
@@ -706,10 +721,10 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
             "Non applicabile per ora — l'app non ha un server e memorizza tutto localmente sul tuo dispositivo. Aggiungi qui un fornitore di hosting se ciò dovesse cambiare.",
           ],
         },
-        { heading: 'Direttore della pubblicazione', body: ['[Il tuo nome]'] },
+        { heading: 'Direttore della pubblicazione', body: ['Romain Lambert'] },
         {
           heading: 'Proprietà intellettuale',
-          body: ["Il contenuto, il design e il codice dell'app sono di proprietà di [il tuo nome/azienda], salvo diversa indicazione."],
+          body: ["Il contenuto, il design e il codice dell'app sono di proprietà di LaSolutionDigital, salvo diversa indicazione."],
         },
         {
           heading: 'Dati personali',
@@ -759,10 +774,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Titolare del trattamento e contatto',
           body: [
-            'Nome o ragione sociale (titolare del trattamento): [da completare]',
-            "Numero di registrazione dell'attività — SIRET in Francia, se applicabile: [da completare]",
-            'Indirizzo: [da completare]',
-            'E-mail di contatto: [da completare]',
+            'Nome o ragione sociale (titolare del trattamento): LaSolutionDigital',
+            "Numero di registrazione dell'attività — SIRET: 93866525400018",
+            'Indirizzo: 6 rue du Fort, 08260 Eteignières, Francia',
+            'E-mail di contatto: romainlambert@lasolutiondigital.com',
+            'Telefono: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -802,12 +818,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Propriedade intelectual',
-          body: ['[O teu nome/empresa] mantém os direitos sobre o design e o código da aplicação, com exceção dos componentes de código aberto utilizados ao abrigo das respetivas licenças.'],
+          body: ['LaSolutionDigital mantém os direitos sobre o design e o código da aplicação, com exceção dos componentes de código aberto utilizados ao abrigo das respetivas licenças.'],
         },
         {
           heading: 'Limitação de responsabilidade',
           body: [
-            'A aplicação é fornecida «tal como está». Na medida permitida por lei, [o teu nome/empresa] não é responsável por decisões tomadas com base nos valores ou estimativas apresentados na aplicação.',
+            'A aplicação é fornecida «tal como está». Na medida permitida por lei, LaSolutionDigital não é responsável por decisões tomadas com base nos valores ou estimativas apresentados na aplicação.',
           ],
         },
         {
@@ -827,10 +843,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Contacto',
           body: [
-            'Nome ou firma: [a preencher]',
-            'Número de registo comercial — SIRET em França, se aplicável: [a preencher]',
-            'Morada: [a preencher]',
-            'E-mail de contacto: [a preencher]',
+            'Nome ou firma: LaSolutionDigital',
+            'Número de registo comercial — SIRET: 93866525400018',
+            'Morada: 6 rue du Fort, 08260 Eteignières, França',
+            'E-mail de contacto: romainlambert@lasolutiondigital.com',
+            'Telefone: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -842,11 +859,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Editor',
           body: [
-            'Nome ou firma: [a preencher]',
-            'Forma jurídica, caso seja empresa (ex. empresário em nome individual, Lda): [a preencher]',
-            'Número de registo comercial — SIRET em França: [a preencher]',
-            'Sede / morada postal: [a preencher]',
-            'E-mail de contacto: [a preencher]',
+            'Nome ou firma: LaSolutionDigital',
+            'Forma jurídica: micro-entreprise (regime francês de empresário em nome individual)',
+            'Número de registo comercial — SIRET: 93866525400018',
+            'Sede / morada postal: 6 rue du Fort, 08260 Eteignières, França',
+            'E-mail de contacto: romainlambert@lasolutiondigital.com',
+            'Telefone: +33 6 43 50 16 37',
           ],
         },
         {
@@ -855,10 +873,10 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
             'Não aplicável por agora — a aplicação não tem servidor e guarda tudo localmente no teu dispositivo. Adiciona aqui um fornecedor de alojamento se isso mudar.',
           ],
         },
-        { heading: 'Diretor de publicação', body: ['[O teu nome]'] },
+        { heading: 'Diretor de publicação', body: ['Romain Lambert'] },
         {
           heading: 'Propriedade intelectual',
-          body: ['O conteúdo, o design e o código da aplicação são propriedade de [o teu nome/empresa], salvo indicação em contrário.'],
+          body: ['O conteúdo, o design e o código da aplicação são propriedade de LaSolutionDigital, salvo indicação em contrário.'],
         },
         {
           heading: 'Dados pessoais',
@@ -908,10 +926,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Responsável pelo tratamento e contacto',
           body: [
-            'Nome ou firma (responsável pelo tratamento): [a preencher]',
-            'Número de registo comercial — SIRET em França, se aplicável: [a preencher]',
-            'Morada: [a preencher]',
-            'E-mail de contacto: [a preencher]',
+            'Nome ou firma (responsável pelo tratamento): LaSolutionDigital',
+            'Número de registo comercial — SIRET: 93866525400018',
+            'Morada: 6 rue du Fort, 08260 Eteignières, França',
+            'E-mail de contacto: romainlambert@lasolutiondigital.com',
+            'Telefone: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -951,12 +970,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: '知识产权',
-          body: ['[你的姓名/公司名称] 保留对本应用设计与代码的权利，依据各自许可证使用的开源组件除外。'],
+          body: ['LaSolutionDigital 保留对本应用设计与代码的权利，依据各自许可证使用的开源组件除外。'],
         },
         {
           heading: '责任限制',
           body: [
-            '本应用按"现状"提供。在法律允许的范围内，[你的姓名/公司名称] 不对基于应用中显示的数值或估算所作出的决定承担责任。',
+            '本应用按"现状"提供。在法律允许的范围内，LaSolutionDigital 不对基于应用中显示的数值或估算所作出的决定承担责任。',
           ],
         },
         {
@@ -974,10 +993,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: '联系方式',
           body: [
-            '姓名或公司名称：[待填写]',
-            '工商注册号——法国为 SIRET，如适用：[待填写]',
-            '地址：[待填写]',
-            '联系邮箱：[待填写]',
+            '姓名或公司名称：LaSolutionDigital',
+            '工商注册号——SIRET：93866525400018',
+            '地址：6 rue du Fort, 08260 Eteignières, 法国',
+            '联系邮箱：romainlambert@lasolutiondigital.com',
+            '电话：+33 6 43 50 16 37',
           ],
         },
       ],
@@ -989,21 +1009,22 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: '发布者',
           body: [
-            '姓名或公司名称：[待填写]',
-            '法律形式（如为公司）：[待填写]',
-            '工商注册号——法国为 SIRET：[待填写]',
-            '注册地址/通讯地址：[待填写]',
-            '联系邮箱：[待填写]',
+            '姓名或公司名称：LaSolutionDigital',
+            '法律形式：micro-entreprise（法国个体经营者制度）',
+            '工商注册号——SIRET：93866525400018',
+            '注册地址/通讯地址：6 rue du Fort, 08260 Eteignières, 法国',
+            '联系邮箱：romainlambert@lasolutiondigital.com',
+            '电话：+33 6 43 50 16 37',
           ],
         },
         {
           heading: '托管服务商',
           body: ['目前不适用——本应用没有服务器，所有内容都存储在你的设备本地。如有变化，请在此处添加托管服务商信息。'],
         },
-        { heading: '出版负责人', body: ['[你的姓名]'] },
+        { heading: '出版负责人', body: ['Romain Lambert'] },
         {
           heading: '知识产权',
-          body: ['本应用的内容、设计和代码归 [你的姓名/公司名称] 所有，另有授权说明的除外。'],
+          body: ['本应用的内容、设计和代码归 LaSolutionDigital 所有，另有授权说明的除外。'],
         },
         {
           heading: '个人数据',
@@ -1049,10 +1070,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: '数据控制者与联系方式',
           body: [
-            '姓名或公司名称（数据控制者）：[待填写]',
-            '工商注册号——法国为 SIRET，如适用：[待填写]',
-            '地址：[待填写]',
-            '联系邮箱：[待填写]',
+            '姓名或公司名称（数据控制者）：LaSolutionDigital',
+            '工商注册号——SIRET：93866525400018',
+            '地址：6 rue du Fort, 08260 Eteignières, 法国',
+            '联系邮箱：romainlambert@lasolutiondigital.com',
+            '电话：+33 6 43 50 16 37',
           ],
         },
       ],
@@ -1092,12 +1114,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'الملكية الفكرية',
-          body: ['يحتفظ [اسمك / شركتك] بحقوق تصميم التطبيق وشيفرته البرمجية، باستثناء مكونات المصادر المفتوحة المستخدمة بموجب تراخيصها الخاصة.'],
+          body: ['يحتفظ LaSolutionDigital بحقوق تصميم التطبيق وشيفرته البرمجية، باستثناء مكونات المصادر المفتوحة المستخدمة بموجب تراخيصها الخاصة.'],
         },
         {
           heading: 'تحديد المسؤولية',
           body: [
-            'يُقدَّم التطبيق «كما هو». وفي الحدود التي يسمح بها القانون، لا يتحمل [اسمك / شركتك] المسؤولية عن القرارات المتخذة استنادًا إلى الأرقام أو التقديرات المعروضة في التطبيق.',
+            'يُقدَّم التطبيق «كما هو». وفي الحدود التي يسمح بها القانون، لا يتحمل LaSolutionDigital المسؤولية عن القرارات المتخذة استنادًا إلى الأرقام أو التقديرات المعروضة في التطبيق.',
           ],
         },
         {
@@ -1115,10 +1137,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'التواصل',
           body: [
-            'الاسم أو اسم الشركة: [يُستكمل]',
-            'رقم السجل التجاري — SIRET في فرنسا، إن وُجد: [يُستكمل]',
-            'العنوان: [يُستكمل]',
-            'البريد الإلكتروني للتواصل: [يُستكمل]',
+            'الاسم أو اسم الشركة: LaSolutionDigital',
+            'رقم السجل التجاري — SIRET: 93866525400018',
+            'العنوان: 6 rue du Fort, 08260 Eteignières, فرنسا',
+            'البريد الإلكتروني للتواصل: romainlambert@lasolutiondigital.com',
+            'الهاتف: +33 6 43 50 16 37',
           ],
         },
       ],
@@ -1130,21 +1153,22 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'الناشر',
           body: [
-            'الاسم أو اسم الشركة: [يُستكمل]',
-            'الشكل القانوني، إن كانت شركة (مثال: مؤسسة فردية، شركة ذات مسؤولية محدودة): [يُستكمل]',
-            'رقم السجل التجاري — SIRET في فرنسا: [يُستكمل]',
-            'العنوان المسجَّل / العنوان البريدي: [يُستكمل]',
-            'البريد الإلكتروني للتواصل: [يُستكمل]',
+            'الاسم أو اسم الشركة: LaSolutionDigital',
+            'الشكل القانوني: micro-entreprise (نظام فرنسي للمشروع الفردي الصغير)',
+            'رقم السجل التجاري — SIRET: 93866525400018',
+            'العنوان المسجَّل / العنوان البريدي: 6 rue du Fort, 08260 Eteignières, فرنسا',
+            'البريد الإلكتروني للتواصل: romainlambert@lasolutiondigital.com',
+            'الهاتف: +33 6 43 50 16 37',
           ],
         },
         {
           heading: 'مزوّد الاستضافة',
           body: ['غير مطبَّق حاليًا — لا يملك التطبيق خادمًا ويخزّن كل شيء محليًا على جهازك. أضف مزوّد استضافة هنا إذا تغيّر ذلك.'],
         },
-        { heading: 'مدير النشر', body: ['[اسمك]'] },
+        { heading: 'مدير النشر', body: ['Romain Lambert'] },
         {
           heading: 'الملكية الفكرية',
-          body: ['محتوى التطبيق وتصميمه وشيفرته البرمجية ملك لـ [اسمك / شركتك]، ما لم يُذكر خلاف ذلك.'],
+          body: ['محتوى التطبيق وتصميمه وشيفرته البرمجية ملك لـ LaSolutionDigital، ما لم يُذكر خلاف ذلك.'],
         },
         {
           heading: 'البيانات الشخصية',
@@ -1190,10 +1214,11 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'المتحكم بالبيانات والتواصل',
           body: [
-            'الاسم أو اسم الشركة (المتحكم بالبيانات): [يُستكمل]',
-            'رقم السجل التجاري — SIRET في فرنسا، إن وُجد: [يُستكمل]',
-            'العنوان: [يُستكمل]',
-            'البريد الإلكتروني للتواصل: [يُستكمل]',
+            'الاسم أو اسم الشركة (المتحكم بالبيانات): LaSolutionDigital',
+            'رقم السجل التجاري — SIRET: 93866525400018',
+            'العنوان: 6 rue du Fort, 08260 Eteignières, فرنسا',
+            'البريد الإلكتروني للتواصل: romainlambert@lasolutiondigital.com',
+            'الهاتف: +33 6 43 50 16 37',
           ],
         },
       ],
