@@ -119,7 +119,7 @@ src/
   db/                   Storage: the Store contract, SQLite and web implementations
   data/
     catalog.json          The bundled drink catalog
-    legal/content.ts       CGU / mentions légales / privacy policy text (en, fr)
+    legal/content.ts       CGU / mentions légales / privacy policy text (all 8 languages)
     resources/             Help-screen contacts, one JSON file per country
     harm-reduction/        "When it might help to talk to someone" copy (all 8 languages)
   i18n/                  8 translation catalogs, provider, device-locale + currency detection,

@@ -22,8 +22,6 @@ const COUNTRY_LABEL_KEY: Record<ResourceCountry, string> = {
   IT: 'help.countryIT',
   PT: 'help.countryPT',
   CN: 'help.countryCN',
-  SA: 'help.countrySA',
-  AE: 'help.countryAE',
   OTHER: 'help.countryOTHER',
 };
 

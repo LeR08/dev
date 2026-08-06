@@ -139,7 +139,7 @@ export const RTL_LANGUAGES: readonly LanguageCode[] = ['ar'];
  * Deliberately a small, curated list rather than every ISO country — each
  * entry needs a matching resources JSON file with real, verified contacts.
  */
-export const RESOURCE_COUNTRIES = ['FR', 'US', 'GB', 'ES', 'DE', 'IT', 'PT', 'CN', 'SA', 'AE', 'OTHER'] as const;
+export const RESOURCE_COUNTRIES = ['FR', 'US', 'GB', 'ES', 'DE', 'IT', 'PT', 'CN', 'OTHER'] as const;
 export type ResourceCountry = (typeof RESOURCE_COUNTRIES)[number];
 
 export type Settings = {

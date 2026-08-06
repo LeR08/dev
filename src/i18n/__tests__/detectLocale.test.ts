@@ -31,12 +31,12 @@ describe('detectResourceCountry', () => {
     expect(detectResourceCountry('IT')).toBe('IT');
     expect(detectResourceCountry('PT')).toBe('PT');
     expect(detectResourceCountry('CN')).toBe('CN');
-    expect(detectResourceCountry('SA')).toBe('SA');
-    expect(detectResourceCountry('AE')).toBe('AE');
   });
 
   it('falls back to OTHER for an unmapped or missing region', () => {
     expect(detectResourceCountry('CA')).toBe('OTHER');
+    expect(detectResourceCountry('SA')).toBe('OTHER');
+    expect(detectResourceCountry('AE')).toBe('OTHER');
     expect(detectResourceCountry(null)).toBe('OTHER');
     expect(detectResourceCountry(undefined)).toBe('OTHER');
   });

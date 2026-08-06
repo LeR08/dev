@@ -27,8 +27,6 @@ const REGION_TO_COUNTRY: Record<string, ResourceCountry> = {
   IT: 'IT',
   PT: 'PT',
   CN: 'CN',
-  SA: 'SA',
-  AE: 'AE',
 };
 
 /** Picks the Help & resources country on first launch (spec v1.2 §8.1). */
