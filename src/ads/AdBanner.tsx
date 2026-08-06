@@ -1,24 +1,29 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { useTheme } from '@/theme/ThemeProvider';
 import { TEST_BANNER_AD_UNIT_ID } from './testAdUnitIds';
 
 /**
  * This file only ever gets bundled for iOS/Android — Metro resolves
- * AdBanner.web.tsx for web instead (see that file for why: the native ads
- * module can't even be parsed on web). It still needs a build that actually
- * links the native module (a dev client or a real build — not plain Expo
- * Go), so the require is lazy and defensive: if it isn't there, the banner
- * quietly renders nothing instead of crashing the app.
+ * AdBanner.web.tsx for web instead (see that file for why: Metro statically
+ * resolves every require/import string it finds in a file's source at
+ * bundle time, regardless of which runtime branch it's in, so a
+ * Platform.OS check alone can't keep the native ads module out of a web
+ * bundle — only routing web to a different file can). The Platform.OS
+ * check below is kept anyway as harmless defense-in-depth for native: it
+ * still correctly skips the require on any hypothetical non-native
+ * platform that resolves this file instead of AdBanner.web.tsx.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let googleMobileAds: any = null;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  googleMobileAds = require('react-native-google-mobile-ads');
-} catch {
-  googleMobileAds = null;
+if (Platform.OS === 'ios' || Platform.OS === 'android') {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    googleMobileAds = require('react-native-google-mobile-ads');
+  } catch {
+    googleMobileAds = null;
+  }
 }
 
 /**
