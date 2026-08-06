@@ -6,7 +6,7 @@
  * happens here so it can be unit-tested without a database.
  */
 
-import { entryGrams } from './alcohol';
+import { entryGrams, entryVolumeMl } from './alcohol';
 import {
   addDays,
   dayKey,
@@ -25,6 +25,8 @@ import { CATEGORIES, type Category, type Entry } from './types';
 export type Totals = {
   /** Grams of pure alcohol. */
   grams: number;
+  /** Poured volume (serving size × quantity), in millilitres. */
+  volumeMl: number;
   /** Money spent, in the user's currency. Entries without a price contribute 0. */
   spend: number;
   /** Number of servings (sum of quantities). */
@@ -53,6 +55,7 @@ export type CategoryTotal = {
 
 export const EMPTY_TOTALS: Totals = {
   grams: 0,
+  volumeMl: 0,
   spend: 0,
   servings: 0,
   entries: 0,
@@ -74,17 +77,19 @@ function periodKey(start: Date, granularity: Granularity): string {
 export function totals(entries: Entry[]): Totals {
   const days = new Set<string>();
   let grams = 0;
+  let volumeMl = 0;
   let spend = 0;
   let servings = 0;
 
   for (const entry of entries) {
     grams += entryGrams(entry);
+    volumeMl += entryVolumeMl(entry);
     spend += entry.price ?? 0;
     servings += entry.quantity;
     days.add(dayKey(entry.consumedAt));
   }
 
-  return { grams, spend, servings, entries: entries.length, drinkingDays: days.size };
+  return { grams, volumeMl, spend, servings, entries: entries.length, drinkingDays: days.size };
 }
 
 /**
@@ -117,6 +122,7 @@ export function bucketize(
     if (!bucket) continue;
 
     bucket.grams += entryGrams(entry);
+    bucket.volumeMl += entryVolumeMl(entry);
     bucket.spend += entry.price ?? 0;
     bucket.servings += entry.quantity;
     bucket.entries += 1;

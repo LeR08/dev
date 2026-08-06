@@ -156,7 +156,11 @@
     "cmpNothingEither": "Auch nichts: {{period}}",
     "cmpVsPeriod": "{{change}} vs {{period}}",
     "weekFreeDaysSoFarOne": "{{count}} alkoholfreier Tag bisher",
-    "weekFreeDaysSoFarOther": "{{count}} alkoholfreie Tage bisher"
+    "weekFreeDaysSoFarOther": "{{count}} alkoholfreie Tage bisher",
+    "dailyGoalTitle": "Tagesziel",
+    "volumeLabel": "Volumen",
+    "dailyGoalRemaining": "{{remaining}} übrig von deinem heutigen Ziel von {{goal}}",
+    "dailyGoalOver": "{{over}} über deinem heutigen Ziel von {{goal}}"
   },
   "settingsHome": {
     "unitsRow": "Einheiten",
@@ -206,7 +210,9 @@
     "footerDisclaimer": "Tally speichert alles lokal. Kein Konto, kein Server, keine Analyse-Tools — nichts verlässt dieses Gerät, außer du exportierst es selbst.",
     "noneSet": "Keine festgelegt",
     "goalPerWeek": "{{count}}/Woche",
-    "goalFreeDays": "{{count}} freie Tage"
+    "goalFreeDays": "{{count}} freie Tage",
+    "subscriptionRowSubtitle": "Eine Testmodus-Idee, keine echte Abbuchung",
+    "adminRowSubtitle": "Eine lokale Vorschau der Nutzer- und Admin-Seite, vor jedem echten Hosting"
   },
   "savings": {
     "title": "Ersparnisse",
@@ -316,7 +322,9 @@
     "personalGoals": "Persönliche Ziele",
     "appearance": "Erscheinungsbild",
     "defaultPrices": "Standardpreise",
-    "dataPrivacy": "Daten & Datenschutz"
+    "dataPrivacy": "Daten & Datenschutz",
+    "subscription": "Abo (Test)",
+    "admin": "Admin (Test)"
   },
   "unitsScreen": {
     "volumeTitle": "Volumen",
@@ -378,7 +386,9 @@
     "noMatchTitle": "Keine Treffer",
     "noMatchBody": "Versuche einen größeren Zeitraum oder eine andere Kategorie.",
     "emptyTitle": "Dein Protokoll ist leer",
-    "emptyBody": "Alles, was du protokollierst, bleibt auf diesem Gerät. Fang an, wann immer du willst."
+    "emptyBody": "Alles, was du protokollierst, bleibt auf diesem Gerät. Fang an, wann immer du willst.",
+    "periodCustom": "Benutzerdefiniert",
+    "customStartLabel": "Starttag"
   },
   "drinksScreen": {
     "intro": "Von dir erstellte Voreinstellungen. Sie erscheinen oben in der Liste, wenn du ein Getränk protokollierst.",
@@ -526,5 +536,41 @@
     "intro": "Ein Standardpreis wird automatisch ausgefüllt, wenn du dieses Getränk protokollierst. Du kannst ihn für einen einzelnen Eintrag jederzeit ändern.",
     "searchPlaceholder": "Getränke suchen",
     "priceA11y": "Standardpreis für {{name}}"
+  },
+  "subscriptionScreen": {
+    "badge": "Testmodus — es wird nie wirklich etwas abgebucht",
+    "intro": "Das schaltet nichts frei, und nichts hier ist verpflichtend — es geht darum, zu sehen, ob sich ein kleiner, optionaler Weg, die App zu unterstützen, wirklich lohnt. Kostenlos bleibt so oder so kostenlos.",
+    "priceLabel": "5€ / Monat",
+    "subscribeAction": "Test-Abo starten",
+    "referralInputLabel": "Hast du einen Empfehlungscode? (optional)",
+    "referralInputPlaceholder": "TALLY-XXXXXX",
+    "referralInvalidHint": "Sieht nicht nach einem gültigen Code aus — prüfe auf Tippfehler.",
+    "activeTitle": "Test-Abo aktiv",
+    "activeSince": "Aktiv seit {{date}}",
+    "yourCodeLabel": "Dein Empfehlungscode",
+    "yourCodeHint": "Teile ihn mit Leuten, die du kennst — es geht nur darum, zu sehen, ob es sich lohnt, das gegenseitige Weiterempfehlen richtig auszubauen. Heute schaltet er noch nichts frei.",
+    "referredByLabel": "Empfohlen von {{code}}",
+    "cancelAction": "Test-Abo beenden",
+    "subscribedToast": "Test-Abo gestartet — es wurde nichts abgebucht.",
+    "cancelledToast": "Test-Abo beendet."
+  },
+  "adminScreen": {
+    "banner": "Dies ist eine lokale Vorschau dessen, was ein zukünftiges Admin-Panel zeigen könnte — sowohl die Nutzerseite (die Daten dieses Geräts) als auch die Admin-Seite (Tickets, Abo-Status, Katalog-Anpassungen). Es gibt noch keinen Server und keine anderen echten Nutzer: alles hier stammt allein von diesem Gerät.",
+    "userSideTitle": "Nutzerseite — lokale Daten",
+    "entriesLabel": "Protokollierte Einträge",
+    "customDrinksLabel": "Eigene Getränke",
+    "adminSideTitle": "Admin-Seite — Support & Abrechnung (Test)",
+    "ticketsOpenLabel": "Offene Tickets",
+    "ticketsClosedLabel": "Geschlossene Tickets",
+    "manageTicketsAction": "Tickets verwalten",
+    "subscriptionActive": "Test-Abo aktiv, Code {{code}}",
+    "subscriptionNone": "Kein Test-Abo aktiv",
+    "manageSubscriptionAction": "Abo verwalten",
+    "catalogOverridesTitle": "Katalog-Übersetzungen",
+    "catalogOverridesBody": "{{count}} Katalog-Getränke haben in der aktuellen Sprache einen übersetzten Anzeigenamen; der Rest behält seinen ursprünglichen internationalen Namen (Absinth, Baijiu, Prosecco, ...), da dieser in den meisten Sprachen bereits korrekt ist.",
+    "appInfoTitle": "App-Info",
+    "versionLabel": "Version",
+    "platformLabel": "Plattform",
+    "languageLabel": "Aktuelle Sprache"
   }
 }

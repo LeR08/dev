@@ -11,6 +11,7 @@
 
 export type Approach = { title: string; body: string };
 export type SeekHelp = { intro: string; signals: string[] };
+export type NonMedicalSection = { title: string; intro: string; items: Approach[]; caution: string };
 
 type Locale = 'en' | 'fr';
 
@@ -76,10 +77,66 @@ export const SEEK_HELP: Record<Locale, SeekHelp> = {
   },
 };
 
+/**
+ * General relaxation / behavioural techniques some people use alongside —
+ * not instead of — professional care. None are alcohol-specific medical
+ * treatments; the intro and caution say so explicitly rather than implying
+ * proven efficacy that isn't there (spec follow-up: "solutions non médicales,
+ * sophrologie, hypnose et autres").
+ */
+export const NON_MEDICAL: Record<Locale, NonMedicalSection> = {
+  en: {
+    title: 'Non-medical, complementary approaches',
+    intro:
+      "None of these are medical treatments, and none are specific to alcohol — they're general relaxation or behavioural techniques some people use alongside, not instead of, professional care. Effectiveness varies by person, and evidence specifically for reducing alcohol use is limited or mixed for most of them.",
+    items: [
+      {
+        title: 'Sophrology',
+        body: 'A relaxation method (developed in Europe) combining breathing exercises, gentle body awareness and visualisation, usually taught over several sessions with a practitioner. Some people use it for general stress management; it is not a clinically proven addiction treatment.',
+      },
+      {
+        title: 'Hypnotherapy',
+        body: 'Guided relaxation and focused attention with a trained hypnotherapist, sometimes used to work on habits. Some people report it helpful; controlled evidence specific to alcohol use is limited, so treat it as one option to discuss with a professional rather than a proven fix.',
+      },
+      {
+        title: 'Mindfulness / meditation',
+        body: "Structured attention and breathing practices, often taught in group or app-based courses. There's more general research on mindfulness for stress and craving management than on the other two here, though results still vary by person.",
+      },
+    ],
+    caution:
+      "As with everything on this page, this list isn't a recommendation — just a starting point if you want to look into non-medical options. A doctor or addiction specialist is the right person to ask what fits your situation.",
+  },
+  fr: {
+    title: 'Approches complémentaires, non médicales',
+    intro:
+      "Aucune de ces approches n'est un traitement médical, et aucune n'est spécifique à l'alcool — ce sont des techniques générales de relaxation ou comportementales que certaines personnes utilisent en complément, et non à la place, d'un suivi professionnel. Leur efficacité varie selon les personnes, et les preuves spécifiques à la réduction de la consommation d'alcool restent limitées ou mitigées pour la plupart d'entre elles.",
+    items: [
+      {
+        title: 'Sophrologie',
+        body: "Une méthode de relaxation (développée en Europe) combinant exercices respiratoires, prise de conscience corporelle douce et visualisation, généralement enseignée sur plusieurs séances avec un praticien. Certaines personnes l'utilisent pour la gestion générale du stress ; ce n'est pas un traitement de l'addiction cliniquement prouvé.",
+      },
+      {
+        title: 'Hypnose / hypnothérapie',
+        body: "Relaxation guidée et attention focalisée avec un hypnothérapeute formé, parfois utilisée pour travailler sur des habitudes. Certaines personnes trouvent cela utile ; les preuves contrôlées spécifiques à la consommation d'alcool restent limitées — à considérer comme une option à discuter avec un professionnel plutôt qu'une solution prouvée.",
+      },
+      {
+        title: 'Pleine conscience / méditation',
+        body: 'Pratiques structurées d\'attention et de respiration, souvent enseignées en groupe ou via une application. Il existe davantage de recherches générales sur la pleine conscience pour la gestion du stress et des envies que sur les deux approches précédentes, même si les résultats varient selon les personnes.',
+      },
+    ],
+    caution:
+      "Comme pour le reste de cette page, cette liste n'est pas une recommandation — juste un point de départ si vous souhaitez vous renseigner sur des options non médicales. Un médecin ou un spécialiste des addictions reste la bonne personne pour évaluer ce qui convient à votre situation.",
+  },
+};
+
 export function approachesFor(locale: string): Approach[] {
   return APPROACHES[locale === 'fr' ? 'fr' : 'en'];
 }
 
 export function seekHelpFor(locale: string): SeekHelp {
   return SEEK_HELP[locale === 'fr' ? 'fr' : 'en'];
+}
+
+export function nonMedicalFor(locale: string): NonMedicalSection {
+  return NON_MEDICAL[locale === 'fr' ? 'fr' : 'en'];
 }

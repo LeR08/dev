@@ -162,6 +162,33 @@ export type Settings = {
   weightUnit: WeightUnit;
   /** Display unit for the profile's height field (stats only, spec v1.2 §4.1). */
   heightUnit: HeightUnit;
+  /** Test-mode-only mock subscription — no real payment is ever processed. */
+  subscription: Subscription;
+};
+
+export type SubscriptionStatus = 'none' | 'testActive';
+
+/**
+ * A local-only stand-in for a real subscription system. Nothing here talks
+ * to a payment processor or a server — activating it just flips this flag on
+ * this device, same as everything else in the app. Exists so the idea of a
+ * paid tier (with an affiliate code, so users can point each other at the
+ * app) can be tried out before any real billing is built.
+ */
+export type Subscription = {
+  status: SubscriptionStatus;
+  /** This device's own shareable referral code, generated once. */
+  ownCode: string | null;
+  /** A code entered when "subscribing", if the user had one. */
+  referredByCode: string | null;
+  activatedAt: number | null;
+};
+
+export const DEFAULT_SUBSCRIPTION: Subscription = {
+  status: 'none',
+  ownCode: null,
+  referredByCode: null,
+  activatedAt: null,
 };
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -178,6 +205,7 @@ export const DEFAULT_SETTINGS: Settings = {
   resourceCountry: 'OTHER',
   weightUnit: 'kg',
   heightUnit: 'cm',
+  subscription: DEFAULT_SUBSCRIPTION,
 };
 
 /** Biological sex as used by the Widmark BAC formula. Never guessed or defaulted. */

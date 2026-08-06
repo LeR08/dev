@@ -156,7 +156,11 @@
     "cmpNothingEither": "Rien non plus pour {{period}}",
     "cmpVsPeriod": "{{change}} vs {{period}}",
     "weekFreeDaysSoFarOne": "{{count}} jour sans alcool jusqu'ici",
-    "weekFreeDaysSoFarOther": "{{count}} jours sans alcool jusqu'ici"
+    "weekFreeDaysSoFarOther": "{{count}} jours sans alcool jusqu'ici",
+    "dailyGoalTitle": "Objectif journalier",
+    "volumeLabel": "Volume",
+    "dailyGoalRemaining": "{{remaining}} restant sur vos {{goal}} du jour",
+    "dailyGoalOver": "{{over}} au-dessus de votre objectif de {{goal}} du jour"
   },
   "settingsHome": {
     "unitsRow": "Unités",
@@ -206,7 +210,9 @@
     "footerDisclaimer": "Tally garde tout en local. Pas de compte, pas de serveur, pas de mesures d'audience — rien ne quitte cet appareil, sauf si vous l'exportez vous-même.",
     "noneSet": "Aucun défini",
     "goalPerWeek": "{{count}}/semaine",
-    "goalFreeDays": "{{count}} jours sans alcool"
+    "goalFreeDays": "{{count}} jours sans alcool",
+    "subscriptionRowSubtitle": "Une idée en mode test, aucun vrai paiement",
+    "adminRowSubtitle": "Un aperçu local des côtés utilisateur et admin, avant tout hébergement réel"
   },
   "savings": {
     "title": "Économies",
@@ -316,7 +322,9 @@
     "personalGoals": "Objectifs personnels",
     "appearance": "Apparence",
     "defaultPrices": "Prix par défaut",
-    "dataPrivacy": "Données et confidentialité"
+    "dataPrivacy": "Données et confidentialité",
+    "subscription": "Abonnement (test)",
+    "admin": "Admin (test)"
   },
   "unitsScreen": {
     "volumeTitle": "Volume",
@@ -378,7 +386,9 @@
     "noMatchTitle": "Aucun résultat",
     "noMatchBody": "Essayez une période plus large ou une autre catégorie.",
     "emptyTitle": "Votre journal est vide",
-    "emptyBody": "Tout ce que vous enregistrez reste sur cet appareil. Commencez quand vous le souhaitez."
+    "emptyBody": "Tout ce que vous enregistrez reste sur cet appareil. Commencez quand vous le souhaitez.",
+    "periodCustom": "Personnalisé",
+    "customStartLabel": "Jour de début"
   },
   "drinksScreen": {
     "intro": "Les préréglages que vous avez créés. Ils apparaissent en haut de la liste quand vous enregistrez une boisson.",
@@ -526,5 +536,41 @@
     "intro": "Un prix par défaut est prérempli automatiquement quand vous enregistrez cette boisson. Vous pouvez toujours le modifier pour une entrée précise.",
     "searchPlaceholder": "Rechercher des boissons",
     "priceA11y": "Prix par défaut pour {{name}}"
+  },
+  "subscriptionScreen": {
+    "badge": "Mode test — rien n'est jamais réellement débité",
+    "intro": "Cela ne débloque rien, et rien ici n'est obligatoire — l'idée est de voir si une petite façon optionnelle de soutenir l'appli mérite d'être construite pour de vrai. La version gratuite reste gratuite dans tous les cas.",
+    "priceLabel": "5€ / mois",
+    "subscribeAction": "Démarrer l'abonnement test",
+    "referralInputLabel": "Un code de parrainage ? (facultatif)",
+    "referralInputPlaceholder": "TALLY-XXXXXX",
+    "referralInvalidHint": "Ce code ne semble pas valide — vérifiez les fautes de frappe.",
+    "activeTitle": "Abonnement test actif",
+    "activeSince": "Actif depuis le {{date}}",
+    "yourCodeLabel": "Votre code de parrainage",
+    "yourCodeHint": "Partagez-le avec des gens que vous connaissez — l'idée est juste de voir si le bouche-à-oreille entre utilisateurs mérite d'être développé sérieusement. Cela ne débloque rien aujourd'hui.",
+    "referredByLabel": "Parrainé par {{code}}",
+    "cancelAction": "Mettre fin à l'abonnement test",
+    "subscribedToast": "Abonnement test démarré — aucun débit réel.",
+    "cancelledToast": "Abonnement test terminé."
+  },
+  "adminScreen": {
+    "banner": "Ceci est un aperçu local de ce qu'un futur panneau d'administration pourrait afficher — à la fois le côté utilisateur (les données de cet appareil) et le côté admin (signalements, état de l'abonnement, ajustements du catalogue). Il n'y a pas encore de serveur ni d'autres vrais utilisateurs : tout ici vient uniquement de cet appareil.",
+    "userSideTitle": "Côté utilisateur — données locales",
+    "entriesLabel": "Entrées enregistrées",
+    "customDrinksLabel": "Boissons personnalisées",
+    "adminSideTitle": "Côté admin — support et facturation (test)",
+    "ticketsOpenLabel": "Signalements ouverts",
+    "ticketsClosedLabel": "Signalements fermés",
+    "manageTicketsAction": "Gérer les signalements",
+    "subscriptionActive": "Abonnement test actif, code {{code}}",
+    "subscriptionNone": "Aucun abonnement test actif",
+    "manageSubscriptionAction": "Gérer l'abonnement",
+    "catalogOverridesTitle": "Traductions du catalogue",
+    "catalogOverridesBody": "{{count}} boissons du catalogue ont un nom d'affichage traduit dans la langue actuelle ; les autres gardent leur nom international d'origine (Absinthe, Baijiu, Prosecco, ...) puisqu'il est déjà correct dans la plupart des langues.",
+    "appInfoTitle": "Infos sur l'application",
+    "versionLabel": "Version",
+    "platformLabel": "Plateforme",
+    "languageLabel": "Langue actuelle"
   }
 }

@@ -115,6 +115,19 @@ export default function SettingsScreen() {
               subtitle={t('settings.dataRowSubtitle', { count: entries.length })}
               onPress={() => router.push('/settings/data')}
             />
+            <RowDivider />
+            <Row
+              title={t('nav.subscription')}
+              subtitle={t('settings.subscriptionRowSubtitle')}
+              value={settings.subscription.status === 'testActive' ? t('subscriptionScreen.activeTitle') : undefined}
+              onPress={() => router.push('/settings/subscription')}
+            />
+            <RowDivider />
+            <Row
+              title={t('nav.admin')}
+              subtitle={t('settings.adminRowSubtitle')}
+              onPress={() => router.push('/settings/admin')}
+            />
           </Card>
         </FadeInView>
 

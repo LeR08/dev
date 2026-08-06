@@ -10,6 +10,7 @@ import { searchDrinks, type DrinkFilter } from '@/domain/search';
 import { CATEGORIES, type Drink } from '@/domain/types';
 import { useQuickLog } from '@/hooks/useQuickLog';
 import { categoryLabel } from '@/i18n/categoryLabel';
+import { catalogDrinkName } from '@/i18n/catalogNames';
 import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -17,7 +18,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 export default function DrinkPickerScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const { drinks, settings } = useApp();
   const quickLog = useQuickLog();
 
@@ -118,6 +119,7 @@ export default function DrinkPickerScreen() {
         renderItem={({ item }) => (
           <DrinkPickerRow
             drink={item}
+            displayName={catalogDrinkName(language, item)}
             volumeLabel={`${formatVolume(item.defaultVolumeMl, settings.volumeUnit)} · ${formatAbv(item.abv)}`}
             yoursLabel={t('logScreen.yours')}
             rowA11yHint={t('logScreen.rowA11yHint')}
@@ -137,6 +139,7 @@ export default function DrinkPickerScreen() {
 
 function DrinkPickerRow({
   drink,
+  displayName,
   volumeLabel,
   yoursLabel,
   rowA11yHint,
@@ -144,6 +147,7 @@ function DrinkPickerRow({
   onLongPress,
 }: {
   drink: Drink;
+  displayName: string;
   volumeLabel: string;
   yoursLabel: string;
   rowA11yHint: string;
@@ -176,7 +180,7 @@ function DrinkPickerRow({
       />
       <View style={{ flex: 1 }}>
         <Text variant="body" numberOfLines={1}>
-          {drink.name}
+          {displayName}
         </Text>
         <Text variant="caption" tone="muted">
           {volumeLabel}

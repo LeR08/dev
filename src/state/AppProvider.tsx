@@ -208,6 +208,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         ...settings,
         ...patch,
         goals: { ...settings.goals, ...(patch.goals ?? {}) },
+        subscription: { ...settings.subscription, ...(patch.subscription ?? {}) },
       };
       setSettings(next);
       await store.saveSettings(next);

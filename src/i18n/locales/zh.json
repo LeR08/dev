@@ -156,7 +156,11 @@
     "cmpNothingEither": "{{period}}也没有记录",
     "cmpVsPeriod": "{{change}}，对比{{period}}",
     "weekFreeDaysSoFarOne": "目前 {{count}} 天无酒",
-    "weekFreeDaysSoFarOther": "目前 {{count}} 天无酒"
+    "weekFreeDaysSoFarOther": "目前 {{count}} 天无酒",
+    "dailyGoalTitle": "每日目标",
+    "volumeLabel": "容量",
+    "dailyGoalRemaining": "距今日目标 {{goal}} 还剩 {{remaining}}",
+    "dailyGoalOver": "超出今日目标 {{goal}} 达 {{over}}"
   },
   "settingsHome": {
     "unitsRow": "单位",
@@ -206,7 +210,9 @@
     "footerDisclaimer": "Tally 只把数据留在本机。没有账户、没有服务器、没有数据分析——除非你自己导出，否则任何内容都不会离开这台设备。",
     "noneSet": "未设置",
     "goalPerWeek": "每周 {{count}}",
-    "goalFreeDays": "{{count}} 天不饮酒"
+    "goalFreeDays": "{{count}} 天不饮酒",
+    "subscriptionRowSubtitle": "测试模式的构想，不会真实扣费",
+    "adminRowSubtitle": "用户端与管理端的本地预览，尚未真正上线托管"
   },
   "savings": {
     "title": "节省",
@@ -316,7 +322,9 @@
     "personalGoals": "个人目标",
     "appearance": "外观",
     "defaultPrices": "默认价格",
-    "dataPrivacy": "数据与隐私"
+    "dataPrivacy": "数据与隐私",
+    "subscription": "订阅（测试）",
+    "admin": "管理（测试）"
   },
   "unitsScreen": {
     "volumeTitle": "容量",
@@ -378,7 +386,9 @@
     "noMatchTitle": "没有匹配结果",
     "noMatchBody": "试试更宽的日期范围或换一个类别。",
     "emptyTitle": "你的记录还是空的",
-    "emptyBody": "你记录的一切都只留在这台设备上。想开始的时候随时可以开始。"
+    "emptyBody": "你记录的一切都只留在这台设备上。想开始的时候随时可以开始。",
+    "periodCustom": "自定义",
+    "customStartLabel": "起始日期"
   },
   "drinksScreen": {
     "intro": "你创建的预设，会出现在记录饮品列表的最上方。",
@@ -526,5 +536,41 @@
     "intro": "记录该饮品时会自动填入默认价格，你随时可以为单条记录修改它。",
     "searchPlaceholder": "搜索饮品",
     "priceA11y": "{{name}} 的默认价格"
+  },
+  "subscriptionScreen": {
+    "badge": "测试模式——不会产生任何真实扣费",
+    "intro": "这不会解锁任何功能，也不是必须的——只是想看看是否值得真正开发一种小额、可选的支持方式。免费版无论如何都会继续免费。",
+    "priceLabel": "每月 5 欧元",
+    "subscribeAction": "开始测试订阅",
+    "referralInputLabel": "有推荐码吗？（可选）",
+    "referralInputPlaceholder": "TALLY-XXXXXX",
+    "referralInvalidHint": "这个代码看起来无效——请检查是否有输入错误。",
+    "activeTitle": "测试订阅已激活",
+    "activeSince": "自 {{date}} 起生效",
+    "yourCodeLabel": "你的推荐码",
+    "yourCodeHint": "把它分享给你认识的人——这只是想看看用户互相推荐是否值得认真开发。目前它不会解锁任何功能。",
+    "referredByLabel": "推荐人：{{code}}",
+    "cancelAction": "结束测试订阅",
+    "subscribedToast": "测试订阅已开始——未产生任何扣费。",
+    "cancelledToast": "测试订阅已结束。"
+  },
+  "adminScreen": {
+    "banner": "这是未来管理面板可能呈现内容的本地预览——既包括用户端（本设备自身的数据），也包括管理端（反馈单、订阅状态、目录调整）。目前还没有服务器，也没有其他真实用户：这里的一切都仅来自本设备。",
+    "userSideTitle": "用户端——本地数据",
+    "entriesLabel": "已记录条目",
+    "customDrinksLabel": "自定义饮品",
+    "adminSideTitle": "管理端——支持与计费（测试）",
+    "ticketsOpenLabel": "待处理反馈单",
+    "ticketsClosedLabel": "已关闭反馈单",
+    "manageTicketsAction": "管理反馈单",
+    "subscriptionActive": "测试订阅已激活，代码 {{code}}",
+    "subscriptionNone": "没有激活的测试订阅",
+    "manageSubscriptionAction": "管理订阅",
+    "catalogOverridesTitle": "目录翻译",
+    "catalogOverridesBody": "目前语言下有 {{count}} 种目录饮品拥有翻译后的显示名称；其余饮品保留其原始国际通用名称（如 Absinthe、Baijiu、Prosecco 等），因为这些名称在大多数语言中已经是正确的。",
+    "appInfoTitle": "应用信息",
+    "versionLabel": "版本",
+    "platformLabel": "平台",
+    "languageLabel": "当前语言"
   }
 }

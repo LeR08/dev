@@ -6,6 +6,7 @@ import { Platform, View } from 'react-native';
 import { EntryForm, type EntryFormValues } from '@/components/EntryForm';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
+import { catalogDrinkName } from '@/i18n/catalogNames';
 import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -13,7 +14,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 export default function LogDetailsScreen() {
   const theme = useTheme();
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const { drinkId } = useLocalSearchParams<{ drinkId?: string }>();
   const { drinks, settings, addEntry, removeEntry } = useApp();
   const toast = useToast();
@@ -32,7 +33,7 @@ export default function LogDetailsScreen() {
 
   const initial: EntryFormValues = {
     drinkId: drink.id,
-    name: drink.name,
+    name: catalogDrinkName(language, drink),
     category: drink.category,
     abv: drink.abv,
     volumeMl: drink.defaultVolumeMl,

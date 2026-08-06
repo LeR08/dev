@@ -22,6 +22,10 @@ export type BarChartProps = {
   formatValue?: (value: number) => string;
   selectedKey?: string | null;
   onSelect?: (datum: BarDatum | null) => void;
+  /** Shows value gridlines (0 / half / max) down the left edge. */
+  showYAxis?: boolean;
+  /** Width reserved for the Y-axis label column. */
+  yAxisWidth?: number;
 };
 
 const MIN_VISIBLE_FRACTION = 0.02;
@@ -70,6 +74,8 @@ export function BarChart({
   formatValue,
   selectedKey,
   onSelect,
+  showYAxis = false,
+  yAxisWidth = 34,
 }: BarChartProps) {
   const theme = useTheme();
   const barColor = color ?? theme.accent.base;
@@ -78,6 +84,9 @@ export function BarChart({
     const highest = Math.max(0, ...data.map((datum) => datum.value), goal ?? 0);
     return highest > 0 ? highest : 1;
   }, [data, goal]);
+
+  const formatTick = formatValue ?? ((value: number) => `${Math.round(value)}`);
+  const yTicks = showYAxis ? [1, 0.5, 0].map((fraction) => ({ fraction, value: max * fraction })) : [];
 
   // One Animated.Value per bar slot, reused across data updates so the chart
   // grows into its new shape instead of snapping.
@@ -105,68 +114,108 @@ export function BarChart({
 
   return (
     <View style={{ gap: theme.spacing(2) }}>
-      <View style={{ height, flexDirection: 'row', alignItems: 'flex-end', gap }}>
-        {goalFraction !== null ? (
-          <View
-            style={{
-              pointerEvents: 'none',
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              bottom: goalFraction * height,
-              borderBottomWidth: 1,
-              borderStyle: 'dashed',
-              borderColor: theme.colors.textFaint,
-            }}
-          >
-            {goalLabel ? (
-              <Text variant="caption" tone="faint" style={{ position: 'absolute', right: 0, bottom: 3 }}>
-                {goalLabel}
+      <View style={{ flexDirection: 'row' }}>
+        {showYAxis ? (
+          <View style={{ width: yAxisWidth, height }}>
+            {yTicks.map((tick) => (
+              <Text
+                key={tick.fraction}
+                variant="caption"
+                tone="faint"
+                numberOfLines={1}
+                style={{
+                  position: 'absolute',
+                  top: (1 - tick.fraction) * height - 7,
+                  left: 0,
+                  right: theme.spacing(1),
+                }}
+              >
+                {formatTick(tick.value)}
               </Text>
-            ) : null}
+            ))}
           </View>
         ) : null}
 
-        {data.map((datum, index) => {
-          const selected = selectedKey === datum.key;
-          const fill = datum.highlight || selected ? barColor : `${barColor}66`;
-          return (
-            <Pressable
-              key={datum.key}
-              accessibilityRole="button"
-              accessibilityLabel={`${datum.label}: ${formatValue ? formatValue(datum.value) : datum.value}`}
-              disabled={!onSelect}
-              onPress={() => onSelect?.(selected ? null : datum)}
-              style={{ flex: 1, height, justifyContent: 'flex-end' }}
-            >
-              <Animated.View
-                style={{
-                  height: animations.current[index].interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, height],
-                  }),
-                  minHeight: datum.value > 0 ? 3 : 0,
-                  backgroundColor: datum.value > 0 ? fill : theme.colors.trackEmpty,
-                  borderRadius: theme.radius.sm,
-                  borderWidth: selected ? 2 : 0,
-                  borderColor: theme.colors.text,
-                }}
-              />
-              {datum.value === 0 ? (
+        <View style={{ flex: 1, height, flexDirection: 'row', alignItems: 'flex-end', gap }}>
+          {showYAxis
+            ? yTicks.map((tick) => (
                 <View
+                  key={tick.fraction}
+                  pointerEvents="none"
                   style={{
-                    height: 3,
-                    borderRadius: 2,
-                    backgroundColor: theme.colors.trackEmpty,
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    bottom: tick.fraction * height,
+                    borderBottomWidth: 1,
+                    borderColor: theme.colors.border,
                   }}
                 />
+              ))
+            : null}
+
+          {goalFraction !== null ? (
+            <View
+              style={{
+                pointerEvents: 'none',
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                bottom: goalFraction * height,
+                borderBottomWidth: 1,
+                borderStyle: 'dashed',
+                borderColor: theme.colors.textFaint,
+              }}
+            >
+              {goalLabel ? (
+                <Text variant="caption" tone="faint" style={{ position: 'absolute', right: 0, bottom: 3 }}>
+                  {goalLabel}
+                </Text>
               ) : null}
-            </Pressable>
-          );
-        })}
+            </View>
+          ) : null}
+
+          {data.map((datum, index) => {
+            const selected = selectedKey === datum.key;
+            const fill = datum.highlight || selected ? barColor : `${barColor}66`;
+            return (
+              <Pressable
+                key={datum.key}
+                accessibilityRole="button"
+                accessibilityLabel={`${datum.label}: ${formatValue ? formatValue(datum.value) : datum.value}`}
+                disabled={!onSelect}
+                onPress={() => onSelect?.(selected ? null : datum)}
+                style={{ flex: 1, height, justifyContent: 'flex-end' }}
+              >
+                <Animated.View
+                  style={{
+                    height: animations.current[index].interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, height],
+                    }),
+                    minHeight: datum.value > 0 ? 3 : 0,
+                    backgroundColor: datum.value > 0 ? fill : theme.colors.trackEmpty,
+                    borderRadius: theme.radius.sm,
+                    borderWidth: selected ? 2 : 0,
+                    borderColor: theme.colors.text,
+                  }}
+                />
+                {datum.value === 0 ? (
+                  <View
+                    style={{
+                      height: 3,
+                      borderRadius: 2,
+                      backgroundColor: theme.colors.trackEmpty,
+                    }}
+                  />
+                ) : null}
+              </Pressable>
+            );
+          })}
+        </View>
       </View>
 
-      <View style={{ flexDirection: 'row', gap }}>
+      <View style={{ flexDirection: 'row', gap, paddingLeft: showYAxis ? yAxisWidth : 0 }}>
         {labelCells(data).map((cell) => (
           <View
             key={cell.key}

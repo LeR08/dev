@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { useMemo, useState } from 'react';
-import { ScrollView, SectionList, View } from 'react-native';
+import { Pressable, ScrollView, SectionList, View } from 'react-native';
 
 import { EntryRow } from '@/components/EntryRow';
 import { Chip } from '@/components/ui/Chip';
@@ -9,8 +9,8 @@ import { FadeInView } from '@/components/ui/FadeInView';
 import { Field } from '@/components/ui/Field';
 import { Text } from '@/components/ui/Text';
 import { gramsToIntake } from '@/domain/alcohol';
-import { dayKey, startOfDay, trailingRange, type Range } from '@/domain/dates';
-import { formatMoney, formatRelativeDay } from '@/domain/format';
+import { addDays, dayKey, startOfDay, trailingRange, type Range } from '@/domain/dates';
+import { formatDate, formatMoney, formatRelativeDay } from '@/domain/format';
 import { filterEntries } from '@/domain/search';
 import { totals } from '@/domain/stats';
 import { CATEGORIES, type Category, type Entry } from '@/domain/types';
@@ -21,16 +21,16 @@ import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
-type Period = 'all' | '30d' | '90d' | '365d';
+type Period = 'all' | '30d' | '90d' | '365d' | 'custom';
 
-const PERIOD_LABEL_KEY: Record<Period, string> = {
+const PERIOD_LABEL_KEY: Record<Exclude<Period, 'custom'>, string> = {
   '30d': 'historyScreen.period30d',
   '90d': 'historyScreen.period90d',
   '365d': 'historyScreen.periodYear',
   all: 'historyScreen.periodAll',
 };
 
-const PERIODS: { value: Period; days: number | null }[] = [
+const PERIODS: { value: Exclude<Period, 'custom'>; days: number | null }[] = [
   { value: '30d', days: 30 },
   { value: '90d', days: 90 },
   { value: '365d', days: 365 },
@@ -47,12 +47,16 @@ export default function HistoryScreen() {
   const [query, setQuery] = useState('');
   const [period, setPeriod] = useState<Period>('30d');
   const [category, setCategory] = useState<Category | 'all'>('all');
+  const [customStart, setCustomStart] = useState(() => trailingRange(now, 'day', 30, settings.weekStartsOn).start);
 
   const range = useMemo<Range | null>(() => {
+    if (period === 'custom') {
+      return { start: startOfDay(customStart).getTime(), end: now };
+    }
     const days = PERIODS.find((item) => item.value === period)?.days ?? null;
     if (days === null) return null;
     return trailingRange(now, 'day', days, settings.weekStartsOn);
-  }, [now, period, settings.weekStartsOn]);
+  }, [customStart, now, period, settings.weekStartsOn]);
 
   const filtered = useMemo(
     () => filterEntries(entries, { range, category, query }),
@@ -106,7 +110,21 @@ export default function HistoryScreen() {
                     onPress={() => setPeriod(item.value)}
                   />
                 ))}
+                <Chip
+                  label={t('historyScreen.periodCustom')}
+                  selected={period === 'custom'}
+                  onPress={() => setPeriod('custom')}
+                />
               </ScrollView>
+
+              {period === 'custom' ? (
+                <StartDatePicker
+                  value={customStart}
+                  max={now}
+                  onChange={setCustomStart}
+                  label={t('historyScreen.customStartLabel')}
+                />
+              ) : null}
 
               <ScrollView
                 horizontal
@@ -193,6 +211,75 @@ export default function HistoryScreen() {
           </View>
         )}
       />
+    </View>
+  );
+}
+
+/**
+ * Lets the user pick exactly which day the "custom" window starts on, so a
+ * trailing preset (30/90/365 days) doesn't drag in days before they actually
+ * started tracking and skew the averages.
+ */
+function StartDatePicker({
+  value,
+  max,
+  onChange,
+  label,
+}: {
+  value: number;
+  max: number;
+  onChange: (value: number) => void;
+  label: string;
+}) {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const previousDayLabel = t('dateTimeField.previousDay');
+  const nextDayLabel = t('dateTimeField.nextDay');
+  const canGoForward = startOfDay(value).getTime() < startOfDay(max).getTime();
+
+  const arrow = (symbol: string, days: number, accessibilityLabel: string, disabled: boolean) => (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      disabled={disabled}
+      onPress={() => onChange(Math.min(addDays(value, days).getTime(), max))}
+      style={({ pressed }) => ({
+        width: 36,
+        height: 36,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: theme.radius.pill,
+        backgroundColor: theme.colors.surface,
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+        opacity: disabled ? 0.35 : pressed ? 0.6 : 1,
+      })}
+    >
+      <Text variant="body">{symbol}</Text>
+    </Pressable>
+  );
+
+  return (
+    <View style={{ gap: theme.spacing(1.5) }}>
+      <Text variant="caption" tone="muted" overline>
+        {label}
+      </Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: theme.colors.surfaceMuted,
+          borderRadius: theme.radius.pill,
+          borderWidth: 1,
+          borderColor: theme.colors.border,
+          padding: theme.spacing(1),
+        }}
+      >
+        {arrow('‹', -1, previousDayLabel, false)}
+        <Text variant="label">{formatDate(value)}</Text>
+        {arrow('›', 1, nextDayLabel, !canGoForward)}
+      </View>
     </View>
   );
 }

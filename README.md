@@ -4,7 +4,7 @@ A personal alcohol tracking app. Log what you drink, see what that adds up to ov
 and keep every byte of it on your own device.
 
 Built as a personal test build: free, offline, no account, no ads, no analytics. Currently
-**v1.3**, still explicitly in test mode — see [Open items](#open-items-before-any-public-release)
+**v1.4**, still explicitly in test mode — see [Open items](#open-items-before-any-public-release)
 before this goes anywhere near a public store listing.
 
 ## What it does
@@ -17,9 +17,18 @@ before this goes anywhere near a public store listing.
   aliases and accents, so `demi`, `pinte` and `rose` all find what you mean.
 - **Your own presets.** Add custom drinks (name, ABV, default volume, default price) and
   reuse them; they sort to the top of the picker.
-- **Charts that stay calm.** Intake and spending by day, week, month or year; a category
-  breakdown; a calendar of drinking and alcohol-free days; comparisons against the equivalent
-  previous window, including hour-by-hour for today.
+- **Charts that stay calm — and now legible.** Intake and spending by day, week, month or
+  year, each with a labelled Y-axis; a category breakdown; a calendar of drinking and
+  alcohol-free days; comparisons against the equivalent previous window, including
+  hour-by-hour for today. The intake chart itself plots actual poured volume (centilitres,
+  or your chosen unit) rather than an abstract "standard drinks" count, since a concrete
+  number on the axis was asked for over an abstract one.
+- **A custom start date for History's filter**, alongside the day/month/year presets — pick
+  exactly which day a window starts on so early, barely-tracked days don't quietly drag an
+  average down.
+- **A daily goal comparison in Insights' Day view** — your weekly goal divided across 7 days,
+  shown against today's own total with a small progress bar, so a weekly target has a
+  same-day read on it too, not just a week-end one.
 - **Alcohol-free streaks**, counted forwards and celebrated. Nothing in the app is coloured
   red, and no copy tells you a number is too high.
 - **A quick local sign-in on first launch** (name, optional email — never sent anywhere, just
@@ -33,10 +42,17 @@ before this goes anywhere near a public store listing.
 - **A savings dashboard** comparing what you say you used to spend against what you've
   actually logged — reported as a plain number either way, saved or not.
 - **Help & resources**, a dedicated tab: country-specific helplines, a few harm-reduction
-  approaches, and a "when it might help to talk to someone" page. Every screen there carries
-  a not-a-medical-device disclaimer.
+  approaches, a "when it might help to talk to someone" page, and a non-medical/complementary
+  section (sophrology, hypnotherapy, mindfulness) that says plainly that none of them are
+  medical treatments and evidence for most is limited. Every screen there carries a
+  not-a-medical-device disclaimer.
 - **In-app bug/suggestion tickets** — local-only for now, exportable to CSV alongside your
   data.
+- **A test-mode subscription screen and a local admin preview** (Settings → Subscription /
+  Admin) — a mocked 5€/month tier with a shareable referral code, and a one-screen preview of
+  what an eventual admin panel could show. Neither talks to a real payment processor or a
+  real server; see [Test-mode mocks](#test-mode-mocks-subscription--admin) for exactly what
+  that does and doesn't mean.
 - **Eight languages** — the EU's major languages (French, Spanish, German, Italian,
   Portuguese) plus English, Chinese and Arabic — genuinely translated (not machine-filled
   placeholders) and switchable independent of your phone's own language, from a pill/card
@@ -81,19 +97,22 @@ app/                    Screens and routing (expo-router, file-based)
   log/                  Drink picker → details → confirm
   entry/[id]            Edit or delete a logged entry
   drinks/               Custom drink presets
-  settings/             Units, goals, appearance, profile, language, legal, tickets, data
+  settings/             Units, goals, appearance, profile, language, legal, tickets, data,
+                        subscription (test), admin (test)
   savings.tsx            Savings deep-dive
   onboarding.tsx          First run: local sign-in → profile → done
 
 src/
-  domain/               Pure logic: alcohol maths, BAC, savings, dates, stats, search, profile
+  domain/               Pure logic: alcohol maths, BAC, savings, dates, stats, search, profile,
+                        subscription (mock affiliate codes)
   db/                   Storage: the Store contract, SQLite and web implementations
   data/
     catalog.json          The bundled drink catalog
     legal/content.ts       CGU / mentions légales / privacy policy text (en, fr)
     resources/             Help-screen contacts, one JSON file per country
-    harm-reduction/        Harm-reduction explainer copy (en, fr)
-  i18n/                  8 translation catalogs, provider, device-locale + currency detection
+    harm-reduction/        Harm-reduction + non-medical-approaches copy (en, fr)
+  i18n/                  8 translation catalogs, provider, device-locale + currency detection,
+                        catalog display-name overrides, intake/category label helpers
   state/                 App-wide data provider
   theme/                 Palette, theme, provider
   components/            UI kit, charts, entry rows, profile fields, BAC card, FadeInView
@@ -161,10 +180,16 @@ to avoid two copies of the same value that could quietly drift apart.
   (Units, Personal goals, Appearance, Default prices, Data & privacy), the drink picker, the
   log/edit-entry form, My drinks, savings, Help & resources, tickets, and legal documents.
   Currency names and drink category names (Beer, Wine, Spirit, …) are translated too, since
-  they show up throughout the app. Only the 115-item drink *catalog* itself (drink names like
-  "Lager (small)") stays in its original language — translating a catalog of specific
-  products accurately is a different, much larger undertaking than translating the app's own
-  UI text, and was not part of what was asked.
+  they show up throughout the app. Also new this pass: the ~18 catalog entries whose name
+  mixed an English serving-size word into an otherwise plain drink name — "Lager (small)",
+  "Red wine (glass)" — now have a translated display name too
+  (`src/i18n/catalogNames.ts`, keyed by the catalog's stable id so a future rename doesn't
+  break it), since that's what was actually flagged as an ambiguity: a stray English word
+  sitting inside otherwise-localized text. The other ~97 catalog entries (Absinthe, Baijiu,
+  Prosecco, Mezcal, …) are international drink/spirit names already correct as-is in most of
+  these languages, and are left alone rather than inventing a "translation" for a proper
+  noun. A logged entry snapshots whichever name it showed at the time, same as every other
+  field, so switching languages later never rewrites past entries.
 - **How this was retrofitted**: a handful of domain formatting functions
   (`formatComparison`, `formatChange`, `formatRelativeDay`, `formatDateTime` in
   `src/domain/format.ts`) used to hardcode English words like "vs", "Nothing logged in the",
@@ -194,6 +219,15 @@ to avoid two copies of the same value that could quietly drift apart.
 - On first launch, language, the Help tab's country, and now currency all default from the
   device's own locale when it's one Tally recognises, else fall back to English / general /
   EUR (`src/i18n/detectLocale.ts`). All three stay changeable any time in Settings.
+- **Known gap: calendar dates still follow the device's system locale, not the in-app
+  language.** `formatDate`/`formatLongDate`/`formatMonth`/`formatWeekdayShort` call
+  `Intl.DateTimeFormat(undefined, …)`, which reads the OS locale rather than Tally's own
+  language setting — so a phone set to English showing the app in French will still see
+  "Wed, Aug 5" instead of "mer. 5 août" in a few places (e.g. the custom start-date picker).
+  Fixing it means threading the app's `language` through every date-formatting call site, the
+  same pattern already used for `formatComparison`/`formatRelativeDay` — flagged here as the
+  next piece of this same class of bug rather than fixed alongside everything else in this
+  pass.
 
 ## Privacy
 
@@ -203,15 +237,40 @@ device, and the only way anything leaves it is the export button — which you p
 profile, your tickets and settings, then restores the built-in catalog and returns you to
 onboarding.
 
+## Test-mode mocks: subscription & admin
+
+Two screens (Settings → Subscription, Settings → Admin) preview ideas that were asked for —
+a paid tier and an admin view — without changing anything about the privacy model above. Both
+are explicitly local-only test mocks, by direct request, not a first version of the real
+thing:
+
+- **Subscription** (`app/settings/subscription.tsx`, `src/domain/subscription.ts`) flips a
+  `subscription` flag in local `Settings` and generates a shareable `TALLY-XXXXXX` code —
+  nothing else. **No payment processor is integrated, no card is ever asked for, and no
+  money moves.** Nothing in the rest of the app checks this flag; there is nothing to unlock
+  yet, on purpose, so the mock can't accidentally start gating features.
+- **Admin** (`app/settings/admin.tsx`) is a read-only dashboard of *this device's own* data —
+  entry/drink/ticket counts, the subscription mock's state, catalog-translation coverage. It
+  is not connected to any other device or user, because there is no server for it to connect
+  through.
+
+Making either of these real needs decisions this codebase can't make on its own: a payment
+processor (Stripe, RevenueCat, ...) and the business/tax registration that comes with
+actually charging people, plus a real backend and authentication if the admin panel is meant
+to manage more than one device. Both are flagged again under
+[Open items](#open-items-before-any-public-release).
+
 ## Tests
 
-194 tests over the parts where a bug would quietly corrupt your history or your trust in a
-number: alcohol maths, the BAC formula, savings, local date handling across DST (now including
-hour-granularity buckets for the daily statistics view), aggregation and streaks, search and
-filtering, the CSV/JSON export format, locale + currency detection, translation catalog parity
-and non-placeholder checks across all eight languages, the translatable comparison/relative-day
-templates in `src/domain/format.ts`, and the full storage contract (SQLite and web, including
-the profile schema's `name`/`email` migration).
+202 tests over the parts where a bug would quietly corrupt your history or your trust in a
+number: alcohol maths, the BAC formula, savings, poured-volume aggregation for the Insights
+volume chart, local date handling across DST (including hour-granularity buckets for the
+daily statistics view), aggregation and streaks, search and filtering, the CSV/JSON export
+format, locale + currency detection, translation catalog parity and non-placeholder checks
+across all eight languages, the translatable comparison/relative-day templates in
+`src/domain/format.ts`, catalog display-name overrides, the mock affiliate-code generator,
+and the full storage contract (SQLite and web, including the profile schema's `name`/`email`
+migration).
 
 ```bash
 npm test
@@ -242,10 +301,24 @@ something this codebase can resolve on its own:
 - **Final app name per locale, and whether to add the optional onboarding questions** from
   spec §4.3 (none of those are built — they were explicitly flagged as proposals, not
   commitments).
+- **Deciding on a real payment provider and business setup**, if the subscription mock is
+  worth pursuing for real. See [Test-mode mocks](#test-mode-mocks-subscription--admin) — this
+  needs a person, not code, to pick a processor (Stripe, RevenueCat, ...) and handle the
+  business/tax registration that comes with actually charging people.
+- **Designing a real admin backend**, if the admin preview needs to manage more than this one
+  device — a server, authentication, and a real multi-user data model, none of which exist
+  yet.
+- **Non-medical approaches content review.** The new sophrology/hypnotherapy/mindfulness
+  section (`src/data/harm-reduction/content.ts`) makes a point of not overstating evidence,
+  but like the rest of that file it's written by this codebase, not a clinician — same
+  "needs a qualified review" flag as the harm-reduction and seek-help content above.
 
 ## Not in this version
 
-Ads, accounts, cloud sync, push notifications, real ticket transmission (tickets are
-local-only; export is the only way they leave the device), and public store submission are
-all deliberately out of scope. The code is layered so they can be added later without a
-rewrite: storage sits behind one interface, and the domain logic has no idea a UI exists.
+Ads, real accounts, cloud sync, push notifications, real payment processing, real ticket
+transmission (tickets are local-only; export is the only way they leave the device), and
+public store submission are all deliberately out of scope. The subscription and admin
+screens preview the *idea* of two of these (see
+[Test-mode mocks](#test-mode-mocks-subscription--admin)) without actually building them. The
+code is layered so all of this can be added later without a rewrite: storage sits behind one
+interface, and the domain logic has no idea a UI exists.

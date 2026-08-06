@@ -32,6 +32,13 @@ export function entryGrams(entry: Pick<Entry, 'volumeMl' | 'abv' | 'quantity'>):
   return pureAlcoholGrams(entry.volumeMl, entry.abv, entry.quantity);
 }
 
+/** Total poured volume of a logged entry (serving size × quantity), in ml. */
+export function entryVolumeMl(entry: Pick<Entry, 'volumeMl' | 'quantity'>): number {
+  if (!isFinite(entry.volumeMl) || !isFinite(entry.quantity)) return 0;
+  if (entry.volumeMl <= 0 || entry.quantity <= 0) return 0;
+  return entry.volumeMl * entry.quantity;
+}
+
 /** Convert grams of pure alcohol into standard drinks of the given size. */
 export function gramsToStandardDrinks(grams: number, standardDrinkGrams: number): number {
   if (!isFinite(grams) || !isFinite(standardDrinkGrams) || standardDrinkGrams <= 0) return 0;

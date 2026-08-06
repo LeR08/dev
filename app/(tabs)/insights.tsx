@@ -30,6 +30,8 @@ import {
   formatMoney,
   formatMonth,
   formatWeekdayShort,
+  trimNumber,
+  volumeInUnit,
   type ComparisonTemplates,
 } from '@/domain/format';
 import { computeSavings, savingsHeadline } from '@/domain/savings';
@@ -107,15 +109,18 @@ export default function InsightsScreen() {
   const toIntake = (grams: number) =>
     gramsToIntake(grams, settings.intakeUnit, settings.standardDrinkGrams);
 
+  // Plotted as volume (the user's own unit, cl by default) rather than
+  // "standard drinks" or grams of alcohol — a concrete, unambiguous number on
+  // the axis rather than an abstract intake-unit count.
   const intakeBars = useMemo<BarDatum[]>(
     () =>
       buckets.map((bucket, index) => ({
         key: bucket.key,
         label: bucketLabel(bucket.start, view, index, buckets.length),
-        value: gramsToIntake(bucket.grams, settings.intakeUnit, settings.standardDrinkGrams),
+        value: volumeInUnit(bucket.volumeMl, settings.volumeUnit),
         highlight: index === buckets.length - 1,
       })),
-    [buckets, settings.intakeUnit, settings.standardDrinkGrams, view]
+    [buckets, settings.volumeUnit, view]
   );
 
   const spendBars = useMemo<BarDatum[]>(
@@ -162,9 +167,15 @@ export default function InsightsScreen() {
     return eachDay(start, addDays(start, 7)).map((day) => formatWeekdayShort(day));
   }, [now, settings.weekStartsOn]);
 
-  const weeklyGoalIntake = settings.goals.weeklyIntake;
-  const goalPerBucket =
-    view === 'week' && weeklyGoalIntake !== null ? weeklyGoalIntake / 7 : null;
+  // A daily share of the weekly goal — the weekly figure divided evenly across
+  // 7 days, since there's no separate "daily goal" setting. Shown against
+  // today's own intake in the Day view (spec follow-up: "plus de données par
+  // rapport à l'objectif journalier").
+  const dailyGoalIntake = settings.goals.weeklyIntake !== null ? settings.goals.weeklyIntake / 7 : null;
+  const todayIntakeForGoal = toIntake(currentTotals.grams);
+  const dailyGoal = dailyGoalIntake !== null && dailyGoalIntake > 0 ? { goal: dailyGoalIntake } : null;
+  const dailyGoalFraction = dailyGoal ? Math.min(1, todayIntakeForGoal / dailyGoal.goal) : null;
+  const dailyGoalRemaining = dailyGoal ? dailyGoal.goal - todayIntakeForGoal : 0;
 
   const periodName =
     view === 'day'
@@ -255,6 +266,41 @@ export default function InsightsScreen() {
           </FadeInView>
         ) : null}
 
+        {view === 'day' && dailyGoal ? (
+          <FadeInView delay={60}>
+            <Card style={{ gap: theme.spacing(2) }}>
+              <Text variant="heading">{t('insights.dailyGoalTitle')}</Text>
+              <View
+                style={{
+                  height: 8,
+                  borderRadius: 4,
+                  backgroundColor: theme.colors.trackEmpty,
+                  overflow: 'hidden',
+                }}
+              >
+                <View
+                  style={{
+                    width: `${(dailyGoalFraction ?? 0) * 100}%`,
+                    height: '100%',
+                    backgroundColor: dailyGoalRemaining < 0 ? theme.colors.textMuted : theme.accent.base,
+                  }}
+                />
+              </View>
+              <Text variant="caption" tone="muted">
+                {dailyGoalRemaining >= 0
+                  ? t('insights.dailyGoalRemaining', {
+                      remaining: formatIntakeLabel(t, dailyGoalRemaining, settings.intakeUnit),
+                      goal: formatIntakeLabel(t, dailyGoal.goal, settings.intakeUnit),
+                    })
+                  : t('insights.dailyGoalOver', {
+                      over: formatIntakeLabel(t, Math.abs(dailyGoalRemaining), settings.intakeUnit),
+                      goal: formatIntakeLabel(t, dailyGoal.goal, settings.intakeUnit),
+                    })}
+              </Text>
+            </Card>
+          </FadeInView>
+        ) : null}
+
         {showTodayEmptyNotice ? (
           <FadeInView delay={40}>
             <Card tone="muted" style={{ gap: theme.spacing(1) }}>
@@ -268,9 +314,7 @@ export default function InsightsScreen() {
           <FadeInView delay={80}>
             <Card style={{ gap: theme.spacing(3) }}>
               <View style={{ gap: 2 }}>
-                <Text variant="heading">
-                  {settings.intakeUnit === 'grams' ? t('insights.pureAlcohol') : t('insights.standardDrinksLabel')}
-                </Text>
+                <Text variant="heading">{t('insights.volumeLabel')}</Text>
                 <Text variant="caption" tone="muted">
                   {view === 'day' ? t('insights.byHour') : view === 'year' ? t('insights.byMonth') : t('insights.byDay')}
                 </Text>
@@ -278,8 +322,9 @@ export default function InsightsScreen() {
               <BarChart
                 data={intakeBars}
                 height={170}
-                goal={goalPerBucket}
-                goalLabel={goalPerBucket ? t('insights.goalShareLabel') : undefined}
+                showYAxis
+                yAxisWidth={52}
+                formatValue={(value) => `${trimNumber(value, 1)} ${settings.volumeUnit}`}
               />
             </Card>
           </FadeInView>
@@ -296,7 +341,14 @@ export default function InsightsScreen() {
                     : t('insights.addPricesHint')}
                 </Text>
               </View>
-              <BarChart data={spendBars} height={130} color={theme.colors.textMuted} />
+              <BarChart
+                data={spendBars}
+                height={130}
+                color={theme.colors.textMuted}
+                showYAxis
+                yAxisWidth={44}
+                formatValue={(value) => formatMoney(value, settings.currency, { compact: true })}
+              />
             </Card>
           </FadeInView>
         ) : null}

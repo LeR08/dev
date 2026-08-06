@@ -35,8 +35,23 @@ describe('totals', () => {
     expect(totals([makeEntry({ price: null })]).spend).toBe(0);
   });
 
+  it('sums poured volume as serving size times quantity', () => {
+    const entries = [
+      makeEntry({ volumeMl: 250, quantity: 2 }),
+      makeEntry({ volumeMl: 100, quantity: 1 }),
+    ];
+    expect(totals(entries).volumeMl).toBe(600);
+  });
+
   it('returns zeroes for an empty log', () => {
-    expect(totals([])).toEqual({ grams: 0, spend: 0, servings: 0, entries: 0, drinkingDays: 0 });
+    expect(totals([])).toEqual({
+      grams: 0,
+      volumeMl: 0,
+      spend: 0,
+      servings: 0,
+      entries: 0,
+      drinkingDays: 0,
+    });
   });
 });
 

@@ -6,6 +6,7 @@ import { Text } from '@/components/ui/Text';
 import { currencySymbol, formatVolume } from '@/domain/format';
 import { searchDrinks } from '@/domain/search';
 import type { Drink } from '@/domain/types';
+import { catalogDrinkName } from '@/i18n/catalogNames';
 import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -89,7 +90,8 @@ function PriceRow({
   onSave: (price: number | null) => void;
 }) {
   const theme = useTheme();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const displayName = catalogDrinkName(language, drink);
   const [text, setText] = useState(drink.defaultPrice === null ? '' : `${drink.defaultPrice}`);
 
   const commit = () => {
@@ -126,7 +128,7 @@ function PriceRow({
       />
       <View style={{ flex: 1 }}>
         <Text variant="body" numberOfLines={1}>
-          {drink.name}
+          {displayName}
         </Text>
         <Text variant="caption" tone="muted">
           {volumeLabel}
@@ -158,7 +160,7 @@ function PriceRow({
           keyboardType="decimal-pad"
           placeholder="—"
           placeholderTextColor={theme.colors.textFaint}
-          accessibilityLabel={t('pricesScreen.priceA11y', { name: drink.name })}
+          accessibilityLabel={t('pricesScreen.priceA11y', { name: displayName })}
           style={{
             flex: 1,
             color: theme.colors.text,

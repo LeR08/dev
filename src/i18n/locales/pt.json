@@ -156,7 +156,11 @@
     "cmpNothingEither": "Também nada para {{period}}",
     "cmpVsPeriod": "{{change}} vs {{period}}",
     "weekFreeDaysSoFarOne": "{{count}} dia sem álcool até agora",
-    "weekFreeDaysSoFarOther": "{{count}} dias sem álcool até agora"
+    "weekFreeDaysSoFarOther": "{{count}} dias sem álcool até agora",
+    "dailyGoalTitle": "Objetivo diário",
+    "volumeLabel": "Volume",
+    "dailyGoalRemaining": "{{remaining}} restante do teu objetivo de {{goal}} hoje",
+    "dailyGoalOver": "{{over}} acima do teu objetivo de {{goal}} de hoje"
   },
   "settingsHome": {
     "unitsRow": "Unidades",
@@ -206,7 +210,9 @@
     "footerDisclaimer": "A Tally guarda tudo localmente. Sem conta, sem servidor, sem análises — nada sai deste dispositivo a menos que o exportes.",
     "noneSet": "Nenhum definido",
     "goalPerWeek": "{{count}}/semana",
-    "goalFreeDays": "{{count}} dias livres"
+    "goalFreeDays": "{{count}} dias livres",
+    "subscriptionRowSubtitle": "Uma ideia em modo de teste, sem cobrança real",
+    "adminRowSubtitle": "Uma pré-visualização local dos lados de utilizador e admin, antes de qualquer alojamento real"
   },
   "savings": {
     "title": "Poupança",
@@ -316,7 +322,9 @@
     "personalGoals": "Objetivos pessoais",
     "appearance": "Aparência",
     "defaultPrices": "Preços predefinidos",
-    "dataPrivacy": "Dados e privacidade"
+    "dataPrivacy": "Dados e privacidade",
+    "subscription": "Subscrição (teste)",
+    "admin": "Admin (teste)"
   },
   "unitsScreen": {
     "volumeTitle": "Volume",
@@ -378,7 +386,9 @@
     "noMatchTitle": "Sem correspondências",
     "noMatchBody": "Tenta um intervalo de datas mais alargado ou uma categoria diferente.",
     "emptyTitle": "O teu registo está vazio",
-    "emptyBody": "Tudo o que registares fica neste dispositivo. Começa quando quiseres."
+    "emptyBody": "Tudo o que registares fica neste dispositivo. Começa quando quiseres.",
+    "periodCustom": "Personalizado",
+    "customStartLabel": "Dia de início"
   },
   "drinksScreen": {
     "intro": "Os predefinidos que criaste. Aparecem no topo da lista quando registas uma bebida.",
@@ -526,5 +536,41 @@
     "intro": "Um preço predefinido é preenchido automaticamente quando registas essa bebida. Podes sempre alterá-lo para um registo específico.",
     "searchPlaceholder": "Pesquisar bebidas",
     "priceA11y": "Preço predefinido para {{name}}"
+  },
+  "subscriptionScreen": {
+    "badge": "Modo de teste — nunca é cobrado nada a sério",
+    "intro": "Isto não desbloqueia nada, e nada aqui é obrigatório — existe para ver se vale a pena construir a sério uma forma pequena e opcional de apoiar a app. A versão gratuita continua gratuita de qualquer forma.",
+    "priceLabel": "5€ / mês",
+    "subscribeAction": "Iniciar subscrição de teste",
+    "referralInputLabel": "Tens um código de referência? (opcional)",
+    "referralInputPlaceholder": "TALLY-XXXXXX",
+    "referralInvalidHint": "Esse código não parece válido — verifica se há erros de digitação.",
+    "activeTitle": "Subscrição de teste ativa",
+    "activeSince": "Ativa desde {{date}}",
+    "yourCodeLabel": "O teu código de referência",
+    "yourCodeHint": "Partilha-o com pessoas que conheces — é só para ver se vale a pena desenvolver a sério a recomendação entre utilizadores. Hoje não desbloqueia nada.",
+    "referredByLabel": "Referenciado por {{code}}",
+    "cancelAction": "Terminar subscrição de teste",
+    "subscribedToast": "Subscrição de teste iniciada — não foi cobrado nada.",
+    "cancelledToast": "Subscrição de teste terminada."
+  },
+  "adminScreen": {
+    "banner": "Esta é uma pré-visualização local do que um futuro painel de administração poderia mostrar — tanto o lado do utilizador (os dados deste dispositivo) como o lado admin (tickets, estado da subscrição, ajustes do catálogo). Ainda não há servidor nem outros utilizadores reais: tudo aqui vem apenas deste dispositivo.",
+    "userSideTitle": "Lado utilizador — dados locais",
+    "entriesLabel": "Registos feitos",
+    "customDrinksLabel": "Bebidas personalizadas",
+    "adminSideTitle": "Lado admin — suporte e faturação (teste)",
+    "ticketsOpenLabel": "Tickets abertos",
+    "ticketsClosedLabel": "Tickets fechados",
+    "manageTicketsAction": "Gerir tickets",
+    "subscriptionActive": "Subscrição de teste ativa, código {{code}}",
+    "subscriptionNone": "Nenhuma subscrição de teste ativa",
+    "manageSubscriptionAction": "Gerir subscrição",
+    "catalogOverridesTitle": "Traduções do catálogo",
+    "catalogOverridesBody": "{{count}} bebidas do catálogo têm um nome de exibição traduzido no idioma atual; as restantes mantêm o nome internacional original (Absinto, Baijiu, Prosecco, ...) já que já está correto na maioria dos idiomas.",
+    "appInfoTitle": "Informação da app",
+    "versionLabel": "Versão",
+    "platformLabel": "Plataforma",
+    "languageLabel": "Idioma atual"
   }
 }

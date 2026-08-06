@@ -156,7 +156,11 @@
     "cmpNothingEither": "لا شيء كذلك: {{period}}",
     "cmpVsPeriod": "{{change}} مقابل {{period}}",
     "weekFreeDaysSoFarOne": "يوم واحد خالٍ من الكحول حتى الآن",
-    "weekFreeDaysSoFarOther": "{{count}} أيام خالية من الكحول حتى الآن"
+    "weekFreeDaysSoFarOther": "{{count}} أيام خالية من الكحول حتى الآن",
+    "dailyGoalTitle": "الهدف اليومي",
+    "volumeLabel": "الحجم",
+    "dailyGoalRemaining": "تبقّى {{remaining}} من هدفك اليومي البالغ {{goal}}",
+    "dailyGoalOver": "تجاوزت هدفك اليومي البالغ {{goal}} بمقدار {{over}}"
   },
   "settingsHome": {
     "unitsRow": "الوحدات",
@@ -206,7 +210,9 @@
     "footerDisclaimer": "يحتفظ Tally بكل شيء محليًا. لا حساب، لا خادم، لا تحليلات — لا يغادر هذا الجهاز شيء إلا إذا صدّرته بنفسك.",
     "noneSet": "لم يُحدَّد شيء",
     "goalPerWeek": "{{count}}/أسبوعيًا",
-    "goalFreeDays": "{{count}} أيام خالية"
+    "goalFreeDays": "{{count}} أيام خالية",
+    "subscriptionRowSubtitle": "فكرة في وضع الاختبار، بلا خصم حقيقي",
+    "adminRowSubtitle": "معاينة محلية لجانبي المستخدم والإدارة، قبل أي استضافة حقيقية"
   },
   "savings": {
     "title": "التوفير",
@@ -316,7 +322,9 @@
     "personalGoals": "الأهداف الشخصية",
     "appearance": "المظهر",
     "defaultPrices": "الأسعار الافتراضية",
-    "dataPrivacy": "البيانات والخصوصية"
+    "dataPrivacy": "البيانات والخصوصية",
+    "subscription": "الاشتراك (تجريبي)",
+    "admin": "الإدارة (تجريبي)"
   },
   "unitsScreen": {
     "volumeTitle": "الحجم",
@@ -378,7 +386,9 @@
     "noMatchTitle": "لا توجد نتائج مطابقة",
     "noMatchBody": "جرّب نطاقًا زمنيًا أوسع أو فئة مختلفة.",
     "emptyTitle": "سجلّك فارغ",
-    "emptyBody": "كل ما تسجّله يبقى على هذا الجهاز. ابدأ متى شئت."
+    "emptyBody": "كل ما تسجّله يبقى على هذا الجهاز. ابدأ متى شئت.",
+    "periodCustom": "مخصص",
+    "customStartLabel": "يوم البداية"
   },
   "drinksScreen": {
     "intro": "الإعدادات المسبقة التي أنشأتها. تظهر في أعلى القائمة عند تسجيل مشروب.",
@@ -526,5 +536,41 @@
     "intro": "يُملأ سعر افتراضي تلقائيًا عند تسجيل ذلك المشروب. يمكنك دائمًا تغييره لتسجيل واحد بعينه.",
     "searchPlaceholder": "ابحث عن مشروبات",
     "priceA11y": "السعر الافتراضي لـ {{name}}"
+  },
+  "subscriptionScreen": {
+    "badge": "وضع الاختبار — لا يُخصم أي مبلغ حقيقي أبدًا",
+    "intro": "هذا لا يفتح أي ميزة، ولا شيء هنا إلزامي — الهدف هو معرفة ما إذا كانت طريقة صغيرة واختيارية لدعم التطبيق تستحق البناء فعليًا. النسخة المجانية تبقى مجانية في كل الأحوال.",
+    "priceLabel": "5 يورو / شهريًا",
+    "subscribeAction": "بدء الاشتراك التجريبي",
+    "referralInputLabel": "هل لديك رمز إحالة؟ (اختياري)",
+    "referralInputPlaceholder": "TALLY-XXXXXX",
+    "referralInvalidHint": "لا يبدو رمزًا صالحًا — تحقق من الأخطاء الإملائية.",
+    "activeTitle": "الاشتراك التجريبي نشط",
+    "activeSince": "نشط منذ {{date}}",
+    "yourCodeLabel": "رمز الإحالة الخاص بك",
+    "yourCodeHint": "شاركه مع من تعرفهم — الهدف فقط معرفة ما إذا كان تبادل الترشيح بين المستخدمين يستحق التطوير الجاد. لا يفتح أي شيء اليوم.",
+    "referredByLabel": "بترشيح من {{code}}",
+    "cancelAction": "إنهاء الاشتراك التجريبي",
+    "subscribedToast": "بدأ الاشتراك التجريبي — لم يُخصم أي مبلغ.",
+    "cancelledToast": "انتهى الاشتراك التجريبي."
+  },
+  "adminScreen": {
+    "banner": "هذه معاينة محلية لما يمكن أن يعرضه لوحة إدارة مستقبلية — الجانب الخاص بالمستخدم (بيانات هذا الجهاز) والجانب الإداري (التذاكر، حالة الاشتراك، تعديلات الكتالوج). لا يوجد خادم بعد ولا مستخدمون حقيقيون آخرون: كل ما هنا يأتي من هذا الجهاز فقط.",
+    "userSideTitle": "جانب المستخدم — بيانات محلية",
+    "entriesLabel": "التسجيلات المسجّلة",
+    "customDrinksLabel": "مشروبات مخصصة",
+    "adminSideTitle": "الجانب الإداري — الدعم والفوترة (تجريبي)",
+    "ticketsOpenLabel": "تذاكر مفتوحة",
+    "ticketsClosedLabel": "تذاكر مغلقة",
+    "manageTicketsAction": "إدارة التذاكر",
+    "subscriptionActive": "الاشتراك التجريبي نشط، الرمز {{code}}",
+    "subscriptionNone": "لا يوجد اشتراك تجريبي نشط",
+    "manageSubscriptionAction": "إدارة الاشتراك",
+    "catalogOverridesTitle": "ترجمات الكتالوج",
+    "catalogOverridesBody": "لدى {{count}} من مشروبات الكتالوج اسم عرض مترجم باللغة الحالية؛ أما البقية فتحتفظ باسمها الدولي الأصلي (Absinthe، Baijiu، Prosecco، ...) لأنه صحيح بالفعل في معظم اللغات.",
+    "appInfoTitle": "معلومات التطبيق",
+    "versionLabel": "الإصدار",
+    "platformLabel": "المنصة",
+    "languageLabel": "اللغة الحالية"
   }
 }

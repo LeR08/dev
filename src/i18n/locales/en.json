@@ -156,7 +156,11 @@
     "cmpNothingEither": "Nothing in the {{period}} either",
     "cmpVsPeriod": "{{change}} vs {{period}}",
     "weekFreeDaysSoFarOne": "{{count}} alcohol-free day so far",
-    "weekFreeDaysSoFarOther": "{{count}} alcohol-free days so far"
+    "weekFreeDaysSoFarOther": "{{count}} alcohol-free days so far",
+    "dailyGoalTitle": "Daily goal",
+    "volumeLabel": "Volume",
+    "dailyGoalRemaining": "{{remaining}} left of your {{goal}} today",
+    "dailyGoalOver": "{{over}} above today's {{goal}} target"
   },
   "settingsHome": {
     "unitsRow": "Units",
@@ -206,7 +210,9 @@
     "footerDisclaimer": "Tally keeps everything locally. No account, no server, no analytics — nothing leaves this device unless you export it yourself.",
     "noneSet": "None set",
     "goalPerWeek": "{{count}}/week",
-    "goalFreeDays": "{{count}} free days"
+    "goalFreeDays": "{{count}} free days",
+    "subscriptionRowSubtitle": "A test-mode idea, not a real charge",
+    "adminRowSubtitle": "A local preview of user + admin sides, before any real hosting"
   },
   "savings": {
     "title": "Savings",
@@ -316,7 +322,9 @@
     "personalGoals": "Personal goals",
     "appearance": "Appearance",
     "defaultPrices": "Default prices",
-    "dataPrivacy": "Data & privacy"
+    "dataPrivacy": "Data & privacy",
+    "subscription": "Subscription (test)",
+    "admin": "Admin (test)"
   },
   "unitsScreen": {
     "volumeTitle": "Volume",
@@ -378,7 +386,9 @@
     "noMatchTitle": "Nothing matches",
     "noMatchBody": "Try a wider date range or a different category.",
     "emptyTitle": "Your log is empty",
-    "emptyBody": "Whatever you log stays on this device. Start whenever you like."
+    "emptyBody": "Whatever you log stays on this device. Start whenever you like.",
+    "periodCustom": "Custom",
+    "customStartLabel": "Start day"
   },
   "drinksScreen": {
     "intro": "Presets you created. They appear at the top of the picker when you log a drink.",
@@ -526,5 +536,41 @@
     "intro": "A default price is filled in automatically when you log that drink. You can always change it for a single entry.",
     "searchPlaceholder": "Search drinks",
     "priceA11y": "Default price for {{name}}"
+  },
+  "subscriptionScreen": {
+    "badge": "Test mode — nothing is ever really charged",
+    "intro": "This won't unlock anything, and nothing here is required — it exists to see whether a small, optional way to support the app is worth building for real. Free stays free either way.",
+    "priceLabel": "5€ / month",
+    "subscribeAction": "Start test subscription",
+    "referralInputLabel": "Have a referral code? (optional)",
+    "referralInputPlaceholder": "TALLY-XXXXXX",
+    "referralInvalidHint": "Doesn't look like a valid code — check for typos.",
+    "activeTitle": "Test subscription active",
+    "activeSince": "Active since {{date}}",
+    "yourCodeLabel": "Your referral code",
+    "yourCodeHint": "Share it with people you know — this is just to see whether people pointing each other to the app is worth building on properly. It doesn't unlock anything today.",
+    "referredByLabel": "Referred by {{code}}",
+    "cancelAction": "End test subscription",
+    "subscribedToast": "Test subscription started — nothing was charged.",
+    "cancelledToast": "Test subscription ended."
+  },
+  "adminScreen": {
+    "banner": "This is a local preview of what a future admin panel could show — both the user side (this device's own data) and the admin side (tickets, subscription state, catalog overrides). There is no server yet and no other real users: everything here comes from this device alone.",
+    "userSideTitle": "User side — local data",
+    "entriesLabel": "Entries logged",
+    "customDrinksLabel": "Custom drinks",
+    "adminSideTitle": "Admin side — support & billing (test)",
+    "ticketsOpenLabel": "Open tickets",
+    "ticketsClosedLabel": "Closed tickets",
+    "manageTicketsAction": "Manage tickets",
+    "subscriptionActive": "Test subscription active, code {{code}}",
+    "subscriptionNone": "No test subscription active",
+    "manageSubscriptionAction": "Manage subscription",
+    "catalogOverridesTitle": "Catalog translations",
+    "catalogOverridesBody": "{{count}} catalog drinks have a translated display name in the current language; the rest keep their original international name (Absinthe, Baijiu, Prosecco, ...) since that's already correct in most languages.",
+    "appInfoTitle": "App info",
+    "versionLabel": "Version",
+    "platformLabel": "Platform",
+    "languageLabel": "Current language"
   }
 }

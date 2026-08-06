@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 
 import { useToast } from '@/components/ui/Toast';
 import type { Drink, Entry, EntryInput } from '@/domain/types';
+import { catalogDrinkName } from '@/i18n/catalogNames';
 import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 
@@ -34,11 +35,15 @@ export function entryInputFromDrink(drink: Drink, overrides: QuickLogOverrides =
 export function useQuickLog() {
   const { addEntry, removeEntry } = useApp();
   const toast = useToast();
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
 
   return useCallback(
     async (drink: Drink, overrides?: QuickLogOverrides): Promise<Entry> => {
-      const entry = await addEntry(entryInputFromDrink(drink, overrides));
+      const input = entryInputFromDrink(drink, overrides);
+      // Snapshot the name the user actually saw in the picker, same as every
+      // other field — a later language switch never rewrites past entries.
+      if (!overrides?.name) input.name = catalogDrinkName(language, drink);
+      const entry = await addEntry(input);
       if (Platform.OS !== 'web') {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
       }
@@ -53,6 +58,6 @@ export function useQuickLog() {
       });
       return entry;
     },
-    [addEntry, removeEntry, t, toast]
+    [addEntry, language, removeEntry, t, toast]
   );
 }
