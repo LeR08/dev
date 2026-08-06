@@ -4,13 +4,15 @@ import { ScrollView, View } from 'react-native';
 import { clToMl, gramsToIntake, pureAlcoholGrams } from '@/domain/alcohol';
 import {
   currencySymbol,
-  formatIntake,
   formatVolume,
   trimNumber,
   volumeInUnit,
 } from '@/domain/format';
 import { commonVolumesMl } from '@/domain/servings';
-import { CATEGORY_LABELS, type Category, type EntryInput, type Settings } from '@/domain/types';
+import { type Category, type EntryInput, type Settings } from '@/domain/types';
+import { categoryLabel } from '@/i18n/categoryLabel';
+import { formatIntakeLabel } from '@/i18n/formatIntakeLabel';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Button } from './ui/Button';
 import { Card } from './ui/Card';
@@ -58,6 +60,7 @@ export function EntryForm({
   deleteHint,
 }: EntryFormProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const [quantity, setQuantity] = useState(initial.quantity);
   const [volumeText, setVolumeText] = useState(() =>
@@ -131,18 +134,18 @@ export function EntryForm({
             }}
           />
           <Text variant="caption" tone="muted" overline>
-            {CATEGORY_LABELS[initial.category]}
+            {categoryLabel(t, initial.category)}
           </Text>
         </View>
         <Text variant="title">{initial.name}</Text>
         <Text variant="body" tone="muted">
           {formatVolume(volumeMl, settings.volumeUnit)} · {trimNumber(abv, 1)}% ·{' '}
-          {formatIntake(intake, settings.intakeUnit)}
+          {formatIntakeLabel(t, intake, settings.intakeUnit)}
         </Text>
       </Card>
 
       <Stepper
-        label="How many"
+        label={t('entryForm.howManyLabel')}
         value={quantity}
         onChange={setQuantity}
         step={1}
@@ -153,12 +156,12 @@ export function EntryForm({
 
       <View style={{ gap: theme.spacing(2) }}>
         <Field
-          label={`Volume (each)`}
+          label={t('entryForm.volumeEachLabel')}
           value={volumeText}
           onChangeText={setVolumeText}
           keyboardType="decimal-pad"
           suffix={settings.volumeUnit}
-          hint={volumeInvalid ? 'Enter a volume greater than zero.' : undefined}
+          hint={volumeInvalid ? t('entryForm.volumeHint') : undefined}
         />
         <ScrollView
           horizontal
@@ -178,16 +181,16 @@ export function EntryForm({
 
       <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
         <Field
-          label="Strength"
+          label={t('common.strengthLabel')}
           value={abvText}
           onChangeText={setAbvText}
           keyboardType="decimal-pad"
           suffix="%"
           containerStyle={{ flex: 1 }}
-          hint={abvInvalid ? 'Between 0 and 100.' : undefined}
+          hint={abvInvalid ? t('entryForm.strengthHint') : undefined}
         />
         <Field
-          label="Price (optional)"
+          label={t('entryForm.priceLabel')}
           value={priceText}
           onChangeText={setPriceText}
           keyboardType="decimal-pad"
@@ -200,17 +203,17 @@ export function EntryForm({
       <DateTimeField value={consumedAt} onChange={setConsumedAt} />
 
       <Field
-        label="Where (optional)"
+        label={t('entryForm.whereLabel')}
         value={location}
         onChangeText={setLocation}
-        placeholder="At home, Chez Marcel…"
+        placeholder={t('entryForm.wherePlaceholder')}
       />
 
       <Field
-        label="Note (optional)"
+        label={t('entryForm.noteLabel')}
         value={note}
         onChangeText={setNote}
-        placeholder="With friends, celebrating…"
+        placeholder={t('entryForm.notePlaceholder')}
         multiline
         style={{ minHeight: 72, textAlignVertical: 'top' }}
       />
@@ -219,7 +222,12 @@ export function EntryForm({
 
       {onDelete ? (
         <View style={{ gap: theme.spacing(1), alignItems: 'center' }}>
-          <Button label="Delete entry" variant="destructive" onPress={onDelete} haptic={false} />
+          <Button
+            label={t('entryForm.deleteAction')}
+            variant="destructive"
+            onPress={onDelete}
+            haptic={false}
+          />
           {deleteHint ? (
             <Text variant="caption" tone="faint" center>
               {deleteHint}

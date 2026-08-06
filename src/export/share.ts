@@ -14,7 +14,8 @@ export type ExportResult = 'shared' | 'downloaded' | 'unavailable';
 export async function exportText(
   fileName: string,
   content: string,
-  mimeType: string
+  mimeType: string,
+  dialogTitle = 'Export your log'
 ): Promise<ExportResult> {
   if (Platform.OS === 'web') {
     return downloadInBrowser(fileName, content, mimeType);
@@ -33,7 +34,7 @@ export async function exportText(
 
   await Sharing.shareAsync(file.uri, {
     mimeType,
-    dialogTitle: 'Export your log',
+    dialogTitle,
     UTI: mimeType === 'text/csv' ? 'public.comma-separated-values-text' : 'public.json',
   });
   return 'shared';

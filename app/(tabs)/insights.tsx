@@ -27,11 +27,10 @@ import {
 import { freeDaysStatus } from '@/domain/encouragement';
 import {
   formatComparison,
-  formatIntake,
   formatMoney,
   formatMonth,
   formatWeekdayShort,
-  pluralize,
+  type ComparisonTemplates,
 } from '@/domain/format';
 import { computeSavings, savingsHeadline } from '@/domain/savings';
 import {
@@ -44,7 +43,8 @@ import {
   filterByRange,
   totals,
 } from '@/domain/stats';
-import { CATEGORY_LABELS } from '@/domain/types';
+import { categoryLabel } from '@/i18n/categoryLabel';
+import { formatIntakeLabel } from '@/i18n/formatIntakeLabel';
 import { useNow } from '@/hooks/useNow';
 import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
@@ -134,11 +134,11 @@ export default function InsightsScreen() {
     () =>
       categories.map((item) => ({
         key: item.category,
-        label: CATEGORY_LABELS[item.category],
+        label: categoryLabel(t, item.category),
         value: item.grams,
         color: theme.categoryColor(item.category),
       })),
-    [categories, theme]
+    [categories, t, theme]
   );
 
   const intakeComparison = compare(toIntake(currentTotals.grams), toIntake(previousTotals.grams));
@@ -168,12 +168,19 @@ export default function InsightsScreen() {
 
   const periodName =
     view === 'day'
-      ? 'day before'
+      ? t('insights.periodDayBefore')
       : view === 'week'
-        ? 'previous 7 days'
+        ? t('insights.periodPrevious7Days')
         : view === 'month'
-          ? 'previous 30 days'
-          : 'previous year';
+          ? t('insights.periodPrevious30Days')
+          : t('insights.periodPreviousYear');
+
+  const comparisonTemplates: ComparisonTemplates = {
+    nothingLoggedIn: t('insights.cmpNothingLoggedIn'),
+    nothingEither: t('insights.cmpNothingEither'),
+    vsPeriod: t('insights.cmpVsPeriod'),
+    sameLabel: t('common.aboutTheSame'),
+  };
 
   const savings = useMemo(
     () => computeSavings(profile?.spendBeforeTrackingPerDay ?? null, entries, range),
@@ -212,18 +219,18 @@ export default function InsightsScreen() {
                 view === 'day'
                   ? t('insights.todayStats')
                   : view === 'year'
-                    ? 'This year'
+                    ? t('insights.thisYear')
                     : view === 'month'
-                      ? 'Last 30 days'
-                      : 'Last 7 days'
+                      ? t('insights.last30Days')
+                      : t('today.last7Days')
               }
-              value={formatIntake(toIntake(currentTotals.grams), settings.intakeUnit)}
-              detail={formatComparison(intakeComparison, periodName)}
+              value={formatIntakeLabel(t, toIntake(currentTotals.grams), settings.intakeUnit)}
+              detail={formatComparison(intakeComparison, periodName, comparisonTemplates)}
             />
             <StatCard
-              label="Spent"
+              label={t('insights.spent')}
               value={formatMoney(currentTotals.spend, settings.currency, { compact: true })}
-              detail={formatComparison(spendComparison, periodName)}
+              detail={formatComparison(spendComparison, periodName, comparisonTemplates)}
             />
           </View>
         </FadeInView>
@@ -232,14 +239,17 @@ export default function InsightsScreen() {
           <FadeInView delay={40}>
             <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
               <StatCard
-                label="Average per day"
-                value={formatIntake(toIntake(perDay), settings.intakeUnit)}
-                detail="Across days you tracked"
+                label={t('insights.averagePerDay')}
+                value={formatIntakeLabel(t, toIntake(perDay), settings.intakeUnit)}
+                detail={t('insights.acrossTrackedDays')}
               />
               <StatCard
-                label="Alcohol-free days"
+                label={t('insights.alcoholFreeDays')}
                 value={`${freeDays}`}
-                detail={`Out of ${elapsedDays} tracked ${pluralize(elapsedDays, "day")}`}
+                detail={t(
+                  elapsedDays === 1 ? ('insights.outOfTrackedOne' as never) : ('insights.outOfTrackedOther' as never),
+                  { count: elapsedDays }
+                )}
               />
             </View>
           </FadeInView>
@@ -259,17 +269,17 @@ export default function InsightsScreen() {
             <Card style={{ gap: theme.spacing(3) }}>
               <View style={{ gap: 2 }}>
                 <Text variant="heading">
-                  {settings.intakeUnit === 'grams' ? 'Pure alcohol' : 'Standard drinks'}
+                  {settings.intakeUnit === 'grams' ? t('insights.pureAlcohol') : t('insights.standardDrinksLabel')}
                 </Text>
                 <Text variant="caption" tone="muted">
-                  {view === 'day' ? t('insights.byHour') : view === 'year' ? 'By month' : 'By day'}
+                  {view === 'day' ? t('insights.byHour') : view === 'year' ? t('insights.byMonth') : t('insights.byDay')}
                 </Text>
               </View>
               <BarChart
                 data={intakeBars}
                 height={170}
                 goal={goalPerBucket}
-                goalLabel={goalPerBucket ? 'daily share of your weekly goal' : undefined}
+                goalLabel={goalPerBucket ? t('insights.goalShareLabel') : undefined}
               />
             </Card>
           </FadeInView>
@@ -279,11 +289,11 @@ export default function InsightsScreen() {
           <FadeInView delay={120}>
             <Card style={{ gap: theme.spacing(3) }}>
               <View style={{ gap: 2 }}>
-                <Text variant="heading">Money spent</Text>
+                <Text variant="heading">{t('insights.moneySpent')}</Text>
                 <Text variant="caption" tone="muted">
                   {currentTotals.spend > 0
-                    ? `${formatMoney(currentTotals.spend, settings.currency)} in this window`
-                    : 'Add prices when you log to see this fill in'}
+                    ? t('insights.spentInWindow', { amount: formatMoney(currentTotals.spend, settings.currency) })
+                    : t('insights.addPricesHint')}
                 </Text>
               </View>
               <BarChart data={spendBars} height={130} color={theme.colors.textMuted} />
@@ -298,17 +308,17 @@ export default function InsightsScreen() {
         {!showTodayEmptyNotice ? (
           <FadeInView delay={200}>
             <Card style={{ gap: theme.spacing(3) }}>
-              <Text variant="heading">By category</Text>
+              <Text variant="heading">{t('insights.byCategory')}</Text>
               {slices.length === 0 ? (
                 <Text variant="body" tone="muted">
-                  Nothing logged in this window.
+                  {t('insights.nothingInWindow')}
                 </Text>
               ) : (
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing(4) }}>
                   <DonutChart
                     slices={slices}
-                    centerValue={formatIntake(toIntake(currentTotals.grams), settings.intakeUnit)}
-                    centerLabel="total"
+                    centerValue={formatIntakeLabel(t, toIntake(currentTotals.grams), settings.intakeUnit)}
+                    centerLabel={t('insights.totalLabel')}
                     size={150}
                   />
                   <View style={{ flex: 1, gap: theme.spacing(2) }}>
@@ -326,7 +336,7 @@ export default function InsightsScreen() {
                           }}
                         />
                         <Text variant="label" style={{ flex: 1 }} numberOfLines={1}>
-                          {CATEGORY_LABELS[item.category]}
+                          {categoryLabel(t, item.category)}
                         </Text>
                         <Text variant="caption" tone="muted">
                           {Math.round(item.share * 100)}%
@@ -343,19 +353,24 @@ export default function InsightsScreen() {
         <FadeInView delay={240}>
           <Card style={{ gap: theme.spacing(3) }}>
             <View style={{ gap: 2 }}>
-              <Text variant="heading">This week, day by day</Text>
+              <Text variant="heading">{t('insights.dayByDayTitle')}</Text>
               <Text variant="caption" tone="muted">
                 {settings.goals.alcoholFreeDaysPerWeek !== null
                   ? (() => {
                       const status = freeDaysStatus(weekFreeDays, settings.goals.alcoholFreeDaysPerWeek);
                       return t(status.key as never, status.params);
                     })()
-                  : `${weekFreeDays} alcohol-free ${pluralize(weekFreeDays, 'day')} so far`}
+                  : t(
+                      weekFreeDays === 1
+                        ? ('insights.weekFreeDaysSoFarOne' as never)
+                        : ('insights.weekFreeDaysSoFarOther' as never),
+                      { count: weekFreeDays }
+                    )}
               </Text>
             </View>
             <DayGrid days={weekDays} weekdayLabels={weekdayLabels} columns={7} />
             <Text variant="caption" tone="faint">
-              Filled squares are alcohol-free days.
+              {t('insights.freeSquaresHint')}
             </Text>
           </Card>
         </FadeInView>
@@ -420,6 +435,7 @@ function SavingsCard({ saved, onPress }: { saved: number | null; onPress: () => 
 function MonthGrid() {
   const theme = useTheme();
   const now = useNow();
+  const { t } = useTranslation();
   const { entries, settings } = useApp();
 
   const month = useMemo(() => periodRange(now, 'month', settings.weekStartsOn), [now, settings.weekStartsOn]);
@@ -450,7 +466,9 @@ function MonthGrid() {
     <View style={{ gap: theme.spacing(2) }}>
       <DayGrid days={padded} weekdayLabels={weekdayLabels} columns={7} />
       <Text variant="caption" tone="muted">
-        {free} alcohol-free {pluralize(free, 'day')} this month.
+        {t(free === 1 ? ('insights.monthFreeDaysOne' as never) : ('insights.monthFreeDaysOther' as never), {
+          count: free,
+        })}
       </Text>
     </View>
   );

@@ -10,27 +10,38 @@ import { Field } from '@/components/ui/Field';
 import { Text } from '@/components/ui/Text';
 import { gramsToIntake } from '@/domain/alcohol';
 import { dayKey, startOfDay, trailingRange, type Range } from '@/domain/dates';
-import { formatIntake, formatMoney, formatRelativeDay } from '@/domain/format';
+import { formatMoney, formatRelativeDay } from '@/domain/format';
 import { filterEntries } from '@/domain/search';
 import { totals } from '@/domain/stats';
-import { CATEGORIES, CATEGORY_LABELS, type Category, type Entry } from '@/domain/types';
+import { CATEGORIES, type Category, type Entry } from '@/domain/types';
 import { useNow } from '@/hooks/useNow';
+import { categoryLabel } from '@/i18n/categoryLabel';
+import { formatIntakeLabel } from '@/i18n/formatIntakeLabel';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
 type Period = 'all' | '30d' | '90d' | '365d';
 
-const PERIODS: { value: Period; label: string; days: number | null }[] = [
-  { value: '30d', label: '30 days', days: 30 },
-  { value: '90d', label: '3 months', days: 90 },
-  { value: '365d', label: 'Year', days: 365 },
-  { value: 'all', label: 'All time', days: null },
+const PERIOD_LABEL_KEY: Record<Period, string> = {
+  '30d': 'historyScreen.period30d',
+  '90d': 'historyScreen.period90d',
+  '365d': 'historyScreen.periodYear',
+  all: 'historyScreen.periodAll',
+};
+
+const PERIODS: { value: Period; days: number | null }[] = [
+  { value: '30d', days: 30 },
+  { value: '90d', days: 90 },
+  { value: '365d', days: 365 },
+  { value: 'all', days: null },
 ];
 
 export default function HistoryScreen() {
   const theme = useTheme();
   const router = useRouter();
   const now = useNow();
+  const { t } = useTranslation();
   const { entries, settings } = useApp();
 
   const [query, setQuery] = useState('');
@@ -71,15 +82,15 @@ export default function HistoryScreen() {
         ListHeaderComponent={
           <FadeInView>
             <View style={{ gap: theme.spacing(3), paddingTop: theme.spacing(8), paddingBottom: theme.spacing(3) }}>
-              <Text variant="title">History</Text>
+              <Text variant="title">{t('historyScreen.title')}</Text>
 
               <Field
-                placeholder="Search names, notes, places…"
+                placeholder={t('historyScreen.searchPlaceholder')}
                 value={query}
                 onChangeText={setQuery}
                 autoCapitalize="none"
                 autoCorrect={false}
-                accessibilityLabel="Search your log"
+                accessibilityLabel={t('historyScreen.searchA11y')}
               />
 
               <ScrollView
@@ -90,7 +101,7 @@ export default function HistoryScreen() {
                 {PERIODS.map((item) => (
                   <Chip
                     key={item.value}
-                    label={item.label}
+                    label={t(PERIOD_LABEL_KEY[item.value] as never)}
                     selected={period === item.value}
                     onPress={() => setPeriod(item.value)}
                   />
@@ -102,11 +113,15 @@ export default function HistoryScreen() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ gap: theme.spacing(2), paddingRight: theme.spacing(5) }}
               >
-                <Chip label="All drinks" selected={category === 'all'} onPress={() => setCategory('all')} />
+                <Chip
+                  label={t('historyScreen.allDrinks')}
+                  selected={category === 'all'}
+                  onPress={() => setCategory('all')}
+                />
                 {CATEGORIES.map((item) => (
                   <Chip
                     key={item}
-                    label={CATEGORY_LABELS[item]}
+                    label={categoryLabel(t, item)}
                     dotColor={theme.categoryColor(item)}
                     selected={category === item}
                     onPress={() => setCategory(item)}
@@ -116,7 +131,11 @@ export default function HistoryScreen() {
 
               {filtered.length > 0 ? (
                 <Text variant="caption" tone="muted">
-                  {summary.entries} entries · {formatIntake(summaryIntake, settings.intakeUnit)}
+                  {t(
+                    summary.entries === 1 ? ('historyScreen.entriesOne' as never) : ('historyScreen.entriesOther' as never),
+                    { count: summary.entries }
+                  )}{' '}
+                  · {formatIntakeLabel(t, summaryIntake, settings.intakeUnit)}
                   {summary.spend > 0 ? ` · ${formatMoney(summary.spend, settings.currency, { compact: true })}` : ''}
                 </Text>
               ) : null}
@@ -126,15 +145,15 @@ export default function HistoryScreen() {
         ListEmptyComponent={
           hasFilters && entries.length > 0 ? (
             <EmptyState
-              title="Nothing matches"
-              body="Try a wider date range or a different category."
+              title={t('historyScreen.noMatchTitle')}
+              body={t('historyScreen.noMatchBody')}
               glyph="⌕"
             />
           ) : (
             <EmptyState
-              title="Your log is empty"
-              body="Whatever you log stays on this device. Start whenever you like."
-              actionLabel="Log a drink"
+              title={t('historyScreen.emptyTitle')}
+              body={t('historyScreen.emptyBody')}
+              actionLabel={t('today.logButton')}
               onAction={() => router.push('/log')}
               glyph="◌"
             />
@@ -151,10 +170,11 @@ export default function HistoryScreen() {
             }}
           >
             <Text variant="label" tone="muted">
-              {formatRelativeDay(section.date, now)}
+              {formatRelativeDay(section.date, now, { today: t('common.today'), yesterday: t('common.yesterday') })}
             </Text>
             <Text variant="caption" tone="faint">
-              {formatIntake(
+              {formatIntakeLabel(
+                t,
                 gramsToIntake(section.grams, settings.intakeUnit, settings.standardDrinkGrams),
                 settings.intakeUnit
               )}

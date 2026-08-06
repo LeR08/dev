@@ -79,6 +79,10 @@ describe('formatChange', () => {
     expect(formatChange(0)).toBe('about the same');
     expect(formatChange(null)).toBe('—');
   });
+
+  it('accepts a translated "no change" label', () => {
+    expect(formatChange(0, 'à peu près pareil')).toBe('à peu près pareil');
+  });
 });
 
 describe('formatComparison', () => {
@@ -96,6 +100,27 @@ describe('formatComparison', () => {
       '+20% vs previous week'
     );
   });
+
+  it('lets a translated template place the period phrase in its own word order', () => {
+    const templates = {
+      nothingLoggedIn: 'Rien enregistré pour {{period}}',
+      nothingEither: 'Rien non plus pour {{period}}',
+      vsPeriod: '{{change}} vs {{period}}',
+      sameLabel: 'à peu près pareil',
+    };
+    expect(
+      formatComparison({ current: 3, previous: 0, change: null }, 'les 7 jours précédents', templates)
+    ).toBe('Rien enregistré pour les 7 jours précédents');
+    expect(
+      formatComparison({ current: 0, previous: 0, change: null }, 'la veille', templates)
+    ).toBe('Rien non plus pour la veille');
+    expect(
+      formatComparison({ current: 12, previous: 10, change: 0.2 }, 'la semaine précédente', templates)
+    ).toBe('+20% vs la semaine précédente');
+    expect(
+      formatComparison({ current: 10, previous: 10, change: 0 }, 'la veille', templates)
+    ).toBe('à peu près pareil vs la veille');
+  });
 });
 
 describe('formatRelativeDay', () => {
@@ -104,6 +129,12 @@ describe('formatRelativeDay', () => {
   it('names today and yesterday', () => {
     expect(formatRelativeDay(at(2026, 4, 10, 9), now)).toBe('Today');
     expect(formatRelativeDay(at(2026, 4, 9, 23), now)).toBe('Yesterday');
+  });
+
+  it('accepts translated labels', () => {
+    const labels = { today: "Aujourd'hui", yesterday: 'Hier' };
+    expect(formatRelativeDay(at(2026, 4, 10, 9), now, labels)).toBe("Aujourd'hui");
+    expect(formatRelativeDay(at(2026, 4, 9, 23), now, labels)).toBe('Hier');
   });
 
   it('falls back to a date further back', () => {

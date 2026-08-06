@@ -33,7 +33,7 @@ export type LanguagePillProps = {
  */
 export function LanguagePill({ onPress }: LanguagePillProps) {
   const theme = useTheme();
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const scale = useRef(new Animated.Value(1)).current;
 
   const press = (toValue: number) => {
@@ -44,7 +44,7 @@ export function LanguagePill({ onPress }: LanguagePillProps) {
     <Animated.View style={{ transform: [{ scale }] }}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Change language"
+        accessibilityLabel={t('settings.language.changeA11y')}
         onPressIn={() => press(0.94)}
         onPressOut={() => press(1)}
         onPress={onPress}

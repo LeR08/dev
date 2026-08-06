@@ -2,6 +2,7 @@ import * as Haptics from 'expo-haptics';
 import React from 'react';
 import { Platform, Pressable, View } from 'react-native';
 
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Text } from './Text';
 
@@ -26,6 +27,7 @@ export function Stepper({
   label,
 }: StepperProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const change = (delta: number) => {
     const next = Math.min(max, Math.max(min, Number((value + delta).toFixed(2))));
@@ -80,9 +82,9 @@ export function Stepper({
           padding: theme.spacing(1),
         }}
       >
-        {button('−', -step, 'Decrease')}
+        {button('−', -step, t('stepper.decrease'))}
         <Text variant="heading">{format(value)}</Text>
-        {button('+', step, 'Increase')}
+        {button('+', step, t('stepper.increase'))}
       </View>
     </View>
   );

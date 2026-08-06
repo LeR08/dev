@@ -6,12 +6,14 @@ import { Screen } from '@/components/ui/Screen';
 import { Segmented } from '@/components/ui/Segmented';
 import { Text } from '@/components/ui/Text';
 import type { AccentName, ThemeMode } from '@/domain/types';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { ACCENTS } from '@/theme/palette';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function AppearanceScreen() {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { settings, updateSettings } = useApp();
 
   const accentNames = Object.keys(ACCENTS) as AccentName[];
@@ -21,13 +23,13 @@ export default function AppearanceScreen() {
       <View style={{ gap: theme.spacing(5), paddingTop: theme.spacing(4) }}>
         <View style={{ gap: theme.spacing(2) }}>
           <Text variant="caption" tone="muted" overline>
-            Theme
+            {t('appearanceScreen.themeTitle')}
           </Text>
           <Segmented<ThemeMode>
             options={[
-              { value: 'system', label: 'System' },
-              { value: 'light', label: 'Light' },
-              { value: 'dark', label: 'Dark' },
+              { value: 'system', label: t('appearanceScreen.system') },
+              { value: 'light', label: t('appearanceScreen.light') },
+              { value: 'dark', label: t('appearanceScreen.dark') },
             ]}
             value={settings.themeMode}
             onChange={(themeMode) => updateSettings({ themeMode })}
@@ -36,18 +38,19 @@ export default function AppearanceScreen() {
 
         <View style={{ gap: theme.spacing(2) }}>
           <Text variant="caption" tone="muted" overline>
-            Accent
+            {t('appearanceScreen.accentTitle')}
           </Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing(3) }}>
             {accentNames.map((name) => {
               const selected = settings.accent === name;
               const swatch = ACCENTS[name][theme.mode];
+              const accentName = t(`accents.${name}` as never);
               return (
                 <Pressable
                   key={name}
                   accessibilityRole="button"
                   accessibilityState={{ selected }}
-                  accessibilityLabel={ACCENTS[name].label}
+                  accessibilityLabel={accentName}
                   onPress={() => updateSettings({ accent: name })}
                   style={({ pressed }) => ({
                     alignItems: 'center',
@@ -66,7 +69,7 @@ export default function AppearanceScreen() {
                     }}
                   />
                   <Text variant="caption" tone={selected ? 'default' : 'muted'}>
-                    {ACCENTS[name].label}
+                    {accentName}
                   </Text>
                 </Pressable>
               );
@@ -76,11 +79,11 @@ export default function AppearanceScreen() {
 
         <Card tone="accent" style={{ gap: theme.spacing(1) }}>
           <Text variant="caption" tone="accent" overline>
-            Preview
+            {t('appearanceScreen.previewTitle')}
           </Text>
-          <Text variant="title">7 alcohol-free days</Text>
+          <Text variant="title">{t('appearanceScreen.previewStreak')}</Text>
           <Text variant="body" tone="muted">
-            This is how the streak card will look.
+            {t('appearanceScreen.previewBody')}
           </Text>
         </Card>
       </View>

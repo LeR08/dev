@@ -9,52 +9,62 @@ import { Text } from '@/components/ui/Text';
 import { STANDARD_DRINK_PRESETS } from '@/domain/alcohol';
 import { CURRENCIES } from '@/domain/format';
 import type { HeightUnit, IntakeUnit, VolumeUnit, WeightUnit } from '@/domain/types';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
+const PRESET_LABEL_KEY: Record<number, string> = {
+  8: 'unitsScreen.presetUK',
+  10: 'unitsScreen.presetFR',
+  12: 'unitsScreen.presetDE',
+  14: 'unitsScreen.presetUS',
+};
+
+const PRESET_DETAIL_KEY: Record<number, string> = {
+  8: 'unitsScreen.presetUKDetail',
+  10: 'unitsScreen.presetFRDetail',
+  12: 'unitsScreen.presetDEDetail',
+  14: 'unitsScreen.presetUSDetail',
+};
+
 export default function UnitsScreen() {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { settings, updateSettings } = useApp();
 
   return (
     <Screen>
       <View style={{ gap: theme.spacing(5), paddingTop: theme.spacing(4) }}>
-        <Section title="Volume" caption="How serving sizes are entered and shown.">
+        <Section title={t('unitsScreen.volumeTitle')} caption={t('unitsScreen.volumeCaption')}>
           <Segmented<VolumeUnit>
             options={[
-              { value: 'cl', label: 'Centilitres' },
-              { value: 'ml', label: 'Millilitres' },
+              { value: 'cl', label: t('unitsScreen.centilitres') },
+              { value: 'ml', label: t('unitsScreen.millilitres') },
             ]}
             value={settings.volumeUnit}
             onChange={(volumeUnit) => updateSettings({ volumeUnit })}
           />
         </Section>
 
-        <Section
-          title="How intake is counted"
-          caption="Standard drinks are easier to compare; grams of pure alcohol are exact."
-        >
+        <Section title={t('unitsScreen.intakeTitle')} caption={t('unitsScreen.intakeCaption')}>
           <Segmented<IntakeUnit>
             options={[
-              { value: 'standardDrinks', label: 'Standard drinks' },
-              { value: 'grams', label: 'Grams' },
+              { value: 'standardDrinks', label: t('unitsScreen.standardDrinksOption') },
+              { value: 'grams', label: t('unitsScreen.gramsOption') },
             ]}
             value={settings.intakeUnit}
             onChange={(intakeUnit) => updateSettings({ intakeUnit })}
           />
         </Section>
 
-        <Section
-          title="One standard drink"
-          caption="Countries define this differently. Pick the one you think in."
-        >
+        <Section title={t('unitsScreen.oneServingTitle')} caption={t('unitsScreen.oneServingCaption')}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             {STANDARD_DRINK_PRESETS.map((preset, index) => (
               <View key={preset.grams}>
                 {index > 0 ? <RowDivider /> : null}
                 <Row
-                  title={preset.label}
-                  subtitle={preset.detail}
+                  title={t(PRESET_LABEL_KEY[preset.grams] as never)}
+                  subtitle={t(PRESET_DETAIL_KEY[preset.grams] as never)}
                   value={settings.standardDrinkGrams === preset.grams ? '✓' : undefined}
                   onPress={() => updateSettings({ standardDrinkGrams: preset.grams })}
                 />
@@ -63,46 +73,46 @@ export default function UnitsScreen() {
           </Card>
         </Section>
 
-        <Section title="Weight" caption="Used for the profile's blood alcohol estimate.">
+        <Section title={t('unitsScreen.weightTitle')} caption={t('unitsScreen.weightCaption')}>
           <Segmented<WeightUnit>
             options={[
-              { value: 'kg', label: 'Kilograms' },
-              { value: 'lb', label: 'Pounds' },
+              { value: 'kg', label: t('unitsScreen.kilograms') },
+              { value: 'lb', label: t('unitsScreen.pounds') },
             ]}
             value={settings.weightUnit}
             onChange={(weightUnit) => updateSettings({ weightUnit })}
           />
         </Section>
 
-        <Section title="Height">
+        <Section title={t('unitsScreen.heightTitle')}>
           <Segmented<HeightUnit>
             options={[
-              { value: 'cm', label: 'Centimetres' },
-              { value: 'in', label: 'Inches' },
+              { value: 'cm', label: t('unitsScreen.centimetres') },
+              { value: 'in', label: t('unitsScreen.inches') },
             ]}
             value={settings.heightUnit}
             onChange={(heightUnit) => updateSettings({ heightUnit })}
           />
         </Section>
 
-        <Section title="Week starts on">
+        <Section title={t('unitsScreen.weekStartsTitle')}>
           <Segmented<'mon' | 'sun'>
             options={[
-              { value: 'mon', label: 'Monday' },
-              { value: 'sun', label: 'Sunday' },
+              { value: 'mon', label: t('unitsScreen.monday') },
+              { value: 'sun', label: t('unitsScreen.sunday') },
             ]}
             value={settings.weekStartsOn === 1 ? 'mon' : 'sun'}
             onChange={(value) => updateSettings({ weekStartsOn: value === 'mon' ? 1 : 0 })}
           />
         </Section>
 
-        <Section title="Currency">
+        <Section title={t('unitsScreen.currencyTitle')}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             {CURRENCIES.map((currency, index) => (
               <View key={currency.code}>
                 {index > 0 ? <RowDivider /> : null}
                 <Row
-                  title={currency.label}
+                  title={t(`currencies.${currency.code}` as never)}
                   subtitle={`${currency.code} · ${currency.symbol}`}
                   value={settings.currency === currency.code ? '✓' : undefined}
                   onPress={() => updateSettings({ currency: currency.code })}

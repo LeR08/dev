@@ -79,9 +79,9 @@ export default function SavingsScreen() {
       <View style={{ gap: theme.spacing(4), paddingTop: theme.spacing(4) }}>
         <Segmented<Window>
           options={[
-            { value: 'week', label: 'Week' },
-            { value: 'month', label: 'Month' },
-            { value: 'year', label: 'Year' },
+            { value: 'week', label: t('insights.week') },
+            { value: 'month', label: t('insights.month') },
+            { value: 'year', label: t('insights.year') },
             { value: 'sinceTracking', label: t('savings.sinceTracking') },
           ]}
           value={window}

@@ -7,12 +7,13 @@ import { Field } from '@/components/ui/Field';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
-import { intakeUnitLabel } from '@/domain/format';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function GoalsScreen() {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { settings, updateSettings } = useApp();
   const toast = useToast();
 
@@ -23,7 +24,9 @@ export default function GoalsScreen() {
     settings.goals.alcoholFreeDaysPerWeek === null ? '' : `${settings.goals.alcoholFreeDaysPerWeek}`
   );
 
-  const unitLabel = settings.intakeUnit === 'grams' ? 'g per week' : `${intakeUnitLabel(settings.intakeUnit)} per week`;
+  const unitLabel = t('goalsScreen.perWeekSuffix', {
+    unit: settings.intakeUnit === 'grams' ? t('common.unitGramsShort') : t('common.drinkOther'),
+  });
 
   const save = async () => {
     await updateSettings({
@@ -32,49 +35,48 @@ export default function GoalsScreen() {
         alcoholFreeDaysPerWeek: clampDays(parsePositive(freeDays)),
       },
     });
-    toast.show({ message: 'Goals saved' });
+    toast.show({ message: t('goalsScreen.savedToast') });
   };
 
   const clear = async () => {
     setWeekly('');
     setFreeDays('');
     await updateSettings({ goals: { weeklyIntake: null, alcoholFreeDaysPerWeek: null } });
-    toast.show({ message: 'Goals cleared' });
+    toast.show({ message: t('goalsScreen.clearedToast') });
   };
 
   return (
     <Screen>
       <View style={{ gap: theme.spacing(4), paddingTop: theme.spacing(4) }}>
         <Card tone="accent" style={{ gap: theme.spacing(1) }}>
-          <Text variant="heading">Entirely optional</Text>
+          <Text variant="heading">{t('goalsScreen.optionalTitle')}</Text>
           <Text variant="body" tone="muted">
-            Goals are yours to set, change, or ignore. Nothing here locks, warns, or nags — a goal
-            just draws a quiet line on your charts so you can see where you are relative to it.
+            {t('goalsScreen.optionalBody')}
           </Text>
         </Card>
 
         <Field
-          label="Weekly intake"
+          label={t('goalsScreen.weeklyIntakeLabel')}
           value={weekly}
           onChangeText={setWeekly}
           keyboardType="decimal-pad"
-          placeholder="No goal"
+          placeholder={t('goalsScreen.noGoalPlaceholder')}
           suffix={unitLabel}
-          hint="Leave empty for no weekly target."
+          hint={t('goalsScreen.weeklyIntakeHint')}
         />
 
         <Field
-          label="Alcohol-free days per week"
+          label={t('goalsScreen.freeDaysLabel')}
           value={freeDays}
           onChangeText={setFreeDays}
           keyboardType="number-pad"
-          placeholder="No goal"
-          suffix="days"
-          hint="Between 0 and 7. Leave empty to skip."
+          placeholder={t('goalsScreen.noGoalPlaceholder')}
+          suffix={t('goalsScreen.freeDaysSuffix')}
+          hint={t('goalsScreen.freeDaysHint')}
         />
 
-        <Button label="Save goals" onPress={save} />
-        <Button label="Clear both goals" variant="ghost" onPress={clear} haptic={false} />
+        <Button label={t('goalsScreen.saveAction')} onPress={save} />
+        <Button label={t('goalsScreen.clearAction')} variant="ghost" onPress={clear} haptic={false} />
       </View>
     </Screen>
   );

@@ -7,14 +7,17 @@ import { Field } from '@/components/ui/Field';
 import { Text } from '@/components/ui/Text';
 import { formatAbv, formatVolume } from '@/domain/format';
 import { searchDrinks, type DrinkFilter } from '@/domain/search';
-import { CATEGORIES, CATEGORY_LABELS, type Drink } from '@/domain/types';
+import { CATEGORIES, type Drink } from '@/domain/types';
 import { useQuickLog } from '@/hooks/useQuickLog';
+import { categoryLabel } from '@/i18n/categoryLabel';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function DrinkPickerScreen() {
   const theme = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const { drinks, settings } = useApp();
   const quickLog = useQuickLog();
 
@@ -24,22 +27,22 @@ export default function DrinkPickerScreen() {
   const results = useMemo(() => searchDrinks(drinks, query, filter), [drinks, filter, query]);
 
   const filters: { value: DrinkFilter; label: string }[] = [
-    { value: 'all', label: 'All' },
-    { value: 'mine', label: 'My drinks' },
-    ...CATEGORIES.map((category) => ({ value: category as DrinkFilter, label: CATEGORY_LABELS[category] })),
+    { value: 'all', label: t('logScreen.filterAll') },
+    { value: 'mine', label: t('nav.myDrinks') },
+    ...CATEGORIES.map((category) => ({ value: category as DrinkFilter, label: categoryLabel(t, category) })),
   ];
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <View style={{ paddingHorizontal: theme.spacing(5), paddingTop: theme.spacing(3), gap: theme.spacing(3) }}>
         <Field
-          placeholder="Search beers, wines, cocktails…"
+          placeholder={t('logScreen.searchPlaceholder')}
           value={query}
           onChangeText={setQuery}
           autoCorrect={false}
           autoCapitalize="none"
           returnKeyType="search"
-          accessibilityLabel="Search drinks"
+          accessibilityLabel={t('common.searchDrinks')}
         />
 
         <ScrollView
@@ -95,9 +98,9 @@ export default function DrinkPickerScreen() {
               </Text>
             </View>
             <View style={{ flex: 1 }}>
-              <Text variant="body">Create a custom drink</Text>
+              <Text variant="body">{t('logScreen.createCustomTitle')}</Text>
               <Text variant="caption" tone="muted">
-                Your own preset, with its own ABV and price
+                {t('logScreen.createCustomSubtitle')}
               </Text>
             </View>
           </Pressable>
@@ -105,10 +108,10 @@ export default function DrinkPickerScreen() {
         ListEmptyComponent={
           <View style={{ paddingVertical: theme.spacing(10), gap: theme.spacing(2) }}>
             <Text variant="heading" center>
-              No match
+              {t('logScreen.noMatchTitle')}
             </Text>
             <Text variant="body" tone="muted" center>
-              Nothing in the catalog fits “{query}”. You can add it as a custom drink.
+              {t('logScreen.noMatchBody', { query })}
             </Text>
           </View>
         }
@@ -116,6 +119,8 @@ export default function DrinkPickerScreen() {
           <DrinkPickerRow
             drink={item}
             volumeLabel={`${formatVolume(item.defaultVolumeMl, settings.volumeUnit)} · ${formatAbv(item.abv)}`}
+            yoursLabel={t('logScreen.yours')}
+            rowA11yHint={t('logScreen.rowA11yHint')}
             onPress={() =>
               router.push({ pathname: '/log/details', params: { drinkId: item.id } })
             }
@@ -133,11 +138,15 @@ export default function DrinkPickerScreen() {
 function DrinkPickerRow({
   drink,
   volumeLabel,
+  yoursLabel,
+  rowA11yHint,
   onPress,
   onLongPress,
 }: {
   drink: Drink;
   volumeLabel: string;
+  yoursLabel: string;
+  rowA11yHint: string;
   onPress: () => void;
   onLongPress: () => void;
 }) {
@@ -146,7 +155,7 @@ function DrinkPickerRow({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityHint="Opens details. Long press to log straight away with the defaults."
+      accessibilityHint={rowA11yHint}
       onPress={onPress}
       onLongPress={onLongPress}
       style={({ pressed }) => ({
@@ -171,7 +180,7 @@ function DrinkPickerRow({
         </Text>
         <Text variant="caption" tone="muted">
           {volumeLabel}
-          {drink.isCustom ? ' · yours' : ''}
+          {drink.isCustom ? ` · ${yoursLabel}` : ''}
         </Text>
       </View>
       <Text variant="body" tone="faint">

@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 
 import { useToast } from '@/components/ui/Toast';
 import type { Drink, Entry, EntryInput } from '@/domain/types';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 
 export type QuickLogOverrides = Partial<Omit<EntryInput, 'drinkId' | 'category'>>;
@@ -33,6 +34,7 @@ export function entryInputFromDrink(drink: Drink, overrides: QuickLogOverrides =
 export function useQuickLog() {
   const { addEntry, removeEntry } = useApp();
   const toast = useToast();
+  const { t } = useTranslation();
 
   return useCallback(
     async (drink: Drink, overrides?: QuickLogOverrides): Promise<Entry> => {
@@ -41,9 +43,9 @@ export function useQuickLog() {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
       }
       toast.show({
-        message: `${entry.name} logged`,
+        message: t('logDetails.loggedToast', { name: entry.name }),
         action: {
-          label: 'Undo',
+          label: t('logDetails.undoAction'),
           onPress: () => {
             removeEntry(entry.id).catch(() => {});
           },
@@ -51,6 +53,6 @@ export function useQuickLog() {
       });
       return entry;
     },
-    [addEntry, removeEntry, toast]
+    [addEntry, removeEntry, t, toast]
   );
 }

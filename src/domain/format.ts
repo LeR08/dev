@@ -123,24 +123,36 @@ export function formatWeekdayShort(date: Date | number): string {
   return safeFormatDate(date, { weekday: 'narrow' });
 }
 
+export type RelativeDayLabels = { today: string; yesterday: string };
+
+const DEFAULT_RELATIVE_DAY_LABELS: RelativeDayLabels = { today: 'Today', yesterday: 'Yesterday' };
+
 /** "Today", "Yesterday", or a short date — for history section headers. */
-export function formatRelativeDay(date: Date | number, now: Date | number = Date.now()): string {
-  if (sameDay(date, now)) return 'Today';
+export function formatRelativeDay(
+  date: Date | number,
+  now: Date | number = Date.now(),
+  labels: RelativeDayLabels = DEFAULT_RELATIVE_DAY_LABELS
+): string {
+  if (sameDay(date, now)) return labels.today;
   const yesterday = startOfDay(now);
   yesterday.setDate(yesterday.getDate() - 1);
-  if (dayKey(date) === dayKey(yesterday)) return 'Yesterday';
+  if (dayKey(date) === dayKey(yesterday)) return labels.yesterday;
   return formatDate(date);
 }
 
-export function formatDateTime(date: Date | number, now: Date | number = Date.now()): string {
-  return `${formatRelativeDay(date, now)} · ${formatTime(date)}`;
+export function formatDateTime(
+  date: Date | number,
+  now: Date | number = Date.now(),
+  labels: RelativeDayLabels = DEFAULT_RELATIVE_DAY_LABELS
+): string {
+  return `${formatRelativeDay(date, now, labels)} · ${formatTime(date)}`;
 }
 
 /** Signed percentage, e.g. "+12%" / "−8%". Null change renders as an em dash. */
-export function formatChange(change: number | null): string {
+export function formatChange(change: number | null, sameLabel = 'about the same'): string {
   if (change === null) return '—';
   const pct = Math.round(change * 100);
-  if (pct === 0) return 'about the same';
+  if (pct === 0) return sameLabel;
   const sign = pct > 0 ? '+' : '−';
   return `${sign}${Math.abs(pct)}%`;
 }
@@ -150,6 +162,27 @@ export function pluralize(count: number, singular: string, plural = `${singular}
 }
 
 /**
+ * Sentence templates for {@link formatComparison}, each holding exactly one
+ * `{{period}}` placeholder (`vsPeriod` also takes `{{change}}`). Callers pass
+ * translated templates so each language can place the period phrase wherever
+ * its own grammar wants it, rather than this function gluing English words
+ * around a foreign-language noun phrase.
+ */
+export type ComparisonTemplates = {
+  nothingLoggedIn: string;
+  nothingEither: string;
+  vsPeriod: string;
+  sameLabel: string;
+};
+
+const DEFAULT_COMPARISON_TEMPLATES: ComparisonTemplates = {
+  nothingLoggedIn: 'Nothing logged in the {{period}}',
+  nothingEither: 'Nothing in the {{period}} either',
+  vsPeriod: '{{change}} vs {{period}}',
+  sameLabel: 'about the same',
+};
+
+/**
  * Caption under a stat card comparing two windows.
  *
  * A percentage against a previous window of zero would be meaningless (and
@@ -157,12 +190,14 @@ export function pluralize(count: number, singular: string, plural = `${singular}
  */
 export function formatComparison(
   comparison: { current: number; previous: number; change: number | null },
-  periodName: string
+  periodName: string,
+  templates: ComparisonTemplates = DEFAULT_COMPARISON_TEMPLATES
 ): string {
   if (comparison.previous === 0) {
-    return comparison.current === 0
-      ? `Nothing in the ${periodName} either`
-      : `Nothing logged in the ${periodName}`;
+    const template = comparison.current === 0 ? templates.nothingEither : templates.nothingLoggedIn;
+    return template.replace('{{period}}', periodName);
   }
-  return `${formatChange(comparison.change)} vs ${periodName}`;
+  return templates.vsPeriod
+    .replace('{{change}}', formatChange(comparison.change, templates.sameLabel))
+    .replace('{{period}}', periodName);
 }

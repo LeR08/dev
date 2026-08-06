@@ -6,13 +6,15 @@ import { Button } from '@/components/ui/Button';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Text } from '@/components/ui/Text';
 import { formatAbv, formatMoney, formatVolume } from '@/domain/format';
-import { CATEGORY_LABELS } from '@/domain/types';
+import { categoryLabel } from '@/i18n/categoryLabel';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function MyDrinksScreen() {
   const theme = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const { drinks, settings } = useApp();
 
   const custom = useMemo(() => drinks.filter((drink) => drink.isCustom), [drinks]);
@@ -34,15 +36,15 @@ export default function MyDrinksScreen() {
         ListHeaderComponent={
           <View style={{ gap: theme.spacing(2), paddingBottom: theme.spacing(3) }}>
             <Text variant="body" tone="muted">
-              Presets you created. They appear at the top of the picker when you log a drink.
+              {t('drinksScreen.intro')}
             </Text>
-            <Button label="New custom drink" onPress={() => router.push('/drinks/edit')} />
+            <Button label={t('drinksScreen.newAction')} onPress={() => router.push('/drinks/edit')} />
           </View>
         }
         ListEmptyComponent={
           <EmptyState
-            title="No custom drinks yet"
-            body="Add your own preset for anything the catalog does not cover — a homemade panaché, a specific bottle, your usual pour."
+            title={t('drinksScreen.emptyTitle')}
+            body={t('drinksScreen.emptyBody')}
             glyph="+"
           />
         }
@@ -71,7 +73,7 @@ export default function MyDrinksScreen() {
                 {item.name}
               </Text>
               <Text variant="caption" tone="muted">
-                {CATEGORY_LABELS[item.category]} · {formatVolume(item.defaultVolumeMl, settings.volumeUnit)} ·{' '}
+                {categoryLabel(t, item.category)} · {formatVolume(item.defaultVolumeMl, settings.volumeUnit)} ·{' '}
                 {formatAbv(item.abv)}
                 {item.defaultPrice !== null ? ` · ${formatMoney(item.defaultPrice, settings.currency)}` : ''}
               </Text>

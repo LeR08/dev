@@ -73,10 +73,10 @@ function Boot() {
         }}
       >
         <Text variant="heading" center>
-          Your data could not be opened
+          {t('common.dataOpenError')}
         </Text>
         <Text variant="body" tone="muted" center>
-          {error ?? 'Something went wrong reading the local database.'}
+          {error ?? t('common.dataOpenErrorFallback')}
         </Text>
       </View>
     );
@@ -106,17 +106,17 @@ function Boot() {
         <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen
           name="log/index"
-          options={{ title: 'Add a drink', presentation: 'modal' }}
+          options={{ title: t('nav.addDrink'), presentation: 'modal' }}
         />
-        <Stack.Screen name="log/details" options={{ title: 'Details' }} />
-        <Stack.Screen name="entry/[id]" options={{ title: 'Edit entry', presentation: 'modal' }} />
-        <Stack.Screen name="drinks/index" options={{ title: 'My drinks' }} />
-        <Stack.Screen name="drinks/edit" options={{ title: 'Custom drink', presentation: 'modal' }} />
-        <Stack.Screen name="settings/units" options={{ title: 'Units' }} />
-        <Stack.Screen name="settings/goals" options={{ title: 'Personal goals' }} />
-        <Stack.Screen name="settings/appearance" options={{ title: 'Appearance' }} />
-        <Stack.Screen name="settings/prices" options={{ title: 'Default prices' }} />
-        <Stack.Screen name="settings/data" options={{ title: 'Data & privacy' }} />
+        <Stack.Screen name="log/details" options={{ title: t('nav.details') }} />
+        <Stack.Screen name="entry/[id]" options={{ title: t('nav.editEntry'), presentation: 'modal' }} />
+        <Stack.Screen name="drinks/index" options={{ title: t('nav.myDrinks') }} />
+        <Stack.Screen name="drinks/edit" options={{ title: t('nav.customDrink'), presentation: 'modal' }} />
+        <Stack.Screen name="settings/units" options={{ title: t('nav.units') }} />
+        <Stack.Screen name="settings/goals" options={{ title: t('nav.personalGoals') }} />
+        <Stack.Screen name="settings/appearance" options={{ title: t('nav.appearance') }} />
+        <Stack.Screen name="settings/prices" options={{ title: t('nav.defaultPrices') }} />
+        <Stack.Screen name="settings/data" options={{ title: t('nav.dataPrivacy') }} />
         <Stack.Screen name="settings/profile" options={{ title: t('settings.profile.title') }} />
         <Stack.Screen name="settings/language" options={{ title: t('settings.language.title') }} />
         <Stack.Screen name="settings/legal/[doc]" options={{ title: '' }} />

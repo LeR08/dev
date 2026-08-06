@@ -5,12 +5,14 @@ import { Alert, Platform, View } from 'react-native';
 import { EntryForm, type EntryFormValues } from '@/components/EntryForm';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function EditEntryScreen() {
   const theme = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { entries, settings, editEntry, removeEntry } = useApp();
   const toast = useToast();
@@ -21,7 +23,7 @@ export default function EditEntryScreen() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: theme.spacing(8) }}>
         <Text variant="body" tone="muted" center>
-          This entry no longer exists.
+          {t('entryScreen.notFound')}
         </Text>
       </View>
     );
@@ -44,7 +46,7 @@ export default function EditEntryScreen() {
     const remove = async () => {
       await removeEntry(entry.id);
       router.back();
-      toast.show({ message: 'Entry deleted' });
+      toast.show({ message: t('entryScreen.deletedToast') });
     };
 
     if (Platform.OS === 'web') {
@@ -53,9 +55,9 @@ export default function EditEntryScreen() {
       return;
     }
 
-    Alert.alert('Delete this entry?', 'It will be removed from your history.', [
-      { text: 'Keep', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: () => void remove() },
+    Alert.alert(t('entryScreen.deleteConfirmTitle'), t('entryScreen.deleteConfirmBody'), [
+      { text: t('common.keep'), style: 'cancel' },
+      { text: t('common.delete'), style: 'destructive', onPress: () => void remove() },
     ]);
   };
 
@@ -63,14 +65,14 @@ export default function EditEntryScreen() {
     <EntryForm
       initial={initial}
       settings={settings}
-      submitLabel="Save changes"
+      submitLabel={t('common.saveChanges')}
       onSubmit={async (input) => {
         await editEntry(entry.id, input);
         router.back();
-        toast.show({ message: 'Entry updated' });
+        toast.show({ message: t('entryScreen.updatedToast') });
       }}
       onDelete={confirmDelete}
-      deleteHint="Deleting removes it from your charts too."
+      deleteHint={t('entryScreen.deleteHint')}
     />
   );
 }

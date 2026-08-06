@@ -2,8 +2,10 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import { entryGrams, gramsToIntake } from '@/domain/alcohol';
-import { formatAbv, formatIntake, formatMoney, formatTime, formatVolume } from '@/domain/format';
+import { formatAbv, formatMoney, formatTime, formatVolume } from '@/domain/format';
 import type { Entry, Settings } from '@/domain/types';
+import { formatIntakeLabel } from '@/i18n/formatIntakeLabel';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Text } from './ui/Text';
 
@@ -15,6 +17,7 @@ export type EntryRowProps = {
 
 export function EntryRow({ entry, settings, onPress }: EntryRowProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const grams = entryGrams(entry);
   const intake = gramsToIntake(grams, settings.intakeUnit, settings.standardDrinkGrams);
 
@@ -66,7 +69,7 @@ export function EntryRow({ entry, settings, onPress }: EntryRowProps) {
       </View>
 
       <View style={{ alignItems: 'flex-end', gap: 2 }}>
-        <Text variant="label">{formatIntake(intake, settings.intakeUnit)}</Text>
+        <Text variant="label">{formatIntakeLabel(t, intake, settings.intakeUnit)}</Text>
         {entry.price !== null ? (
           <Text variant="caption" tone="muted">
             {formatMoney(entry.price, settings.currency)}

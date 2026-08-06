@@ -152,16 +152,28 @@ to avoid two copies of the same value that could quietly drift apart.
   pass. `src/i18n/__tests__/i18n.test.ts` asserts the exact eight-language set and spot-checks
   that every non-English catalog actually differs from English on a representative sample of
   keys, so a future accidental placeholder would fail the test suite rather than ship quietly.
-- **What's translated**: the tab bar, onboarding/sign-in, the profile screen, Today's home
-  screen (including the encouragement copy in `src/domain/encouragement.ts`, which used to be
-  hardcoded English regardless of language — a real bug fixed in this pass), Insights' Day/
-  Week/Month/Year picker and the new Day-view labels, savings, Help & resources, tickets, and
-  legal documents.
-- **Screens that still predate this pass** (History's list/section copy, Insights' chart
-  captions and comparison text, the drink picker, most of Settings' v1.1 rows) remain
-  English-only. That's the same disclosed scope boundary as v1.2: translating the remaining
-  ~20 files is a mechanical retrofit, not a design decision, and deserves its own pass rather
-  than being rushed in alongside everything else here.
+- **What's translated**: every screen in the app — the tab bar, onboarding/sign-in, the
+  profile screen, Today, History (including the "Today"/"Yesterday" section headers and the
+  per-entry "N drinks" wording, which used to be hardcoded English coming from
+  `formatIntake`/`formatRelativeDay` regardless of language — a real, user-reported bug fixed
+  in this pass), Insights (all four Day/Week/Month/Year views, the comparison sentences
+  against the previous window, the category breakdown), Settings and all of its subscreens
+  (Units, Personal goals, Appearance, Default prices, Data & privacy), the drink picker, the
+  log/edit-entry form, My drinks, savings, Help & resources, tickets, and legal documents.
+  Currency names and drink category names (Beer, Wine, Spirit, …) are translated too, since
+  they show up throughout the app. Only the 115-item drink *catalog* itself (drink names like
+  "Lager (small)") stays in its original language — translating a catalog of specific
+  products accurately is a different, much larger undertaking than translating the app's own
+  UI text, and was not part of what was asked.
+- **How this was retrofitted**: a handful of domain formatting functions
+  (`formatComparison`, `formatChange`, `formatRelativeDay`, `formatDateTime` in
+  `src/domain/format.ts`) used to hardcode English words like "vs", "Nothing logged in the",
+  "Today" — invisible to a per-screen translation pass because the English never appeared as
+  a string literal in the screen itself, only inside the shared formatter. They now take
+  optional translated templates/labels (defaulting to the original English so their unit
+  tests keep working unchanged) and every call site passes translated ones. If a screen looks
+  translated but a shared card or row under it still shows English, that's the pattern to
+  check for.
 - **Language picker**: a card grid in Settings → Language, plus a small globe pill
   (`src/components/ui/LanguagePill.tsx`) in the Today screen's header for a one-tap switch
   without leaving the home screen.
@@ -193,12 +205,13 @@ onboarding.
 
 ## Tests
 
-191 tests over the parts where a bug would quietly corrupt your history or your trust in a
+194 tests over the parts where a bug would quietly corrupt your history or your trust in a
 number: alcohol maths, the BAC formula, savings, local date handling across DST (now including
 hour-granularity buckets for the daily statistics view), aggregation and streaks, search and
 filtering, the CSV/JSON export format, locale + currency detection, translation catalog parity
-and non-placeholder checks across all eight languages, and the full storage contract (SQLite
-and web, including the profile schema's `name`/`email` migration).
+and non-placeholder checks across all eight languages, the translatable comparison/relative-day
+templates in `src/domain/format.ts`, and the full storage contract (SQLite and web, including
+the profile schema's `name`/`email` migration).
 
 ```bash
 npm test

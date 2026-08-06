@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 
 import { addDays, sameDay, startOfDay } from '@/domain/dates';
 import { formatRelativeDay } from '@/domain/format';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 import { Field } from './Field';
 import { Text } from './Text';
@@ -23,6 +24,7 @@ export type DateTimeFieldProps = {
  */
 export function DateTimeField({ value, onChange, max = Date.now() }: DateTimeFieldProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [timeText, setTimeText] = useState(() => toTimeText(value));
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export function DateTimeField({ value, onChange, max = Date.now() }: DateTimeFie
     <View style={{ gap: theme.spacing(3) }}>
       <View style={{ gap: theme.spacing(1.5) }}>
         <Text variant="caption" tone="muted" overline>
-          When
+          {t('dateTimeField.whenLabel')}
         </Text>
         <View
           style={{
@@ -89,22 +91,24 @@ export function DateTimeField({ value, onChange, max = Date.now() }: DateTimeFie
             padding: theme.spacing(1),
           }}
         >
-          {arrow('‹', -1, 'Previous day', false)}
-          <Text variant="label">{formatRelativeDay(value, max)}</Text>
-          {arrow('›', 1, 'Next day', !canGoForward)}
+          {arrow('‹', -1, t('dateTimeField.previousDay'), false)}
+          <Text variant="label">
+            {formatRelativeDay(value, max, { today: t('common.today'), yesterday: t('common.yesterday') })}
+          </Text>
+          {arrow('›', 1, t('dateTimeField.nextDay'), !canGoForward)}
         </View>
       </View>
 
       <View style={{ flexDirection: 'row', gap: theme.spacing(3), alignItems: 'flex-end' }}>
         <Field
-          label="Time"
+          label={t('dateTimeField.timeLabel')}
           value={timeText}
           onChangeText={commitTime}
           placeholder="20:30"
           keyboardType="numbers-and-punctuation"
           maxLength={5}
           containerStyle={{ flex: 1 }}
-          accessibilityLabel="Time of day"
+          accessibilityLabel={t('dateTimeField.timeA11y')}
         />
         <Pressable
           accessibilityRole="button"
@@ -120,7 +124,7 @@ export function DateTimeField({ value, onChange, max = Date.now() }: DateTimeFie
           })}
         >
           <Text variant="label" tone="muted">
-            Now
+            {t('dateTimeField.nowAction')}
           </Text>
         </Pressable>
       </View>

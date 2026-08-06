@@ -131,7 +131,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         if (mounted.current) setStatus('ready');
       } catch (cause) {
         if (!mounted.current) return;
-        setError(cause instanceof Error ? cause.message : 'Could not open your data.');
+        // A message from a real Error is shown verbatim (it is diagnostic, not
+        // UI copy); anything else falls through to Boot's own translated
+        // fallback text rather than hardcoding an English string here, since
+        // this provider sits outside I18nProvider and has no t() of its own.
+        setError(cause instanceof Error ? cause.message : null);
         setStatus('error');
       }
     })();

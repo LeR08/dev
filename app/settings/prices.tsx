@@ -6,6 +6,7 @@ import { Text } from '@/components/ui/Text';
 import { currencySymbol, formatVolume } from '@/domain/format';
 import { searchDrinks } from '@/domain/search';
 import type { Drink } from '@/domain/types';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -17,6 +18,7 @@ import { useTheme } from '@/theme/ThemeProvider';
  */
 export default function PricesScreen() {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { drinks, settings, editDrink } = useApp();
   const [query, setQuery] = useState('');
 
@@ -35,11 +37,10 @@ export default function PricesScreen() {
     <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <View style={{ paddingHorizontal: theme.spacing(5), paddingTop: theme.spacing(4), gap: theme.spacing(2) }}>
         <Text variant="caption" tone="faint">
-          A default price is filled in automatically when you log that drink. You can always change
-          it for a single entry.
+          {t('pricesScreen.intro')}
         </Text>
         <Field
-          placeholder="Search drinks"
+          placeholder={t('pricesScreen.searchPlaceholder')}
           value={query}
           onChangeText={setQuery}
           autoCapitalize="none"
@@ -88,6 +89,7 @@ function PriceRow({
   onSave: (price: number | null) => void;
 }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [text, setText] = useState(drink.defaultPrice === null ? '' : `${drink.defaultPrice}`);
 
   const commit = () => {
@@ -156,7 +158,7 @@ function PriceRow({
           keyboardType="decimal-pad"
           placeholder="—"
           placeholderTextColor={theme.colors.textFaint}
-          accessibilityLabel={`Default price for ${drink.name}`}
+          accessibilityLabel={t('pricesScreen.priceA11y', { name: drink.name })}
           style={{
             flex: 1,
             color: theme.colors.text,

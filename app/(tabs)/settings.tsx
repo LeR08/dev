@@ -21,43 +21,46 @@ export default function SettingsScreen() {
   const { settings, drinks, entries, profile, tickets } = useApp();
 
   const customCount = drinks.filter((drink) => drink.isCustom).length;
-  const currencyLabel =
-    CURRENCIES.find((currency) => currency.code === settings.currency)?.label ?? settings.currency;
+  const currencyLabel = CURRENCIES.some((currency) => currency.code === settings.currency)
+    ? t(`currencies.${settings.currency}` as never)
+    : settings.currency;
 
   const goalSummary = () => {
     const parts: string[] = [];
-    if (settings.goals.weeklyIntake !== null) parts.push(`${settings.goals.weeklyIntake}/week`);
-    if (settings.goals.alcoholFreeDaysPerWeek !== null) {
-      parts.push(`${settings.goals.alcoholFreeDaysPerWeek} free days`);
+    if (settings.goals.weeklyIntake !== null) {
+      parts.push(t('settings.goalPerWeek', { count: settings.goals.weeklyIntake }));
     }
-    return parts.length > 0 ? parts.join(' · ') : 'None set';
+    if (settings.goals.alcoholFreeDaysPerWeek !== null) {
+      parts.push(t('settings.goalFreeDays', { count: settings.goals.alcoholFreeDaysPerWeek }));
+    }
+    return parts.length > 0 ? parts.join(' · ') : t('settings.noneSet');
   };
 
   return (
     <Screen>
       <View style={{ paddingTop: theme.spacing(8), paddingBottom: theme.spacing(4) }}>
-        <Text variant="title">Settings</Text>
+        <Text variant="title">{t('settings.title')}</Text>
       </View>
 
       <View style={{ gap: theme.spacing(4) }}>
         <FadeInView delay={0}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Row
-              title="Units"
-              subtitle="Volume, standard drinks, currency"
+              title={t('nav.units')}
+              subtitle={t('settings.unitsRowSubtitle')}
               value={settings.volumeUnit}
               onPress={() => router.push('/settings/units')}
             />
             <RowDivider />
             <Row
-              title="Currency"
+              title={t('settings.currencyRow')}
               value={currencyLabel}
               onPress={() => router.push('/settings/units')}
             />
             <RowDivider />
             <Row
-              title="Personal goals"
-              subtitle="Optional, and only yours"
+              title={t('nav.personalGoals')}
+              subtitle={t('settings.goalsRowSubtitle')}
               value={goalSummary()}
               onPress={() => router.push('/settings/goals')}
             />
@@ -67,22 +70,22 @@ export default function SettingsScreen() {
         <FadeInView delay={40}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Row
-              title="Appearance"
-              subtitle="Theme and accent colour"
-              value={ACCENTS[settings.accent].label}
+              title={t('nav.appearance')}
+              subtitle={t('settings.appearanceRowSubtitle')}
+              value={t(`accents.${settings.accent}` as never)}
               onPress={() => router.push('/settings/appearance')}
             />
             <RowDivider />
             <Row
-              title="My drinks"
-              subtitle="Your own presets"
+              title={t('nav.myDrinks')}
+              subtitle={t('settings.myDrinksRowSubtitle')}
               value={`${customCount}`}
               onPress={() => router.push('/drinks')}
             />
             <RowDivider />
             <Row
-              title="Default prices"
-              subtitle="Price templates per drink"
+              title={t('nav.defaultPrices')}
+              subtitle={t('settings.defaultPricesRowSubtitle')}
               onPress={() => router.push('/settings/prices')}
             />
           </Card>
@@ -108,8 +111,8 @@ export default function SettingsScreen() {
         <FadeInView delay={120}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Row
-              title="Data & privacy"
-              subtitle={`${entries.length} entries, stored on this device only`}
+              title={t('nav.dataPrivacy')}
+              subtitle={t('settings.dataRowSubtitle', { count: entries.length })}
               onPress={() => router.push('/settings/data')}
             />
           </Card>
@@ -161,8 +164,7 @@ export default function SettingsScreen() {
 
         <View style={{ gap: theme.spacing(1), paddingHorizontal: theme.spacing(2) }}>
           <Text variant="caption" tone="faint">
-            Tally keeps everything locally. No account, no server, no analytics — nothing leaves this
-            device unless you export it yourself.
+            {t('settings.footerDisclaimer')}
           </Text>
         </View>
       </View>

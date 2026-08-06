@@ -8,8 +8,11 @@ import { Field } from '@/components/ui/Field';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
 import { clToMl, gramsToIntake, pureAlcoholGrams } from '@/domain/alcohol';
-import { currencySymbol, formatIntake, volumeInUnit } from '@/domain/format';
-import { CATEGORIES, CATEGORY_LABELS, type Category } from '@/domain/types';
+import { currencySymbol, volumeInUnit } from '@/domain/format';
+import { CATEGORIES, type Category } from '@/domain/types';
+import { categoryLabel } from '@/i18n/categoryLabel';
+import { formatIntakeLabel } from '@/i18n/formatIntakeLabel';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -17,6 +20,7 @@ export default function EditDrinkScreen() {
   const theme = useTheme();
   const router = useRouter();
   const toast = useToast();
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { drinks, settings, addDrink, editDrink, removeDrink } = useApp();
 
@@ -63,10 +67,10 @@ export default function EditDrinkScreen() {
       };
       if (existing) {
         await editDrink(existing.id, input);
-        toast.show({ message: `${input.name} updated` });
+        toast.show({ message: t('drinkEdit.updatedToast', { name: input.name }) });
       } else {
         await addDrink(input);
-        toast.show({ message: `${input.name} added to your drinks` });
+        toast.show({ message: t('drinkEdit.addedToast', { name: input.name }) });
       }
       router.back();
     } finally {
@@ -79,7 +83,7 @@ export default function EditDrinkScreen() {
     const remove = async () => {
       await removeDrink(existing.id);
       router.back();
-      toast.show({ message: 'Preset deleted. Past entries are untouched.' });
+      toast.show({ message: t('drinkEdit.deletedToast') });
     };
 
     if (Platform.OS === 'web') {
@@ -87,11 +91,11 @@ export default function EditDrinkScreen() {
       return;
     }
     Alert.alert(
-      `Delete ${existing.name}?`,
-      'The preset is removed. Entries you already logged with it stay in your history.',
+      t('drinkEdit.deleteConfirmTitle', { name: existing.name }),
+      t('drinkEdit.deleteConfirmBody'),
       [
-        { text: 'Keep', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => void remove() },
+        { text: t('common.keep'), style: 'cancel' },
+        { text: t('common.delete'), style: 'destructive', onPress: () => void remove() },
       ]
     );
   };
@@ -110,22 +114,22 @@ export default function EditDrinkScreen() {
       keyboardShouldPersistTaps="handled"
     >
       <Field
-        label="Name"
+        label={t('drinkEdit.nameLabel')}
         value={name}
         onChangeText={setName}
-        placeholder="Homemade panaché"
+        placeholder={t('drinkEdit.namePlaceholder')}
         autoFocus={!existing}
       />
 
       <View style={{ gap: theme.spacing(2) }}>
         <Text variant="caption" tone="muted" overline>
-          Category
+          {t('common.categoryLabel')}
         </Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing(2) }}>
           {CATEGORIES.map((item) => (
             <Chip
               key={item}
-              label={CATEGORY_LABELS[item]}
+              label={categoryLabel(t, item)}
               dotColor={theme.categoryColor(item)}
               selected={category === item}
               onPress={() => setCategory(item)}
@@ -136,44 +140,44 @@ export default function EditDrinkScreen() {
 
       <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
         <Field
-          label="Strength"
+          label={t('common.strengthLabel')}
           value={abvText}
           onChangeText={setAbvText}
           keyboardType="decimal-pad"
           suffix="%"
           containerStyle={{ flex: 1 }}
-          hint={abvValid ? undefined : '0 to 100.'}
+          hint={abvValid ? undefined : t('drinkEdit.strengthHint')}
         />
         <Field
-          label="Default volume"
+          label={t('drinkEdit.volumeLabel')}
           value={volumeText}
           onChangeText={setVolumeText}
           keyboardType="decimal-pad"
           suffix={settings.volumeUnit}
           containerStyle={{ flex: 1 }}
           placeholder={settings.volumeUnit === 'cl' ? '25' : '250'}
-          hint={volumeValid || volumeText === '' ? undefined : 'Greater than zero.'}
+          hint={volumeValid || volumeText === '' ? undefined : t('drinkEdit.volumeHint')}
         />
       </View>
 
       <Field
-        label="Default price (optional)"
+        label={t('drinkEdit.priceLabel')}
         value={priceText}
         onChangeText={setPriceText}
         keyboardType="decimal-pad"
         prefix={currencySymbol(settings.currency)}
         placeholder="—"
-        hint="Pre-filled when you log this drink."
+        hint={t('drinkEdit.priceHint')}
       />
 
       {volumeValid ? (
         <Text variant="caption" tone="muted">
-          One serving ≈ {formatIntake(preview, settings.intakeUnit)}
+          {t('drinkEdit.servingPreview', { intake: formatIntakeLabel(t, preview, settings.intakeUnit) })}
         </Text>
       ) : null}
 
       <Button
-        label={existing ? 'Save changes' : 'Add drink'}
+        label={existing ? t('common.saveChanges') : t('drinkEdit.addAction')}
         size="lg"
         onPress={save}
         disabled={!canSave}
@@ -181,7 +185,12 @@ export default function EditDrinkScreen() {
       />
 
       {existing ? (
-        <Button label="Delete preset" variant="destructive" onPress={confirmDelete} haptic={false} />
+        <Button
+          label={t('drinkEdit.deleteAction')}
+          variant="destructive"
+          onPress={confirmDelete}
+          haptic={false}
+        />
       ) : null}
     </ScrollView>
   );

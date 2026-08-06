@@ -9,6 +9,7 @@ import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
 import { backupFileName, buildBackup, ticketsFileName, ticketsToCsv, toCsv, toJson } from '@/export/backup';
 import { exportText } from '@/export/share';
+import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
@@ -16,6 +17,7 @@ const CONFIRM_WORD = 'DELETE';
 
 export default function DataScreen() {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { entries, drinks, settings, profile, tickets, clearAllData } = useApp();
   const toast = useToast();
 
@@ -25,7 +27,7 @@ export default function DataScreen() {
 
   const runExport = async (kind: 'csv' | 'json') => {
     if (entries.length === 0) {
-      toast.show({ message: 'Nothing to export yet' });
+      toast.show({ message: t('dataScreen.nothingToExport') });
       return;
     }
     setBusy(kind);
@@ -35,18 +37,23 @@ export default function DataScreen() {
         kind === 'csv'
           ? toCsv(entries, settings.currency)
           : toJson(buildBackup(entries, drinks, settings, profile, tickets));
-      const result = await exportText(fileName, content, kind === 'csv' ? 'text/csv' : 'application/json');
+      const result = await exportText(
+        fileName,
+        content,
+        kind === 'csv' ? 'text/csv' : 'application/json',
+        t('dataScreen.exportDialogTitle')
+      );
 
       toast.show({
         message:
           result === 'downloaded'
-            ? `${fileName} downloaded`
+            ? t('dataScreen.downloadedToast', { file: fileName })
             : result === 'shared'
-              ? 'Export ready'
-              : 'Sharing is not available on this device',
+              ? t('dataScreen.exportReadyToast')
+              : t('dataScreen.sharingUnavailableToast'),
       });
     } catch (error) {
-      toast.show({ message: error instanceof Error ? error.message : 'Export failed' });
+      toast.show({ message: error instanceof Error ? error.message : t('dataScreen.exportFailedToast') });
     } finally {
       setBusy(null);
     }
@@ -54,23 +61,28 @@ export default function DataScreen() {
 
   const runTicketExport = async () => {
     if (tickets.length === 0) {
-      toast.show({ message: 'No tickets to export yet' });
+      toast.show({ message: t('dataScreen.noTicketsToExport') });
       return;
     }
     setBusy('tickets');
     try {
       const fileName = ticketsFileName('csv');
-      const result = await exportText(fileName, ticketsToCsv(tickets), 'text/csv');
+      const result = await exportText(
+        fileName,
+        ticketsToCsv(tickets),
+        'text/csv',
+        t('dataScreen.exportTicketsDialogTitle')
+      );
       toast.show({
         message:
           result === 'downloaded'
-            ? `${fileName} downloaded`
+            ? t('dataScreen.downloadedToast', { file: fileName })
             : result === 'shared'
-              ? 'Export ready'
-              : 'Sharing is not available on this device',
+              ? t('dataScreen.exportReadyToast')
+              : t('dataScreen.sharingUnavailableToast'),
       });
     } catch (error) {
-      toast.show({ message: error instanceof Error ? error.message : 'Export failed' });
+      toast.show({ message: error instanceof Error ? error.message : t('dataScreen.exportFailedToast') });
     } finally {
       setBusy(null);
     }
@@ -81,7 +93,7 @@ export default function DataScreen() {
     try {
       await clearAllData();
       setConfirmText('');
-      toast.show({ message: 'All data deleted' });
+      toast.show({ message: t('dataScreen.allDataDeletedToast') });
     } finally {
       setDeleting(false);
     }
@@ -93,14 +105,10 @@ export default function DataScreen() {
       void wipe();
       return;
     }
-    Alert.alert(
-      'Delete everything?',
-      'Your entries, custom drinks and settings will be removed from this device. This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete all', style: 'destructive', onPress: () => void wipe() },
-      ]
-    );
+    Alert.alert(t('dataScreen.deleteConfirmTitle'), t('dataScreen.deleteConfirmBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      { text: t('dataScreen.deleteAllAction'), style: 'destructive', onPress: () => void wipe() },
+    ]);
   };
 
   const canWipe = confirmText.trim().toUpperCase() === CONFIRM_WORD;
@@ -109,32 +117,33 @@ export default function DataScreen() {
     <Screen>
       <View style={{ gap: theme.spacing(4), paddingTop: theme.spacing(4) }}>
         <Card style={{ gap: theme.spacing(2) }}>
-          <Text variant="heading">Where your data lives</Text>
+          <Text variant="heading">{t('dataScreen.whereTitle')}</Text>
           <Text variant="body" tone="muted">
-            Everything is stored in a local database on this device. There is no account, no sync and
-            no analytics. Nothing is sent anywhere unless you export it yourself.
+            {t('dataScreen.whereBody')}
           </Text>
           <Text variant="caption" tone="faint">
-            {entries.length} entries · {drinks.filter((drink) => drink.isCustom).length} custom drinks
+            {t('dataScreen.countSummary', {
+              entries: entries.length,
+              drinks: drinks.filter((drink) => drink.isCustom).length,
+            })}
           </Text>
         </Card>
 
         <Card style={{ gap: theme.spacing(3) }}>
           <View style={{ gap: theme.spacing(1) }}>
-            <Text variant="heading">Export a backup</Text>
+            <Text variant="heading">{t('dataScreen.exportTitle')}</Text>
             <Text variant="body" tone="muted">
-              CSV opens in any spreadsheet. JSON keeps everything, including your custom drinks and
-              settings.
+              {t('dataScreen.exportBody')}
             </Text>
           </View>
           <Button
-            label="Export CSV"
+            label={t('dataScreen.exportCsv')}
             variant="secondary"
             loading={busy === 'csv'}
             onPress={() => void runExport('csv')}
           />
           <Button
-            label="Export JSON"
+            label={t('dataScreen.exportJson')}
             variant="secondary"
             loading={busy === 'json'}
             onPress={() => void runExport('json')}
@@ -143,15 +152,13 @@ export default function DataScreen() {
 
         <Card style={{ gap: theme.spacing(3) }}>
           <View style={{ gap: theme.spacing(1) }}>
-            <Text variant="heading">Export tickets</Text>
+            <Text variant="heading">{t('dataScreen.exportTicketsTitle')}</Text>
             <Text variant="body" tone="muted">
-              Bug reports and suggestions you logged from Settings → Report a problem. Nothing is
-              sent anywhere automatically in this version — export is how you get them off the
-              device.
+              {t('dataScreen.exportTicketsBody')}
             </Text>
           </View>
           <Button
-            label="Export tickets CSV"
+            label={t('dataScreen.exportTicketsCsv')}
             variant="secondary"
             loading={busy === 'tickets'}
             onPress={() => void runTicketExport()}
@@ -160,15 +167,13 @@ export default function DataScreen() {
 
         <Card style={{ gap: theme.spacing(3) }}>
           <View style={{ gap: theme.spacing(1) }}>
-            <Text variant="heading">Delete all my data</Text>
+            <Text variant="heading">{t('dataScreen.deleteTitle')}</Text>
             <Text variant="body" tone="muted">
-              Removes every entry, custom drink, your profile, tickets and settings from this
-              device, and brings back onboarding. The built-in drink catalog is restored so the app
-              still works afterwards.
+              {t('dataScreen.deleteBody')}
             </Text>
           </View>
           <Field
-            label={`Type ${CONFIRM_WORD} to confirm`}
+            label={t('dataScreen.confirmLabel', { word: CONFIRM_WORD })}
             value={confirmText}
             onChangeText={setConfirmText}
             autoCapitalize="characters"
@@ -176,7 +181,7 @@ export default function DataScreen() {
             placeholder={CONFIRM_WORD}
           />
           <Button
-            label="Delete everything"
+            label={t('dataScreen.deleteAction')}
             variant="destructive"
             disabled={!canWipe}
             loading={deleting}
