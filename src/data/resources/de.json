@@ -1,0 +1,15 @@
+{
+  "country": "DE",
+  "entries": [
+    {
+      "name": "Sucht & Drogen Hotline",
+      "contact": "01805 313031",
+      "notes": "Bundesweit, rund um die Uhr. Die Beratung ist kostenlos, aber der Anruf kostet 0,20 €/Anruf aus dem deutschen Fest- und Mobilfunknetz."
+    },
+    {
+      "name": "TelefonSeelsorge",
+      "contact": "0800 111 0 111",
+      "notes": "Kostenlos, anonym, rund um die Uhr. Nicht speziell zu Alkohol, aber Sucht ist eines der häufigsten Themen dort. Auch erreichbar unter 0800 111 0 222 oder 116 123."
+    }
+  ]
+}

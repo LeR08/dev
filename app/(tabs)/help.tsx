@@ -6,7 +6,7 @@ import { Chip } from '@/components/ui/Chip';
 import { FadeInView } from '@/components/ui/FadeInView';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
-import { approachesFor, nonMedicalFor, seekHelpFor } from '@/data/harm-reduction/content';
+import { seekHelpFor } from '@/data/harm-reduction/content';
 import { resourcesFor } from '@/data/resources';
 import { RESOURCE_COUNTRIES, type ResourceCountry } from '@/domain/types';
 import { useTranslation } from '@/i18n/I18nProvider';
@@ -17,7 +17,10 @@ const COUNTRY_LABEL_KEY: Record<ResourceCountry, string> = {
   FR: 'help.countryFR',
   US: 'help.countryUS',
   GB: 'help.countryGB',
-  CA: 'help.countryCA',
+  ES: 'help.countryES',
+  DE: 'help.countryDE',
+  IT: 'help.countryIT',
+  PT: 'help.countryPT',
   CN: 'help.countryCN',
   SA: 'help.countrySA',
   AE: 'help.countryAE',
@@ -36,9 +39,7 @@ export default function HelpScreen() {
   const [country, setCountry] = useState<ResourceCountry>(settings.resourceCountry);
 
   const resources = useMemo(() => resourcesFor(country), [country]);
-  const approaches = useMemo(() => approachesFor(language), [language]);
   const seekHelp = useMemo(() => seekHelpFor(language), [language]);
-  const nonMedical = useMemo(() => nonMedicalFor(language), [language]);
 
   const selectCountry = (next: ResourceCountry) => {
     setCountry(next);
@@ -123,40 +124,6 @@ export default function HelpScreen() {
         </FadeInView>
 
         <FadeInView delay={180}>
-          <Card style={{ gap: theme.spacing(3) }}>
-            <Text variant="heading">{t('help.harmReductionTitle')}</Text>
-            {approaches.map((approach) => (
-              <View key={approach.title} style={{ gap: 2 }}>
-                <Text variant="label">{approach.title}</Text>
-                <Text variant="body" tone="muted">
-                  {approach.body}
-                </Text>
-              </View>
-            ))}
-          </Card>
-        </FadeInView>
-
-        <FadeInView delay={210}>
-          <Card style={{ gap: theme.spacing(3) }}>
-            <Text variant="heading">{nonMedical.title}</Text>
-            <Text variant="body" tone="muted">
-              {nonMedical.intro}
-            </Text>
-            {nonMedical.items.map((item) => (
-              <View key={item.title} style={{ gap: 2 }}>
-                <Text variant="label">{item.title}</Text>
-                <Text variant="body" tone="muted">
-                  {item.body}
-                </Text>
-              </View>
-            ))}
-            <Text variant="caption" tone="faint">
-              {nonMedical.caution}
-            </Text>
-          </Card>
-        </FadeInView>
-
-        <FadeInView delay={270}>
           <Card style={{ gap: theme.spacing(3) }}>
             <Text variant="heading">{t('help.seekHelpTitle')}</Text>
             <Text variant="body" tone="muted">

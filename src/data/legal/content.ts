@@ -77,7 +77,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Contact',
-          body: ['[Your contact email or address]'],
+          body: [
+            'Name or company name: [fill in]',
+            'Business registration number — SIRET in France, if applicable: [fill in]',
+            'Address: [fill in]',
+            'Contact email: [fill in]',
+          ],
         },
       ],
     },
@@ -85,7 +90,16 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
       title: 'Legal Notice',
       intro: 'Placeholder legal notice. Fill in the bracketed fields with your own details before this app leaves test mode.',
       sections: [
-        { heading: 'Publisher', body: ['[Your name or company name]', '[Address]', '[Contact email]'] },
+        {
+          heading: 'Publisher',
+          body: [
+            'Name or company name: [fill in]',
+            'Legal form, if a registered company (e.g. sole trader, SARL, auto-entrepreneur): [fill in]',
+            'Business registration number — SIRET in France: [fill in]',
+            'Registered / postal address: [fill in]',
+            'Contact email: [fill in]',
+          ],
+        },
         {
           heading: 'Hosting provider',
           body: [
@@ -143,8 +157,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
           ],
         },
         {
-          heading: 'Contact',
-          body: ['[Your contact email]'],
+          heading: 'Data controller & contact',
+          body: [
+            'Name or company name (data controller): [fill in]',
+            'Business registration number — SIRET in France, if applicable: [fill in]',
+            'Address: [fill in]',
+            'Contact email: [fill in]',
+          ],
         },
       ],
     },
@@ -207,7 +226,12 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Contact',
-          body: ['[Votre e-mail ou adresse de contact]'],
+          body: [
+            'Nom ou raison sociale : [à compléter]',
+            'SIRET, si applicable : [à compléter]',
+            'Adresse : [à compléter]',
+            'E-mail de contact : [à compléter]',
+          ],
         },
       ],
     },
@@ -215,7 +239,16 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
       title: 'Mentions légales',
       intro: 'Mentions légales type. Complétez les champs entre crochets avec vos propres informations avant que l\'application ne sorte du mode test.',
       sections: [
-        { heading: 'Éditeur', body: ['[Votre nom ou raison sociale]', '[Adresse]', '[E-mail de contact]'] },
+        {
+          heading: 'Éditeur',
+          body: [
+            'Nom ou raison sociale : [à compléter]',
+            'Forme juridique, si société (ex. SARL, auto-entrepreneur) : [à compléter]',
+            'SIRET : [à compléter]',
+            'Adresse du siège / adresse postale : [à compléter]',
+            'E-mail de contact : [à compléter]',
+          ],
+        },
         {
           heading: 'Hébergeur',
           body: [
@@ -273,8 +306,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
           ],
         },
         {
-          heading: 'Contact',
-          body: ['[Votre e-mail de contact]'],
+          heading: 'Responsable du traitement & contact',
+          body: [
+            'Nom ou raison sociale (responsable du traitement) : [à compléter]',
+            'SIRET, si applicable : [à compléter]',
+            'Adresse : [à compléter]',
+            'E-mail de contact : [à compléter]',
+          ],
         },
       ],
     },

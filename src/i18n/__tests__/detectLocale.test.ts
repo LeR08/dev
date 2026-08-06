@@ -26,14 +26,17 @@ describe('detectResourceCountry', () => {
     expect(detectResourceCountry('FR')).toBe('FR');
     expect(detectResourceCountry('US')).toBe('US');
     expect(detectResourceCountry('gb')).toBe('GB');
-    expect(detectResourceCountry('CA')).toBe('CA');
+    expect(detectResourceCountry('ES')).toBe('ES');
+    expect(detectResourceCountry('DE')).toBe('DE');
+    expect(detectResourceCountry('IT')).toBe('IT');
+    expect(detectResourceCountry('PT')).toBe('PT');
     expect(detectResourceCountry('CN')).toBe('CN');
     expect(detectResourceCountry('SA')).toBe('SA');
     expect(detectResourceCountry('AE')).toBe('AE');
   });
 
   it('falls back to OTHER for an unmapped or missing region', () => {
-    expect(detectResourceCountry('DE')).toBe('OTHER');
+    expect(detectResourceCountry('CA')).toBe('OTHER');
     expect(detectResourceCountry(null)).toBe('OTHER');
     expect(detectResourceCountry(undefined)).toBe('OTHER');
   });

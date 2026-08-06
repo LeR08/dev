@@ -45,11 +45,8 @@ near a public store listing.
   "not a measurement" disclaimer and never a colour-coded warning.
 - **A savings dashboard** comparing what you say you used to spend against what you've
   actually logged — reported as a plain number either way, saved or not.
-- **Help & resources**, a dedicated tab: country-specific helplines, a few harm-reduction
-  approaches, a "when it might help to talk to someone" page, and a non-medical/complementary
-  section (sophrology, hypnotherapy, mindfulness) that says plainly that none of them are
-  medical treatments and evidence for most is limited. Every screen there carries a
-  not-a-medical-device disclaimer.
+- **Help & resources**, a dedicated tab: country-specific helplines and a "when it might help
+  to talk to someone" page. Every screen there carries a not-a-medical-device disclaimer.
 - **In-app bug/suggestion tickets** — local-only for now, exportable to CSV alongside your
   data.
 - **A real freemium subscription** (Settings → Subscription) — Stripe or PayPal checkout,
@@ -124,7 +121,7 @@ src/
     catalog.json          The bundled drink catalog
     legal/content.ts       CGU / mentions légales / privacy policy text (en, fr)
     resources/             Help-screen contacts, one JSON file per country
-    harm-reduction/        Harm-reduction + non-medical-approaches copy (all 8 languages)
+    harm-reduction/        "When it might help to talk to someone" copy (all 8 languages)
   i18n/                  8 translation catalogs, provider, device-locale + currency detection,
                         catalog display-name overrides, intake/category label helpers
   payments/              Client for server/'s API — checkout/approval URLs, status polling
@@ -341,7 +338,7 @@ npm test
 Carried over verbatim from the v1.2 spec — these are flagged there as needing a human, not
 something this codebase can resolve on its own:
 
-- **Clinical review.** The BAC formula and the harm-reduction / "when to seek help" content
+- **Clinical review.** The BAC formula and the "when to seek help" content
   (`src/domain/bac.ts`, `src/data/harm-reduction/`) should be reviewed by a qualified
   addictologist or physician before anyone but you relies on them.
 - **Legal review.** The Terms of Service, Legal Notice and Privacy Policy
@@ -349,15 +346,20 @@ something this codebase can resolve on its own:
   for you to fill in — not reviewed by a lawyer, and jurisdiction-specific requirements aren't
   covered.
 - **Verify the helpline contacts.** France's numbers came from the spec's own draft table;
-  the US/UK ones are ones I'm confident are currently accurate; Canada intentionally points
-  to "search for the current number" rather than asserting a specific text shortcode I
-  couldn't verify. China, Saudi Arabia and UAE (`src/data/resources/{cn,sa,ae}.json`, added
-  this pass) were researched against official sources — China's National Health Commission's
-  12356 line and Lifeline China's own published number; Saudi Arabia's MOH mental-health line;
-  UAE's MOHAP national line and the Sakina line reported by Gulf News — written in each
-  country's own language. All of them can change, and none of this is a substitute for
-  checking the source directly before anyone relies on it in an emergency; the Help screen
-  says so.
+  the US/UK ones are ones I'm confident are currently accurate. China, Saudi Arabia and UAE
+  (`src/data/resources/{cn,sa,ae}.json`) were researched against official sources — China's
+  National Health Commission's 12356 line and Lifeline China's own published number; Saudi
+  Arabia's MOH mental-health line; UAE's MOHAP national line and the Sakina line reported by
+  Gulf News — written in each country's own language. Spain, Germany, Italy and Portugal
+  (`src/data/resources/{es,de,it,pt}.json`, added this pass) came from official government/
+  health-authority sources checked via live web search rather than memory — Spain's Ministerio
+  de Sanidad 024 line (not alcohol-specific; Spain's addiction services are run per autonomous
+  community, so the entry points at that rather than asserting one number); Germany's
+  Sucht & Drogen Hotline and the free TelefonSeelsorge as a backup; Italy's Telefono Verde
+  Alcol, run by the Istituto Superiore di Sanità; Portugal's Linha Vida (SICAD) and SNS 24.
+  Canada was dropped rather than kept with an unverifiable placeholder. All of these can
+  change, and none of this is a substitute for checking the source directly before anyone
+  relies on it in an emergency; the Help screen says so.
 - **Final app name per locale, and whether to add the optional onboarding questions** from
   spec §4.3 (none of those are built — they were explicitly flagged as proposals, not
   commitments).
@@ -372,11 +374,6 @@ something this codebase can resolve on its own:
   device — a server, authentication, and a real multi-user data model, none of which exist
   yet. (The narrow payments backend in `server/` intentionally doesn't do any of this — it
   only ever answers "is this one device subscribed?".)
-- **Non-medical approaches content review.** The new sophrology/hypnotherapy/mindfulness
-  section (`src/data/harm-reduction/content.ts`) makes a point of not overstating evidence,
-  but like the rest of that file it's written by this codebase, not a clinician — same
-  "needs a qualified review" flag as the harm-reduction and seek-help content above.
-
 ## Not in this version
 
 Real accounts, cloud sync, push notifications, real ticket transmission (tickets are
