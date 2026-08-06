@@ -249,17 +249,22 @@ to avoid two copies of the same value that could quietly drift apart.
 
 ## Privacy
 
-There is no account and no telemetry. Every drink, entry, custom drink, profile field and
-ticket lives in a local database on the device, and the only way any of *that* leaves it is
-the export button — which you press. Settings → Data & privacy has a "delete all my data"
-option that wipes entries, custom drinks, your profile, your tickets and settings, then
-restores the built-in catalog and returns you to onboarding.
+There is no telemetry, and no account is ever required. Every drink, entry, custom drink,
+profile field and ticket lives in a local database on the device, and by default the only way
+any of *that* leaves it is the export button — which you press. Settings → Data & privacy has
+a "delete all my data" option that wipes entries, custom drinks, your profile, your tickets
+and settings, then restores the built-in catalog and returns you to onboarding.
 
-The one exception is the payments backend in `server/` (see
-[Freemium, payments & ads](#freemium-payments--ads)): if you choose to subscribe, this
-device's random subscription id and payment status are sent to it — nothing else about you.
-Skip Subscription entirely and nothing changes: no server is contacted anywhere else in the
-app.
+There are two opt-in exceptions, both off unless you deliberately turn them on:
+
+- The payments backend in `server/` (see [Freemium, payments & ads](#freemium-payments--ads)):
+  if you choose to subscribe, this device's random subscription id and payment status are sent
+  to it — nothing else about you.
+- Cloud sync (see [Accounts & cloud sync](#accounts--cloud-sync)): if you create an account
+  from Settings → Account & cloud sync, your drink log, custom drinks and profile are also
+  stored in your own Firebase project so they survive losing this device and can sync to
+  another one. Skip both features entirely and nothing changes: no server is contacted
+  anywhere else in the app.
 
 ## Freemium, payments & ads
 
@@ -312,6 +317,71 @@ What's still a human decision, not something this codebase can resolve on its ow
 creating the Stripe/PayPal/AdMob accounts, switching from test to live keys, and the
 business/tax registration that comes with charging real money. Flagged again under
 [Open items](#open-items-before-any-public-release).
+
+## Accounts & cloud sync
+
+Local-only usage (no account) remains the default and is not degraded or nagged now that this
+exists — accounts are purely opt-in, reachable from Settings → Account & cloud sync, never
+forced at launch. Everything below only ever runs for someone who deliberately creates an
+account.
+
+**Auth.** [Firebase Authentication](https://firebase.google.com/docs/auth) with email +
+password, including the standard "forgot password" reset email. Google and Apple sign-in are
+*not* built yet — see [Open items](#open-items-before-any-public-release) for why (they both
+need native modules or OAuth client setup this codebase can't invent credentials for, and per
+Apple's App Store review guidelines, adding Google sign-in on iOS would make Apple Sign-In
+mandatory alongside it — a real product/legal decision, not a default to make silently).
+
+**Data store: Firestore, not Realtime Database.** Firestore's structured queries (filtering by
+date range, by drink type) match how this app already reads its local data far better than
+Realtime Database's plain key-value tree would. Layout, scoped by `uid` (`firestore.rules`
+enforces that a user can only ever read/write their own data):
+
+- `users/{uid}` — the profile fields, directly on the user document.
+- `users/{uid}/entries/{id}` and `users/{uid}/drinks/{id}` — subcollections, one doc per entry
+  / custom drink. Only *custom* drinks sync; the built-in catalog ships with the app on every
+  device already.
+
+Nothing new is collected for sync's sake — it's the same fields already stored locally, mirrored.
+
+**Sync strategy** (`src/sync/syncEngine.ts`, `src/domain/sync.ts`):
+
+- *Offline-first.* Every read/write still goes straight to SQLite/localStorage first, exactly
+  as before; sync to Firestore happens opportunistically afterwards, queued in a local outbox
+  (`src/sync/outbox.ts`) and pushed on a short debounce so a burst of edits doesn't fire a
+  network call per keystroke.
+- *Triggers.* App foreground, pull-to-refresh (`syncNow()` from `useApp()`), and — via the
+  debounced outbox — shortly after any local write, whenever a signed-in account exists.
+- *Conflict resolution.* Entries and custom drinks are treated as append-mostly and merged by
+  id (`mergeById`): the newer copy of a given id wins by `updatedAt`, and nothing is dropped
+  just because the whole dataset diverged. Deleting one is still instant locally; underneath,
+  it writes a small tombstone to Firestore (`{ deleted: true }`) rather than a real delete, so
+  a second device picks up the deletion on its next sync instead of the record silently
+  reappearing. Profile fields use last-write-wins by timestamp (`mergeLatest`) — edits there
+  are rare and low-stakes, unlike the log itself.
+- *First sign-in.* Whatever's already on the device gets queued and uploaded as the starting
+  cloud state — signing up never discards pre-existing local history.
+- *Second device.* Signing in pulls the full existing cloud history down and merges it in
+  before any new local write can diverge from it.
+
+Real-time multi-device push updates are deliberately not built — eventual sync on
+foreground/refresh is what's specified, not a live subscription to another session's edits.
+
+**Account deletion.** Settings → Account & cloud sync → Delete account
+(`src/sync/auth.ts`'s `deleteAccount`) re-authenticates, deletes every Firestore document under
+that `uid` (`deleteAllUserData`, batched), then deletes the Firebase Auth user itself — a real
+GDPR-style erasure, not just a sign-out. It does not touch this device's local data; that's
+still what Settings → Data & privacy's "delete all my data" is for.
+
+**Setup.** Ships with blank `EXPO_PUBLIC_FIREBASE_*` values (see `.env.example`) — with those
+unset, `isFirebaseConfigured()` is `false` and the whole feature quietly steps aside: Account &
+cloud sync shows a "not set up" message instead of a broken sign-in form, and the rest of the
+app is completely unaffected. To turn it on: create a Firebase project, enable Authentication
+(Email/Password provider) and Firestore, copy the web app config into `.env`, and publish
+`firestore.rules` (`firebase deploy --only firestore:rules`, or paste it into the console).
+Firebase's free Spark tier is almost certainly enough for testing; understand its Blaze
+pricing before a public launch. Also pick a Firestore region during setup — for GDPR, an EU
+region if your users are meaningfully in the EU.
 
 ## Tests
 
@@ -374,13 +444,29 @@ something this codebase can resolve on its own:
   device — a server, authentication, and a real multi-user data model, none of which exist
   yet. (The narrow payments backend in `server/` intentionally doesn't do any of this — it
   only ever answers "is this one device subscribed?".)
+- **Google and Apple sign-in** (see [Accounts & cloud sync](#accounts--cloud-sync)) — email
+  sign-in is real and functional today; the social providers need their own OAuth client IDs /
+  Apple Developer Program enrollment this codebase can't invent, plus (for Apple) a native
+  module that needs a custom dev client, not plain Expo Go.
+- **Legal/GDPR review of cloud sync specifically.** Storing personal, health-adjacent data
+  (alcohol consumption) on a third-party server (Firebase/Google) for anyone who opts into an
+  account is a real change in legal posture from a fully local-only app. The Privacy Policy
+  (`src/data/legal/content.ts`) now discloses Firebase as a data processor and that sync is
+  opt-in, but neither that language nor whether a formal Data Processing Agreement reference is
+  required has had an actual legal review.
+- **Firebase project setup itself** — creating the project, choosing a data-residency region,
+  and understanding the Spark → Blaze pricing transition before any public launch. See
+  [Accounts & cloud sync](#accounts--cloud-sync)'s Setup section.
+
 ## Not in this version
 
-Real accounts, cloud sync, push notifications, real ticket transmission (tickets are
-local-only; export is the only way they leave the device), and public store submission are
-all deliberately out of scope. Payments and ads *are* now real (test-mode keys and test ad
-unit ids — see [Freemium, payments & ads](#freemium-payments--ads)), which is the one
-deliberate exception to "everything stays on this device"; the admin screen is still a
-local-only preview with no real backend behind it. The code is layered so everything else
-can be added later without a rewrite: storage sits behind one interface, and the domain logic
-has no idea a UI exists.
+Accounts and cloud sync *are* now real (see [Accounts & cloud sync](#accounts--cloud-sync)) —
+opt-in, off by default, and inert until you configure your own Firebase project. Still out of
+scope: Google/Apple social sign-in, social/sharing features between accounts, real-time
+multi-device push updates (sync happens on foreground/refresh, not a live subscription), push
+notifications, real ticket transmission (tickets are local-only; export is the only way they
+leave the device), and public store submission. Payments and ads *are* also real (test-mode
+keys and test ad unit ids — see [Freemium, payments & ads](#freemium-payments--ads)); the admin
+screen is still a local-only preview with no real backend behind it. The code is layered so
+everything else can be added later without a rewrite: storage sits behind one interface, and
+the domain logic has no idea a UI exists.

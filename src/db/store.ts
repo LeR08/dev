@@ -53,6 +53,16 @@ export interface Store {
 
   /** Wipes entries, custom drinks, settings, profile and tickets, then re-seeds the catalog. */
   clearAll(): Promise<void>;
+
+  /**
+   * Applies a post-merge authoritative snapshot from the cloud sync layer
+   * (src/sync/syncEngine.ts) — a full replace for entries and custom drinks
+   * (catalog drinks are untouched) and, when given, the profile. Distinct
+   * from the CRUD methods above: those always mint a fresh id/updatedAt;
+   * this preserves exactly what's passed in, since the sync engine has
+   * already resolved ids and timestamps during conflict resolution.
+   */
+  replaceSyncedData(data: { entries: Entry[]; drinks: Drink[]; profile: Profile | null }): Promise<void>;
 }
 
 export type Backup = {

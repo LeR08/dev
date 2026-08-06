@@ -121,6 +121,13 @@ export default function SettingsScreen() {
               value={LANGUAGE_NAMES[settings.language]}
               onPress={() => router.push('/settings/language')}
             />
+            <RowDivider />
+            <Row
+              title={t('settings.accountRow')}
+              subtitle={t('settings.accountRowSubtitle')}
+              value={settings.account?.email ?? t('settings.accountRowLocalOnly')}
+              onPress={() => router.push('/settings/account')}
+            />
           </Card>
         </FadeInView>
 

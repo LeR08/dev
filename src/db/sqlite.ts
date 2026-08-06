@@ -646,4 +646,74 @@ export class SqliteStore implements Store {
     });
     await this.seedCatalog(this.database);
   }
+
+  async replaceSyncedData(data: { entries: Entry[]; drinks: Drink[]; profile: Profile | null }): Promise<void> {
+    await this.database.withTransactionAsync(async () => {
+      await this.database.runAsync('DELETE FROM entries');
+      for (const entry of data.entries) {
+        await this.database.runAsync(
+          `INSERT INTO entries
+             (id, drink_id, name, category, abv, volume_ml, quantity, price, consumed_at, note, location, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            entry.id,
+            entry.drinkId,
+            entry.name,
+            entry.category,
+            entry.abv,
+            entry.volumeMl,
+            entry.quantity,
+            entry.price,
+            entry.consumedAt,
+            entry.note,
+            entry.location,
+            entry.createdAt,
+            entry.updatedAt,
+          ]
+        );
+      }
+
+      await this.database.runAsync('DELETE FROM drinks WHERE is_custom = 1');
+      for (const drink of data.drinks.filter((item) => item.isCustom)) {
+        await this.database.runAsync(
+          `INSERT INTO drinks
+             (id, name, category, abv, default_volume_ml, default_price, is_custom, archived, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?, ?)`,
+          [
+            drink.id,
+            drink.name,
+            drink.category,
+            drink.abv,
+            drink.defaultVolumeMl,
+            drink.defaultPrice,
+            drink.archived ? 1 : 0,
+            drink.createdAt,
+            drink.updatedAt,
+          ]
+        );
+      }
+
+      if (data.profile) {
+        await this.database.runAsync(
+          `INSERT OR REPLACE INTO profile
+             (id, name, email, sex, age, weight_kg, height_cm, spend_before_tracking_per_day, spend_period, reasons, other_reason, created_at, updated_at)
+           VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            data.profile.name,
+            data.profile.email,
+            data.profile.sex,
+            data.profile.age,
+            data.profile.weightKg,
+            data.profile.heightCm,
+            data.profile.spendBeforeTrackingPerDay,
+            data.profile.spendPeriod,
+            JSON.stringify(data.profile.reasons),
+            data.profile.otherReason,
+            data.profile.createdAt,
+            data.profile.updatedAt,
+          ]
+        );
+      }
+    });
+  }
 }

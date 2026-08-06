@@ -164,6 +164,23 @@ export type Settings = {
   heightUnit: HeightUnit;
   /** Freemium subscription state, backed by a real Stripe/PayPal checkout via the backend. */
   subscription: Subscription;
+  /** Null when using the app fully locally, with no account — the default, and always available (spec v2.0). */
+  account: Account | null;
+};
+
+/**
+ * Bookkeeping for the optional cloud account (spec v2.0). Firebase Auth
+ * itself is the source of truth for "am I signed in" (see src/sync/auth.ts);
+ * this only tracks what this device needs to sync sensibly — whether it's
+ * already uploaded its pre-existing local data for this uid (so that only
+ * happens once, not on every app launch) and when it last synced.
+ */
+export type Account = {
+  uid: string;
+  email: string | null;
+  /** Null until this device's first post-sign-in migration/merge completes for this uid. */
+  migratedAt: number | null;
+  lastSyncedAt: number | null;
 };
 
 /**
@@ -214,6 +231,7 @@ export const DEFAULT_SETTINGS: Settings = {
   weightUnit: 'kg',
   heightUnit: 'cm',
   subscription: DEFAULT_SUBSCRIPTION,
+  account: null,
 };
 
 /** Biological sex as used by the Widmark BAC formula. Never guessed or defaulted. */

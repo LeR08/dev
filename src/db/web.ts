@@ -276,4 +276,14 @@ export class WebStore implements Store {
     this.persist();
     this.seedCatalog();
   }
+
+  async replaceSyncedData(data: { entries: Entry[]; drinks: Drink[]; profile: Profile | null }): Promise<void> {
+    this.snapshot.entries = data.entries;
+    this.snapshot.drinks = [
+      ...this.snapshot.drinks.filter((drink) => !drink.isCustom),
+      ...data.drinks.filter((drink) => drink.isCustom),
+    ];
+    if (data.profile) this.snapshot.profile = data.profile;
+    this.persist();
+  }
 }
