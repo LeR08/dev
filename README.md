@@ -124,7 +124,7 @@ src/
     catalog.json          The bundled drink catalog
     legal/content.ts       CGU / mentions légales / privacy policy text (en, fr)
     resources/             Help-screen contacts, one JSON file per country
-    harm-reduction/        Harm-reduction + non-medical-approaches copy (en, fr)
+    harm-reduction/        Harm-reduction + non-medical-approaches copy (all 8 languages)
   i18n/                  8 translation catalogs, provider, device-locale + currency detection,
                         catalog display-name overrides, intake/category label helpers
   payments/              Client for server/'s API — checkout/approval URLs, status polling

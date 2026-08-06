@@ -19,7 +19,17 @@
     {
       "name": "CSAPA (Centre de Soins, d'Accompagnement et de Prévention en Addictologie)",
       "contact": "Annuaire par département — voir drogues-info-service.fr",
-      "notes": "Centres de soins en addictologie près de chez vous."
+      "notes": "Centres de soins en addictologie près de chez vous. Gratuit, avec ou sans rendez-vous selon les structures — c'est aussi la porte d'entrée habituelle vers une cure de désintoxication (voir ci-dessous)."
+    },
+    {
+      "name": "Cure de désintoxication (sevrage résidentiel)",
+      "contact": "Orientation via un CSAPA, votre médecin traitant ou un service hospitalier d'addictologie",
+      "notes": "Sevrage encadré médicalement, en hôpital ou en clinique. Ne se réserve pas directement par téléphone — un CSAPA ou un médecin oriente vers la structure adaptée."
+    },
+    {
+      "name": "CMP (Centre Médico-Psychologique)",
+      "contact": "Un CMP par secteur géographique — voir l'annuaire sur psycom.org, ou demandez à votre médecin traitant",
+      "notes": "Consultations gratuites (secteur public) avec un psychiatre, un psychologue ou un infirmier — pas spécifique à l'alcool, mais souvent un point d'entrée utile s'il y a aussi de l'anxiété, une dépression ou besoin d'un suivi régulier."
     },
     {
       "name": "SOS Addictions",
