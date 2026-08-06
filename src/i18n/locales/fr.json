@@ -538,33 +538,36 @@
     "priceA11y": "Prix par défaut pour {{name}}"
   },
   "subscriptionScreen": {
-    "badge": "Mode test — rien n'est jamais réellement débité",
-    "intro": "Cela ne débloque rien, et rien ici n'est obligatoire — l'idée est de voir si une petite façon optionnelle de soutenir l'appli mérite d'être construite pour de vrai. La version gratuite reste gratuite dans tous les cas.",
     "priceLabel": "5€ / mois",
-    "subscribeAction": "Démarrer l'abonnement test",
-    "referralInputLabel": "Un code de parrainage ? (facultatif)",
-    "referralInputPlaceholder": "TALLY-XXXXXX",
-    "referralInvalidHint": "Ce code ne semble pas valide — vérifiez les fautes de frappe.",
-    "activeTitle": "Abonnement test actif",
+    "intro": "La version gratuite reste gratuite — enregistrement des consommations, statistiques, tout le reste. Premium retire le message au lancement et la petite bannière de soutien ci-dessous, et aide à financer l'application. Le paiement est géré par Stripe ou PayPal — l'application ne voit et ne stocke jamais vos coordonnées bancaires.",
+    "freeTierTitle": "Version gratuite",
+    "freeTierBody": "Tout fonctionne dans la version gratuite. Les utilisateurs gratuits voient aussi un court message, qu'on peut passer, à l'ouverture de l'application — à propos du soutien et des ressources sur l'addiction, jamais une vraie publicité — ainsi qu'une petite bannière ici même.",
+    "subscribeStripeAction": "S'abonner avec Stripe",
+    "subscribePaypalAction": "S'abonner avec PayPal",
+    "pendingHint": "En attente de confirmation du paiement — cela peut prendre un instant après le paiement. Revenez sur cet écran, ou appuyez sur Actualiser.",
+    "activeTitle": "Premium actif",
     "activeSince": "Actif depuis le {{date}}",
-    "yourCodeLabel": "Votre code de parrainage",
-    "yourCodeHint": "Partagez-le avec des gens que vous connaissez — l'idée est juste de voir si le bouche-à-oreille entre utilisateurs mérite d'être développé sérieusement. Cela ne débloque rien aujourd'hui.",
-    "referredByLabel": "Parrainé par {{code}}",
-    "cancelAction": "Mettre fin à l'abonnement test",
-    "subscribedToast": "Abonnement test démarré — aucun débit réel.",
-    "cancelledToast": "Abonnement test terminé."
+    "viaStripe": "Géré via Stripe",
+    "viaPaypal": "Géré via PayPal",
+    "manageBillingAction": "Gérer la facturation",
+    "managePaypalHint": "Gérez ou annulez cet abonnement depuis votre compte PayPal.",
+    "refreshAction": "Actualiser le statut",
+    "refreshedToast": "Statut actualisé.",
+    "backendNotConfigured": "Les paiements ne sont pas encore configurés sur cette version — voir server/README.md.",
+    "checkFailed": "Impossible de vérifier le statut de l'abonnement. Vérifiez votre connexion et réessayez.",
+    "checkoutFailed": "Impossible de démarrer le paiement. Vérifiez votre connexion et réessayez."
   },
   "adminScreen": {
-    "banner": "Ceci est un aperçu local de ce qu'un futur panneau d'administration pourrait afficher — à la fois le côté utilisateur (les données de cet appareil) et le côté admin (signalements, état de l'abonnement, ajustements du catalogue). Il n'y a pas encore de serveur ni d'autres vrais utilisateurs : tout ici vient uniquement de cet appareil.",
+    "banner": "Ceci est un aperçu local de ce qu'un futur panneau d'administration pourrait afficher — le côté utilisateur (les données de cet appareil) et le côté admin (signalements, état de l'abonnement, ajustements du catalogue). L'état de l'abonnement s'appuie désormais sur le vrai serveur (server/) ; tout le reste ici reste local à cet appareil.",
     "userSideTitle": "Côté utilisateur — données locales",
     "entriesLabel": "Entrées enregistrées",
     "customDrinksLabel": "Boissons personnalisées",
-    "adminSideTitle": "Côté admin — support et facturation (test)",
+    "adminSideTitle": "Côté admin — support et facturation",
     "ticketsOpenLabel": "Signalements ouverts",
     "ticketsClosedLabel": "Signalements fermés",
     "manageTicketsAction": "Gérer les signalements",
-    "subscriptionActive": "Abonnement test actif, code {{code}}",
-    "subscriptionNone": "Aucun abonnement test actif",
+    "subscriptionActive": "Premium actif via {{provider}}",
+    "subscriptionNone": "Aucun abonnement actif",
     "manageSubscriptionAction": "Gérer l'abonnement",
     "catalogOverridesTitle": "Traductions du catalogue",
     "catalogOverridesBody": "{{count}} boissons du catalogue ont un nom d'affichage traduit dans la langue actuelle ; les autres gardent leur nom international d'origine (Absinthe, Baijiu, Prosecco, ...) puisqu'il est déjà correct dans la plupart des langues.",
@@ -572,5 +575,18 @@
     "versionLabel": "Version",
     "platformLabel": "Plateforme",
     "languageLabel": "Langue actuelle"
+  },
+  "ads": {
+    "psa": {
+      "badge": "Pas une publicité",
+      "title": "Avant de commencer",
+      "message1": "Une habitude, quelle qu'elle soit, vous semble plus forte que vous ? Vous n'êtes pas seul·e, une vraie aide existe — voir Aide et ressources.",
+      "message2": "Quelle que soit la raison qui vous a amené·e ici, suivre sa consommation est déjà une façon de prendre soin de soi.",
+      "message3": "L'addiction ne concerne pas que l'alcool — jeu, écrans, travail, tout peut y mener. Une aide gratuite et confidentielle est à portée de main.",
+      "message4": "Vous n'avez pas besoin d'avoir tout résolu. Une entrée honnête aujourd'hui, c'est déjà suffisant.",
+      "message5": "Si une habitude — quelle qu'elle soit — semble échapper à votre contrôle, de vraies personnes sont prêtes à aider.",
+      "helpAction": "Aide et ressources",
+      "skipAction": "Passer"
+    }
   }
 }

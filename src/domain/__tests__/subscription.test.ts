@@ -1,32 +1,27 @@
-import { generateAffiliateCode, isPlausibleAffiliateCode } from '../subscription';
+import { generateUserId, isPremium } from '../subscription';
 
-describe('generateAffiliateCode', () => {
-  it('produces a TALLY-XXXXXX code from an injected RNG', () => {
+describe('generateUserId', () => {
+  it('produces a 24-char id from an injected RNG', () => {
     let calls = 0;
-    const code = generateAffiliateCode(() => {
+    const id = generateUserId(() => {
       calls += 1;
       return 0;
     });
-    expect(code).toBe('TALLY-AAAAAA');
-    expect(calls).toBe(6);
+    expect(id).toBe('a'.repeat(24));
+    expect(calls).toBe(24);
   });
 
-  it('never includes visually ambiguous characters in the random suffix', () => {
-    const code = generateAffiliateCode(() => 0.999999);
-    const suffix = code.replace('TALLY-', '');
-    expect(suffix).not.toMatch(/[0O1IL]/);
+  it('draws from the full alphabet with a different RNG', () => {
+    const id = generateUserId(() => 0.999999);
+    expect(id).toBe('9'.repeat(24));
   });
 });
 
-describe('isPlausibleAffiliateCode', () => {
-  it('accepts a well-formed code, case- and whitespace-insensitively', () => {
-    expect(isPlausibleAffiliateCode('TALLY-AB23CD')).toBe(true);
-    expect(isPlausibleAffiliateCode('  tally-ab23cd  ')).toBe(true);
-  });
-
-  it('rejects anything else', () => {
-    expect(isPlausibleAffiliateCode('not a code')).toBe(false);
-    expect(isPlausibleAffiliateCode('TALLY-AB2')).toBe(false);
-    expect(isPlausibleAffiliateCode('')).toBe(false);
+describe('isPremium', () => {
+  it('is true only for an active subscription', () => {
+    expect(isPremium('active')).toBe(true);
+    expect(isPremium('free')).toBe(false);
+    expect(isPremium('pending')).toBe(false);
+    expect(isPremium('canceled')).toBe(false);
   });
 });

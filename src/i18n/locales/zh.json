@@ -538,33 +538,36 @@
     "priceA11y": "{{name}} 的默认价格"
   },
   "subscriptionScreen": {
-    "badge": "测试模式——不会产生任何真实扣费",
-    "intro": "这不会解锁任何功能，也不是必须的——只是想看看是否值得真正开发一种小额、可选的支持方式。免费版无论如何都会继续免费。",
     "priceLabel": "每月 5 欧元",
-    "subscribeAction": "开始测试订阅",
-    "referralInputLabel": "有推荐码吗？（可选）",
-    "referralInputPlaceholder": "TALLY-XXXXXX",
-    "referralInvalidHint": "这个代码看起来无效——请检查是否有输入错误。",
-    "activeTitle": "测试订阅已激活",
+    "intro": "免费版始终免费——记录饮酒、数据洞察，其他一切都不受影响。高级版会移除启动时的提示信息和下方的小型支持横幅，并帮助支持这款应用的开发。付款由 Stripe 或 PayPal 处理——本应用绝不会看到或存储你的银行卡信息。",
+    "freeTierTitle": "免费版",
+    "freeTierBody": "免费版中所有功能都可以使用。免费用户在打开应用时还会看到一条简短的、可跳过的提示——内容是关于支持与成瘾相关资源，绝不是真正的广告——以及此处的一个小横幅。",
+    "subscribeStripeAction": "使用 Stripe 订阅",
+    "subscribePaypalAction": "使用 PayPal 订阅",
+    "pendingHint": "正在等待付款确认——结账后可能需要一点时间。请返回此页面，或点击刷新。",
+    "activeTitle": "高级版已激活",
     "activeSince": "自 {{date}} 起生效",
-    "yourCodeLabel": "你的推荐码",
-    "yourCodeHint": "把它分享给你认识的人——这只是想看看用户互相推荐是否值得认真开发。目前它不会解锁任何功能。",
-    "referredByLabel": "推荐人：{{code}}",
-    "cancelAction": "结束测试订阅",
-    "subscribedToast": "测试订阅已开始——未产生任何扣费。",
-    "cancelledToast": "测试订阅已结束。"
+    "viaStripe": "通过 Stripe 管理",
+    "viaPaypal": "通过 PayPal 管理",
+    "manageBillingAction": "管理账单",
+    "managePaypalHint": "可在你的 PayPal 账户中管理或取消此订阅。",
+    "refreshAction": "刷新状态",
+    "refreshedToast": "状态已刷新。",
+    "backendNotConfigured": "此版本尚未配置支付功能——请参阅 server/README.md。",
+    "checkFailed": "无法检查订阅状态。请检查网络连接后重试。",
+    "checkoutFailed": "无法开始结账。请检查网络连接后重试。"
   },
   "adminScreen": {
-    "banner": "这是未来管理面板可能呈现内容的本地预览——既包括用户端（本设备自身的数据），也包括管理端（反馈单、订阅状态、目录调整）。目前还没有服务器，也没有其他真实用户：这里的一切都仅来自本设备。",
+    "banner": "这是未来管理面板可能呈现内容的本地预览——包括用户端（本设备自身的数据）和管理端（反馈单、订阅状态、目录调整）。订阅状态现在由 server/ 中真实的后端提供支持；此处其余内容仍然仅来自本设备本地数据。",
     "userSideTitle": "用户端——本地数据",
     "entriesLabel": "已记录条目",
     "customDrinksLabel": "自定义饮品",
-    "adminSideTitle": "管理端——支持与计费（测试）",
+    "adminSideTitle": "管理端——支持与账单",
     "ticketsOpenLabel": "待处理反馈单",
     "ticketsClosedLabel": "已关闭反馈单",
     "manageTicketsAction": "管理反馈单",
-    "subscriptionActive": "测试订阅已激活，代码 {{code}}",
-    "subscriptionNone": "没有激活的测试订阅",
+    "subscriptionActive": "通过 {{provider}} 激活高级版",
+    "subscriptionNone": "没有激活的订阅",
     "manageSubscriptionAction": "管理订阅",
     "catalogOverridesTitle": "目录翻译",
     "catalogOverridesBody": "目前语言下有 {{count}} 种目录饮品拥有翻译后的显示名称；其余饮品保留其原始国际通用名称（如 Absinthe、Baijiu、Prosecco 等），因为这些名称在大多数语言中已经是正确的。",
@@ -572,5 +575,18 @@
     "versionLabel": "版本",
     "platformLabel": "平台",
     "languageLabel": "当前语言"
+  },
+  "ads": {
+    "psa": {
+      "badge": "不是广告",
+      "title": "在开始之前",
+      "message1": "是否觉得某种习惯已经超出了自己的掌控？你并不孤单，真正的帮助就在身边——请查看“帮助与资源”。",
+      "message2": "无论是什么原因让你来到这里，坚持记录本身就是一种自我关怀。",
+      "message3": "成瘾不仅限于酒精——赌博、屏幕、工作，任何事物都可能让人深陷其中。免费、保密的帮助触手可及。",
+      "message4": "你不需要立刻把一切都想清楚。今天诚实地记录一次，就已经足够。",
+      "message5": "如果任何一种习惯让你觉得难以掌控，总有真实的人愿意提供帮助。",
+      "helpAction": "帮助与资源",
+      "skipAction": "跳过"
+    }
   }
 }

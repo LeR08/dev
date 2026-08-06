@@ -1,24 +1,28 @@
 /**
- * A local-only mock of a paid tier, per the "test interface, no real payment"
- * decision — nothing here talks to a payment processor. See
- * {@link Subscription} in `types.ts` for what's actually persisted.
+ * Local subscription-status helpers. The actual payment flow (talking to the
+ * backend, opening Stripe/PayPal in a browser) lives in `src/payments` — this
+ * module only holds pure, testable logic.
  */
 
-// Excludes visually ambiguous characters (0/O, 1/I/L) so a code is easy to
-// read aloud or copy by hand.
-const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-const CODE_LENGTH = 6;
+import type { SubscriptionStatus } from './types';
 
-/** A fresh, shareable affiliate code for this device. Injectable RNG for tests. */
-export function generateAffiliateCode(random: () => number = Math.random): string {
-  let suffix = '';
-  for (let i = 0; i < CODE_LENGTH; i++) {
-    suffix += CODE_ALPHABET[Math.floor(random() * CODE_ALPHABET.length)];
+const ID_ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789';
+const ID_LENGTH = 24;
+
+/**
+ * A fresh, random id for this device — not tied to any identity (no name,
+ * email, or account). Sent to the backend only so it can look up this
+ * device's subscription status. Injectable RNG for tests.
+ */
+export function generateUserId(random: () => number = Math.random): string {
+  let id = '';
+  for (let i = 0; i < ID_LENGTH; i++) {
+    id += ID_ALPHABET[Math.floor(random() * ID_ALPHABET.length)];
   }
-  return `TALLY-${suffix}`;
+  return id;
 }
 
-/** Loose format check for a code someone typed in — not a real lookup, since there's no server. */
-export function isPlausibleAffiliateCode(code: string): boolean {
-  return /^TALLY-[A-Z0-9]{6}$/.test(code.trim().toUpperCase());
+/** Whether a status should unlock premium features. */
+export function isPremium(status: SubscriptionStatus): boolean {
+  return status === 'active';
 }

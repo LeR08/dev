@@ -538,33 +538,36 @@
     "priceA11y": "Preço predefinido para {{name}}"
   },
   "subscriptionScreen": {
-    "badge": "Modo de teste — nunca é cobrado nada a sério",
-    "intro": "Isto não desbloqueia nada, e nada aqui é obrigatório — existe para ver se vale a pena construir a sério uma forma pequena e opcional de apoiar a app. A versão gratuita continua gratuita de qualquer forma.",
     "priceLabel": "5€ / mês",
-    "subscribeAction": "Iniciar subscrição de teste",
-    "referralInputLabel": "Tens um código de referência? (opcional)",
-    "referralInputPlaceholder": "TALLY-XXXXXX",
-    "referralInvalidHint": "Esse código não parece válido — verifica se há erros de digitação.",
-    "activeTitle": "Subscrição de teste ativa",
-    "activeSince": "Ativa desde {{date}}",
-    "yourCodeLabel": "O teu código de referência",
-    "yourCodeHint": "Partilha-o com pessoas que conheces — é só para ver se vale a pena desenvolver a sério a recomendação entre utilizadores. Hoje não desbloqueia nada.",
-    "referredByLabel": "Referenciado por {{code}}",
-    "cancelAction": "Terminar subscrição de teste",
-    "subscribedToast": "Subscrição de teste iniciada — não foi cobrado nada.",
-    "cancelledToast": "Subscrição de teste terminada."
+    "intro": "A versão gratuita continua gratuita — registar consumos, estatísticas, tudo o resto. Premium remove a mensagem ao abrir a app e a pequena faixa de apoio abaixo, e ajuda a financiar a app. O pagamento é processado pela Stripe ou PayPal — esta app nunca vê nem guarda os dados do teu cartão.",
+    "freeTierTitle": "Versão gratuita",
+    "freeTierBody": "Tudo funciona na versão gratuita. Os utilizadores gratuitos também veem uma mensagem breve, que pode ser saltada, ao abrir a app — sobre apoio e recursos sobre dependências, nunca um anúncio real — e uma pequena faixa aqui mesmo.",
+    "subscribeStripeAction": "Subscrever com Stripe",
+    "subscribePaypalAction": "Subscrever com PayPal",
+    "pendingHint": "A aguardar confirmação do pagamento — pode demorar um pouco depois do checkout. Volta a este ecrã, ou toca em Atualizar.",
+    "activeTitle": "Premium ativo",
+    "activeSince": "Ativo desde {{date}}",
+    "viaStripe": "Gerido via Stripe",
+    "viaPaypal": "Gerido via PayPal",
+    "manageBillingAction": "Gerir faturação",
+    "managePaypalHint": "Gere ou cancela esta subscrição a partir da tua conta PayPal.",
+    "refreshAction": "Atualizar estado",
+    "refreshedToast": "Estado atualizado.",
+    "backendNotConfigured": "Os pagamentos ainda não estão configurados nesta versão — ver server/README.md.",
+    "checkFailed": "Não foi possível verificar o estado da subscrição. Verifica a tua ligação e tenta novamente.",
+    "checkoutFailed": "Não foi possível iniciar o pagamento. Verifica a tua ligação e tenta novamente."
   },
   "adminScreen": {
-    "banner": "Esta é uma pré-visualização local do que um futuro painel de administração poderia mostrar — tanto o lado do utilizador (os dados deste dispositivo) como o lado admin (tickets, estado da subscrição, ajustes do catálogo). Ainda não há servidor nem outros utilizadores reais: tudo aqui vem apenas deste dispositivo.",
+    "banner": "Esta é uma pré-visualização local do que um futuro painel de administração poderia mostrar — o lado do utilizador (os dados deste dispositivo) e o lado admin (tickets, estado da subscrição, ajustes do catálogo). O estado da subscrição agora depende do backend real em server/; tudo o resto aqui continua a ser local a este dispositivo.",
     "userSideTitle": "Lado utilizador — dados locais",
     "entriesLabel": "Registos feitos",
     "customDrinksLabel": "Bebidas personalizadas",
-    "adminSideTitle": "Lado admin — suporte e faturação (teste)",
+    "adminSideTitle": "Lado admin — suporte e faturação",
     "ticketsOpenLabel": "Tickets abertos",
     "ticketsClosedLabel": "Tickets fechados",
     "manageTicketsAction": "Gerir tickets",
-    "subscriptionActive": "Subscrição de teste ativa, código {{code}}",
-    "subscriptionNone": "Nenhuma subscrição de teste ativa",
+    "subscriptionActive": "Premium ativo via {{provider}}",
+    "subscriptionNone": "Nenhuma subscrição ativa",
     "manageSubscriptionAction": "Gerir subscrição",
     "catalogOverridesTitle": "Traduções do catálogo",
     "catalogOverridesBody": "{{count}} bebidas do catálogo têm um nome de exibição traduzido no idioma atual; as restantes mantêm o nome internacional original (Absinto, Baijiu, Prosecco, ...) já que já está correto na maioria dos idiomas.",
@@ -572,5 +575,18 @@
     "versionLabel": "Versão",
     "platformLabel": "Plataforma",
     "languageLabel": "Idioma atual"
+  },
+  "ads": {
+    "psa": {
+      "badge": "Não é um anúncio",
+      "title": "Antes de começares",
+      "message1": "Sentes que algum hábito, seja ele qual for, te ultrapassa? Não estás sozinho/a, existe ajuda real — vê Ajuda e recursos.",
+      "message2": "Seja qual for o motivo que te trouxe aqui, registar já é uma forma de cuidares de ti.",
+      "message3": "A dependência não é só sobre álcool — jogo, ecrãs, trabalho, qualquer coisa pode tomar conta de nós. Há ajuda gratuita e confidencial a um toque de distância.",
+      "message4": "Não precisas de ter tudo resolvido. Um registo honesto hoje já é suficiente.",
+      "message5": "Se algum hábito — seja ele qual for — alguma vez parecer fugir ao teu controlo, há pessoas reais prontas para ajudar.",
+      "helpAction": "Ajuda e recursos",
+      "skipAction": "Saltar"
+    }
   }
 }

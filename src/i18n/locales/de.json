@@ -538,33 +538,36 @@
     "priceA11y": "Standardpreis für {{name}}"
   },
   "subscriptionScreen": {
-    "badge": "Testmodus — es wird nie wirklich etwas abgebucht",
-    "intro": "Das schaltet nichts frei, und nichts hier ist verpflichtend — es geht darum, zu sehen, ob sich ein kleiner, optionaler Weg, die App zu unterstützen, wirklich lohnt. Kostenlos bleibt so oder so kostenlos.",
     "priceLabel": "5€ / Monat",
-    "subscribeAction": "Test-Abo starten",
-    "referralInputLabel": "Hast du einen Empfehlungscode? (optional)",
-    "referralInputPlaceholder": "TALLY-XXXXXX",
-    "referralInvalidHint": "Sieht nicht nach einem gültigen Code aus — prüfe auf Tippfehler.",
-    "activeTitle": "Test-Abo aktiv",
+    "intro": "Kostenlos bleibt kostenlos — Trinken protokollieren, Auswertungen, alles andere. Premium entfernt die Startmeldung und das kleine Support-Banner weiter unten und hilft, die App zu finanzieren. Die Zahlung läuft über Stripe oder PayPal — diese App sieht oder speichert deine Kartendaten nie.",
+    "freeTierTitle": "Kostenlose Version",
+    "freeTierBody": "In der kostenlosen Version funktioniert alles. Kostenlose Nutzer sehen beim Öffnen der App außerdem eine kurze, überspringbare Meldung — zu Unterstützung und Hilfe bei Sucht, nie eine echte Werbeanzeige — sowie ein kleines Banner genau hier.",
+    "subscribeStripeAction": "Mit Stripe abonnieren",
+    "subscribePaypalAction": "Mit PayPal abonnieren",
+    "pendingHint": "Warte auf Zahlungsbestätigung — das kann nach dem Bezahlvorgang einen Moment dauern. Komm zu diesem Bildschirm zurück oder tippe auf Aktualisieren.",
+    "activeTitle": "Premium aktiv",
     "activeSince": "Aktiv seit {{date}}",
-    "yourCodeLabel": "Dein Empfehlungscode",
-    "yourCodeHint": "Teile ihn mit Leuten, die du kennst — es geht nur darum, zu sehen, ob es sich lohnt, das gegenseitige Weiterempfehlen richtig auszubauen. Heute schaltet er noch nichts frei.",
-    "referredByLabel": "Empfohlen von {{code}}",
-    "cancelAction": "Test-Abo beenden",
-    "subscribedToast": "Test-Abo gestartet — es wurde nichts abgebucht.",
-    "cancelledToast": "Test-Abo beendet."
+    "viaStripe": "Verwaltet über Stripe",
+    "viaPaypal": "Verwaltet über PayPal",
+    "manageBillingAction": "Abrechnung verwalten",
+    "managePaypalHint": "Verwalte oder kündige dieses Abo über dein PayPal-Konto.",
+    "refreshAction": "Status aktualisieren",
+    "refreshedToast": "Status aktualisiert.",
+    "backendNotConfigured": "Zahlungen sind in dieser Version noch nicht eingerichtet — siehe server/README.md.",
+    "checkFailed": "Abo-Status konnte nicht geprüft werden. Verbindung prüfen und erneut versuchen.",
+    "checkoutFailed": "Bezahlvorgang konnte nicht gestartet werden. Verbindung prüfen und erneut versuchen."
   },
   "adminScreen": {
-    "banner": "Dies ist eine lokale Vorschau dessen, was ein zukünftiges Admin-Panel zeigen könnte — sowohl die Nutzerseite (die Daten dieses Geräts) als auch die Admin-Seite (Tickets, Abo-Status, Katalog-Anpassungen). Es gibt noch keinen Server und keine anderen echten Nutzer: alles hier stammt allein von diesem Gerät.",
+    "banner": "Dies ist eine lokale Vorschau dessen, was ein zukünftiges Admin-Panel zeigen könnte — die Nutzerseite (die Daten dieses Geräts) und die Admin-Seite (Tickets, Abo-Status, Katalog-Anpassungen). Der Abo-Status stützt sich jetzt auf das echte Backend in server/; alles andere hier ist weiterhin lokal auf diesem Gerät.",
     "userSideTitle": "Nutzerseite — lokale Daten",
     "entriesLabel": "Protokollierte Einträge",
     "customDrinksLabel": "Eigene Getränke",
-    "adminSideTitle": "Admin-Seite — Support & Abrechnung (Test)",
+    "adminSideTitle": "Admin-Seite — Support & Abrechnung",
     "ticketsOpenLabel": "Offene Tickets",
     "ticketsClosedLabel": "Geschlossene Tickets",
     "manageTicketsAction": "Tickets verwalten",
-    "subscriptionActive": "Test-Abo aktiv, Code {{code}}",
-    "subscriptionNone": "Kein Test-Abo aktiv",
+    "subscriptionActive": "Premium aktiv über {{provider}}",
+    "subscriptionNone": "Kein aktives Abo",
     "manageSubscriptionAction": "Abo verwalten",
     "catalogOverridesTitle": "Katalog-Übersetzungen",
     "catalogOverridesBody": "{{count}} Katalog-Getränke haben in der aktuellen Sprache einen übersetzten Anzeigenamen; der Rest behält seinen ursprünglichen internationalen Namen (Absinth, Baijiu, Prosecco, ...), da dieser in den meisten Sprachen bereits korrekt ist.",
@@ -572,5 +575,18 @@
     "versionLabel": "Version",
     "platformLabel": "Plattform",
     "languageLabel": "Aktuelle Sprache"
+  },
+  "ads": {
+    "psa": {
+      "badge": "Keine Werbung",
+      "title": "Bevor es losgeht",
+      "message1": "Fühlt sich eine Gewohnheit größer an als du selbst? Du bist nicht allein, echte Hilfe gibt es — siehe Hilfe & Ressourcen.",
+      "message2": "Was auch immer dich hierhergeführt hat — das Protokollieren ist bereits eine Form der Fürsorge für dich selbst.",
+      "message3": "Sucht betrifft nicht nur Alkohol — Glücksspiel, Bildschirme, Arbeit, alles kann einen im Griff haben. Kostenlose, vertrauliche Hilfe ist nur einen Klick entfernt.",
+      "message4": "Du musst nicht alles im Griff haben. Ein ehrlicher Eintrag heute reicht schon.",
+      "message5": "Wenn sich eine Gewohnheit — egal welche — je der Kontrolle zu entziehen scheint, gibt es echte Menschen, die helfen wollen.",
+      "helpAction": "Hilfe & Ressourcen",
+      "skipAction": "Überspringen"
+    }
   }
 }

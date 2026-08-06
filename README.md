@@ -3,9 +3,12 @@
 A personal alcohol tracking app. Log what you drink, see what that adds up to over time,
 and keep every byte of it on your own device.
 
-Built as a personal test build: free, offline, no account, no ads, no analytics. Currently
-**v1.4**, still explicitly in test mode — see [Open items](#open-items-before-any-public-release)
-before this goes anywhere near a public store listing.
+Built as a personal test build: free, offline, no account, no analytics. All logging,
+history, charts and insights are free for everyone, always. A small backend (`server/`) now
+exists purely to run a freemium subscription through real Stripe/PayPal checkouts — see
+[Freemium, payments & ads](#freemium-payments--ads). Currently **v1.4**, still explicitly in
+test mode — see [Open items](#open-items-before-any-public-release) before this goes anywhere
+near a public store listing.
 
 ## What it does
 
@@ -48,11 +51,13 @@ before this goes anywhere near a public store listing.
   not-a-medical-device disclaimer.
 - **In-app bug/suggestion tickets** — local-only for now, exportable to CSV alongside your
   data.
-- **A test-mode subscription screen and a local admin preview** (Settings → Subscription /
-  Admin) — a mocked 5€/month tier with a shareable referral code, and a one-screen preview of
-  what an eventual admin panel could show. Neither talks to a real payment processor or a
-  real server; see [Test-mode mocks](#test-mode-mocks-subscription--admin) for exactly what
-  that does and doesn't mean.
+- **A real freemium subscription** (Settings → Subscription) — Stripe or PayPal checkout,
+  opened in the system browser, backed by the minimal server in `server/`. Free stays free for
+  every feature above; premium only removes the launch message and the small support banner
+  described below. See [Freemium, payments & ads](#freemium-payments--ads).
+- **A local admin preview** (Settings → Admin) — a one-screen dashboard of *this device's own*
+  data (entry/drink/ticket counts, this device's subscription state, catalog-translation
+  coverage). Still local-only; see the same section below.
 - **Eight languages** — the EU's major languages (French, Spanish, German, Italian,
   Portuguese) plus English, Chinese and Arabic — genuinely translated (not machine-filled
   placeholders) and switchable independent of your phone's own language, from a pill/card
@@ -89,6 +94,13 @@ To install it as a real standalone app, with no Expo Go in the picture, build wi
 npx eas build --profile preview --platform android   # or ios
 ```
 
+The app itself needs nothing extra to run — subscribing is the only screen that talks to
+anything external. To try that locally: `cd server && npm install && cp .env.example .env`
+(see `server/README.md`), run it, and copy this repo's own `.env.example` to `.env` pointing
+`EXPO_PUBLIC_BACKEND_URL` at it. The real AdMob banner (test ad unit id) only shows up inside
+a dev client / EAS build — see [Freemium, payments & ads](#freemium-payments--ads) — Expo Go
+can't load native ad SDKs, so it just shows nothing there.
+
 ## How it is put together
 
 ```
@@ -98,13 +110,13 @@ app/                    Screens and routing (expo-router, file-based)
   entry/[id]            Edit or delete a logged entry
   drinks/               Custom drink presets
   settings/             Units, goals, appearance, profile, language, legal, tickets, data,
-                        subscription (test), admin (test)
+                        subscription (real Stripe/PayPal via server/), admin (local preview)
   savings.tsx            Savings deep-dive
   onboarding.tsx          First run: local sign-in → profile → done
 
 src/
   domain/               Pure logic: alcohol maths, BAC, savings, dates, stats, search, profile,
-                        subscription (mock affiliate codes)
+                        subscription (device id + status helpers)
   db/                   Storage: the Store contract, SQLite and web implementations
   data/
     catalog.json          The bundled drink catalog
@@ -113,10 +125,17 @@ src/
     harm-reduction/        Harm-reduction + non-medical-approaches copy (en, fr)
   i18n/                  8 translation catalogs, provider, device-locale + currency detection,
                         catalog display-name overrides, intake/category label helpers
+  payments/              Client for server/'s API — checkout/approval URLs, status polling
+  ads/                   AdMob test ad unit ids + banner (native only, degrades to nothing
+                        elsewhere); the launch message itself lives in components/ (below)
   state/                 App-wide data provider
   theme/                 Palette, theme, provider
-  components/            UI kit, charts, entry rows, profile fields, BAC card, FadeInView
+  components/            UI kit, charts, entry rows, profile fields, BAC card, FadeInView,
+                        SupportInterstitial (the anti-addiction launch message)
   export/                CSV/JSON backup and sharing
+
+server/                 Minimal backend: holds Stripe/PayPal secret keys, tracks subscription
+                        status. See server/README.md.
 ```
 
 ### Decisions worth knowing about
@@ -231,46 +250,85 @@ to avoid two copies of the same value that could quietly drift apart.
 
 ## Privacy
 
-There is no server, no account and no telemetry. Data lives in a local database on the
-device, and the only way anything leaves it is the export button — which you press. Settings
-→ Data & privacy has a "delete all my data" option that wipes entries, custom drinks, your
-profile, your tickets and settings, then restores the built-in catalog and returns you to
-onboarding.
+There is no account and no telemetry. Every drink, entry, custom drink, profile field and
+ticket lives in a local database on the device, and the only way any of *that* leaves it is
+the export button — which you press. Settings → Data & privacy has a "delete all my data"
+option that wipes entries, custom drinks, your profile, your tickets and settings, then
+restores the built-in catalog and returns you to onboarding.
 
-## Test-mode mocks: subscription & admin
+The one exception is the payments backend in `server/` (see
+[Freemium, payments & ads](#freemium-payments--ads)): if you choose to subscribe, this
+device's random subscription id and payment status are sent to it — nothing else about you.
+Skip Subscription entirely and nothing changes: no server is contacted anywhere else in the
+app.
 
-Two screens (Settings → Subscription, Settings → Admin) preview ideas that were asked for —
-a paid tier and an admin view — without changing anything about the privacy model above. Both
-are explicitly local-only test mocks, by direct request, not a first version of the real
-thing:
+## Freemium, payments & ads
 
-- **Subscription** (`app/settings/subscription.tsx`, `src/domain/subscription.ts`) flips a
-  `subscription` flag in local `Settings` and generates a shareable `TALLY-XXXXXX` code —
-  nothing else. **No payment processor is integrated, no card is ever asked for, and no
-  money moves.** Nothing in the rest of the app checks this flag; there is nothing to unlock
-  yet, on purpose, so the mock can't accidentally start gating features.
-- **Admin** (`app/settings/admin.tsx`) is a read-only dashboard of *this device's own* data —
-  entry/drink/ticket counts, the subscription mock's state, catalog-translation coverage. It
-  is not connected to any other device or user, because there is no server for it to connect
-  through.
+Every feature described above — logging, history, charts, insights, export, everything — is
+free, full-stop, for every user. The only thing a subscription changes is removing two small,
+non-blocking things free users see. Nothing about tracking, insights or safety-relevant
+content is ever paywalled.
 
-Making either of these real needs decisions this codebase can't make on its own: a payment
-processor (Stripe, RevenueCat, ...) and the business/tax registration that comes with
-actually charging people, plus a real backend and authentication if the admin panel is meant
-to manage more than one device. Both are flagged again under
+**Payments.** Client apps can never safely hold a Stripe or PayPal *secret* key — anything
+shipped to a phone can be extracted — so a minimal backend (`server/`) exists purely to hold
+those keys and answer "is this device subscribed?". The app never talks to Stripe/PayPal
+directly:
+
+1. Settings → Subscription asks `server/` for a Stripe Checkout or PayPal approval URL and
+   opens it in the system browser. This app never sees a card number.
+2. Stripe/PayPal confirm payment to `server/` via webhook, which updates that device's status.
+3. The app polls `server/` for status (on this screen, and whenever it returns to the
+   foreground) and reflects it locally.
+
+`server/` ships with **placeholder env vars only** — see `server/.env.example` and
+`server/README.md` for how to fill in your own real Stripe/PayPal keys (test mode to start)
+and deploy it. Until it's configured and running somewhere reachable, the subscribe buttons
+fail with a clear "payments aren't set up yet" message rather than silently pretending to
+work.
+
+**Ads — kept deliberately narrow and on-theme.** The literal ask was Google Ads on every
+launch for free users; what's built instead, to keep this ethical for an app about drinking
+habits:
+
+- **The "ad" free users actually see on launch** (`src/components/SupportInterstitial.tsx`)
+  is not sourced from an ad network at all — it's a short, immediately-skippable, self-authored
+  message about support and addiction resources (not only alcohol), with a direct link to
+  Help & Resources. Shown at most once per app launch, only to free-tier users. Because it's
+  our own copy rather than arbitrary ad-network creative, its content can actually be held to
+  "anti-addiction, non-judgmental" rather than whatever an ad auction happens to serve.
+- **A real AdMob banner** (`src/ads/`, Settings → Subscription) uses Google's own public
+  **test** ad unit ids (`src/ads/testAdUnitIds.ts`) — no AdMob account exists yet, and these
+  are the official placeholder ids meant for exactly that. It only renders on iOS/Android
+  inside a build that actually links `react-native-google-mobile-ads` (a dev client or a real
+  build — **not plain Expo Go**, which can't load native ad SDKs); everywhere else, including
+  the web build, it quietly renders nothing rather than crashing. Swap in your own ad unit ids
+  (and the `androidAppId`/`iosAppId` in `app.json`) once you create an AdMob account.
+
+**Admin** (`app/settings/admin.tsx`) stays a read-only, local-only dashboard of *this device's
+own* data — entry/drink/ticket counts, this device's subscription state, catalog-translation
+coverage. It is not connected to any other device or user; there's still no multi-user backend
+behind it, only the narrow payments one above.
+
+What's still a human decision, not something this codebase can resolve on its own: actually
+creating the Stripe/PayPal/AdMob accounts, switching from test to live keys, and the
+business/tax registration that comes with charging real money. Flagged again under
 [Open items](#open-items-before-any-public-release).
 
 ## Tests
 
-202 tests over the parts where a bug would quietly corrupt your history or your trust in a
+203 tests over the parts where a bug would quietly corrupt your history or your trust in a
 number: alcohol maths, the BAC formula, savings, poured-volume aggregation for the Insights
 volume chart, local date handling across DST (including hour-granularity buckets for the
 daily statistics view), aggregation and streaks, search and filtering, the CSV/JSON export
-format, locale + currency detection, translation catalog parity and non-placeholder checks
-across all eight languages, the translatable comparison/relative-day templates in
-`src/domain/format.ts`, catalog display-name overrides, the mock affiliate-code generator,
-and the full storage contract (SQLite and web, including the profile schema's `name`/`email`
-migration).
+format (including CSV-formula-injection escaping), locale + currency detection, translation
+catalog parity and non-placeholder checks across all eight languages, the translatable
+comparison/relative-day templates in `src/domain/format.ts`, catalog display-name overrides,
+the device-id generator and subscription status helpers, and the full storage contract
+(SQLite and web, including the profile schema's `name`/`email` migration).
+
+Server-side (`server/`) has no automated tests yet — it was smoke-tested manually (health
+check, subscription lookup, and both Stripe/PayPal endpoints correctly rejecting the
+placeholder keys in `.env.example`) rather than covered by an automated suite.
 
 ```bash
 npm test
@@ -301,13 +359,17 @@ something this codebase can resolve on its own:
 - **Final app name per locale, and whether to add the optional onboarding questions** from
   spec §4.3 (none of those are built — they were explicitly flagged as proposals, not
   commitments).
-- **Deciding on a real payment provider and business setup**, if the subscription mock is
-  worth pursuing for real. See [Test-mode mocks](#test-mode-mocks-subscription--admin) — this
-  needs a person, not code, to pick a processor (Stripe, RevenueCat, ...) and handle the
-  business/tax registration that comes with actually charging people.
+- **Creating the actual Stripe/PayPal/AdMob accounts and going live.** Stripe/PayPal
+  integration and the AdMob banner are wired up for real (see
+  [Freemium, payments & ads](#freemium-payments--ads)) but ship with placeholder test-mode
+  keys — filling in real keys, switching to live mode, and the business/tax registration that
+  comes with actually charging people all need a person, not code.
+- **Deploying `server/` somewhere reachable**, with real webhook URLs configured in the
+  Stripe/PayPal dashboards — see `server/README.md`.
 - **Designing a real admin backend**, if the admin preview needs to manage more than this one
   device — a server, authentication, and a real multi-user data model, none of which exist
-  yet.
+  yet. (The narrow payments backend in `server/` intentionally doesn't do any of this — it
+  only ever answers "is this one device subscribed?".)
 - **Non-medical approaches content review.** The new sophrology/hypnotherapy/mindfulness
   section (`src/data/harm-reduction/content.ts`) makes a point of not overstating evidence,
   but like the rest of that file it's written by this codebase, not a clinician — same
@@ -315,10 +377,11 @@ something this codebase can resolve on its own:
 
 ## Not in this version
 
-Ads, real accounts, cloud sync, push notifications, real payment processing, real ticket
-transmission (tickets are local-only; export is the only way they leave the device), and
-public store submission are all deliberately out of scope. The subscription and admin
-screens preview the *idea* of two of these (see
-[Test-mode mocks](#test-mode-mocks-subscription--admin)) without actually building them. The
-code is layered so all of this can be added later without a rewrite: storage sits behind one
-interface, and the domain logic has no idea a UI exists.
+Real accounts, cloud sync, push notifications, real ticket transmission (tickets are
+local-only; export is the only way they leave the device), and public store submission are
+all deliberately out of scope. Payments and ads *are* now real (test-mode keys and test ad
+unit ids — see [Freemium, payments & ads](#freemium-payments--ads)), which is the one
+deliberate exception to "everything stays on this device"; the admin screen is still a
+local-only preview with no real backend behind it. The code is layered so everything else
+can be added later without a rewrite: storage sits behind one interface, and the domain logic
+has no idea a UI exists.

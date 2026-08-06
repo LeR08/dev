@@ -119,7 +119,7 @@ export default function SettingsScreen() {
             <Row
               title={t('nav.subscription')}
               subtitle={t('settings.subscriptionRowSubtitle')}
-              value={settings.subscription.status === 'testActive' ? t('subscriptionScreen.activeTitle') : undefined}
+              value={settings.subscription.status === 'active' ? t('subscriptionScreen.activeTitle') : undefined}
               onPress={() => router.push('/settings/subscription')}
             />
             <RowDivider />

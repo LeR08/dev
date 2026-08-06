@@ -117,6 +117,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       ...detectedDefaults,
       ...storedSettings,
       goals: { ...DEFAULT_SETTINGS.goals, ...(storedSettings.goals ?? {}) },
+      subscription: { ...DEFAULT_SETTINGS.subscription, ...(storedSettings.subscription ?? {}) },
     });
     setProfile(loadedProfile);
     setTickets(loadedTickets);

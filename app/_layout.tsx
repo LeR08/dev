@@ -1,16 +1,21 @@
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { SupportInterstitial } from '@/components/SupportInterstitial';
 import { Text } from '@/components/ui/Text';
 import { ToastProvider } from '@/components/ui/Toast';
 import { I18nProvider, useTranslation } from '@/i18n/I18nProvider';
 import { AppProvider, useApp } from '@/state/AppProvider';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
+
+// Module scope so it naturally resets on each fresh app process launch, and
+// stays put across in-app navigation within the same launch.
+let supportInterstitialShownThisLaunch = false;
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   // Not fatal: the splash screen simply hides on its own schedule.
@@ -44,6 +49,7 @@ function Boot() {
 
   const onboarded = settings.onboardingCompletedAt !== null;
   const inOnboarding = segments[0] === 'onboarding';
+  const [supportInterstitialVisible, setSupportInterstitialVisible] = useState(false);
 
   useEffect(() => {
     if (status === 'ready') {
@@ -59,6 +65,17 @@ function Boot() {
       router.replace('/');
     }
   }, [inOnboarding, onboarded, router, status]);
+
+  // A light, skippable, self-authored message (never a real ad-network ad —
+  // see SupportInterstitial) shown once per app launch to free-tier users
+  // only, once onboarding is behind them.
+  useEffect(() => {
+    if (status !== 'ready' || !onboarded || inOnboarding) return;
+    if (settings.subscription.status === 'active') return;
+    if (supportInterstitialShownThisLaunch) return;
+    supportInterstitialShownThisLaunch = true;
+    setSupportInterstitialVisible(true);
+  }, [inOnboarding, onboarded, settings.subscription.status, status]);
 
   if (status === 'error') {
     return (
@@ -126,6 +143,10 @@ function Boot() {
         <Stack.Screen name="settings/tickets" options={{ title: t('tickets.myTicketsTitle') }} />
         <Stack.Screen name="savings" options={{ title: t('savings.title') }} />
       </Stack>
+      <SupportInterstitial
+        visible={supportInterstitialVisible}
+        onDismiss={() => setSupportInterstitialVisible(false)}
+      />
     </>
   );
 }

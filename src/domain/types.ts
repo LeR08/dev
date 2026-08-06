@@ -162,33 +162,41 @@ export type Settings = {
   weightUnit: WeightUnit;
   /** Display unit for the profile's height field (stats only, spec v1.2 §4.1). */
   heightUnit: HeightUnit;
-  /** Test-mode-only mock subscription — no real payment is ever processed. */
+  /** Freemium subscription state, backed by a real Stripe/PayPal checkout via the backend. */
   subscription: Subscription;
 };
 
-export type SubscriptionStatus = 'none' | 'testActive';
+/**
+ * `pending` covers the gap between "checkout/approval opened" and the
+ * processor's webhook confirming payment — the backend hasn't heard back yet.
+ */
+export type SubscriptionStatus = 'free' | 'pending' | 'active' | 'canceled';
+
+export type SubscriptionProvider = 'stripe' | 'paypal';
 
 /**
- * A local-only stand-in for a real subscription system. Nothing here talks
- * to a payment processor or a server — activating it just flips this flag on
- * this device, same as everything else in the app. Exists so the idea of a
- * paid tier (with an affiliate code, so users can point each other at the
- * app) can be tried out before any real billing is built.
+ * Freemium subscription state. Nothing here processes a payment on-device —
+ * that only ever happens in a browser tab opened onto Stripe Checkout or
+ * PayPal's approval flow. This device only holds: its own opaque id (so the
+ * backend can look up its status), which provider it last used, and the
+ * status last fetched from the backend.
  */
 export type Subscription = {
   status: SubscriptionStatus;
-  /** This device's own shareable referral code, generated once. */
-  ownCode: string | null;
-  /** A code entered when "subscribing", if the user had one. */
-  referredByCode: string | null;
+  provider: SubscriptionProvider | null;
+  /** This device's own random id, generated once and sent to the backend — never anything identifying. */
+  userId: string | null;
   activatedAt: number | null;
+  /** When `status` was last refreshed from the backend. Null before the first check. */
+  lastCheckedAt: number | null;
 };
 
 export const DEFAULT_SUBSCRIPTION: Subscription = {
-  status: 'none',
-  ownCode: null,
-  referredByCode: null,
+  status: 'free',
+  provider: null,
+  userId: null,
   activatedAt: null,
+  lastCheckedAt: null,
 };
 
 export const DEFAULT_SETTINGS: Settings = {

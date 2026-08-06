@@ -58,8 +58,10 @@ export default function AdminScreen() {
           />
           <View style={{ height: 1, backgroundColor: theme.colors.border, marginVertical: theme.spacing(1) }} />
           <Text variant="body" tone="muted">
-            {settings.subscription.status === 'testActive' && settings.subscription.ownCode
-              ? t('adminScreen.subscriptionActive', { code: settings.subscription.ownCode })
+            {settings.subscription.status === 'active'
+              ? t('adminScreen.subscriptionActive', {
+                  provider: settings.subscription.provider === 'paypal' ? 'PayPal' : 'Stripe',
+                })
               : t('adminScreen.subscriptionNone')}
           </Text>
           <Button

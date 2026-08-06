@@ -1,68 +1,146 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { AppState, Linking, View } from 'react-native';
 
+import { AdBanner } from '@/ads/AdBanner';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Field } from '@/components/ui/Field';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
 import { formatLongDate } from '@/domain/format';
-import { generateAffiliateCode, isPlausibleAffiliateCode } from '@/domain/subscription';
+import { generateUserId, isPremium } from '@/domain/subscription';
 import { useTranslation } from '@/i18n/I18nProvider';
+import {
+  BackendNotConfiguredError,
+  createPaypalApprovalUrl,
+  createStripeCheckoutUrl,
+  createStripePortalUrl,
+  fetchSubscriptionStatus,
+} from '@/payments/api';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
 /**
- * A local-only mock of a paid tier (spec follow-up: "abonnement minime...
- * interface de test"). No payment processor, no server, no account — this
- * previews the idea so it can be evaluated before any real billing is built.
- * Nothing in the rest of the app checks this flag; there is nothing to
- * unlock yet.
+ * Real freemium subscription: Stripe and PayPal Checkout are opened in the
+ * system browser (their secret keys can only ever live on the backend in
+ * `server/`, never in this app), and this screen polls the backend for the
+ * resulting status. Premium's only effect today is removing the launch
+ * message and support banner below — see README's "Freemium, payments &
+ * ads" section for why nothing about logging drinks is ever paywalled.
  */
 export default function SubscriptionScreen() {
   const theme = useTheme();
   const { t } = useTranslation();
   const { settings, updateSettings } = useApp();
   const toast = useToast();
-  const [referralInput, setReferralInput] = useState('');
-  const [subscribing, setSubscribing] = useState(false);
+  const [busy, setBusy] = useState<'stripe' | 'paypal' | 'portal' | 'refresh' | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const userIdRef = useRef(settings.subscription.userId);
 
   const { subscription } = settings;
-  const referralInvalid = referralInput.trim() !== '' && !isPlausibleAffiliateCode(referralInput);
+  const premium = isPremium(subscription.status);
 
-  const subscribe = async () => {
-    setSubscribing(true);
+  // Every device needs its own opaque id before it can be looked up on the
+  // backend — generated once, the moment this screen is first opened.
+  useEffect(() => {
+    if (!settings.subscription.userId) {
+      const userId = generateUserId();
+      userIdRef.current = userId;
+      void updateSettings({ subscription: { ...settings.subscription, userId } });
+    } else {
+      userIdRef.current = settings.subscription.userId;
+    }
+    // Only ever needs to run once per device — settings.subscription is
+    // intentionally excluded so writing userId above doesn't loop this effect.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const refreshStatus = useCallback(async () => {
+    const userId = userIdRef.current;
+    if (!userId) return;
+    setBusy('refresh');
+    setErrorMessage(null);
     try {
-      const code = subscription.ownCode ?? generateAffiliateCode();
+      const remote = await fetchSubscriptionStatus(userId);
       await updateSettings({
         subscription: {
-          status: 'testActive',
-          ownCode: code,
-          referredByCode: !referralInvalid && referralInput.trim() !== '' ? referralInput.trim().toUpperCase() : null,
-          activatedAt: Date.now(),
+          ...settings.subscription,
+          status: remote.status,
+          provider: remote.provider,
+          activatedAt: remote.status === 'active' ? (settings.subscription.activatedAt ?? Date.now()) : settings.subscription.activatedAt,
+          lastCheckedAt: Date.now(),
         },
       });
-      toast.show({ message: t('subscriptionScreen.subscribedToast') });
+    } catch (cause) {
+      setErrorMessage(cause instanceof BackendNotConfiguredError ? t('subscriptionScreen.backendNotConfigured') : t('subscriptionScreen.checkFailed'));
     } finally {
-      setSubscribing(false);
+      setBusy(null);
+    }
+    // settings.subscription intentionally excluded: this reads the latest
+    // value via the closure at call time, and re-running on every settings
+    // change would refetch on our own writes below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, updateSettings]);
+
+  // Checkout/approval happens in the system browser, outside the app — the
+  // most reliable moment to pick up the result is when the user comes back.
+  useEffect(() => {
+    const subscriptionListener = AppState.addEventListener('change', (state) => {
+      if (state === 'active') void refreshStatus();
+    });
+    return () => subscriptionListener.remove();
+  }, [refreshStatus]);
+
+  const subscribeWithStripe = async () => {
+    const userId = userIdRef.current;
+    if (!userId) return;
+    setBusy('stripe');
+    setErrorMessage(null);
+    try {
+      const url = await createStripeCheckoutUrl(userId);
+      await Linking.openURL(url);
+      await updateSettings({ subscription: { ...settings.subscription, status: 'pending', provider: 'stripe' } });
+    } catch (cause) {
+      setErrorMessage(cause instanceof BackendNotConfiguredError ? t('subscriptionScreen.backendNotConfigured') : t('subscriptionScreen.checkoutFailed'));
+    } finally {
+      setBusy(null);
     }
   };
 
-  const cancel = async () => {
-    await updateSettings({ subscription: { ...subscription, status: 'none', activatedAt: null } });
-    toast.show({ message: t('subscriptionScreen.cancelledToast') });
+  const subscribeWithPaypal = async () => {
+    const userId = userIdRef.current;
+    if (!userId) return;
+    setBusy('paypal');
+    setErrorMessage(null);
+    try {
+      const url = await createPaypalApprovalUrl(userId);
+      await Linking.openURL(url);
+      await updateSettings({ subscription: { ...settings.subscription, status: 'pending', provider: 'paypal' } });
+    } catch (cause) {
+      setErrorMessage(cause instanceof BackendNotConfiguredError ? t('subscriptionScreen.backendNotConfigured') : t('subscriptionScreen.checkoutFailed'));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const manageStripeBilling = async () => {
+    const userId = userIdRef.current;
+    if (!userId) return;
+    setBusy('portal');
+    setErrorMessage(null);
+    try {
+      const url = await createStripePortalUrl(userId);
+      await Linking.openURL(url);
+    } catch (cause) {
+      setErrorMessage(cause instanceof BackendNotConfiguredError ? t('subscriptionScreen.backendNotConfigured') : t('subscriptionScreen.checkoutFailed'));
+    } finally {
+      setBusy(null);
+    }
   };
 
   return (
     <Screen>
       <View style={{ gap: theme.spacing(4), paddingTop: theme.spacing(4) }}>
-        <Card tone="muted" style={{ gap: theme.spacing(1) }}>
-          <Text variant="caption" tone="muted">
-            {t('subscriptionScreen.badge')}
-          </Text>
-        </Card>
-
         <Card tone="accent" style={{ gap: theme.spacing(2) }}>
           <Text variant="title">{t('subscriptionScreen.priceLabel')}</Text>
           <Text variant="body" tone="muted">
@@ -70,74 +148,83 @@ export default function SubscriptionScreen() {
           </Text>
         </Card>
 
-        {subscription.status === 'testActive' ? (
-          <>
-            <Card style={{ gap: theme.spacing(2) }}>
-              <Text variant="heading">{t('subscriptionScreen.activeTitle')}</Text>
-              {subscription.activatedAt ? (
-                <Text variant="body" tone="muted">
-                  {t('subscriptionScreen.activeSince', { date: formatLongDate(subscription.activatedAt) })}
-                </Text>
-              ) : null}
-              {subscription.referredByCode ? (
-                <Text variant="caption" tone="faint">
-                  {t('subscriptionScreen.referredByLabel', { code: subscription.referredByCode })}
-                </Text>
-              ) : null}
-            </Card>
+        {errorMessage ? (
+          <Card tone="muted" style={{ gap: theme.spacing(1) }}>
+            <Text variant="body" tone="muted">
+              {errorMessage}
+            </Text>
+          </Card>
+        ) : null}
 
-            <Card style={{ gap: theme.spacing(2) }}>
-              <Text variant="caption" tone="muted" overline>
-                {t('subscriptionScreen.yourCodeLabel')}
+        {premium ? (
+          <Card style={{ gap: theme.spacing(2) }}>
+            <Text variant="heading">{t('subscriptionScreen.activeTitle')}</Text>
+            {subscription.activatedAt ? (
+              <Text variant="body" tone="muted">
+                {t('subscriptionScreen.activeSince', { date: formatLongDate(subscription.activatedAt) })}
               </Text>
-              <View
-                style={{
-                  paddingVertical: theme.spacing(3),
-                  paddingHorizontal: theme.spacing(4),
-                  borderRadius: theme.radius.md,
-                  backgroundColor: theme.colors.surfaceMuted,
-                  borderWidth: 1,
-                  borderColor: theme.colors.border,
-                  alignItems: 'center',
-                }}
-              >
-                <Text variant="title" style={{ letterSpacing: 2 }}>
-                  {subscription.ownCode}
-                </Text>
-              </View>
+            ) : null}
+            <Text variant="caption" tone="faint">
+              {subscription.provider === 'stripe'
+                ? t('subscriptionScreen.viaStripe')
+                : t('subscriptionScreen.viaPaypal')}
+            </Text>
+            {subscription.provider === 'stripe' ? (
+              <Button
+                label={t('subscriptionScreen.manageBillingAction')}
+                variant="secondary"
+                loading={busy === 'portal'}
+                onPress={() => void manageStripeBilling()}
+              />
+            ) : (
               <Text variant="caption" tone="faint">
-                {t('subscriptionScreen.yourCodeHint')}
+                {t('subscriptionScreen.managePaypalHint')}
               </Text>
-            </Card>
-
-            <Button
-              label={t('subscriptionScreen.cancelAction')}
-              variant="ghost"
-              haptic={false}
-              onPress={() => void cancel()}
-            />
-          </>
+            )}
+          </Card>
         ) : (
           <>
-            <View>
-              <Field
-                label={t('subscriptionScreen.referralInputLabel')}
-                value={referralInput}
-                onChangeText={setReferralInput}
-                placeholder={t('subscriptionScreen.referralInputPlaceholder')}
-                autoCapitalize="characters"
-                autoCorrect={false}
-                hint={referralInvalid ? t('subscriptionScreen.referralInvalidHint') : undefined}
+            {subscription.status === 'pending' ? (
+              <Card tone="muted" style={{ gap: theme.spacing(1) }}>
+                <Text variant="body" tone="muted">
+                  {t('subscriptionScreen.pendingHint')}
+                </Text>
+              </Card>
+            ) : null}
+
+            <Card style={{ gap: theme.spacing(2) }}>
+              <Text variant="heading">{t('subscriptionScreen.freeTierTitle')}</Text>
+              <Text variant="body" tone="muted">
+                {t('subscriptionScreen.freeTierBody')}
+              </Text>
+              <AdBanner />
+            </Card>
+
+            <View style={{ gap: theme.spacing(2) }}>
+              <Button
+                label={t('subscriptionScreen.subscribeStripeAction')}
+                size="lg"
+                loading={busy === 'stripe'}
+                onPress={() => void subscribeWithStripe()}
+              />
+              <Button
+                label={t('subscriptionScreen.subscribePaypalAction')}
+                size="lg"
+                variant="secondary"
+                loading={busy === 'paypal'}
+                onPress={() => void subscribeWithPaypal()}
               />
             </View>
-            <Button
-              label={t('subscriptionScreen.subscribeAction')}
-              size="lg"
-              onPress={() => void subscribe()}
-              loading={subscribing}
-            />
           </>
         )}
+
+        <Button
+          label={t('subscriptionScreen.refreshAction')}
+          variant="ghost"
+          haptic={false}
+          loading={busy === 'refresh'}
+          onPress={() => void refreshStatus().then(() => toast.show({ message: t('subscriptionScreen.refreshedToast') }))}
+        />
       </View>
     </Screen>
   );
