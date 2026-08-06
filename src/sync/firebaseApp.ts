@@ -1,4 +1,5 @@
 import { type FirebaseApp, getApps, initializeApp } from 'firebase/app';
+import { Platform } from 'react-native';
 
 /**
  * Firebase web/config values — these are NOT secret (unlike the Stripe/PayPal
@@ -19,6 +20,21 @@ const firebaseConfig = {
 
 export function isFirebaseConfigured(): boolean {
   return Boolean(firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId);
+}
+
+/**
+ * On web, Google sign-in goes through `signInWithPopup` straight against the
+ * Firebase project above — no separate OAuth client id needed. On native
+ * there's no popup API, so it goes through expo-auth-session instead (see
+ * app/settings/account.tsx), which does need its own Google OAuth web client
+ * id (Firebase Console → Authentication → Sign-in method → Google → "Web SDK
+ * configuration"). Until that's set, the native Google button shows a clear
+ * "not set up" state rather than a broken one.
+ */
+export function isGoogleSignInAvailable(): boolean {
+  if (!isFirebaseConfigured()) return false;
+  if (Platform.OS === 'web') return true;
+  return Boolean(process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID);
 }
 
 let app: FirebaseApp | null = null;

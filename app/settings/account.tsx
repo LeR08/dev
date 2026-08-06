@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+import React, { useEffect, useState } from 'react';
 import { Alert, Platform, View } from 'react-native';
 
 import { Button } from '@/components/ui/Button';
@@ -13,14 +15,90 @@ import {
   deleteAccount,
   sendPasswordReset,
   signInWithEmail,
+  signInWithGoogleIdToken,
+  signInWithGooglePopup,
   signOut,
   signUpWithEmail,
 } from '@/sync/auth';
-import { isFirebaseConfigured } from '@/sync/firebaseApp';
+import { isFirebaseConfigured, isGoogleSignInAvailable } from '@/sync/firebaseApp';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
 const DELETE_CONFIRM_WORD = 'DELETE';
+
+// Needed once per app so the native browser tab used for the Google OAuth
+// redirect actually closes and hands control back to the app afterwards.
+WebBrowser.maybeCompleteAuthSession();
+
+const GOOGLE_WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || undefined;
+const GOOGLE_IOS_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || undefined;
+const GOOGLE_ANDROID_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || undefined;
+
+function describeAuthError(cause: unknown, t: ReturnType<typeof useTranslation>['t']): string {
+  const code = cause && typeof cause === 'object' && 'code' in cause ? String((cause as { code?: unknown }).code) : '';
+  switch (code) {
+    case 'auth/invalid-email':
+      return t('account.errorInvalidEmail');
+    case 'auth/email-already-in-use':
+      return t('account.errorEmailInUse');
+    case 'auth/weak-password':
+      return t('account.errorWeakPassword');
+    case 'auth/wrong-password':
+    case 'auth/invalid-credential':
+      return t('account.errorWrongPassword');
+    case 'auth/user-not-found':
+      return t('account.errorUserNotFound');
+    case 'auth/too-many-requests':
+      return t('account.errorTooManyRequests');
+    default:
+      return t('account.errorGeneric');
+  }
+}
+
+/**
+ * Native has no popup API, so Google sign-in goes through expo-auth-session's
+ * own browser-based OAuth flow instead of Firebase's `signInWithPopup`. This
+ * is its own component (not inlined in AccountScreen) because its Google
+ * client id is only known once `isGoogleSignInAvailable()` is true on native
+ * — and that's static for the lifetime of the app (it comes from a build-time
+ * env var), so only ever mounting this when configured keeps the
+ * id-token-request hook itself unconditional, per the rules of hooks.
+ */
+function GoogleSignInNativeButton({ label, onError }: { label: string; onError: (message: string) => void }) {
+  const { t } = useTranslation();
+  const [busy, setBusy] = useState(false);
+  const [, response, promptAsync] = Google.useIdTokenAuthRequest({
+    webClientId: GOOGLE_WEB_CLIENT_ID,
+    iosClientId: GOOGLE_IOS_CLIENT_ID,
+    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+  });
+
+  useEffect(() => {
+    if (response?.type === 'success' && response.params.id_token) {
+      setBusy(true);
+      void signInWithGoogleIdToken(response.params.id_token)
+        .catch((cause) => onError(describeAuthError(cause, t)))
+        .finally(() => setBusy(false));
+    } else if (response?.type === 'error') {
+      onError(t('account.errorGeneric'));
+    }
+    // Only the response identity matters here — re-running for every render
+    // would re-fire this on unrelated state changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
+
+  return (
+    <Button
+      label={label}
+      variant="secondary"
+      loading={busy}
+      onPress={() => {
+        onError('');
+        void promptAsync();
+      }}
+    />
+  );
+}
 
 /**
  * Firebase Auth is the real source of truth for sign-in state; this screen
@@ -46,27 +124,7 @@ export default function AccountScreen() {
 
   const account = settings.account;
   const configured = isFirebaseConfigured();
-
-  const describeError = (cause: unknown): string => {
-    const code = cause && typeof cause === 'object' && 'code' in cause ? String((cause as { code?: unknown }).code) : '';
-    switch (code) {
-      case 'auth/invalid-email':
-        return t('account.errorInvalidEmail');
-      case 'auth/email-already-in-use':
-        return t('account.errorEmailInUse');
-      case 'auth/weak-password':
-        return t('account.errorWeakPassword');
-      case 'auth/wrong-password':
-      case 'auth/invalid-credential':
-        return t('account.errorWrongPassword');
-      case 'auth/user-not-found':
-        return t('account.errorUserNotFound');
-      case 'auth/too-many-requests':
-        return t('account.errorTooManyRequests');
-      default:
-        return t('account.errorGeneric');
-    }
-  };
+  const googleAvailable = isGoogleSignInAvailable();
 
   const submitAuth = async () => {
     setBusy('auth');
@@ -79,7 +137,19 @@ export default function AccountScreen() {
       }
       setPassword('');
     } catch (cause) {
-      setErrorMessage(describeError(cause));
+      setErrorMessage(describeAuthError(cause, t));
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const submitGoogleWeb = async () => {
+    setBusy('auth');
+    setErrorMessage(null);
+    try {
+      await signInWithGooglePopup();
+    } catch (cause) {
+      setErrorMessage(describeAuthError(cause, t));
     } finally {
       setBusy(null);
     }
@@ -130,7 +200,7 @@ export default function AccountScreen() {
       setConfirmText('');
       toast.show({ message: t('account.deletedToast') });
     } catch (cause) {
-      setErrorMessage(describeError(cause));
+      setErrorMessage(describeAuthError(cause, t));
     } finally {
       setBusy(null);
     }
@@ -314,8 +384,26 @@ export default function AccountScreen() {
           />
         ) : null}
 
+        {googleAvailable ? (
+          <View style={{ gap: theme.spacing(2) }}>
+            <Text variant="caption" tone="faint" center>
+              {t('account.orDivider')}
+            </Text>
+            {Platform.OS === 'web' ? (
+              <Button
+                label={t('account.continueWithGoogle')}
+                variant="secondary"
+                loading={busy === 'auth'}
+                onPress={() => void submitGoogleWeb()}
+              />
+            ) : (
+              <GoogleSignInNativeButton label={t('account.continueWithGoogle')} onError={setErrorMessage} />
+            )}
+          </View>
+        ) : null}
+
         <Text variant="caption" tone="faint">
-          {t('account.googleAppleNotice')}
+          {t('account.appleNotice')}
         </Text>
       </View>
     </Screen>

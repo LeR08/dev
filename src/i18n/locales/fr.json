@@ -643,6 +643,8 @@
     "errorUserNotFound": "Aucun compte trouvé avec cet e-mail.",
     "errorTooManyRequests": "Trop de tentatives — patientez un instant et réessayez.",
     "errorGeneric": "Une erreur est survenue. Vérifiez votre connexion et réessayez.",
-    "googleAppleNotice": "La connexion avec Google et Apple arrivera dans une prochaine mise à jour — la connexion par e-mail fonctionne dès maintenant."
+    "orDivider": "ou",
+    "continueWithGoogle": "Continuer avec Google",
+    "appleNotice": "La connexion avec Apple n'est pas encore disponible sur cette version — la connexion par e-mail et par Google fonctionnent déjà."
   }
 }

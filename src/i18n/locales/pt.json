@@ -643,6 +643,8 @@
     "errorUserNotFound": "Nenhuma conta encontrada com esse e-mail.",
     "errorTooManyRequests": "Demasiadas tentativas — espera um momento e tenta novamente.",
     "errorGeneric": "Algo correu mal. Verifica a tua ligação e tenta novamente.",
-    "googleAppleNotice": "O início de sessão com Google e Apple chega numa futura atualização — o início de sessão por e-mail já funciona."
+    "orDivider": "ou",
+    "continueWithGoogle": "Continuar com Google",
+    "appleNotice": "O início de sessão com Apple ainda não está configurado nesta versão — o início de sessão por e-mail e com Google já funcionam."
   }
 }

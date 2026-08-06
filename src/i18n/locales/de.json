@@ -643,6 +643,8 @@
     "errorUserNotFound": "Kein Konto mit dieser E-Mail gefunden.",
     "errorTooManyRequests": "Zu viele Versuche — warte einen Moment und versuche es erneut.",
     "errorGeneric": "Etwas ist schiefgelaufen. Verbindung prüfen und erneut versuchen.",
-    "googleAppleNotice": "Anmeldung mit Google und Apple folgt in einem künftigen Update — die Anmeldung per E-Mail funktioniert schon heute."
+    "orDivider": "oder",
+    "continueWithGoogle": "Weiter mit Google",
+    "appleNotice": "Die Anmeldung mit Apple ist in dieser Version noch nicht eingerichtet — die Anmeldung per E-Mail und mit Google funktionieren bereits."
   }
 }

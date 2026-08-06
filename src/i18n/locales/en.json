@@ -643,6 +643,8 @@
     "errorUserNotFound": "No account found with that email.",
     "errorTooManyRequests": "Too many attempts — wait a moment and try again.",
     "errorGeneric": "Something went wrong. Check your connection and try again.",
-    "googleAppleNotice": "Google and Apple sign-in are coming in a future update — email sign-in works today."
+    "orDivider": "or",
+    "continueWithGoogle": "Continue with Google",
+    "appleNotice": "Apple sign-in isn't set up on this build yet — email and Google sign-in both work today."
   }
 }

@@ -643,6 +643,8 @@
     "errorUserNotFound": "Nessun account trovato con questa e-mail.",
     "errorTooManyRequests": "Troppi tentativi — attendi un momento e riprova.",
     "errorGeneric": "Qualcosa è andato storto. Controlla la connessione e riprova.",
-    "googleAppleNotice": "L'accesso con Google e Apple arriverà in un futuro aggiornamento — l'accesso via e-mail funziona già oggi."
+    "orDivider": "oppure",
+    "continueWithGoogle": "Continua con Google",
+    "appleNotice": "L'accesso con Apple non è ancora configurato in questa versione — l'accesso via e-mail e con Google funzionano già."
   }
 }

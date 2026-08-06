@@ -643,6 +643,8 @@
     "errorUserNotFound": "未找到使用该邮箱的账户。",
     "errorTooManyRequests": "尝试次数过多——请稍等片刻后重试。",
     "errorGeneric": "出现问题，请检查网络连接后重试。",
-    "googleAppleNotice": "Google 和 Apple 登录将在后续更新中推出——目前可使用邮箱登录。"
+    "orDivider": "或",
+    "continueWithGoogle": "使用 Google 继续",
+    "appleNotice": "此版本尚未支持 Apple 登录——邮箱登录和 Google 登录目前均可使用。"
   }
 }

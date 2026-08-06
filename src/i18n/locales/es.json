@@ -643,6 +643,8 @@
     "errorUserNotFound": "No se encontró ninguna cuenta con ese correo.",
     "errorTooManyRequests": "Demasiados intentos — espera un momento e inténtalo de nuevo.",
     "errorGeneric": "Algo ha ido mal. Comprueba tu conexión e inténtalo de nuevo.",
-    "googleAppleNotice": "El inicio de sesión con Google y Apple llegará en una futura actualización — el inicio de sesión por correo ya funciona."
+    "orDivider": "o",
+    "continueWithGoogle": "Continuar con Google",
+    "appleNotice": "El inicio de sesión con Apple aún no está disponible en esta versión — el inicio de sesión por correo y con Google ya funcionan."
   }
 }

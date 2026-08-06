@@ -2,10 +2,13 @@ import {
   createUserWithEmailAndPassword,
   deleteUser,
   EmailAuthProvider,
+  GoogleAuthProvider,
   onAuthStateChanged,
   reauthenticateWithCredential,
   sendPasswordResetEmail,
+  signInWithCredential,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut as firebaseSignOut,
   type User,
 } from 'firebase/auth';
@@ -35,6 +38,22 @@ export async function signInWithEmail(email: string, password: string): Promise<
 
 export async function sendPasswordReset(email: string): Promise<void> {
   await sendPasswordResetEmail(getFirebaseAuth(), email);
+}
+
+/** Web only — opens Google's own account picker in a popup. Never called on native (see signInWithGoogleIdToken). */
+export async function signInWithGooglePopup(): Promise<User> {
+  const credential = await signInWithPopup(getFirebaseAuth(), new GoogleAuthProvider());
+  return credential.user;
+}
+
+/**
+ * Native path: the id token comes from expo-auth-session's own Google OAuth
+ * flow (see app/settings/account.tsx) — `signInWithPopup` has no RN
+ * equivalent, so this exchanges that token for a Firebase session instead.
+ */
+export async function signInWithGoogleIdToken(idToken: string): Promise<User> {
+  const result = await signInWithCredential(getFirebaseAuth(), GoogleAuthProvider.credential(idToken));
+  return result.user;
 }
 
 export async function signOut(): Promise<void> {

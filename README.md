@@ -326,11 +326,17 @@ forced at launch. Everything below only ever runs for someone who deliberately c
 account.
 
 **Auth.** [Firebase Authentication](https://firebase.google.com/docs/auth) with email +
-password, including the standard "forgot password" reset email. Google and Apple sign-in are
-*not* built yet — see [Open items](#open-items-before-any-public-release) for why (they both
-need native modules or OAuth client setup this codebase can't invent credentials for, and per
-Apple's App Store review guidelines, adding Google sign-in on iOS would make Apple Sign-In
-mandatory alongside it — a real product/legal decision, not a default to make silently).
+password (including the standard "forgot password" reset email) and Google sign-in. Web Google
+sign-in uses `signInWithPopup` straight against your Firebase project — no extra setup once
+Authentication's Google provider is enabled. Native (Android/iOS) has no popup API, so it goes
+through `expo-auth-session`'s own browser-based OAuth flow instead
+(`app/settings/account.tsx`'s `GoogleSignInNativeButton`), gated behind its own
+`EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` env var (see Setup below) — until that's set, the native
+Google button shows a clear "not set up" state rather than a broken one. Apple sign-in is *not*
+built yet — see [Open items](#open-items-before-any-public-release) for why (it needs a native
+module and a paid Apple Developer Program enrollment this codebase can't invent, and per
+Apple's App Store review guidelines it becomes *mandatory* the moment Google sign-in ships on
+iOS — a real product/legal decision, not a default to make silently).
 
 **Data store: Firestore, not Realtime Database.** Firestore's structured queries (filtering by
 date range, by drink type) match how this app already reads its local data far better than
@@ -376,12 +382,29 @@ still what Settings → Data & privacy's "delete all my data" is for.
 **Setup.** Ships with blank `EXPO_PUBLIC_FIREBASE_*` values (see `.env.example`) — with those
 unset, `isFirebaseConfigured()` is `false` and the whole feature quietly steps aside: Account &
 cloud sync shows a "not set up" message instead of a broken sign-in form, and the rest of the
-app is completely unaffected. To turn it on: create a Firebase project, enable Authentication
-(Email/Password provider) and Firestore, copy the web app config into `.env`, and publish
-`firestore.rules` (`firebase deploy --only firestore:rules`, or paste it into the console).
-Firebase's free Spark tier is almost certainly enough for testing; understand its Blaze
-pricing before a public launch. Also pick a Firestore region during setup — for GDPR, an EU
-region if your users are meaningfully in the EU.
+app is completely unaffected. To turn it on:
+
+1. Create a Firebase project, enable Authentication's Email/Password *and* Google providers.
+2. **Create the Firestore database itself** — a Firebase project having Authentication enabled
+   does not imply Firestore exists yet. Firebase Console → Firestore Database → Create database.
+   As of Firestore's multi-database support, the console asks for a **Database ID**: leave it as
+   `(default)` — the client SDK's `getFirestore(app)` (see `src/sync/firestoreInstance.ts`) only
+   ever looks at the default database, so a custom-named one would be invisible to this app.
+   Pick your region here too — for GDPR, an EU region/multi-region if your users are meaningfully
+   in the EU.
+3. Copy the web app config into `.env` as `EXPO_PUBLIC_FIREBASE_*`.
+4. For native Google sign-in specifically, also copy the **Web client ID** from Authentication →
+   Sign-in method → Google → "Web SDK configuration" into `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`. Web
+   Google sign-in needs none of this — only native does.
+5. Publish `firestore.rules` (`firebase deploy --only firestore:rules`, or paste its contents
+   into Firebase Console → Firestore Database → Rules → Publish) — **without this step the
+   database is either wide open or fully locked**, whichever your project defaulted to, and
+   either way sync will misbehave. Test it before trusting it: the Rules Playground in the
+   console, or a real read/write attempt against another account's `uid` path, should both
+   confirm access is denied.
+
+Firebase's free Spark tier is almost certainly enough for testing; understand its Blaze pricing
+before a public launch.
 
 ## Tests
 
@@ -444,10 +467,15 @@ something this codebase can resolve on its own:
   device — a server, authentication, and a real multi-user data model, none of which exist
   yet. (The narrow payments backend in `server/` intentionally doesn't do any of this — it
   only ever answers "is this one device subscribed?".)
-- **Google and Apple sign-in** (see [Accounts & cloud sync](#accounts--cloud-sync)) — email
-  sign-in is real and functional today; the social providers need their own OAuth client IDs /
-  Apple Developer Program enrollment this codebase can't invent, plus (for Apple) a native
-  module that needs a custom dev client, not plain Expo Go.
+- **Apple sign-in** (see [Accounts & cloud sync](#accounts--cloud-sync)) — email and Google
+  sign-in are both real and functional today; Apple needs a paid Apple Developer Program
+  enrollment and a native module that needs a custom dev client, not plain Expo Go, neither of
+  which this codebase can invent on its own.
+- **Provisioning the Firestore database itself on a given Firebase project.** Enabling
+  Authentication does not create a Firestore database — that's a separate step (see [Accounts &
+  cloud sync](#accounts--cloud-sync)'s Setup section), and skipping it makes every Firestore read
+  or write fail with a "database (default) does not exist" error rather than a permissions error.
+  Worth checking for explicitly before assuming sync is broken.
 - **Legal/GDPR review of cloud sync specifically.** Storing personal, health-adjacent data
   (alcohol consumption) on a third-party server (Firebase/Google) for anyone who opts into an
   account is a real change in legal posture from a fully local-only app. The Privacy Policy
@@ -461,11 +489,11 @@ something this codebase can resolve on its own:
 ## Not in this version
 
 Accounts and cloud sync *are* now real (see [Accounts & cloud sync](#accounts--cloud-sync)) —
-opt-in, off by default, and inert until you configure your own Firebase project. Still out of
-scope: Google/Apple social sign-in, social/sharing features between accounts, real-time
-multi-device push updates (sync happens on foreground/refresh, not a live subscription), push
-notifications, real ticket transmission (tickets are local-only; export is the only way they
-leave the device), and public store submission. Payments and ads *are* also real (test-mode
+opt-in, off by default, and inert until you configure your own Firebase project. Email and
+Google sign-in both work; Apple doesn't yet. Still out of scope: social/sharing features between
+accounts, real-time multi-device push updates (sync happens on foreground/refresh, not a live
+subscription), push notifications, real ticket transmission (tickets are local-only; export is
+the only way they leave the device), and public store submission. Payments and ads *are* also real (test-mode
 keys and test ad unit ids — see [Freemium, payments & ads](#freemium-payments--ads)); the admin
 screen is still a local-only preview with no real backend behind it. The code is layered so
 everything else can be added later without a rewrite: storage sits behind one interface, and
