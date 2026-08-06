@@ -82,8 +82,19 @@ export function toCsv(entries: Entry[], currency: string): string {
   return [CSV_COLUMNS.join(','), ...rows.map((row) => row.join(','))].join('\n');
 }
 
+/**
+ * Free-text fields (note, location, a custom drink's own name, a ticket's
+ * title/description) go straight into this CSV. Spreadsheet apps treat a
+ * cell starting with `=`, `+`, `-`, `@`, tab or CR as a formula, which is a
+ * known CSV-injection vector (CWE-1236) if that cell is ever opened by
+ * someone other than whoever typed it — a leading `'` (Excel/Sheets/LibreOffice's
+ * own "force text" marker) neutralises that without changing what's shown.
+ */
 function csvCell(value: string | number): string {
-  const text = `${value}`;
+  let text = `${value}`;
+  if (/^[=+\-@\t\r]/.test(text)) {
+    text = `'${text}`;
+  }
   if (/[",\n\r]/.test(text)) {
     return `"${text.replace(/"/g, '""')}"`;
   }

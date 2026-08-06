@@ -42,6 +42,9 @@
     "typecheck": "tsc --noEmit"
   },
   "private": true,
+  "overrides": {
+    "uuid": "^14.0.1"
+  },
   "jest": {
     "preset": "jest-expo",
     "testPathIgnorePatterns": [

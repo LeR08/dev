@@ -30,8 +30,13 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
+# local env files and secrets — never commit real API keys (Stripe, PayPal,
+# AdMob, ...). Keep an .env.example checked in instead, with placeholder values.
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
 
 # typescript
 *.tsbuildinfo

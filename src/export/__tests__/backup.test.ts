@@ -90,6 +90,22 @@ describe('toCsv', () => {
     expect(csv).toContain('"said ""hi"", then left\nlate"');
   });
 
+  it('neutralises a formula-looking note so a spreadsheet cannot execute it (CSV injection)', () => {
+    const csv = toCsv([makeEntry({ note: '=HYPERLINK("http://evil.example","click")' })], 'EUR');
+    const row = csv.split('\n')[1];
+    expect(row).toContain("'=HYPERLINK");
+    // The raw cell must not start with a formula trigger character.
+    expect(/,=|^=/.test(row)).toBe(false);
+  });
+
+  it('also neutralises +, -, @, tab and carriage-return formula triggers', () => {
+    for (const trigger of ['+1+1', '-1+1', '@SUM(1,1)', '\tcmd', '\rcmd']) {
+      const csv = toCsv([makeEntry({ location: trigger })], 'EUR');
+      const row = csv.split('\n')[1];
+      expect(row).toContain(`'${trigger}`);
+    }
+  });
+
   it('leaves price and currency blank when no price was recorded', () => {
     const csv = toCsv([makeEntry({ price: null })], 'EUR');
     expect(csv.split('\n')[1]).toContain(',,');
