@@ -39,6 +39,23 @@ import type { SyncOp } from '@/sync/types';
 
 type Status = 'loading' | 'ready' | 'error';
 
+// Firestore's SDK retries indefinitely (exponential backoff) on errors like a
+// missing or unreachable database rather than rejecting the call — confirmed
+// by running the SDK directly against a project whose database didn't exist
+// yet. Left unbounded, an `await` on a sync call can hang forever, and every
+// sync attempt below is wrapped in this so that failure stays local to sync
+// itself: it never blocks the "signed in" state transition, which only needs
+// Firebase Auth to have already succeeded.
+const SYNC_TIMEOUT_MS = 20000;
+function withTimeout<T>(promise: Promise<T>, message: string): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_resolve, reject) => {
+      setTimeout(() => reject(new Error(message)), SYNC_TIMEOUT_MS);
+    }),
+  ]);
+}
+
 type AppContextValue = {
   status: Status;
   error: string | null;
@@ -301,16 +318,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (!uid || !isFirebaseConfigured()) return;
     setSyncing(true);
     try {
-      const result = await runSyncCycle(uid, {
-        entries: entriesRef.current,
-        drinks: drinksRef.current,
-        profile: profileRef.current,
-      });
+      const result = await withTimeout(
+        runSyncCycle(uid, {
+          entries: entriesRef.current,
+          drinks: drinksRef.current,
+          profile: profileRef.current,
+        }),
+        'Cloud sync timed out'
+      );
       await applySyncResult(result);
       if (!mounted.current) return;
       await updateSettings({
         account: { ...settingsRef.current.account!, uid, lastSyncedAt: Date.now() },
       });
+    } catch (cause) {
+      // Best-effort: local data stays authoritative either way, and the next
+      // foreground/pull-to-refresh/debounced push retries automatically.
+      if (__DEV__) console.warn('[sync] syncNow failed', cause);
     } finally {
       if (mounted.current) setSyncing(false);
     }
@@ -334,6 +358,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           return;
         }
         const isNewSignIn = settingsRef.current.account?.uid !== user.uid;
+
+        // Firebase Auth has already confirmed this sign-in — flip the local
+        // "signed in" state right away rather than waiting on sync, whose
+        // Firestore calls can hang far longer than any UI should sit on a
+        // spinner (see withTimeout above). Sync runs next as best-effort;
+        // its own success just refines lastSyncedAt/migratedAt afterward.
+        await updateSettings({
+          account: {
+            uid: user.uid,
+            email: user.email,
+            migratedAt: settingsRef.current.account?.migratedAt ?? null,
+            lastSyncedAt: settingsRef.current.account?.lastSyncedAt ?? null,
+          },
+        });
+        if (!mounted.current) return;
+
         if (isNewSignIn) {
           await migrateLocalDataOnSignIn({
             entries: entriesRef.current,
@@ -343,24 +383,33 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
         setSyncing(true);
         try {
-          const result = await runSyncCycle(user.uid, {
-            entries: entriesRef.current,
-            drinks: drinksRef.current,
-            profile: profileRef.current,
-          });
+          const result = await withTimeout(
+            runSyncCycle(user.uid, {
+              entries: entriesRef.current,
+              drinks: drinksRef.current,
+              profile: profileRef.current,
+            }),
+            'Cloud sync timed out'
+          );
           await applySyncResult(result);
+          if (!mounted.current) return;
+          await updateSettings({
+            account: {
+              uid: user.uid,
+              email: user.email,
+              migratedAt: isNewSignIn ? Date.now() : (settingsRef.current.account?.migratedAt ?? Date.now()),
+              lastSyncedAt: Date.now(),
+            },
+          });
+        } catch (cause) {
+          // Being signed in doesn't depend on this succeeding — the account
+          // state above already reflects it. The outbox already durably
+          // queued this device's data (migrateLocalDataOnSignIn), so the
+          // next successful sync pass picks up right where this left off.
+          if (__DEV__) console.warn('[sync] post-sign-in sync failed', cause);
         } finally {
           if (mounted.current) setSyncing(false);
         }
-        if (!mounted.current) return;
-        await updateSettings({
-          account: {
-            uid: user.uid,
-            email: user.email,
-            migratedAt: isNewSignIn ? Date.now() : (settingsRef.current.account?.migratedAt ?? Date.now()),
-            lastSyncedAt: Date.now(),
-          },
-        });
       })();
     });
     return unsubscribe;
