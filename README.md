@@ -28,7 +28,8 @@ near a public store listing.
   number on the axis was asked for over an abstract one.
 - **A custom start date for History's filter**, alongside the day/month/year presets — pick
   exactly which day a window starts on so early, barely-tracked days don't quietly drag an
-  average down.
+  average down. A 5-year preset sits alongside the honest "all time" one too, so a long enough
+  run of real history reads as more than a string of individual weeks.
 - **A daily goal comparison in Insights' Day view** — your weekly goal divided across 7 days,
   shown against today's own total with a small progress bar, so a weekly target has a
   same-day read on it too, not just a week-end one.
@@ -67,7 +68,8 @@ near a public store listing.
   and deletion of any past entry.
 - **Optional personal goals** that draw a dashed line on a chart and do nothing else.
 - **Export** to CSV or JSON whenever you want a backup.
-- **Light, dark, or system theme**, with five accent colours.
+- **Light, dark, or system theme**, with six accent colours (Indigo — vivid, not another green-on-cream app — is the default; Sage, Ocean, Plum, Amber and Clay are still there for anyone who prefers them), and Manrope as the app-wide typeface for a bit more character than the system default.
+- **A savings hero on the very first screen** (Today), not tucked away in a sub-screen: the biggest, boldest number on the app is what's been saved since you started tracking, in a gold gradient card that also carries the actual case for small, consistent effort (why a modest amount of it goes a long way — financially, and for a health with no price tag). Tapping it opens the full Savings dashboard.
 - **Small entrance animations** (fade + slight rise, staggered per card) on the screens that
   benefit most from them — Today, Insights, History's filter bar, Settings, Help, the
   language picker and onboarding — kept subtle and skippable-by-not-noticing rather than

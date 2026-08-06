@@ -21,19 +21,27 @@ import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
-type Period = 'all' | '30d' | '90d' | '365d' | 'custom';
+type Period = 'all' | '30d' | '90d' | '365d' | '1825d' | 'custom';
 
 const PERIOD_LABEL_KEY: Record<Exclude<Period, 'custom'>, string> = {
   '30d': 'historyScreen.period30d',
   '90d': 'historyScreen.period90d',
   '365d': 'historyScreen.periodYear',
+  '1825d': 'historyScreen.period5y',
   all: 'historyScreen.periodAll',
 };
 
+/**
+ * The 5-year lens sits alongside the honest "all time" one (never a
+ * fabricated projection) so a long enough run of real history reads as more
+ * than a string of individual weeks — years of small choices add up, for
+ * better or worse.
+ */
 const PERIODS: { value: Exclude<Period, 'custom'>; days: number | null }[] = [
   { value: '30d', days: 30 },
   { value: '90d', days: 90 },
   { value: '365d', days: 365 },
+  { value: '1825d', days: 1825 },
   { value: 'all', days: null },
 ];
 

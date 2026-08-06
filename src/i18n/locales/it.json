@@ -96,7 +96,11 @@
     "unitStandardDrinks": "bevande standard",
     "unitGrams": "grammi di alcol",
     "todaysLog": "Registro di oggi",
-    "nothingLoggedToday": "Nulla registrato oggi. È solo un'informazione, non un giudizio."
+    "nothingLoggedToday": "Nulla registrato oggi. È solo un'informazione, non un giudizio.",
+    "savingsHero": {
+      "badge": "Risparmi",
+      "pareto": "Circa il 20% di impegno può portare l'80% del beneficio — economico, e per una salute che non ha prezzo."
+    }
   },
   "history": {
     "title": "Cronologia",
@@ -388,7 +392,8 @@
     "emptyTitle": "Il tuo diario è vuoto",
     "emptyBody": "Tutto ciò che registri resta su questo dispositivo. Inizia quando vuoi.",
     "periodCustom": "Personalizzato",
-    "customStartLabel": "Giorno di inizio"
+    "customStartLabel": "Giorno di inizio",
+    "period5y": "5 anni"
   },
   "drinksScreen": {
     "intro": "I preset che hai creato. Compaiono in cima all'elenco quando registri una bevanda.",
@@ -504,7 +509,8 @@
     "ocean": "Oceano",
     "plum": "Prugna",
     "amber": "Ambra",
-    "clay": "Argilla"
+    "clay": "Argilla",
+    "indigo": "Indaco"
   },
   "currencies": {
     "EUR": "Euro",

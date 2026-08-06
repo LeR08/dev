@@ -109,7 +109,7 @@ export type IntakeUnit = 'standardDrinks' | 'grams';
 
 export type ThemeMode = 'system' | 'light' | 'dark';
 
-export type AccentName = 'sage' | 'ocean' | 'plum' | 'amber' | 'clay';
+export type AccentName = 'sage' | 'ocean' | 'plum' | 'amber' | 'clay' | 'indigo';
 
 /**
  * Optional personal goals. Both are opt-in and framed as the user's own choice,
@@ -206,7 +206,7 @@ export const DEFAULT_SETTINGS: Settings = {
   currency: 'EUR',
   weekStartsOn: 1,
   themeMode: 'system',
-  accent: 'sage',
+  accent: 'indigo',
   goals: { weeklyIntake: null, alcoholFreeDaysPerWeek: null },
   onboardingCompletedAt: null,
   language: 'en',

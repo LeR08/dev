@@ -5,6 +5,7 @@ import { ScrollView, View } from 'react-native';
 import { BacCard } from '@/components/BacCard';
 import { BarChart, type BarDatum } from '@/components/charts/BarChart';
 import { EntryRow } from '@/components/EntryRow';
+import { SavingsHeroCard } from '@/components/SavingsHeroCard';
 import { StatCard } from '@/components/StatCard';
 import { StreakCard } from '@/components/StreakCard';
 import { Button } from '@/components/ui/Button';
@@ -19,6 +20,7 @@ import { gramsToIntake } from '@/domain/alcohol';
 import { dayKey, periodRange, trailingRange } from '@/domain/dates';
 import { greeting } from '@/domain/encouragement';
 import { formatIntakeValue, formatLongDate, formatMoney, formatWeekdayShort } from '@/domain/format';
+import { computeSavings } from '@/domain/savings';
 import {
   bucketize,
   currentAlcoholFreeStreak,
@@ -72,6 +74,11 @@ export default function TodayScreen() {
     [drinks, entries, now]
   );
 
+  const savingsSinceTracking = useMemo(
+    () => computeSavings(profile?.spendBeforeTrackingPerDay ?? null, entries, { start: profile?.createdAt ?? now, end: now }),
+    [entries, now, profile?.createdAt, profile?.spendBeforeTrackingPerDay]
+  );
+
   const todayIntake = gramsToIntake(todayTotals.grams, settings.intakeUnit, settings.standardDrinkGrams);
   const weekIntake = gramsToIntake(weekTotals.grams, settings.intakeUnit, settings.standardDrinkGrams);
   const greetingCopy = greeting(now);
@@ -101,6 +108,14 @@ export default function TodayScreen() {
 
       <View style={{ gap: theme.spacing(4) }}>
         <FadeInView delay={0}>
+          <SavingsHeroCard
+            saved={savingsSinceTracking?.saved ?? null}
+            currency={settings.currency}
+            onPress={() => router.push(profile?.spendBeforeTrackingPerDay != null ? '/savings' : '/settings/profile')}
+          />
+        </FadeInView>
+
+        <FadeInView delay={40}>
           <Button
             label={t('today.logButton')}
             size="lg"
@@ -110,7 +125,7 @@ export default function TodayScreen() {
         </FadeInView>
 
         {quickDrinks.length > 0 ? (
-          <FadeInView delay={40}>
+          <FadeInView delay={80}>
             <View style={{ gap: theme.spacing(2) }}>
               <Text variant="caption" tone="muted" overline>
                 {t('today.oneTap')}
@@ -135,7 +150,7 @@ export default function TodayScreen() {
           </FadeInView>
         ) : null}
 
-        <FadeInView delay={80}>
+        <FadeInView delay={120}>
           <View style={{ flexDirection: 'row', gap: theme.spacing(3) }}>
             <StatCard
               label={t('today.todayLabel')}
@@ -156,15 +171,15 @@ export default function TodayScreen() {
           </View>
         </FadeInView>
 
-        <FadeInView delay={120}>
+        <FadeInView delay={160}>
           <StreakCard streak={streak} longest={longestStreak} />
         </FadeInView>
 
-        <FadeInView delay={160}>
+        <FadeInView delay={200}>
           <BacCard profile={profile} entries={entries} now={now} />
         </FadeInView>
 
-        <FadeInView delay={200}>
+        <FadeInView delay={240}>
           <Card style={{ gap: theme.spacing(3) }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <Text variant="heading">{t('today.last7Days')}</Text>
@@ -176,7 +191,7 @@ export default function TodayScreen() {
           </Card>
         </FadeInView>
 
-        <FadeInView delay={240}>
+        <FadeInView delay={280}>
           <Card style={{ gap: theme.spacing(1) }}>
             <View
               style={{

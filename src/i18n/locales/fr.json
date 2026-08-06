@@ -96,7 +96,11 @@
     "unitStandardDrinks": "verres standards",
     "unitGrams": "grammes d'alcool",
     "todaysLog": "Journal du jour",
-    "nothingLoggedToday": "Rien enregistré aujourd'hui. C'est juste une information, pas un jugement."
+    "nothingLoggedToday": "Rien enregistré aujourd'hui. C'est juste une information, pas un jugement.",
+    "savingsHero": {
+      "badge": "Économies",
+      "pareto": "Environ 20 % d'efforts peuvent apporter 80 % du bénéfice — financier, et pour une santé qui n'a pas de prix."
+    }
   },
   "history": {
     "title": "Historique",
@@ -388,7 +392,8 @@
     "emptyTitle": "Votre journal est vide",
     "emptyBody": "Tout ce que vous enregistrez reste sur cet appareil. Commencez quand vous le souhaitez.",
     "periodCustom": "Personnalisé",
-    "customStartLabel": "Jour de début"
+    "customStartLabel": "Jour de début",
+    "period5y": "5 ans"
   },
   "drinksScreen": {
     "intro": "Les préréglages que vous avez créés. Ils apparaissent en haut de la liste quand vous enregistrez une boisson.",
@@ -504,7 +509,8 @@
     "ocean": "Océan",
     "plum": "Prune",
     "amber": "Ambre",
-    "clay": "Argile"
+    "clay": "Argile",
+    "indigo": "Indigo"
   },
   "currencies": {
     "EUR": "Euro",

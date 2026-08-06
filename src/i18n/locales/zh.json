@@ -96,7 +96,11 @@
     "unitStandardDrinks": "标准杯",
     "unitGrams": "克酒精",
     "todaysLog": "今日记录",
-    "nothingLoggedToday": "今天还没有记录。这只是信息，不是评判。"
+    "nothingLoggedToday": "今天还没有记录。这只是信息，不是评判。",
+    "savingsHero": {
+      "badge": "省下的钱",
+      "pareto": "大约 20% 的努力就能带来 80% 的收益——无论是经济上的，还是一份无价的健康。"
+    }
   },
   "history": {
     "title": "历史记录",
@@ -388,7 +392,8 @@
     "emptyTitle": "你的记录还是空的",
     "emptyBody": "你记录的一切都只留在这台设备上。想开始的时候随时可以开始。",
     "periodCustom": "自定义",
-    "customStartLabel": "起始日期"
+    "customStartLabel": "起始日期",
+    "period5y": "5 年"
   },
   "drinksScreen": {
     "intro": "你创建的预设，会出现在记录饮品列表的最上方。",
@@ -504,7 +509,8 @@
     "ocean": "海洋蓝",
     "plum": "梅紫色",
     "amber": "琥珀色",
-    "clay": "陶土色"
+    "clay": "陶土色",
+    "indigo": "靛蓝"
   },
   "currencies": {
     "EUR": "欧元",

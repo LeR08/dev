@@ -96,7 +96,11 @@
     "unitStandardDrinks": "bebidas estándar",
     "unitGrams": "gramos de alcohol",
     "todaysLog": "Registro de hoy",
-    "nothingLoggedToday": "Nada registrado hoy. Es solo información, no un juicio."
+    "nothingLoggedToday": "Nada registrado hoy. Es solo información, no un juicio.",
+    "savingsHero": {
+      "badge": "Ahorros",
+      "pareto": "Un 20 % de esfuerzo puede aportar un 80 % del beneficio — económico, y para una salud que no tiene precio."
+    }
   },
   "history": {
     "title": "Historial",
@@ -388,7 +392,8 @@
     "emptyTitle": "Tu registro está vacío",
     "emptyBody": "Todo lo que registres se queda en este dispositivo. Empieza cuando quieras.",
     "periodCustom": "Personalizado",
-    "customStartLabel": "Día de inicio"
+    "customStartLabel": "Día de inicio",
+    "period5y": "5 años"
   },
   "drinksScreen": {
     "intro": "Los ajustes predefinidos que has creado. Aparecen arriba del todo al registrar una bebida.",
@@ -504,7 +509,8 @@
     "ocean": "Océano",
     "plum": "Ciruela",
     "amber": "Ámbar",
-    "clay": "Arcilla"
+    "clay": "Arcilla",
+    "indigo": "Índigo"
   },
   "currencies": {
     "EUR": "Euro",

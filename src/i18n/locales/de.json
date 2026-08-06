@@ -96,7 +96,11 @@
     "unitStandardDrinks": "Standardgetränke",
     "unitGrams": "Gramm Alkohol",
     "todaysLog": "Heutiges Protokoll",
-    "nothingLoggedToday": "Heute nichts eingetragen. Das ist nur eine Information, kein Urteil."
+    "nothingLoggedToday": "Heute nichts eingetragen. Das ist nur eine Information, kein Urteil.",
+    "savingsHero": {
+      "badge": "Ersparnisse",
+      "pareto": "Etwa 20 % Aufwand können 80 % des Nutzens bringen — finanziell, und für eine Gesundheit, die unbezahlbar ist."
+    }
   },
   "history": {
     "title": "Verlauf",
@@ -388,7 +392,8 @@
     "emptyTitle": "Dein Protokoll ist leer",
     "emptyBody": "Alles, was du protokollierst, bleibt auf diesem Gerät. Fang an, wann immer du willst.",
     "periodCustom": "Benutzerdefiniert",
-    "customStartLabel": "Starttag"
+    "customStartLabel": "Starttag",
+    "period5y": "5 Jahre"
   },
   "drinksScreen": {
     "intro": "Von dir erstellte Voreinstellungen. Sie erscheinen oben in der Liste, wenn du ein Getränk protokollierst.",
@@ -504,7 +509,8 @@
     "ocean": "Ozean",
     "plum": "Pflaume",
     "amber": "Bernstein",
-    "clay": "Ton"
+    "clay": "Ton",
+    "indigo": "Indigo"
   },
   "currencies": {
     "EUR": "Euro",

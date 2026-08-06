@@ -96,7 +96,11 @@
     "unitStandardDrinks": "bebidas padrão",
     "unitGrams": "gramas de álcool",
     "todaysLog": "Registo de hoje",
-    "nothingLoggedToday": "Nada registado hoje. É apenas informação, não um julgamento."
+    "nothingLoggedToday": "Nada registado hoje. É apenas informação, não um julgamento.",
+    "savingsHero": {
+      "badge": "Poupança",
+      "pareto": "Cerca de 20% de esforço pode trazer 80% do benefício — financeiro, e para uma saúde que não tem preço."
+    }
   },
   "history": {
     "title": "Histórico",
@@ -388,7 +392,8 @@
     "emptyTitle": "O teu registo está vazio",
     "emptyBody": "Tudo o que registares fica neste dispositivo. Começa quando quiseres.",
     "periodCustom": "Personalizado",
-    "customStartLabel": "Dia de início"
+    "customStartLabel": "Dia de início",
+    "period5y": "5 anos"
   },
   "drinksScreen": {
     "intro": "Os predefinidos que criaste. Aparecem no topo da lista quando registas uma bebida.",
@@ -504,7 +509,8 @@
     "ocean": "Oceano",
     "plum": "Ameixa",
     "amber": "Âmbar",
-    "clay": "Argila"
+    "clay": "Argila",
+    "indigo": "Índigo"
   },
   "currencies": {
     "EUR": "Euro",

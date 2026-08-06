@@ -96,7 +96,11 @@
     "unitStandardDrinks": "standard drinks",
     "unitGrams": "grams of alcohol",
     "todaysLog": "Today's log",
-    "nothingLoggedToday": "Nothing logged today. That's just information, not a verdict."
+    "nothingLoggedToday": "Nothing logged today. That's just information, not a verdict.",
+    "savingsHero": {
+      "badge": "Savings",
+      "pareto": "About 20% effort can bring 80% of the benefit — financial, and for a health that has no price tag."
+    }
   },
   "history": {
     "title": "History",
@@ -388,7 +392,8 @@
     "emptyTitle": "Your log is empty",
     "emptyBody": "Whatever you log stays on this device. Start whenever you like.",
     "periodCustom": "Custom",
-    "customStartLabel": "Start day"
+    "customStartLabel": "Start day",
+    "period5y": "5 years"
   },
   "drinksScreen": {
     "intro": "Presets you created. They appear at the top of the picker when you log a drink.",
@@ -504,7 +509,8 @@
     "ocean": "Ocean",
     "plum": "Plum",
     "amber": "Amber",
-    "clay": "Clay"
+    "clay": "Clay",
+    "indigo": "Indigo"
   },
   "currencies": {
     "EUR": "Euro",

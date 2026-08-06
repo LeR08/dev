@@ -47,6 +47,21 @@ export const ACCENTS: Record<AccentName, { label: string; light: Accent; dark: A
     light: { base: '#A56A5B', strong: '#814E41', soft: '#F2E6E2', onBase: '#FFFFFF' },
     dark: { base: '#C48C7C', strong: '#D9AB9E', soft: '#33241F', onBase: '#1C110D' },
   },
+  indigo: {
+    label: 'Indigo',
+    light: { base: '#5B5FEF', strong: '#4240C7', soft: '#E8E8FC', onBase: '#FFFFFF' },
+    dark: { base: '#9698F5', strong: '#BCBEF9', soft: '#28284F', onBase: '#131230' },
+  },
+};
+
+/**
+ * A fixed gold accent for money/savings emphasis — independent of the
+ * user's chosen accent, so the savings hero always reads as "value" rather
+ * than shifting with whatever colour someone happens to have picked.
+ */
+export const MONEY: Record<Mode, Accent> = {
+  light: { base: '#C99A34', strong: '#9C7522', soft: '#F8EDD4', onBase: '#FFFFFF' },
+  dark: { base: '#EBC06B', strong: '#F3D08E', soft: '#3D2F14', onBase: '#1E1608' },
 };
 
 export type Palette = {

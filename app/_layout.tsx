@@ -1,3 +1,11 @@
+import {
+  Manrope_400Regular,
+  Manrope_500Medium,
+  Manrope_600SemiBold,
+  Manrope_700Bold,
+  Manrope_800ExtraBold,
+  useFonts,
+} from '@expo-google-fonts/manrope';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -22,6 +30,22 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 });
 
 export default function RootLayout() {
+  // Manrope is a discrete-weight font (see theme.ts) — every weight it needs
+  // has to be loaded before anything renders, or text would flash from the
+  // system font to Manrope. Fonts are bundled, not fetched, so this adds no
+  // real delay; the native splash screen (held open above) covers it.
+  const [fontsLoaded, fontError] = useFonts({
+    Manrope_400Regular,
+    Manrope_500Medium,
+    Manrope_600SemiBold,
+    Manrope_700Bold,
+    Manrope_800ExtraBold,
+  });
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
@@ -114,7 +138,11 @@ function Boot() {
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.background },
           headerTintColor: theme.colors.text,
-          headerTitleStyle: { fontSize: theme.type.heading.fontSize, fontWeight: '600' },
+          headerTitleStyle: {
+            fontSize: theme.type.heading.fontSize,
+            fontWeight: '600',
+            fontFamily: theme.type.heading.fontFamily,
+          },
           headerShadowVisible: false,
           contentStyle: { backgroundColor: theme.colors.background },
         }}
