@@ -1,24 +1,24 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useTheme } from '@/theme/ThemeProvider';
 import { TEST_BANNER_AD_UNIT_ID } from './testAdUnitIds';
 
 /**
- * The native ads module only works on iOS/Android inside a build that
- * actually links it (a dev client or a real build — not plain Expo Go), so
- * it's loaded lazily and defensively: if it isn't there, this whole banner
+ * This file only ever gets bundled for iOS/Android — Metro resolves
+ * AdBanner.web.tsx for web instead (see that file for why: the native ads
+ * module can't even be parsed on web). It still needs a build that actually
+ * links the native module (a dev client or a real build — not plain Expo
+ * Go), so the require is lazy and defensive: if it isn't there, the banner
  * quietly renders nothing instead of crashing the app.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let googleMobileAds: any = null;
-if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    googleMobileAds = require('react-native-google-mobile-ads');
-  } catch {
-    googleMobileAds = null;
-  }
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  googleMobileAds = require('react-native-google-mobile-ads');
+} catch {
+  googleMobileAds = null;
 }
 
 /**
