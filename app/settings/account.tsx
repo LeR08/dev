@@ -34,6 +34,21 @@ const GOOGLE_WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || und
 const GOOGLE_IOS_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || undefined;
 const GOOGLE_ANDROID_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || undefined;
 
+// A corrupted local persistence layer (e.g. from an earlier native-module
+// mismatch — see git history) can make Firebase's own signOut() hang rather
+// than reject, the same failure mode already worked around for sync in
+// AppProvider.tsx. Bounded here the same way, so "Sign out" can never leave
+// someone stuck on this screen with no feedback and no way out.
+const SIGN_OUT_TIMEOUT_MS = 8000;
+function withTimeout<T>(promise: Promise<T>, message: string): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_resolve, reject) => {
+      setTimeout(() => reject(new Error(message)), SIGN_OUT_TIMEOUT_MS);
+    }),
+  ]);
+}
+
 function describeAuthError(cause: unknown, t: ReturnType<typeof useTranslation>['t']): string {
   const code = cause && typeof cause === 'object' && 'code' in cause ? String((cause as { code?: unknown }).code) : '';
   switch (code) {
@@ -111,7 +126,7 @@ function GoogleSignInNativeButton({ label, onError }: { label: string; onError: 
 export default function AccountScreen() {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { settings, syncing, syncNow } = useApp();
+  const { settings, syncing, syncNow, updateSettings } = useApp();
   const toast = useToast();
 
   const [mode, setMode] = useState<'signIn' | 'signUp'>('signIn');
@@ -171,8 +186,16 @@ export default function AccountScreen() {
 
   const doSignOut = async () => {
     setBusy('signOut');
+    setErrorMessage(null);
     try {
-      await signOut();
+      await withTimeout(signOut(), 'Sign out timed out');
+    } catch (cause) {
+      // Firebase's own signOut() failing/hanging shouldn't trap someone on
+      // this screen forever — clear the local "signed in" state regardless.
+      // Worst case this device re-syncs against a session Firebase still
+      // considers valid next time; that's harmless, unlike being stuck.
+      await updateSettings({ account: null });
+      setErrorMessage(describeAuthError(cause, t));
     } finally {
       setBusy(null);
     }
@@ -247,6 +270,14 @@ export default function AccountScreen() {
                   : t('account.neverSyncedLabel')}
             </Text>
           </Card>
+
+          {errorMessage ? (
+            <Card tone="muted" style={{ gap: theme.spacing(1) }}>
+              <Text variant="body" tone="muted">
+                {errorMessage}
+              </Text>
+            </Card>
+          ) : null}
 
           <Button
             label={t('account.syncNowAction')}
