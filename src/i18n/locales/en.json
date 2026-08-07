@@ -646,5 +646,10 @@
     "orDivider": "or",
     "continueWithGoogle": "Continue with Google",
     "appleNotice": "Apple sign-in isn't set up on this build yet — email and Google sign-in both work today."
+  },
+  "authGate": {
+    "title": "Welcome to Tally",
+    "subtitle": "Create an account or sign in to get started — your history stays backed up and available on every device.",
+    "dataNotice": "We store your drink log, custom drinks and profile — the same fields you'll see in the app, nothing more. See the Privacy Policy for details."
   }
 }

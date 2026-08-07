@@ -646,5 +646,10 @@
     "orDivider": "o",
     "continueWithGoogle": "Continuar con Google",
     "appleNotice": "El inicio de sesión con Apple aún no está disponible en esta versión — el inicio de sesión por correo y con Google ya funcionan."
+  },
+  "authGate": {
+    "title": "Bienvenido a Tally",
+    "subtitle": "Crea una cuenta o inicia sesión para empezar — tu historial se guarda y está disponible en todos tus dispositivos.",
+    "dataNotice": "Guardamos tu historial de consumo, tus bebidas personalizadas y tu perfil — los mismos datos que verás en la aplicación, nada más. Consulta la Política de Privacidad para más detalles."
   }
 }

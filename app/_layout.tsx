@@ -19,6 +19,7 @@ import { Text } from '@/components/ui/Text';
 import { ToastProvider } from '@/components/ui/Toast';
 import { I18nProvider, useTranslation } from '@/i18n/I18nProvider';
 import { AppProvider, useApp } from '@/state/AppProvider';
+import { isFirebaseConfigured } from '@/sync/firebaseApp';
 import { ThemeProvider, useTheme } from '@/theme/ThemeProvider';
 
 // Module scope so it naturally resets on each fresh app process launch, and
@@ -75,6 +76,16 @@ function Boot() {
   const inOnboarding = segments[0] === 'onboarding';
   const [supportInterstitialVisible, setSupportInterstitialVisible] = useState(false);
 
+  // Account creation is mandatory: nobody reaches onboarding or the app
+  // itself without a signed-in Firebase account first. The one exception is
+  // a build with no Firebase project configured at all (isFirebaseConfigured()
+  // false, e.g. local development without a .env) — there's no account
+  // system to gate behind in that case, so it falls back to the previous
+  // local-only behavior rather than locking the app out entirely.
+  const authRequired = isFirebaseConfigured();
+  const authed = !authRequired || settings.account !== null;
+  const inAuthGate = segments[0] === 'auth-gate';
+
   useEffect(() => {
     if (status === 'ready') {
       SplashScreen.hideAsync().catch(() => {});
@@ -83,12 +94,16 @@ function Boot() {
 
   useEffect(() => {
     if (status !== 'ready') return;
-    if (!onboarded && !inOnboarding) {
-      router.replace('/onboarding');
-    } else if (onboarded && inOnboarding) {
-      router.replace('/');
+    if (!authed) {
+      if (!inAuthGate) router.replace('/auth-gate');
+      return;
     }
-  }, [inOnboarding, onboarded, router, status]);
+    if (!onboarded) {
+      if (!inOnboarding) router.replace('/onboarding');
+      return;
+    }
+    if (inAuthGate || inOnboarding) router.replace('/');
+  }, [authed, inAuthGate, inOnboarding, onboarded, router, status]);
 
   // A light, skippable, self-authored message (never a real ad-network ad —
   // see SupportInterstitial) shown once per app launch to free-tier users
@@ -148,6 +163,7 @@ function Boot() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="auth-gate" options={{ headerShown: false, animation: 'fade', gestureEnabled: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen
           name="log/index"

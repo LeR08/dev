@@ -646,5 +646,10 @@
     "orDivider": "ou",
     "continueWithGoogle": "Continuar com Google",
     "appleNotice": "O início de sessão com Apple ainda não está configurado nesta versão — o início de sessão por e-mail e com Google já funcionam."
+  },
+  "authGate": {
+    "title": "Bem-vindo ao Tally",
+    "subtitle": "Cria uma conta ou inicia sessão para começar — o teu histórico fica guardado e disponível em todos os teus dispositivos.",
+    "dataNotice": "Guardamos o teu registo de consumos, as tuas bebidas personalizadas e o teu perfil — os mesmos dados que vais ver na aplicação, nada mais. Consulta a Política de Privacidade para detalhes."
   }
 }

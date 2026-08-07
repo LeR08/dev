@@ -646,5 +646,10 @@
     "orDivider": "oder",
     "continueWithGoogle": "Weiter mit Google",
     "appleNotice": "Die Anmeldung mit Apple ist in dieser Version noch nicht eingerichtet — die Anmeldung per E-Mail und mit Google funktionieren bereits."
+  },
+  "authGate": {
+    "title": "Willkommen bei Tally",
+    "subtitle": "Erstelle ein Konto oder melde dich an, um loszulegen — dein Verlauf bleibt gesichert und ist auf allen deinen Geräten verfügbar.",
+    "dataNotice": "Wir speichern dein Trinkprotokoll, deine eigenen Getränke und dein Profil — dieselben Daten, die du auch in der App siehst, nicht mehr. Details siehe Datenschutzerklärung."
   }
 }

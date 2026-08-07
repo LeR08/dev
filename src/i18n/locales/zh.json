@@ -646,5 +646,10 @@
     "orDivider": "或",
     "continueWithGoogle": "使用 Google 继续",
     "appleNotice": "此版本尚未支持 Apple 登录——邮箱登录和 Google 登录目前均可使用。"
+  },
+  "authGate": {
+    "title": "欢迎使用 Tally",
+    "subtitle": "创建账户或登录以开始使用——你的记录会安全保存，并可在所有设备上使用。",
+    "dataNotice": "我们会保存你的饮酒记录、自定义饮品和个人资料——与应用内显示的字段相同，不会更多。详见隐私政策。"
   }
 }

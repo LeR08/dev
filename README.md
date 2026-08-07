@@ -249,22 +249,18 @@ to avoid two copies of the same value that could quietly drift apart.
 
 ## Privacy
 
-There is no telemetry, and no account is ever required. Every drink, entry, custom drink,
-profile field and ticket lives in a local database on the device, and by default the only way
-any of *that* leaves it is the export button — which you press. Settings → Data & privacy has
-a "delete all my data" option that wipes entries, custom drinks, your profile, your tickets
-and settings, then restores the built-in catalog and returns you to onboarding.
+There is no telemetry. Every drink, entry, custom drink, profile field and ticket lives in a
+local database on the device first — cloud sync (below) mirrors it to your own Firebase project,
+it doesn't replace local storage. Settings → Data & privacy has a "delete all my data" option
+that wipes entries, custom drinks, your profile, your tickets and settings on this device (it
+does not delete the cloud account — see [Accounts & cloud sync](#accounts--cloud-sync) for that).
 
-There are two opt-in exceptions, both off unless you deliberately turn them on:
-
-- The payments backend in `server/` (see [Freemium, payments & ads](#freemium-payments--ads)):
-  if you choose to subscribe, this device's random subscription id and payment status are sent
-  to it — nothing else about you.
-- Cloud sync (see [Accounts & cloud sync](#accounts--cloud-sync)): if you create an account
-  from Settings → Account & cloud sync, your drink log, custom drinks and profile are also
-  stored in your own Firebase project so they survive losing this device and can sync to
-  another one. Skip both features entirely and nothing changes: no server is contacted
-  anywhere else in the app.
+Account creation is mandatory (see [Accounts & cloud sync](#accounts--cloud-sync)) when a
+Firebase project is configured — that's the one deliberate exception to "everything stays on
+this device" beyond export, which you still control. The other is opt-in: the payments backend
+in `server/` (see [Freemium, payments & ads](#freemium-payments--ads)) — if you choose to
+subscribe, this device's random subscription id and payment status are sent to it, nothing else
+about you. Skip subscribing and that's the only thing that changes.
 
 ## Freemium, payments & ads
 
@@ -320,10 +316,14 @@ business/tax registration that comes with charging real money. Flagged again und
 
 ## Accounts & cloud sync
 
-Local-only usage (no account) remains the default and is not degraded or nagged now that this
-exists — accounts are purely opt-in, reachable from Settings → Account & cloud sync, never
-forced at launch. Everything below only ever runs for someone who deliberately creates an
-account.
+**Account creation is mandatory** — a deliberate product decision (business model depends on it,
+see [Open items](#open-items-before-any-public-release)), not the original v1.2/v2.0 design.
+`app/auth-gate.tsx` sits in front of everything else: `app/_layout.tsx`'s `Boot()` redirects
+there before onboarding or the app itself whenever Firebase is configured and no account is
+signed in, and won't let go until one is. The one exception is a build with **no Firebase
+project configured at all** (`isFirebaseConfigured()` false, e.g. local dev with no `.env`) —
+there's no account system to gate behind then, so it falls back to the previous local-only
+behavior rather than locking the app out entirely. Once past the gate, everything below applies.
 
 **Auth.** [Firebase Authentication](https://firebase.google.com/docs/auth) with email +
 password (including the standard "forgot password" reset email) and Google sign-in. Web Google
@@ -437,7 +437,9 @@ something this codebase can resolve on its own:
 - **Legal review.** The Terms of Service, Legal Notice and Privacy Policy
   (`src/data/legal/content.ts`) are editable placeholder templates with `[bracketed]` fields
   for you to fill in — not reviewed by a lawyer, and jurisdiction-specific requirements aren't
-  covered.
+  covered. They also still describe account creation as opt-in in all 8 languages — that
+  language needs updating (and a lawyer's eyes) now that accounts are mandatory; this
+  codebase hasn't done that rewrite yet, only the code-level gate.
 - **Verify the helpline contacts.** France's numbers came from the spec's own draft table;
   the US/UK ones are ones I'm confident are currently accurate. China, Saudi Arabia and UAE
   (`src/data/resources/{cn,sa,ae}.json`) were researched against official sources — China's
@@ -489,8 +491,9 @@ something this codebase can resolve on its own:
 ## Not in this version
 
 Accounts and cloud sync *are* now real (see [Accounts & cloud sync](#accounts--cloud-sync)) —
-opt-in, off by default, and inert until you configure your own Firebase project. Email and
-Google sign-in both work; Apple doesn't yet. Still out of scope: social/sharing features between
+and mandatory whenever a Firebase project is configured, inert (falls back to local-only) only
+when one isn't. Email and Google sign-in both work; Apple doesn't yet. Still out of scope:
+social/sharing features between
 accounts, real-time multi-device push updates (sync happens on foreground/refresh, not a live
 subscription), push notifications, real ticket transmission (tickets are local-only; export is
 the only way they leave the device), and public store submission. Payments and ads *are* also real (test-mode

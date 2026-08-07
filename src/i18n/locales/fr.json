@@ -646,5 +646,10 @@
     "orDivider": "ou",
     "continueWithGoogle": "Continuer avec Google",
     "appleNotice": "La connexion avec Apple n'est pas encore disponible sur cette version — la connexion par e-mail et par Google fonctionnent déjà."
+  },
+  "authGate": {
+    "title": "Bienvenue sur Tally",
+    "subtitle": "Créez un compte ou connectez-vous pour commencer — votre historique reste sauvegardé et disponible sur tous vos appareils.",
+    "dataNotice": "Nous stockons votre historique de consommation, vos boissons personnalisées et votre profil — les mêmes données que celles visibles dans l'application, rien de plus. Voir la Politique de confidentialité pour le détail."
   }
 }

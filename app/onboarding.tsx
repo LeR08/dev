@@ -7,39 +7,44 @@ import { ProfileFields } from '@/components/ProfileFields';
 import { Button } from '@/components/ui/Button';
 import { USE_NATIVE_DRIVER } from '@/components/ui/animation';
 import { Card } from '@/components/ui/Card';
-import { Field } from '@/components/ui/Field';
 import { FadeInView } from '@/components/ui/FadeInView';
 import { Icon } from '@/components/ui/Icon';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
-import { buildProfile, emptyProfileDraft, isValidEmail, type ProfileDraft } from '@/domain/profile';
+import { buildProfile, emptyProfileDraft, type ProfileDraft } from '@/domain/profile';
 import { useTranslation } from '@/i18n/I18nProvider';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
-const STEP_COUNT = 3;
+const STEP_COUNT = 2;
 
 /**
- * First-run flow: sign in (local-only, sets the tone) → profile → done.
+ * First-run flow: profile → done. Reached only after the mandatory account
+ * sign-in/sign-up gate (app/auth-gate.tsx) — the local-only mock "sign in"
+ * step this used to open with is gone now that a real Firebase account
+ * always precedes it; the account's own email pre-fills the profile's email
+ * field below instead of asking for it again. Name still isn't collected
+ * here (email/password sign-up has no name field) — Settings → Profile
+ * covers that whenever the user wants to add it.
  *
  * Units, currency and a weekly goal used to be separate mandatory steps here;
  * currency now comes from the device locale (§21) and the rest are reasonable
  * defaults the user can revisit in Settings whenever they like, so the wizard
- * stays to the one thing spec asked to happen "at app opening": who you are
- * and the identified profile fields (v1.2 §4) — still never leaving the
- * device, still optional wherever a field can't be guessed.
+ * stays to the one thing spec asked to happen "at app opening": the
+ * identified profile fields (v1.2 §4).
  */
 export default function OnboardingScreen() {
   const theme = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const { profile, saveProfile, updateSettings } = useApp();
+  const { settings, profile, saveProfile, updateSettings } = useApp();
 
   const [step, setStep] = useState(0);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [profileDraft, setProfileDraft] = useState<ProfileDraft>(emptyProfileDraft());
+  const [profileDraft, setProfileDraft] = useState<ProfileDraft>(() => ({
+    ...emptyProfileDraft(),
+    email: settings.account?.email ?? null,
+  }));
   const fade = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
@@ -47,16 +52,9 @@ export default function OnboardingScreen() {
     Animated.timing(fade, { toValue: 1, duration: 320, useNativeDriver: USE_NATIVE_DRIVER }).start();
   }, [fade, step]);
 
-  const emailInvalid = email.trim() !== '' && !isValidEmail(email);
-
   const finish = async () => {
     const now = Date.now();
-    const draft: ProfileDraft = {
-      ...profileDraft,
-      name: name.trim() === '' ? null : name.trim(),
-      email: email.trim() === '' || emailInvalid ? null : email.trim(),
-    };
-    await saveProfile(buildProfile(draft, profile, now));
+    await saveProfile(buildProfile(profileDraft, profile, now));
     await updateSettings({ onboardingCompletedAt: now });
     router.replace('/');
   };
@@ -70,11 +68,8 @@ export default function OnboardingScreen() {
     <View style={{ flex: 1, backgroundColor: theme.colors.background, paddingTop: insets.top }}>
       <Screen scrollProps={{ contentInsetAdjustmentBehavior: 'automatic' }}>
         <Animated.View style={{ opacity: fade, gap: theme.spacing(5), paddingTop: theme.spacing(10) }}>
-          {step === 0 ? (
-            <SignInStep name={name} onName={setName} email={email} onEmail={setEmail} emailInvalid={emailInvalid} />
-          ) : null}
-          {step === 1 ? <ProfileStep value={profileDraft} onChange={setProfileDraft} /> : null}
-          {step === 2 ? <DoneStep name={name} /> : null}
+          {step === 0 ? <ProfileStep value={profileDraft} onChange={setProfileDraft} /> : null}
+          {step === 1 ? <DoneStep /> : null}
         </Animated.View>
       </Screen>
 
@@ -103,7 +98,7 @@ export default function OnboardingScreen() {
         </View>
 
         <Button
-          label={step === STEP_COUNT - 1 ? t('onboarding.startTracking') : t('signIn.continueAction')}
+          label={step === STEP_COUNT - 1 ? t('onboarding.startTracking') : t('common.continue')}
           size="lg"
           onPress={next}
         />
@@ -112,80 +107,6 @@ export default function OnboardingScreen() {
           <Button label={t('onboarding.skipSetup')} variant="ghost" haptic={false} onPress={() => void finish()} />
         ) : null}
       </View>
-    </View>
-  );
-}
-
-type SignInStepProps = {
-  name: string;
-  onName: (value: string) => void;
-  email: string;
-  onEmail: (value: string) => void;
-  emailInvalid: boolean;
-};
-
-function SignInStep({ name, onName, email, onEmail, emailInvalid }: SignInStepProps) {
-  const theme = useTheme();
-  const { t } = useTranslation();
-
-  return (
-    <View style={{ gap: theme.spacing(5) }}>
-      <FadeInView delay={0}>
-        <View style={{ gap: theme.spacing(3), alignItems: 'flex-start' }}>
-          <View
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: 28,
-              backgroundColor: theme.accent.soft,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="user" size={26} color={theme.accent.base} strokeWidth={2} />
-          </View>
-          <Text variant="display">{t('signIn.title')}</Text>
-          <Text variant="body" tone="muted">
-            {t('signIn.subtitle')}
-          </Text>
-        </View>
-      </FadeInView>
-
-      <FadeInView delay={80}>
-        <View style={{ gap: theme.spacing(4) }}>
-          <Field
-            label={t('signIn.nameLabel')}
-            value={name}
-            onChangeText={onName}
-            placeholder={t('signIn.namePlaceholder')}
-            autoCapitalize="words"
-          />
-          <View>
-            <Field
-              label={t('signIn.emailLabel')}
-              value={email}
-              onChangeText={onEmail}
-              placeholder={t('signIn.emailPlaceholder')}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              hint={emailInvalid ? undefined : t('signIn.emailHint')}
-            />
-            {emailInvalid ? (
-              <Text variant="caption" tone="muted" style={{ marginTop: theme.spacing(1) }}>
-                {t('signIn.emailHint')}
-              </Text>
-            ) : null}
-          </View>
-        </View>
-      </FadeInView>
-
-      <FadeInView delay={140}>
-        <Card tone="muted">
-          <Text variant="caption" tone="muted">
-            {t('signIn.testModeNotice')}
-          </Text>
-        </Card>
-      </FadeInView>
     </View>
   );
 }
@@ -212,7 +133,7 @@ function ProfileStep({ value, onChange }: { value: ProfileDraft; onChange: (next
   );
 }
 
-function DoneStep({ name }: { name: string }) {
+function DoneStep() {
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -231,9 +152,7 @@ function DoneStep({ name }: { name: string }) {
         >
           <Icon name="check" size={26} color={theme.accent.base} strokeWidth={2.4} />
         </View>
-        <Text variant="display">
-          {name.trim() !== '' ? `${t('onboarding.profile.doneTitle')}, ${name.trim()}` : t('onboarding.profile.doneTitle')}
-        </Text>
+        <Text variant="display">{t('onboarding.profile.doneTitle')}</Text>
         <Card tone="accent" style={{ gap: theme.spacing(2) }}>
           <Text variant="body">{t('onboarding.profile.doneSubtitle')}</Text>
         </Card>
