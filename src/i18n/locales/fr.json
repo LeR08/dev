@@ -216,7 +216,6 @@
     "goalPerWeek": "{{count}}/semaine",
     "goalFreeDays": "{{count}} jours sans alcool",
     "subscriptionRowSubtitle": "Une idée en mode test, aucun vrai paiement",
-    "adminRowSubtitle": "Un aperçu local des côtés utilisateur et admin, avant tout hébergement réel",
     "accountRow": "Compte et synchronisation",
     "accountRowSubtitle": "Optionnel — protégez votre historique sur plusieurs appareils",
     "accountRowLocalOnly": "Local uniquement"
@@ -330,8 +329,7 @@
     "appearance": "Apparence",
     "defaultPrices": "Prix par défaut",
     "dataPrivacy": "Données et confidentialité",
-    "subscription": "Abonnement (test)",
-    "admin": "Admin (test)"
+    "subscription": "Abonnement (test)"
   },
   "unitsScreen": {
     "volumeTitle": "Volume",

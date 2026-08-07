@@ -90,9 +90,6 @@ const CATALOG_NAME_OVERRIDES: Partial<Record<string, Record<LanguageCode, string
   },
 };
 
-/** Number of catalog entries with a translated display name — for the admin overview. */
-export const CATALOG_NAME_OVERRIDE_COUNT = Object.keys(CATALOG_NAME_OVERRIDES).length;
-
 /**
  * Translated name for a catalog drink, or the drink's own name unchanged —
  * for custom drinks (the user's own presets) and the ~97 catalog entries

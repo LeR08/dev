@@ -216,7 +216,6 @@
     "goalPerWeek": "{{count}}/Woche",
     "goalFreeDays": "{{count}} freie Tage",
     "subscriptionRowSubtitle": "Eine Testmodus-Idee, keine echte Abbuchung",
-    "adminRowSubtitle": "Eine lokale Vorschau der Nutzer- und Admin-Seite, vor jedem echten Hosting",
     "accountRow": "Konto & Cloud-Synchronisierung",
     "accountRowSubtitle": "Optional — sichert deinen Verlauf geräteübergreifend",
     "accountRowLocalOnly": "Nur lokal"
@@ -330,8 +329,7 @@
     "appearance": "Erscheinungsbild",
     "defaultPrices": "Standardpreise",
     "dataPrivacy": "Daten & Datenschutz",
-    "subscription": "Abo (Test)",
-    "admin": "Admin (Test)"
+    "subscription": "Abo (Test)"
   },
   "unitsScreen": {
     "volumeTitle": "Volumen",

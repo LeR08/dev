@@ -216,7 +216,6 @@
     "goalPerWeek": "每周 {{count}}",
     "goalFreeDays": "{{count}} 天不饮酒",
     "subscriptionRowSubtitle": "测试模式的构想，不会真实扣费",
-    "adminRowSubtitle": "用户端与管理端的本地预览，尚未真正上线托管",
     "accountRow": "账户与云同步",
     "accountRowSubtitle": "可选功能——在多台设备间保护你的记录",
     "accountRowLocalOnly": "仅本地"
@@ -330,8 +329,7 @@
     "appearance": "外观",
     "defaultPrices": "默认价格",
     "dataPrivacy": "数据与隐私",
-    "subscription": "订阅（测试）",
-    "admin": "管理（测试）"
+    "subscription": "订阅（测试）"
   },
   "unitsScreen": {
     "volumeTitle": "容量",

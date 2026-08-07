@@ -216,7 +216,6 @@
     "goalPerWeek": "{{count}}/أسبوعيًا",
     "goalFreeDays": "{{count}} أيام خالية",
     "subscriptionRowSubtitle": "فكرة في وضع الاختبار، بلا خصم حقيقي",
-    "adminRowSubtitle": "معاينة محلية لجانبي المستخدم والإدارة، قبل أي استضافة حقيقية",
     "accountRow": "الحساب والمزامنة السحابية",
     "accountRowSubtitle": "اختياري — حافظ على سجلك آمنًا عبر عدة أجهزة",
     "accountRowLocalOnly": "محلي فقط"
@@ -330,8 +329,7 @@
     "appearance": "المظهر",
     "defaultPrices": "الأسعار الافتراضية",
     "dataPrivacy": "البيانات والخصوصية",
-    "subscription": "الاشتراك (تجريبي)",
-    "admin": "الإدارة (تجريبي)"
+    "subscription": "الاشتراك (تجريبي)"
   },
   "unitsScreen": {
     "volumeTitle": "الحجم",

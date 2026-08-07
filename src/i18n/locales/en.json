@@ -216,7 +216,6 @@
     "goalPerWeek": "{{count}}/week",
     "goalFreeDays": "{{count}} free days",
     "subscriptionRowSubtitle": "A test-mode idea, not a real charge",
-    "adminRowSubtitle": "A local preview of user + admin sides, before any real hosting",
     "accountRow": "Account & cloud sync",
     "accountRowSubtitle": "Optional — keep your history safe across devices",
     "accountRowLocalOnly": "Local only"
@@ -330,8 +329,7 @@
     "appearance": "Appearance",
     "defaultPrices": "Default prices",
     "dataPrivacy": "Data & privacy",
-    "subscription": "Subscription (test)",
-    "admin": "Admin (test)"
+    "subscription": "Subscription (test)"
   },
   "unitsScreen": {
     "volumeTitle": "Volume",

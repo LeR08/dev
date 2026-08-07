@@ -216,7 +216,6 @@
     "goalPerWeek": "{{count}}/semana",
     "goalFreeDays": "{{count}} días libres",
     "subscriptionRowSubtitle": "Una idea en modo prueba, sin cobro real",
-    "adminRowSubtitle": "Una vista previa local de los lados de usuario y administrador, antes de cualquier alojamiento real",
     "accountRow": "Cuenta y sincronización",
     "accountRowSubtitle": "Opcional — protege tu historial en varios dispositivos",
     "accountRowLocalOnly": "Solo local"
@@ -330,8 +329,7 @@
     "appearance": "Apariencia",
     "defaultPrices": "Precios predeterminados",
     "dataPrivacy": "Datos y privacidad",
-    "subscription": "Suscripción (prueba)",
-    "admin": "Admin (prueba)"
+    "subscription": "Suscripción (prueba)"
   },
   "unitsScreen": {
     "volumeTitle": "Volumen",

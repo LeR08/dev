@@ -216,7 +216,6 @@
     "goalPerWeek": "{{count}}/settimana",
     "goalFreeDays": "{{count}} giorni liberi",
     "subscriptionRowSubtitle": "Un'idea in modalità test, nessun addebito reale",
-    "adminRowSubtitle": "Un'anteprima locale dei lati utente e admin, prima di qualsiasi hosting reale",
     "accountRow": "Account e sincronizzazione",
     "accountRowSubtitle": "Facoltativo — proteggi la cronologia su più dispositivi",
     "accountRowLocalOnly": "Solo locale"
@@ -330,8 +329,7 @@
     "appearance": "Aspetto",
     "defaultPrices": "Prezzi predefiniti",
     "dataPrivacy": "Dati e privacy",
-    "subscription": "Abbonamento (test)",
-    "admin": "Admin (test)"
+    "subscription": "Abbonamento (test)"
   },
   "unitsScreen": {
     "volumeTitle": "Volume",

@@ -179,7 +179,6 @@ function Boot() {
         <Stack.Screen name="settings/prices" options={{ title: t('nav.defaultPrices') }} />
         <Stack.Screen name="settings/data" options={{ title: t('nav.dataPrivacy') }} />
         <Stack.Screen name="settings/subscription" options={{ title: t('nav.subscription') }} />
-        <Stack.Screen name="settings/admin" options={{ title: t('nav.admin') }} />
         <Stack.Screen name="settings/profile" options={{ title: t('settings.profile.title') }} />
         <Stack.Screen name="settings/language" options={{ title: t('settings.language.title') }} />
         <Stack.Screen name="settings/legal/[doc]" options={{ title: '' }} />

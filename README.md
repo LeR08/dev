@@ -53,9 +53,6 @@ near a public store listing.
   opened in the system browser, backed by the minimal server in `server/`. Free stays free for
   every feature above; premium only removes the launch message and the small support banner
   described below. See [Freemium, payments & ads](#freemium-payments--ads).
-- **A local admin preview** (Settings → Admin) — a one-screen dashboard of *this device's own*
-  data (entry/drink/ticket counts, this device's subscription state, catalog-translation
-  coverage). Still local-only; see the same section below.
 - **Eight languages** — the EU's major languages (French, Spanish, German, Italian,
   Portuguese) plus English, Chinese and Arabic — genuinely translated (not machine-filled
   placeholders) and switchable independent of your phone's own language, from a pill/card
@@ -109,9 +106,9 @@ app/                    Screens and routing (expo-router, file-based)
   entry/[id]            Edit or delete a logged entry
   drinks/               Custom drink presets
   settings/             Units, goals, appearance, profile, language, legal, tickets, data,
-                        subscription (real Stripe/PayPal via server/), admin (local preview)
+                        subscription (real Stripe/PayPal via server/)
   savings.tsx            Savings deep-dive
-  onboarding.tsx          First run: local sign-in → profile → done
+  onboarding.tsx          First run (after the mandatory auth-gate): profile → done
 
 src/
   domain/               Pure logic: alcohol maths, BAC, savings, dates, stats, search, profile,
@@ -307,11 +304,6 @@ habits:
   compiled against an older Kotlin metadata version. Not a blocker for anything else — it's
   a free-tier banner, not part of auth/sync.
 
-**Admin** (`app/settings/admin.tsx`) stays a read-only, local-only dashboard of *this device's
-own* data — entry/drink/ticket counts, this device's subscription state, catalog-translation
-coverage. It is not connected to any other device or user; there's still no multi-user backend
-behind it, only the narrow payments one above.
-
 What's still a human decision, not something this codebase can resolve on its own: actually
 creating the Stripe/PayPal/AdMob accounts, switching from test to live keys, and the
 business/tax registration that comes with charging real money. Flagged again under
@@ -468,10 +460,6 @@ something this codebase can resolve on its own:
   comes with actually charging people all need a person, not code.
 - **Deploying `server/` somewhere reachable**, with real webhook URLs configured in the
   Stripe/PayPal dashboards — see `server/README.md`.
-- **Designing a real admin backend**, if the admin preview needs to manage more than this one
-  device — a server, authentication, and a real multi-user data model, none of which exist
-  yet. (The narrow payments backend in `server/` intentionally doesn't do any of this — it
-  only ever answers "is this one device subscribed?".)
 - **Apple sign-in** (see [Accounts & cloud sync](#accounts--cloud-sync)) — email and Google
   sign-in are both real and functional today; Apple needs a paid Apple Developer Program
   enrollment and a native module that needs a custom dev client, not plain Expo Go, neither of
@@ -500,7 +488,6 @@ social/sharing features between
 accounts, real-time multi-device push updates (sync happens on foreground/refresh, not a live
 subscription), push notifications, real ticket transmission (tickets are local-only; export is
 the only way they leave the device), and public store submission. Payments and ads *are* also real (test-mode
-keys and test ad unit ids — see [Freemium, payments & ads](#freemium-payments--ads)); the admin
-screen is still a local-only preview with no real backend behind it. The code is layered so
-everything else can be added later without a rewrite: storage sits behind one interface, and
-the domain logic has no idea a UI exists.
+keys and test ad unit ids — see [Freemium, payments & ads](#freemium-payments--ads)). The code is
+layered so everything else can be added later without a rewrite: storage sits behind one
+interface, and the domain logic has no idea a UI exists.
