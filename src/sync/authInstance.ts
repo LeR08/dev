@@ -22,3 +22,19 @@ export function getFirebaseAuth(): Auth {
   }
   return auth;
 }
+
+/**
+ * Recovery path for a session stuck in a bad local state — observed on a
+ * real device where `signOut()` itself never resolved or rejected, which
+ * left it permanently "signed in" locally with no way out through normal
+ * auth calls (all of which go through this same persistence layer and hung
+ * the same way). Firebase's RN persistence writes its session under keys
+ * prefixed `firebase:` (`firebase:authUser:...`, etc.) — removing them
+ * directly bypasses whatever is stuck and forces a clean slate; they're
+ * reconstructed fresh on the next real sign-in, so this is always safe.
+ */
+export async function clearPersistedAuthSession(): Promise<void> {
+  const keys = await AsyncStorage.getAllKeys();
+  const authKeys = keys.filter((key) => key.startsWith('firebase:'));
+  if (authKeys.length > 0) await AsyncStorage.multiRemove(authKeys);
+}

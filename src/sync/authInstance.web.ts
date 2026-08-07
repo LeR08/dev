@@ -11,3 +11,6 @@ export function getFirebaseAuth(): Auth {
   }
   return auth;
 }
+
+/** Web hasn't shown the stuck-session failure mode this recovers from natively — nothing to do here. */
+export async function clearPersistedAuthSession(): Promise<void> {}

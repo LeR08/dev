@@ -20,6 +20,7 @@ import {
   signOut,
   signUpWithEmail,
 } from '@/sync/auth';
+import { clearPersistedAuthSession } from '@/sync/authInstance';
 import { isFirebaseConfigured, isGoogleSignInAvailable } from '@/sync/firebaseApp';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
@@ -191,9 +192,14 @@ export default function AccountScreen() {
       await withTimeout(signOut(), 'Sign out timed out');
     } catch (cause) {
       // Firebase's own signOut() failing/hanging shouldn't trap someone on
-      // this screen forever — clear the local "signed in" state regardless.
-      // Worst case this device re-syncs against a session Firebase still
-      // considers valid next time; that's harmless, unlike being stuck.
+      // this screen forever. Clearing the local "signed in" state alone
+      // isn't enough if Firebase's *own* persisted session is what's stuck —
+      // AppProvider's auth listener would just see that same still-"signed
+      // in" session again and restore it. clearPersistedAuthSession() wipes
+      // Firebase's own storage directly, breaking that loop; it's always
+      // safe, since a real session is reconstructed fresh on the next
+      // successful sign-in.
+      await clearPersistedAuthSession();
       await updateSettings({ account: null });
       setErrorMessage(describeAuthError(cause, t));
     } finally {
@@ -218,7 +224,7 @@ export default function AccountScreen() {
     setBusy('delete');
     setErrorMessage(null);
     try {
-      await deleteAccount(deletePassword);
+      await withTimeout(deleteAccount(deletePassword), 'Delete account timed out');
       setDeletePassword('');
       setConfirmText('');
       toast.show({ message: t('account.deletedToast') });
