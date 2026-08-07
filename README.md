@@ -296,13 +296,16 @@ habits:
   Help & Resources. Shown at most once per app launch, only to free-tier users. Because it's
   our own copy rather than arbitrary ad-network creative, its content can actually be held to
   "anti-addiction, non-judgmental" rather than whatever an ad auction happens to serve.
-- **A real AdMob banner** (`src/ads/`, Settings → Subscription) uses Google's own public
-  **test** ad unit ids (`src/ads/testAdUnitIds.ts`) — no AdMob account exists yet, and these
-  are the official placeholder ids meant for exactly that. It only renders on iOS/Android
-  inside a build that actually links `react-native-google-mobile-ads` (a dev client or a real
-  build — **not plain Expo Go**, which can't load native ad SDKs); everywhere else, including
-  the web build, it quietly renders nothing rather than crashing. Swap in your own ad unit ids
-  (and the `androidAppId`/`iosAppId` in `app.json`) once you create an AdMob account.
+- **The AdMob banner is currently disabled** (`src/ads/AdBanner.tsx` always renders `null`,
+  and `react-native-google-mobile-ads` is removed from `package.json`/`app.json`). It used
+  Google's own public **test** ad unit ids and rendered fine on a real device build, but
+  `react-native-google-mobile-ads@16.4.0` pulls in `play-services-ads:25.4.0`, whose Kotlin
+  metadata (2.3.0) is newer than what this project's Gradle/Kotlin toolchain compiles against
+  (2.1.x) — that failed `:react-native-google-mobile-ads:compileReleaseKotlin` on EAS Build.
+  Re-add the dependency and the `app.json` plugin entry (see git history for the exact block)
+  once the Kotlin toolchain version is bumped to match, or once the library ships a build
+  compiled against an older Kotlin metadata version. Not a blocker for anything else — it's
+  a free-tier banner, not part of auth/sync.
 
 **Admin** (`app/settings/admin.tsx`) stays a read-only, local-only dashboard of *this device's
 own* data — entry/drink/ticket counts, this device's subscription state, catalog-translation

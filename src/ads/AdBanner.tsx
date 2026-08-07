@@ -1,45 +1,15 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
-
-import { useTheme } from '@/theme/ThemeProvider';
-import { TEST_BANNER_AD_UNIT_ID } from './testAdUnitIds';
 
 /**
- * This file only ever gets bundled for iOS/Android — Metro resolves
- * AdBanner.web.tsx for web instead (see that file for why: Metro statically
- * resolves every require/import string it finds in a file's source at
- * bundle time, regardless of which runtime branch it's in, so a
- * Platform.OS check alone can't keep the native ads module out of a web
- * bundle — only routing web to a different file can). The Platform.OS
- * check below is kept anyway as harmless defense-in-depth for native: it
- * still correctly skips the require on any hypothetical non-native
- * platform that resolves this file instead of AdBanner.web.tsx.
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let googleMobileAds: any = null;
-if (Platform.OS === 'ios' || Platform.OS === 'android') {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    googleMobileAds = require('react-native-google-mobile-ads');
-  } catch {
-    googleMobileAds = null;
-  }
-}
-
-/**
- * A small AdMob banner using Google's official TEST ad unit id (see
- * testAdUnitIds.ts) — swap for a real ad unit id once there's a real AdMob
- * account (see README's "Freemium, payments & ads" section). Shown only to
- * free-tier users; premium subscribers never see it.
+ * AdMob (react-native-google-mobile-ads) is temporarily removed from the
+ * native build: play-services-ads 25.4.0's Kotlin metadata (2.3.0) is newer
+ * than what this project's Gradle/Kotlin toolchain compiles against (2.1.x),
+ * which fails `:react-native-google-mobile-ads:compileReleaseKotlin` on EAS
+ * Build. Re-add the dependency + app.json plugin once that's resolved (e.g.
+ * after bumping the project's Kotlin version to match). Until then this
+ * mirrors AdBanner.web.tsx and renders nothing — free-tier users simply see
+ * no banner rather than a broken build.
  */
 export function AdBanner() {
-  const theme = useTheme();
-  if (!googleMobileAds || !TEST_BANNER_AD_UNIT_ID) return null;
-
-  const { BannerAd, BannerAdSize } = googleMobileAds;
-  return (
-    <View style={{ alignItems: 'center', marginTop: theme.spacing(2) }}>
-      <BannerAd unitId={TEST_BANNER_AD_UNIT_ID} size={BannerAdSize.BANNER} />
-    </View>
-  );
+  return null;
 }
