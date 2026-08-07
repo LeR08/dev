@@ -334,7 +334,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     } catch (cause) {
       // Best-effort: local data stays authoritative either way, and the next
       // foreground/pull-to-refresh/debounced push retries automatically.
-      if (__DEV__) console.warn('[sync] syncNow failed', cause);
+      if (__DEV__) console.log('[sync] syncNow failed (non-fatal, will retry):', cause);
     } finally {
       if (mounted.current) setSyncing(false);
     }
@@ -406,7 +406,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           // state above already reflects it. The outbox already durably
           // queued this device's data (migrateLocalDataOnSignIn), so the
           // next successful sync pass picks up right where this left off.
-          if (__DEV__) console.warn('[sync] post-sign-in sync failed', cause);
+          if (__DEV__) console.log('[sync] post-sign-in sync failed (non-fatal, will retry):', cause);
         } finally {
           if (mounted.current) setSyncing(false);
         }
