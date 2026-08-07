@@ -82,6 +82,7 @@ function describeAuthError(cause: unknown, t: ReturnType<typeof useTranslation>[
  */
 function GoogleSignInNativeButton({ label, onError }: { label: string; onError: (message: string) => void }) {
   const { t } = useTranslation();
+  const { clearSignOutSuppression } = useApp();
   const [busy, setBusy] = useState(false);
   const [, response, promptAsync] = Google.useIdTokenAuthRequest({
     webClientId: GOOGLE_WEB_CLIENT_ID,
@@ -110,6 +111,7 @@ function GoogleSignInNativeButton({ label, onError }: { label: string; onError: 
       loading={busy}
       onPress={() => {
         onError('');
+        clearSignOutSuppression();
         void promptAsync();
       }}
     />
@@ -127,7 +129,7 @@ function GoogleSignInNativeButton({ label, onError }: { label: string; onError: 
 export default function AccountScreen() {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { settings, syncing, syncNow, updateSettings } = useApp();
+  const { settings, syncing, syncNow, forceLocalSignOut, clearSignOutSuppression } = useApp();
   const toast = useToast();
 
   const [mode, setMode] = useState<'signIn' | 'signUp'>('signIn');
@@ -145,6 +147,7 @@ export default function AccountScreen() {
   const submitAuth = async () => {
     setBusy('auth');
     setErrorMessage(null);
+    clearSignOutSuppression();
     try {
       if (mode === 'signUp') {
         await signUpWithEmail(email.trim(), password);
@@ -162,6 +165,7 @@ export default function AccountScreen() {
   const submitGoogleWeb = async () => {
     setBusy('auth');
     setErrorMessage(null);
+    clearSignOutSuppression();
     try {
       await signInWithGooglePopup();
     } catch (cause) {
@@ -192,15 +196,15 @@ export default function AccountScreen() {
       await withTimeout(signOut(), 'Sign out timed out');
     } catch (cause) {
       // Firebase's own signOut() failing/hanging shouldn't trap someone on
-      // this screen forever. Clearing the local "signed in" state alone
-      // isn't enough if Firebase's *own* persisted session is what's stuck —
-      // AppProvider's auth listener would just see that same still-"signed
-      // in" session again and restore it. clearPersistedAuthSession() wipes
-      // Firebase's own storage directly, breaking that loop; it's always
-      // safe, since a real session is reconstructed fresh on the next
-      // successful sign-in.
+      // this screen forever. Two layers here: forceLocalSignOut() tells
+      // AppProvider's auth listener to stop re-asserting "signed in" for
+      // this exact uid even though Firebase's in-memory session was never
+      // actually cleared (that's the *live* fix); clearPersistedAuthSession()
+      // wipes Firebase's own on-disk session too, so a later app restart
+      // doesn't resurrect it either. Both are safe — a real session is
+      // reconstructed fresh on the next successful sign-in.
+      await forceLocalSignOut();
       await clearPersistedAuthSession();
-      await updateSettings({ account: null });
       setErrorMessage(describeAuthError(cause, t));
     } finally {
       setBusy(null);

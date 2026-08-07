@@ -83,6 +83,15 @@ type AppContextValue = {
   syncing: boolean;
   /** No-op when signed out or Firebase isn't configured — safe to call unconditionally (e.g. pull-to-refresh). */
   syncNow: () => Promise<void>;
+  /**
+   * Forces the local "signed in" state to null even though Firebase's own
+   * in-memory session wasn't actually cleared (used when signOut() itself is
+   * stuck — see git history). Without this, the auth listener below just
+   * sees the same still-"signed in" Firebase session and restores it.
+   */
+  forceLocalSignOut: () => Promise<void>;
+  /** Call before attempting any new sign-in so a stale forceLocalSignOut() suppression doesn't block it. */
+  clearSignOutSuppression: () => void;
 };
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -119,6 +128,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   profileRef.current = profile;
   const settingsRef = useRef(settings);
   settingsRef.current = settings;
+
+  // Holds the uid of an account forceLocalSignOut() gave up on — the auth
+  // listener below skips re-asserting "signed in" for that exact uid until
+  // clearSignOutSuppression() runs (called right before any new deliberate
+  // sign-in attempt), or until Firebase itself eventually reports that uid
+  // signed out for real.
+  const suppressAuthUidRef = useRef<string | null>(null);
 
   const load = useCallback(async () => {
     const [loadedEntries, loadedDrinks, storedSettings, loadedProfile, loadedTickets] = await Promise.all([
@@ -340,6 +356,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [applySyncResult, updateSettings]);
 
+  const forceLocalSignOut = useCallback(async () => {
+    suppressAuthUidRef.current = settingsRef.current.account?.uid ?? null;
+    await resetSyncStateOnSignOut();
+    await updateSettings({ account: null });
+  }, [updateSettings]);
+
+  const clearSignOutSuppression = useCallback(() => {
+    suppressAuthUidRef.current = null;
+  }, []);
+
   // Firebase Auth is the source of truth for sign-in state; this subscribes
   // once (empty deps) and reacts to sign-in, account switch and sign-out.
   // Entirely inert — never even subscribes — when the app is running without
@@ -351,12 +377,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       void (async () => {
         if (!mounted.current) return;
         if (!user) {
+          suppressAuthUidRef.current = null;
           if (settingsRef.current.account) {
             await resetSyncStateOnSignOut();
             await updateSettings({ account: null });
           }
           return;
         }
+        // forceLocalSignOut() already gave up on this exact uid — Firebase's
+        // in-memory session evidently never actually cleared (that's why
+        // this callback fired again with the same user), so keep ignoring
+        // it until a fresh sign-in attempt explicitly clears the flag.
+        if (suppressAuthUidRef.current === user.uid) return;
+
         const isNewSignIn = settingsRef.current.account?.uid !== user.uid;
 
         // Firebase Auth has already confirmed this sign-in — flip the local
@@ -487,6 +520,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       reload: load,
       syncing,
       syncNow,
+      forceLocalSignOut,
+      clearSignOutSuppression,
     }),
     [
       status,
@@ -512,6 +547,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       load,
       syncing,
       syncNow,
+      forceLocalSignOut,
+      clearSignOutSuppression,
     ]
   );
 
