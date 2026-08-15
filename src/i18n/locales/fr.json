@@ -218,7 +218,9 @@
     "subscriptionRowSubtitle": "Une idée en mode test, aucun vrai paiement",
     "accountRow": "Compte et synchronisation",
     "accountRowSubtitle": "Optionnel — protégez votre historique sur plusieurs appareils",
-    "accountRowLocalOnly": "Local uniquement"
+    "accountRowLocalOnly": "Local uniquement",
+    "tutorialRow": "Tutoriel",
+    "tutorialRowSubtitle": "Revoir la visite rapide"
   },
   "savings": {
     "title": "Économies",
@@ -546,23 +548,12 @@
   },
   "subscriptionScreen": {
     "priceLabel": "5€ / mois",
-    "intro": "La version gratuite reste gratuite — enregistrement des consommations, statistiques, tout le reste. Premium retire le message au lancement et la petite bannière de soutien ci-dessous, et aide à financer l'application. Le paiement est géré par Stripe ou PayPal — l'application ne voit et ne stocke jamais vos coordonnées bancaires.",
+    "intro": "La version gratuite reste gratuite — enregistrement des consommations, statistiques, tout le reste. Premium retirerait le message au lancement et la petite bannière de soutien ci-dessous, et aiderait à financer l'application.",
     "freeTierTitle": "Version gratuite",
     "freeTierBody": "Tout fonctionne dans la version gratuite. Les utilisateurs gratuits voient aussi un court message, qu'on peut passer, à l'ouverture de l'application — à propos du soutien et des ressources sur l'addiction, jamais une vraie publicité — ainsi qu'une petite bannière ici même.",
-    "subscribeStripeAction": "S'abonner avec Stripe",
-    "subscribePaypalAction": "S'abonner avec PayPal",
-    "pendingHint": "En attente de confirmation du paiement — cela peut prendre un instant après le paiement. Revenez sur cet écran, ou appuyez sur Actualiser.",
-    "activeTitle": "Premium actif",
-    "activeSince": "Actif depuis le {{date}}",
-    "viaStripe": "Géré via Stripe",
-    "viaPaypal": "Géré via PayPal",
-    "manageBillingAction": "Gérer la facturation",
-    "managePaypalHint": "Gérez ou annulez cet abonnement depuis votre compte PayPal.",
-    "refreshAction": "Actualiser le statut",
-    "refreshedToast": "Statut actualisé.",
-    "backendNotConfigured": "Les paiements ne sont pas encore configurés sur cette version — voir server/README.md.",
-    "checkFailed": "Impossible de vérifier le statut de l'abonnement. Vérifiez votre connexion et réessayez.",
-    "checkoutFailed": "Impossible de démarrer le paiement. Vérifiez votre connexion et réessayez."
+    "previewNotice": "Aperçu de l'offre. Les paiements ne sont pas encore ouverts : rien n'est facturé et aucune coordonnée bancaire n'est demandée.",
+    "subscribeAction": "S'abonner",
+    "notAvailableToast": "L'abonnement n'est pas encore ouvert."
   },
   "adminScreen": {
     "banner": "Ceci est un aperçu local de ce qu'un futur panneau d'administration pourrait afficher — le côté utilisateur (les données de cet appareil) et le côté admin (signalements, état de l'abonnement, ajustements du catalogue). L'état de l'abonnement s'appuie désormais sur le vrai serveur (server/) ; tout le reste ici reste local à cet appareil.",
@@ -649,5 +640,29 @@
     "title": "Bienvenue sur Tally",
     "subtitle": "Créez un compte ou connectez-vous pour commencer — votre historique reste sauvegardé et disponible sur tous vos appareils.",
     "dataNotice": "Nous stockons votre historique de consommation, vos boissons personnalisées et votre profil — les mêmes données que celles visibles dans l'application, rien de plus. Voir la Politique de confidentialité pour le détail."
+  },
+  "tutorial": {
+    "skip": "Passer",
+    "startAction": "C'est parti",
+    "log": {
+      "title": "Enregistre en 2 secondes",
+      "body": "Un appui sur +, et c'est noté. C'est tout.",
+      "counterLabel": "Verres aujourd'hui",
+      "tapHint": "Essaie — appuie sur +",
+      "tapDone": "Voilà. Tu sais déjà t'en servir."
+    },
+    "history": {
+      "title": "Tout ton historique",
+      "body": "Cherche, filtre par date ou par type, modifie même après coup."
+    },
+    "insights": {
+      "title": "Tes stats, tes économies",
+      "body": "Vois ce que tu bois vraiment — et ce que tu gardes dans ta poche.",
+      "savedLabel": "Économisé"
+    },
+    "help": {
+      "title": "De l'aide, quand tu veux",
+      "body": "De vraies lignes d'écoute et ressources près de chez toi, à un onglet."
+    }
   }
 }

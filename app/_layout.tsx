@@ -17,6 +17,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SupportInterstitial } from '@/components/SupportInterstitial';
 import { Text } from '@/components/ui/Text';
 import { ToastProvider } from '@/components/ui/Toast';
+import { isPremium } from '@/domain/subscription';
 import { I18nProvider, useTranslation } from '@/i18n/I18nProvider';
 import { AppProvider, useApp } from '@/state/AppProvider';
 import { isFirebaseConfigured } from '@/sync/firebaseApp';
@@ -74,6 +75,8 @@ function Boot() {
 
   const onboarded = settings.onboardingCompletedAt !== null;
   const inOnboarding = segments[0] === 'onboarding';
+  const tutorialSeen = settings.tutorialCompletedAt !== null;
+  const inTutorial = segments[0] === 'tutorial';
   const [supportInterstitialVisible, setSupportInterstitialVisible] = useState(false);
 
   // Account creation is mandatory: nobody reaches onboarding or the app
@@ -102,19 +105,25 @@ function Boot() {
       if (!inOnboarding) router.replace('/onboarding');
       return;
     }
-    if (inAuthGate || inOnboarding) router.replace('/');
-  }, [authed, inAuthGate, inOnboarding, onboarded, router, status]);
+    if (!tutorialSeen) {
+      if (!inTutorial) router.replace('/tutorial');
+      return;
+    }
+    if (inAuthGate || inOnboarding || inTutorial) router.replace('/');
+  }, [authed, inAuthGate, inOnboarding, inTutorial, onboarded, router, status, tutorialSeen]);
 
   // A light, skippable, self-authored message (never a real ad-network ad —
   // see SupportInterstitial) shown once per app launch to free-tier users
   // only, once onboarding is behind them.
   useEffect(() => {
     if (status !== 'ready' || !onboarded || inOnboarding) return;
-    if (settings.subscription.status === 'active') return;
+    // Never on top of the tutorial — the first run is busy enough already.
+    if (!tutorialSeen || inTutorial) return;
+    if (isPremium(settings.subscription.status)) return;
     if (supportInterstitialShownThisLaunch) return;
     supportInterstitialShownThisLaunch = true;
     setSupportInterstitialVisible(true);
-  }, [inOnboarding, onboarded, settings.subscription.status, status]);
+  }, [inOnboarding, inTutorial, onboarded, settings.subscription.status, status, tutorialSeen]);
 
   if (status === 'error') {
     return (
@@ -165,6 +174,7 @@ function Boot() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="auth-gate" options={{ headerShown: false, animation: 'fade', gestureEnabled: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'fade' }} />
+        <Stack.Screen name="tutorial" options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen
           name="log/index"
           options={{ title: t('nav.addDrink'), presentation: 'modal' }}

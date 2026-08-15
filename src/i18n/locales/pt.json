@@ -218,7 +218,9 @@
     "subscriptionRowSubtitle": "Uma ideia em modo de teste, sem cobrança real",
     "accountRow": "Conta e sincronização",
     "accountRowSubtitle": "Opcional — mantém o teu histórico seguro em vários dispositivos",
-    "accountRowLocalOnly": "Apenas local"
+    "accountRowLocalOnly": "Apenas local",
+    "tutorialRow": "Tutorial",
+    "tutorialRowSubtitle": "Rever a visita rápida"
   },
   "savings": {
     "title": "Poupança",
@@ -546,23 +548,12 @@
   },
   "subscriptionScreen": {
     "priceLabel": "5€ / mês",
-    "intro": "A versão gratuita continua gratuita — registar consumos, estatísticas, tudo o resto. Premium remove a mensagem ao abrir a app e a pequena faixa de apoio abaixo, e ajuda a financiar a app. O pagamento é processado pela Stripe ou PayPal — esta app nunca vê nem guarda os dados do teu cartão.",
+    "intro": "A versão gratuita continua gratuita — registo de consumos, estatísticas, tudo o resto. O Premium removeria a mensagem de arranque e o pequeno banner de apoio abaixo, e ajudaria a financiar a aplicação.",
     "freeTierTitle": "Versão gratuita",
     "freeTierBody": "Tudo funciona na versão gratuita. Os utilizadores gratuitos também veem uma mensagem breve, que pode ser saltada, ao abrir a app — sobre apoio e recursos sobre dependências, nunca um anúncio real — e uma pequena faixa aqui mesmo.",
-    "subscribeStripeAction": "Subscrever com Stripe",
-    "subscribePaypalAction": "Subscrever com PayPal",
-    "pendingHint": "A aguardar confirmação do pagamento — pode demorar um pouco depois do checkout. Volta a este ecrã, ou toca em Atualizar.",
-    "activeTitle": "Premium ativo",
-    "activeSince": "Ativo desde {{date}}",
-    "viaStripe": "Gerido via Stripe",
-    "viaPaypal": "Gerido via PayPal",
-    "manageBillingAction": "Gerir faturação",
-    "managePaypalHint": "Gere ou cancela esta subscrição a partir da tua conta PayPal.",
-    "refreshAction": "Atualizar estado",
-    "refreshedToast": "Estado atualizado.",
-    "backendNotConfigured": "Os pagamentos ainda não estão configurados nesta versão — ver server/README.md.",
-    "checkFailed": "Não foi possível verificar o estado da subscrição. Verifica a tua ligação e tenta novamente.",
-    "checkoutFailed": "Não foi possível iniciar o pagamento. Verifica a tua ligação e tenta novamente."
+    "previewNotice": "Pré-visualização da oferta. Os pagamentos ainda não estão abertos: nada é cobrado e nunca são pedidos dados de pagamento.",
+    "subscribeAction": "Subscrever",
+    "notAvailableToast": "As subscrições ainda não estão abertas."
   },
   "adminScreen": {
     "banner": "Esta é uma pré-visualização local do que um futuro painel de administração poderia mostrar — o lado do utilizador (os dados deste dispositivo) e o lado admin (tickets, estado da subscrição, ajustes do catálogo). O estado da subscrição agora depende do backend real em server/; tudo o resto aqui continua a ser local a este dispositivo.",
@@ -649,5 +640,29 @@
     "title": "Bem-vindo ao Tally",
     "subtitle": "Cria uma conta ou inicia sessão para começar — o teu histórico fica guardado e disponível em todos os teus dispositivos.",
     "dataNotice": "Guardamos o teu registo de consumos, as tuas bebidas personalizadas e o teu perfil — os mesmos dados que vais ver na aplicação, nada mais. Consulta a Política de Privacidade para detalhes."
+  },
+  "tutorial": {
+    "skip": "Saltar",
+    "startAction": "Vamos lá",
+    "log": {
+      "title": "Regista em 2 segundos",
+      "body": "Um toque no + e fica registado. É só isso.",
+      "counterLabel": "Bebidas hoje",
+      "tapHint": "Experimenta — toca no +",
+      "tapDone": "Pronto. Já sabes usá-la."
+    },
+    "history": {
+      "title": "Todo o teu histórico",
+      "body": "Pesquisa, filtra por data ou tipo, edita mesmo depois."
+    },
+    "insights": {
+      "title": "As tuas estatísticas e poupanças",
+      "body": "Vê o que bebes de facto — e o que fica no teu bolso.",
+      "savedLabel": "Poupado"
+    },
+    "help": {
+      "title": "Ajuda, quando quiseres",
+      "body": "Linhas de apoio e recursos reais do teu país, a um separador."
+    }
   }
 }

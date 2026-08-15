@@ -3,12 +3,15 @@
 A personal alcohol tracking app. Log what you drink, see what that adds up to over time,
 and keep every byte of it on your own device.
 
-Built as a personal test build: free, offline, no account, no analytics. All logging,
-history, charts and insights are free for everyone, always. A small backend (`server/`) now
-exists purely to run a freemium subscription through real Stripe/PayPal checkouts — see
-[Freemium, payments & ads](#freemium-payments--ads). Currently **v1.4**, still explicitly in
-test mode — see [Open items](#open-items-before-any-public-release) before this goes anywhere
-near a public store listing.
+Built as a personal test build: free, no analytics, everything free for everyone. There is
+**no payment processing anywhere in the app** — Settings → Subscription is a mock-up of what
+an offer might look like, with inert buttons, kept only so the layout can be judged (see
+[Freemium & ads](#freemium--ads)). Currently **v1.4**, still explicitly in test mode — see
+[Open items](#open-items-before-any-public-release) before this goes anywhere near a public
+store listing.
+
+The target is **Android on a real phone**. Web still builds and runs, but it's no longer what
+the app is designed or tested against.
 
 ## What it does
 
@@ -49,10 +52,12 @@ near a public store listing.
   to talk to someone" page. Every screen there carries a not-a-medical-device disclaimer.
 - **In-app bug/suggestion tickets** — local-only for now, exportable to CSV alongside your
   data.
-- **A real freemium subscription** (Settings → Subscription) — Stripe or PayPal checkout,
-  opened in the system browser, backed by the minimal server in `server/`. Free stays free for
-  every feature above; premium only removes the launch message and the small support banner
-  described below. See [Freemium, payments & ads](#freemium-payments--ads).
+- **An interactive first-run tutorial** (`app/tutorial.tsx`) — four swipeable slides shown
+  once after onboarding, and replayable any time from Settings → Tutorial. Built to be done
+  rather than read: the first slide's `+` button actually works, so the app's core gesture is
+  learned by using it. Skippable throughout.
+- **A pricing mock-up** (Settings → Subscription) — visual only. No payments exist; see
+  [Freemium & ads](#freemium--ads).
 - **Eight languages** — the EU's major languages (French, Spanish, German, Italian,
   Portuguese) plus English, Chinese and Arabic — genuinely translated (not machine-filled
   placeholders) and switchable independent of your phone's own language, from a pill/card
@@ -73,29 +78,44 @@ near a public store listing.
 
 ```bash
 npm install
-npm start          # Expo dev server — scan the QR code with Expo Go
-npm run web        # run it in a browser as a PWA
 npm test           # unit tests
 npm run typecheck  # TypeScript
+npm run web        # browser preview — handy for a quick look, not the target
 ```
 
-This is an **Expo SDK 57** project, so `npm start` needs **Expo Go 57.x** on the phone.
-An older Expo Go answers with *"Project is incompatible with this version of Expo Go"* —
-update it from the store, or grab the matching build directly from
-<https://expo.dev/go?sdkVersion=57&platform=android&device=true>.
+### On a phone: the development-build workflow
 
-To install it as a real standalone app, with no Expo Go in the picture, build with EAS:
+**Expo Go doesn't work for this app** — native Google Sign-In needs an OAuth client tied to
+the build's own signing fingerprint, which Expo Go can't provide. Use a *development build*
+instead: one APK, installed once, that then loads JavaScript from your machine, so day-to-day
+edits show up in seconds without rebuilding.
+
+Build it once (needs `npm install -g eas-cli` and `eas login` first):
 
 ```bash
-npx eas build --profile preview --platform android   # or ios
+npx eas build --profile development --platform android
 ```
 
-The app itself needs nothing extra to run — subscribing is the only screen that talks to
-anything external. To try that locally: `cd server && npm install && cp .env.example .env`
-(see `server/README.md`), run it, and copy this repo's own `.env.example` to `.env` pointing
-`EXPO_PUBLIC_BACKEND_URL` at it. The real AdMob banner (test ad unit id) only shows up inside
-a dev client / EAS build — see [Freemium, payments & ads](#freemium-payments--ads) — Expo Go
-can't load native ad SDKs, so it just shows nothing there.
+Install the resulting APK on the phone, then from then on just:
+
+```bash
+npm start          # = expo start --dev-client
+```
+
+Open the app on the phone and it connects to that dev server — phone and computer have to be
+on the same network. Edit a file, and the screen updates. You only need to build again when
+something *native* changes: a new package with native code, or an edit to `app.json`'s
+`plugins` / `android` / `ios` sections. Pure JavaScript and TypeScript changes never need one.
+
+For a standalone APK that runs with no computer attached — the one to actually use or hand to
+someone — build the `preview` profile instead:
+
+```bash
+npx eas build --profile preview --platform android
+```
+
+> On a machine with no `git` installed, prefix EAS commands with `set EAS_NO_VCS=1` (Windows)
+> or `EAS_NO_VCS=1` (macOS/Linux), otherwise the CLI aborts looking for a repository.
 
 ## How it is put together
 
@@ -106,13 +126,14 @@ app/                    Screens and routing (expo-router, file-based)
   entry/[id]            Edit or delete a logged entry
   drinks/               Custom drink presets
   settings/             Units, goals, appearance, profile, language, legal, tickets, data,
-                        subscription (real Stripe/PayPal via server/)
+                        subscription (pricing mock-up, no payments)
   savings.tsx            Savings deep-dive
   onboarding.tsx          First run (after the mandatory auth-gate): profile → done
+  tutorial.tsx            Interactive four-slide walkthrough, once after onboarding
 
 src/
   domain/               Pure logic: alcohol maths, BAC, savings, dates, stats, search, profile,
-                        subscription (device id + status helpers)
+                        premium-status helper
   db/                   Storage: the Store contract, SQLite and web implementations
   data/
     catalog.json          The bundled drink catalog
@@ -121,17 +142,13 @@ src/
     harm-reduction/        "When it might help to talk to someone" copy (all 8 languages)
   i18n/                  8 translation catalogs, provider, device-locale + currency detection,
                         catalog display-name overrides, intake/category label helpers
-  payments/              Client for server/'s API — checkout/approval URLs, status polling
-  ads/                   AdMob test ad unit ids + banner (native only, degrades to nothing
-                        elsewhere); the launch message itself lives in components/ (below)
+  ads/                   Banner placeholder (currently renders nothing — see Freemium & ads);
+                        the launch message itself lives in components/ (below)
   state/                 App-wide data provider
   theme/                 Palette, theme, provider
   components/            UI kit, charts, entry rows, profile fields, BAC card, FadeInView,
                         SupportInterstitial (the anti-addiction launch message)
   export/                CSV/JSON backup and sharing
-
-server/                 Minimal backend: holds Stripe/PayPal secret keys, tracks subscription
-                        status. See server/README.md.
 ```
 
 ### Decisions worth knowing about
@@ -254,34 +271,25 @@ does not delete the cloud account — see [Accounts & cloud sync](#accounts--clo
 
 Account creation is mandatory (see [Accounts & cloud sync](#accounts--cloud-sync)) when a
 Firebase project is configured — that's the one deliberate exception to "everything stays on
-this device" beyond export, which you still control. The other is opt-in: the payments backend
-in `server/` (see [Freemium, payments & ads](#freemium-payments--ads)) — if you choose to
-subscribe, this device's random subscription id and payment status are sent to it, nothing else
-about you. Skip subscribing and that's the only thing that changes.
+this device" beyond export, which you still control. It is now the *only* exception: with
+payments removed, nothing else in the app sends anything anywhere.
 
-## Freemium, payments & ads
+## Freemium & ads
 
 Every feature described above — logging, history, charts, insights, export, everything — is
-free, full-stop, for every user. The only thing a subscription changes is removing two small,
-non-blocking things free users see. Nothing about tracking, insights or safety-relevant
-content is ever paywalled.
+free, full-stop, for every user. Nothing about tracking, insights or safety-relevant content
+is ever paywalled.
 
-**Payments.** Client apps can never safely hold a Stripe or PayPal *secret* key — anything
-shipped to a phone can be extracted — so a minimal backend (`server/`) exists purely to hold
-those keys and answer "is this device subscribed?". The app never talks to Stripe/PayPal
-directly:
+**There is no payment processing.** Stripe and PayPal checkout, and the backend in `server/`
+that held their secret keys, were all removed deliberately — see commit history if they ever
+need to come back. What's left is `app/settings/subscription.tsx`, a **preview** of what an
+offer might look like: real cards, real copy, real layout, and a subscribe button that says
+the offer isn't open rather than starting a checkout that doesn't exist. Nothing charges
+anyone, and no payment details are ever collected.
 
-1. Settings → Subscription asks `server/` for a Stripe Checkout or PayPal approval URL and
-   opens it in the system browser. This app never sees a card number.
-2. Stripe/PayPal confirm payment to `server/` via webhook, which updates that device's status.
-3. The app polls `server/` for status (on this screen, and whenever it returns to the
-   foreground) and reflects it locally.
-
-`server/` ships with **placeholder env vars only** — see `server/.env.example` and
-`server/README.md` for how to fill in your own real Stripe/PayPal keys (test mode to start)
-and deploy it. Until it's configured and running somewhere reachable, the subscribe buttons
-fail with a clear "payments aren't set up yet" message rather than silently pretending to
-work.
+`settings.subscription.status` still exists in the data model and still gates the launch
+interstitial, but nothing flips it to `active` today. That's the seam to reuse if a real
+purchase flow is added later — see `src/domain/types.ts`.
 
 **Ads — kept deliberately narrow and on-theme.** The literal ask was Google Ads on every
 launch for free users; what's built instead, to keep this ethical for an app about drinking
@@ -304,10 +312,8 @@ habits:
   compiled against an older Kotlin metadata version. Not a blocker for anything else — it's
   a free-tier banner, not part of auth/sync.
 
-What's still a human decision, not something this codebase can resolve on its own: actually
-creating the Stripe/PayPal/AdMob accounts, switching from test to live keys, and the
-business/tax registration that comes with charging real money. Flagged again under
-[Open items](#open-items-before-any-public-release).
+Whether to monetize at all, and how, is a human decision this codebase deliberately no longer
+pre-empts. Flagged again under [Open items](#open-items-before-any-public-release).
 
 ## Accounts & cloud sync
 
@@ -410,12 +416,8 @@ daily statistics view), aggregation and streaks, search and filtering, the CSV/J
 format (including CSV-formula-injection escaping), locale + currency detection, translation
 catalog parity and non-placeholder checks across all eight languages, the translatable
 comparison/relative-day templates in `src/domain/format.ts`, catalog display-name overrides,
-the device-id generator and subscription status helpers, and the full storage contract
-(SQLite and web, including the profile schema's `name`/`email` migration).
-
-Server-side (`server/`) has no automated tests yet — it was smoke-tested manually (health
-check, subscription lookup, and both Stripe/PayPal endpoints correctly rejecting the
-placeholder keys in `.env.example`) rather than covered by an automated suite.
+the premium-status helper, and the full storage contract (SQLite and web, including the
+profile schema's `name`/`email` migration).
 
 ```bash
 npm test
@@ -453,13 +455,10 @@ something this codebase can resolve on its own:
 - **Final app name per locale, and whether to add the optional onboarding questions** from
   spec §4.3 (none of those are built — they were explicitly flagged as proposals, not
   commitments).
-- **Creating the actual Stripe/PayPal/AdMob accounts and going live.** Stripe/PayPal
-  integration and the AdMob banner are wired up for real (see
-  [Freemium, payments & ads](#freemium-payments--ads)) but ship with placeholder test-mode
-  keys — filling in real keys, switching to live mode, and the business/tax registration that
-  comes with actually charging people all need a person, not code.
-- **Deploying `server/` somewhere reachable**, with real webhook URLs configured in the
-  Stripe/PayPal dashboards — see `server/README.md`.
+- **Whether to monetize at all, and how.** All payment code was removed; Settings →
+  Subscription is a visual mock-up only (see [Freemium & ads](#freemium--ads)). Choosing a
+  provider, wiring a real checkout, and the business/tax registration that comes with charging
+  people are all decisions a person has to make first.
 - **Apple sign-in** (see [Accounts & cloud sync](#accounts--cloud-sync)) — email and Google
   sign-in are both real and functional today; Apple needs a paid Apple Developer Program
   enrollment and a native module that needs a custom dev client, not plain Expo Go, neither of
@@ -487,7 +486,8 @@ when one isn't. Email and Google sign-in both work; Apple doesn't yet. Still out
 social/sharing features between
 accounts, real-time multi-device push updates (sync happens on foreground/refresh, not a live
 subscription), push notifications, real ticket transmission (tickets are local-only; export is
-the only way they leave the device), and public store submission. Payments and ads *are* also real (test-mode
-keys and test ad unit ids — see [Freemium, payments & ads](#freemium-payments--ads)). The code is
-layered so everything else can be added later without a rewrite: storage sits behind one
-interface, and the domain logic has no idea a UI exists.
+the only way they leave the device), and public store submission. Payments are gone entirely —
+Settings → Subscription is a visual preview with no checkout behind it (see
+[Freemium & ads](#freemium--ads)). The code is layered so everything else can be added later
+without a rewrite: storage sits behind one interface, and the domain logic has no idea a UI
+exists.

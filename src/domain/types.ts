@@ -154,6 +154,13 @@ export type Settings = {
   accent: AccentName;
   goals: Goals;
   onboardingCompletedAt: number | null;
+  /**
+   * When the interactive first-run tutorial (app/tutorial.tsx) was finished or
+   * skipped. Null means it hasn't been seen, which is what routes the user
+   * there once, right after onboarding. Settings → "Revoir le tutoriel" resets
+   * it to null to replay it on demand.
+   */
+  tutorialCompletedAt: number | null;
   /** In-app language (spec v1.2 §3.2) — independent of the OS locale. */
   language: LanguageCode;
   /** Which country's help & resources content to show (spec v1.2 §8.1). */
@@ -162,7 +169,7 @@ export type Settings = {
   weightUnit: WeightUnit;
   /** Display unit for the profile's height field (stats only, spec v1.2 §4.1). */
   heightUnit: HeightUnit;
-  /** Freemium subscription state, backed by a real Stripe/PayPal checkout via the backend. */
+  /** Premium state. No payment flow exists yet — see the Subscription docs below. */
   subscription: Subscription;
   /** Null when using the app fully locally, with no account — the default, and always available (spec v2.0). */
   account: Account | null;
@@ -183,37 +190,24 @@ export type Account = {
   lastSyncedAt: number | null;
 };
 
-/**
- * `pending` covers the gap between "checkout/approval opened" and the
- * processor's webhook confirming payment — the backend hasn't heard back yet.
- */
-export type SubscriptionStatus = 'free' | 'pending' | 'active' | 'canceled';
-
-export type SubscriptionProvider = 'stripe' | 'paypal';
+export type SubscriptionStatus = 'free' | 'active';
 
 /**
- * Freemium subscription state. Nothing here processes a payment on-device —
- * that only ever happens in a browser tab opened onto Stripe Checkout or
- * PayPal's approval flow. This device only holds: its own opaque id (so the
- * backend can look up its status), which provider it last used, and the
- * status last fetched from the backend.
+ * Premium state. There is no payment processing anywhere in the app right now
+ * — Settings → Subscription is a preview of what the offer would look like,
+ * with inert buttons (see app/settings/subscription.tsx). So nothing flips
+ * this to 'active' today; it stays here because the launch interstitial is
+ * still gated on it, and so re-introducing a real purchase later is a matter
+ * of setting this field rather than re-threading it through the app.
  */
 export type Subscription = {
   status: SubscriptionStatus;
-  provider: SubscriptionProvider | null;
-  /** This device's own random id, generated once and sent to the backend — never anything identifying. */
-  userId: string | null;
   activatedAt: number | null;
-  /** When `status` was last refreshed from the backend. Null before the first check. */
-  lastCheckedAt: number | null;
 };
 
 export const DEFAULT_SUBSCRIPTION: Subscription = {
   status: 'free',
-  provider: null,
-  userId: null,
   activatedAt: null,
-  lastCheckedAt: null,
 };
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -226,6 +220,7 @@ export const DEFAULT_SETTINGS: Settings = {
   accent: 'indigo',
   goals: { weeklyIntake: null, alcoholFreeDaysPerWeek: null },
   onboardingCompletedAt: null,
+  tutorialCompletedAt: null,
   language: 'en',
   resourceCountry: 'OTHER',
   weightUnit: 'kg',

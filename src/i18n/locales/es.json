@@ -218,7 +218,9 @@
     "subscriptionRowSubtitle": "Una idea en modo prueba, sin cobro real",
     "accountRow": "Cuenta y sincronización",
     "accountRowSubtitle": "Opcional — protege tu historial en varios dispositivos",
-    "accountRowLocalOnly": "Solo local"
+    "accountRowLocalOnly": "Solo local",
+    "tutorialRow": "Tutorial",
+    "tutorialRowSubtitle": "Volver a ver la guía rápida"
   },
   "savings": {
     "title": "Ahorro",
@@ -546,23 +548,12 @@
   },
   "subscriptionScreen": {
     "priceLabel": "5€ / mes",
-    "intro": "La versión gratuita sigue siendo gratuita — registrar consumos, estadísticas, todo lo demás. Premium elimina el mensaje al iniciar y el pequeño banner de apoyo de abajo, y ayuda a financiar la app. El pago lo gestiona Stripe o PayPal — esta app nunca ve ni guarda los datos de tu tarjeta.",
+    "intro": "La versión gratuita sigue siendo gratuita — registro de consumiciones, estadísticas, todo lo demás. Premium eliminaría el mensaje de inicio y el pequeño banner de apoyo de abajo, y ayudaría a financiar la aplicación.",
     "freeTierTitle": "Versión gratuita",
     "freeTierBody": "Todo funciona en la versión gratuita. Los usuarios gratuitos también ven un mensaje breve, que se puede omitir, al abrir la app — sobre apoyo y recursos frente a la adicción, nunca un anuncio real — y un pequeño banner aquí mismo.",
-    "subscribeStripeAction": "Suscribirse con Stripe",
-    "subscribePaypalAction": "Suscribirse con PayPal",
-    "pendingHint": "Esperando la confirmación del pago — puede tardar un momento tras el pago. Vuelve a esta pantalla, o toca Actualizar.",
-    "activeTitle": "Premium activo",
-    "activeSince": "Activo desde el {{date}}",
-    "viaStripe": "Gestionado a través de Stripe",
-    "viaPaypal": "Gestionado a través de PayPal",
-    "manageBillingAction": "Gestionar facturación",
-    "managePaypalHint": "Gestiona o cancela esta suscripción desde tu cuenta de PayPal.",
-    "refreshAction": "Actualizar estado",
-    "refreshedToast": "Estado actualizado.",
-    "backendNotConfigured": "Los pagos aún no están configurados en esta versión — consulta server/README.md.",
-    "checkFailed": "No se pudo comprobar el estado de la suscripción. Revisa tu conexión e inténtalo de nuevo.",
-    "checkoutFailed": "No se pudo iniciar el pago. Revisa tu conexión e inténtalo de nuevo."
+    "previewNotice": "Vista previa de la oferta. Los pagos aún no están abiertos: no se cobra nada y nunca se piden datos bancarios.",
+    "subscribeAction": "Suscribirse",
+    "notAvailableToast": "Las suscripciones aún no están abiertas."
   },
   "adminScreen": {
     "banner": "Esta es una vista previa local de lo que un futuro panel de administración podría mostrar — el lado del usuario (los datos de este dispositivo) y el lado del administrador (tickets, estado de la suscripción, ajustes del catálogo). El estado de la suscripción ahora depende del backend real en server/; todo lo demás aquí sigue siendo local de este dispositivo.",
@@ -649,5 +640,29 @@
     "title": "Bienvenido a Tally",
     "subtitle": "Crea una cuenta o inicia sesión para empezar — tu historial se guarda y está disponible en todos tus dispositivos.",
     "dataNotice": "Guardamos tu historial de consumo, tus bebidas personalizadas y tu perfil — los mismos datos que verás en la aplicación, nada más. Consulta la Política de Privacidad para más detalles."
+  },
+  "tutorial": {
+    "skip": "Saltar",
+    "startAction": "¡Vamos!",
+    "log": {
+      "title": "Registra en 2 segundos",
+      "body": "Un toque en + y queda anotado. Eso es todo.",
+      "counterLabel": "Copas hoy",
+      "tapHint": "Pruébalo — toca +",
+      "tapDone": "Listo. Ya sabes usarla."
+    },
+    "history": {
+      "title": "Todo tu historial",
+      "body": "Busca, filtra por fecha o tipo, y edita incluso después."
+    },
+    "insights": {
+      "title": "Tus estadísticas y ahorros",
+      "body": "Mira lo que bebes de verdad — y lo que te queda en el bolsillo.",
+      "savedLabel": "Ahorrado"
+    },
+    "help": {
+      "title": "Ayuda, cuando quieras",
+      "body": "Líneas de apoyo y recursos reales de tu país, a una pestaña."
+    }
   }
 }

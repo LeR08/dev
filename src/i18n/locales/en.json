@@ -218,7 +218,9 @@
     "subscriptionRowSubtitle": "A test-mode idea, not a real charge",
     "accountRow": "Account & cloud sync",
     "accountRowSubtitle": "Optional — keep your history safe across devices",
-    "accountRowLocalOnly": "Local only"
+    "accountRowLocalOnly": "Local only",
+    "tutorialRow": "Tutorial",
+    "tutorialRowSubtitle": "Replay the quick walkthrough"
   },
   "savings": {
     "title": "Savings",
@@ -546,23 +548,12 @@
   },
   "subscriptionScreen": {
     "priceLabel": "5€ / month",
-    "intro": "Free stays free — logging drinks, insights, everything else. Premium removes the launch message and the small support banner below, and helps fund the app. Payment is handled by Stripe or PayPal — this app never sees or stores your card details.",
+    "intro": "The free version stays free — drink logging, statistics, everything else. Premium would remove the launch message and the small support banner below, and help fund the app.",
     "freeTierTitle": "Free tier",
     "freeTierBody": "Everything works on the free tier. Free users also see a short, skippable message when the app opens — about support & addiction resources, never a real ad — and a small banner right here.",
-    "subscribeStripeAction": "Subscribe with Stripe",
-    "subscribePaypalAction": "Subscribe with PayPal",
-    "pendingHint": "Waiting for the payment to confirm — this can take a moment after checkout. Come back to this screen, or tap Refresh.",
-    "activeTitle": "Premium active",
-    "activeSince": "Active since {{date}}",
-    "viaStripe": "Managed via Stripe",
-    "viaPaypal": "Managed via PayPal",
-    "manageBillingAction": "Manage billing",
-    "managePaypalHint": "Manage or cancel this subscription from your PayPal account.",
-    "refreshAction": "Refresh status",
-    "refreshedToast": "Status refreshed.",
-    "backendNotConfigured": "Payments aren't set up on this build yet — see server/README.md.",
-    "checkFailed": "Couldn't check subscription status. Check your connection and try again.",
-    "checkoutFailed": "Couldn't start checkout. Check your connection and try again."
+    "previewNotice": "Offer preview. Payments aren't open yet: nothing is charged, and no payment details are ever requested.",
+    "subscribeAction": "Subscribe",
+    "notAvailableToast": "Subscriptions aren't open yet."
   },
   "adminScreen": {
     "banner": "This is a local preview of what a future admin panel could show — the user side (this device's own data) and the admin side (tickets, subscription state, catalog overrides). Subscription state is now backed by the real backend in server/; everything else here is still this device's own local data.",
@@ -649,5 +640,29 @@
     "title": "Welcome to Tally",
     "subtitle": "Create an account or sign in to get started — your history stays backed up and available on every device.",
     "dataNotice": "We store your drink log, custom drinks and profile — the same fields you'll see in the app, nothing more. See the Privacy Policy for details."
+  },
+  "tutorial": {
+    "skip": "Skip",
+    "startAction": "Let's go",
+    "log": {
+      "title": "Log a drink in seconds",
+      "body": "One tap on + and it's recorded. That's the whole thing.",
+      "counterLabel": "Drinks today",
+      "tapHint": "Try it — tap +",
+      "tapDone": "That's it. You already know the app."
+    },
+    "history": {
+      "title": "Everything you've logged",
+      "body": "Search, filter by date or type, edit anything after the fact."
+    },
+    "insights": {
+      "title": "Your stats and savings",
+      "body": "See what you actually drink — and what stays in your pocket.",
+      "savedLabel": "Saved"
+    },
+    "help": {
+      "title": "Help, whenever",
+      "body": "Real support lines and resources for your country, one tab away."
+    }
   }
 }

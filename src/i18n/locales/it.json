@@ -218,7 +218,9 @@
     "subscriptionRowSubtitle": "Un'idea in modalità test, nessun addebito reale",
     "accountRow": "Account e sincronizzazione",
     "accountRowSubtitle": "Facoltativo — proteggi la cronologia su più dispositivi",
-    "accountRowLocalOnly": "Solo locale"
+    "accountRowLocalOnly": "Solo locale",
+    "tutorialRow": "Tutorial",
+    "tutorialRowSubtitle": "Rivedi la guida rapida"
   },
   "savings": {
     "title": "Risparmi",
@@ -546,23 +548,12 @@
   },
   "subscriptionScreen": {
     "priceLabel": "5€ / mese",
-    "intro": "La versione gratuita resta gratuita — registrare i consumi, le statistiche, tutto il resto. Premium rimuove il messaggio all'avvio e il piccolo banner di supporto qui sotto, e aiuta a finanziare l'app. Il pagamento è gestito da Stripe o PayPal — questa app non vede né conserva mai i dati della tua carta.",
+    "intro": "La versione gratuita resta gratuita — registrazione dei consumi, statistiche, tutto il resto. Premium rimuoverebbe il messaggio all'avvio e il piccolo banner di sostegno qui sotto, e aiuterebbe a finanziare l'app.",
     "freeTierTitle": "Versione gratuita",
     "freeTierBody": "Nella versione gratuita funziona tutto. Gli utenti gratuiti vedono anche un breve messaggio, che si può saltare, all'apertura dell'app — su supporto e risorse per le dipendenze, mai una vera pubblicità — e un piccolo banner proprio qui.",
-    "subscribeStripeAction": "Abbonati con Stripe",
-    "subscribePaypalAction": "Abbonati con PayPal",
-    "pendingHint": "In attesa di conferma del pagamento — dopo il checkout può richiedere qualche istante. Torna su questa schermata, oppure tocca Aggiorna.",
-    "activeTitle": "Premium attivo",
-    "activeSince": "Attivo dal {{date}}",
-    "viaStripe": "Gestito tramite Stripe",
-    "viaPaypal": "Gestito tramite PayPal",
-    "manageBillingAction": "Gestisci fatturazione",
-    "managePaypalHint": "Gestisci o annulla questo abbonamento dal tuo account PayPal.",
-    "refreshAction": "Aggiorna stato",
-    "refreshedToast": "Stato aggiornato.",
-    "backendNotConfigured": "I pagamenti non sono ancora configurati in questa versione — vedi server/README.md.",
-    "checkFailed": "Impossibile verificare lo stato dell'abbonamento. Controlla la connessione e riprova.",
-    "checkoutFailed": "Impossibile avviare il pagamento. Controlla la connessione e riprova."
+    "previewNotice": "Anteprima dell'offerta. I pagamenti non sono ancora attivi: non viene addebitato nulla e non vengono mai richiesti dati di pagamento.",
+    "subscribeAction": "Abbonati",
+    "notAvailableToast": "Gli abbonamenti non sono ancora attivi."
   },
   "adminScreen": {
     "banner": "Questa è un'anteprima locale di ciò che un futuro pannello di amministrazione potrebbe mostrare — il lato utente (i dati di questo dispositivo) e il lato admin (segnalazioni, stato dell'abbonamento, personalizzazioni del catalogo). Lo stato dell'abbonamento ora si basa sul backend reale in server/; tutto il resto qui rimane locale a questo dispositivo.",
@@ -649,5 +640,29 @@
     "title": "Benvenuto su Tally",
     "subtitle": "Crea un account o accedi per iniziare — la tua cronologia resta salvata e disponibile su tutti i tuoi dispositivi.",
     "dataNotice": "Salviamo il tuo storico dei consumi, le tue bevande personalizzate e il tuo profilo — gli stessi dati che vedrai nell'app, niente di più. Vedi l'Informativa sulla privacy per i dettagli."
+  },
+  "tutorial": {
+    "skip": "Salta",
+    "startAction": "Iniziamo",
+    "log": {
+      "title": "Registra in 2 secondi",
+      "body": "Un tocco su + ed è registrato. Tutto qui.",
+      "counterLabel": "Bicchieri oggi",
+      "tapHint": "Provaci — tocca +",
+      "tapDone": "Fatto. Sai già usarla."
+    },
+    "history": {
+      "title": "Tutto il tuo storico",
+      "body": "Cerca, filtra per data o tipo, modifica anche dopo."
+    },
+    "insights": {
+      "title": "Le tue statistiche e i risparmi",
+      "body": "Guarda cosa bevi davvero — e cosa ti resta in tasca.",
+      "savedLabel": "Risparmiato"
+    },
+    "help": {
+      "title": "Aiuto, quando vuoi",
+      "body": "Linee di ascolto e risorse reali del tuo paese, a una scheda di distanza."
+    }
   }
 }

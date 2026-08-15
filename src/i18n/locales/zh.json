@@ -218,7 +218,9 @@
     "subscriptionRowSubtitle": "测试模式的构想，不会真实扣费",
     "accountRow": "账户与云同步",
     "accountRowSubtitle": "可选功能——在多台设备间保护你的记录",
-    "accountRowLocalOnly": "仅本地"
+    "accountRowLocalOnly": "仅本地",
+    "tutorialRow": "使用教程",
+    "tutorialRowSubtitle": "重新观看快速指引"
   },
   "savings": {
     "title": "节省",
@@ -546,23 +548,12 @@
   },
   "subscriptionScreen": {
     "priceLabel": "每月 5 欧元",
-    "intro": "免费版始终免费——记录饮酒、数据洞察，其他一切都不受影响。高级版会移除启动时的提示信息和下方的小型支持横幅，并帮助支持这款应用的开发。付款由 Stripe 或 PayPal 处理——本应用绝不会看到或存储你的银行卡信息。",
+    "intro": "免费版始终免费——记录饮酒、统计数据以及其他所有功能。高级版将移除启动时的提示信息和下方的小支持横幅，并帮助支持应用的运营。",
     "freeTierTitle": "免费版",
     "freeTierBody": "免费版中所有功能都可以使用。免费用户在打开应用时还会看到一条简短的、可跳过的提示——内容是关于支持与成瘾相关资源，绝不是真正的广告——以及此处的一个小横幅。",
-    "subscribeStripeAction": "使用 Stripe 订阅",
-    "subscribePaypalAction": "使用 PayPal 订阅",
-    "pendingHint": "正在等待付款确认——结账后可能需要一点时间。请返回此页面，或点击刷新。",
-    "activeTitle": "高级版已激活",
-    "activeSince": "自 {{date}} 起生效",
-    "viaStripe": "通过 Stripe 管理",
-    "viaPaypal": "通过 PayPal 管理",
-    "manageBillingAction": "管理账单",
-    "managePaypalHint": "可在你的 PayPal 账户中管理或取消此订阅。",
-    "refreshAction": "刷新状态",
-    "refreshedToast": "状态已刷新。",
-    "backendNotConfigured": "此版本尚未配置支付功能——请参阅 server/README.md。",
-    "checkFailed": "无法检查订阅状态。请检查网络连接后重试。",
-    "checkoutFailed": "无法开始结账。请检查网络连接后重试。"
+    "previewNotice": "方案预览。支付功能尚未开放：不会产生任何费用，也不会索取任何支付信息。",
+    "subscribeAction": "订阅",
+    "notAvailableToast": "订阅功能尚未开放。"
   },
   "adminScreen": {
     "banner": "这是未来管理面板可能呈现内容的本地预览——包括用户端（本设备自身的数据）和管理端（反馈单、订阅状态、目录调整）。订阅状态现在由 server/ 中真实的后端提供支持；此处其余内容仍然仅来自本设备本地数据。",
@@ -649,5 +640,29 @@
     "title": "欢迎使用 Tally",
     "subtitle": "创建账户或登录以开始使用——你的记录会安全保存，并可在所有设备上使用。",
     "dataNotice": "我们会保存你的饮酒记录、自定义饮品和个人资料——与应用内显示的字段相同，不会更多。详见隐私政策。"
+  },
+  "tutorial": {
+    "skip": "跳过",
+    "startAction": "开始使用",
+    "log": {
+      "title": "两秒完成记录",
+      "body": "点一下 +，就记录好了。就这么简单。",
+      "counterLabel": "今日饮酒",
+      "tapHint": "试试看——点击 +",
+      "tapDone": "就是这样，你已经会用了。"
+    },
+    "history": {
+      "title": "全部记录一目了然",
+      "body": "搜索、按日期或类型筛选，事后也能随时修改。"
+    },
+    "insights": {
+      "title": "你的数据与省下的钱",
+      "body": "看看你实际喝了多少——以及省下了多少。",
+      "savedLabel": "已省下"
+    },
+    "help": {
+      "title": "随时可以求助",
+      "body": "你所在国家的真实援助热线和资源，一个标签页即可找到。"
+    }
   }
 }

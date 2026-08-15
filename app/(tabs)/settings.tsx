@@ -142,7 +142,6 @@ export default function SettingsScreen() {
             <Row
               title={t('nav.subscription')}
               subtitle={t('settings.subscriptionRowSubtitle')}
-              value={settings.subscription.status === 'active' ? t('subscriptionScreen.activeTitle') : undefined}
               onPress={() => router.push('/settings/subscription')}
             />
           </Card>
@@ -151,6 +150,12 @@ export default function SettingsScreen() {
         <FadeInView delay={200}>
           <Card padded={false} style={{ paddingHorizontal: theme.spacing(4) }}>
             <Row title={t('settings.helpRow')} onPress={() => router.push('/help')} />
+            <RowDivider />
+            <Row
+              title={t('settings.tutorialRow')}
+              subtitle={t('settings.tutorialRowSubtitle')}
+              onPress={() => router.push('/tutorial')}
+            />
             <RowDivider />
             <Row
               title={t('settings.reportRow')}
