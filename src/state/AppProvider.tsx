@@ -298,20 +298,29 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // that closure's copy of `updateSettings` at whatever `settings` was at
   // mount time, so any later call from that listener (e.g. patching
   // `account` on sign-in) would silently overwrite every other setting —
-  // language included — back to its value at app boot. The functional form
-  // of setSettings always sees React's current state, not a stale closure.
+  // language included — back to its value at app boot.
+  //
+  // Reads the merge base from `settingsRef` rather than `setSettings`'s own
+  // functional-update form: that form only runs its updater once React gets
+  // around to processing the update, which isn't synchronous when called
+  // from outside a React event handler (Firebase's auth listener, most
+  // notably) — an earlier version of this fix read `next` right after
+  // calling setSettings and got `undefined` there, which crashed
+  // store.saveSettings(undefined) with "Cannot convert undefined value to
+  // object". settingsRef is kept in sync every render (see its assignment
+  // above) and is also updated here immediately, so back-to-back calls
+  // before a re-render still merge onto the latest patch, not a stale one.
   const updateSettings = useCallback(
     async (patch: Partial<Settings>) => {
-      let next!: Settings;
-      setSettings((current) => {
-        next = {
-          ...current,
-          ...patch,
-          goals: { ...current.goals, ...(patch.goals ?? {}) },
-          subscription: { ...current.subscription, ...(patch.subscription ?? {}) },
-        };
-        return next;
-      });
+      const current = settingsRef.current;
+      const next: Settings = {
+        ...current,
+        ...patch,
+        goals: { ...current.goals, ...(patch.goals ?? {}) },
+        subscription: { ...current.subscription, ...(patch.subscription ?? {}) },
+      };
+      settingsRef.current = next;
+      setSettings(next);
       await store.saveSettings(next);
     },
     [store]
