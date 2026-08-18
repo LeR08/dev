@@ -1,17 +1,17 @@
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect, useState } from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Field } from '@/components/ui/Field';
 import { Icon } from '@/components/ui/Icon';
 import { LanguagePickerModal } from '@/components/ui/LanguagePickerModal';
-import { LanguagePill } from '@/components/ui/LanguagePill';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
+import { LANGUAGE_NAMES } from '@/i18n';
 import { useTranslation } from '@/i18n/I18nProvider';
 import {
   sendPasswordReset,
@@ -155,10 +155,30 @@ export default function AuthGateScreen() {
 
   return (
     <Screen bottomInset={theme.spacing(6)}>
-      <View style={{ gap: theme.spacing(5), paddingTop: theme.spacing(10) }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <LanguagePill onPress={() => setLanguagePickerVisible(true)} />
-        </View>
+      <View style={{ gap: theme.spacing(5), paddingTop: theme.spacing(6) }}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('settings.language.changeA11y')}
+          onPress={() => setLanguagePickerVisible(true)}
+          style={({ pressed }) => ({
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: theme.spacing(2.5),
+            paddingVertical: theme.spacing(3),
+            paddingHorizontal: theme.spacing(4),
+            borderRadius: theme.radius.lg,
+            backgroundColor: theme.accent.soft,
+            opacity: pressed ? 0.75 : 1,
+          })}
+        >
+          <Icon name="globe" size={18} color={theme.accent.strong} strokeWidth={1.8} />
+          <Text variant="label" style={{ flex: 1, color: theme.accent.strong }}>
+            {LANGUAGE_NAMES[settings.language]}
+          </Text>
+          <View style={{ transform: [{ rotate: '180deg' }] }}>
+            <Icon name="chevronLeft" size={16} color={theme.accent.strong} strokeWidth={2} />
+          </View>
+        </Pressable>
 
         <View style={{ gap: theme.spacing(3), alignItems: 'flex-start' }}>
           <View
