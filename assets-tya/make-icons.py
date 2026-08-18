@@ -25,7 +25,7 @@ from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "tya-mark.svg")
 OUT = HERE
-BG = (237, 239, 250)  # #EDEFFA — the illustration's own background
+BG = (255, 255, 255)  # the illustration's own background
 
 os.makedirs(OUT, exist_ok=True)
 
@@ -34,7 +34,7 @@ def render(size, transparent):
     """Rasterise the SVG at `size`, optionally dropping the background rect."""
     svg = open(SRC, encoding="utf-8").read()
     if transparent:
-        svg = svg.replace('<rect width="1024" height="1024" fill="#EDEFFA"/>', "")
+        svg = svg.replace('<rect width="1024" height="1024" fill="#FFFFFF"/>', "")
         # The inner fills reference the background colour to punch holes in
         # overlapping strokes; keep them opaque so the shapes stay readable
         # over the adaptive background layer.

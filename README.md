@@ -138,10 +138,14 @@ TYA's mark lives at `assets-tya/tya-mark.svg` and every PNG in `assets-tya/` is 
 from it — edit the SVG, re-run the generator, never touch the PNGs by hand. Two constraints
 are baked into that generation and are easy to undo by accident: Android masks adaptive icons
 to a circle and only guarantees the middle ~66%, so the foreground layer is scaled into that
-safe zone instead of full bleed; and the flat background layer is the illustration's own
-lavender rather than white, so the mark keeps an edge on a light wallpaper. The artwork is
-detailed line-art — it reads well from about 72px up, and turns to mush at 48px, which is the
-trade-off that comes with using an illustration rather than a glyph as a launcher icon.
+safe zone instead of full bleed; and the flat background layer must stay the same colour as
+the illustration's own background, or the mask shows a mismatched sliver behind the mark.
+
+The artwork is detailed line-art, so it needs room: it reads well from roughly 96px up and
+turns to mush below that. In practice that is fine — a launcher on a xxhdpi/xxxhdpi phone
+draws icons at 144–192 physical px (the "48" in Android's icon spec is dp, not pixels), and
+the app ships no notification icons, which is the only place a genuinely tiny raster would be
+needed. It is still the trade-off that comes with an illustration rather than a glyph.
 
 Build TYA exactly like Tally, just with its own profile:
 

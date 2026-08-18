@@ -30,9 +30,9 @@ const VARIANTS = {
     androidPackage: 'com.tya.tracker',
     iosBundleId: 'com.tya.tracker',
     assetsDir: './assets-tya',
-    // Matches the green gradient the TYA icon itself starts from, so the
-    // adaptive-icon mask never shows a mismatched background sliver.
-    adaptiveIconBackground: '#EDEFFA',
+    // Matches the illustration's own background, so the adaptive-icon mask
+    // never shows a mismatched sliver behind the mark.
+    adaptiveIconBackground: '#FFFFFF',
     easProjectId: '9b767876-5eec-4875-b368-b1d4b5d6bfe4',
   },
 };
