@@ -114,8 +114,13 @@ someone — build the `preview` profile instead:
 npx eas build --profile preview --platform android
 ```
 
-> On a machine with no `git` installed, prefix EAS commands with `set EAS_NO_VCS=1` (Windows)
-> or `EAS_NO_VCS=1` (macOS/Linux), otherwise the CLI aborts looking for a repository.
+> On a machine with no `git` installed — or with a broken one, which reports as
+> `git found, but git --help exited with status undefined` — set `EAS_NO_VCS=1` before the
+> EAS command (`set EAS_NO_VCS=1` on Windows, `EAS_NO_VCS=1` inline on macOS/Linux),
+> otherwise the CLI aborts looking for a repository. EAS normally works out what to upload
+> from git, so with no VCS that job falls to `.easignore` — it is what keeps `node_modules`,
+> build output and the local `.env` off the build server. Anything that must not be uploaded
+> belongs in `.easignore`, not only in `.gitignore`.
 
 ### Two apps, one codebase: Tally and TYA
 
