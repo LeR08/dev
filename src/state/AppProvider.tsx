@@ -290,18 +290,31 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     [store, enqueueIfSignedIn]
   );
 
+  // Deliberately closes over no reactive state (`store` is stable) so this
+  // keeps one identity for the component's whole lifetime. That matters
+  // because onAuthChange's listener below is registered once (empty deps,
+  // so it never re-subscribes to Firebase) and calls this function from
+  // inside its closure — a version depending on `settings` would freeze
+  // that closure's copy of `updateSettings` at whatever `settings` was at
+  // mount time, so any later call from that listener (e.g. patching
+  // `account` on sign-in) would silently overwrite every other setting —
+  // language included — back to its value at app boot. The functional form
+  // of setSettings always sees React's current state, not a stale closure.
   const updateSettings = useCallback(
     async (patch: Partial<Settings>) => {
-      const next: Settings = {
-        ...settings,
-        ...patch,
-        goals: { ...settings.goals, ...(patch.goals ?? {}) },
-        subscription: { ...settings.subscription, ...(patch.subscription ?? {}) },
-      };
-      setSettings(next);
+      let next!: Settings;
+      setSettings((current) => {
+        next = {
+          ...current,
+          ...patch,
+          goals: { ...current.goals, ...(patch.goals ?? {}) },
+          subscription: { ...current.subscription, ...(patch.subscription ?? {}) },
+        };
+        return next;
+      });
       await store.saveSettings(next);
     },
-    [settings, store]
+    [store]
   );
 
   const saveProfile = useCallback(
