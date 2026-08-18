@@ -218,7 +218,7 @@
     "subscriptionRowSubtitle": "Eine Testmodus-Idee, keine echte Abbuchung",
     "accountRow": "Konto & Cloud-Synchronisierung",
     "accountRowSubtitle": "Optional — sichert deinen Verlauf geräteübergreifend",
-    "accountRowLocalOnly": "Nur lokal",
+    "accountSynced": "Synchronisiert",
     "tutorialRow": "Tutorial",
     "tutorialRowSubtitle": "Kurze Einführung erneut ansehen"
   },

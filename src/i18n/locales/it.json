@@ -218,7 +218,7 @@
     "subscriptionRowSubtitle": "Un'idea in modalità test, nessun addebito reale",
     "accountRow": "Account e sincronizzazione",
     "accountRowSubtitle": "Facoltativo — proteggi la cronologia su più dispositivi",
-    "accountRowLocalOnly": "Solo locale",
+    "accountSynced": "Sincronizzato",
     "tutorialRow": "Tutorial",
     "tutorialRowSubtitle": "Rivedi la guida rapida"
   },

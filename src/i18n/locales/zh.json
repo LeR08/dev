@@ -218,7 +218,7 @@
     "subscriptionRowSubtitle": "测试模式的构想，不会真实扣费",
     "accountRow": "账户与云同步",
     "accountRowSubtitle": "可选功能——在多台设备间保护你的记录",
-    "accountRowLocalOnly": "仅本地",
+    "accountSynced": "已同步",
     "tutorialRow": "使用教程",
     "tutorialRowSubtitle": "重新观看快速指引"
   },

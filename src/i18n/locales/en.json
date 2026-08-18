@@ -218,7 +218,7 @@
     "subscriptionRowSubtitle": "A test-mode idea, not a real charge",
     "accountRow": "Account & cloud sync",
     "accountRowSubtitle": "Optional — keep your history safe across devices",
-    "accountRowLocalOnly": "Local only",
+    "accountSynced": "Synced",
     "tutorialRow": "Tutorial",
     "tutorialRowSubtitle": "Replay the quick walkthrough"
   },

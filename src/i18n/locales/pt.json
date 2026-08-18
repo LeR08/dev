@@ -218,7 +218,7 @@
     "subscriptionRowSubtitle": "Uma ideia em modo de teste, sem cobrança real",
     "accountRow": "Conta e sincronização",
     "accountRowSubtitle": "Opcional — mantém o teu histórico seguro em vários dispositivos",
-    "accountRowLocalOnly": "Apenas local",
+    "accountSynced": "Sincronizado",
     "tutorialRow": "Tutorial",
     "tutorialRowSubtitle": "Rever a visita rápida"
   },

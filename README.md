@@ -457,6 +457,26 @@ profile schema's `name`/`email` migration).
 npm test
 ```
 
+### Dependency advisories
+
+`npm audit` reports a set of high-severity findings that all trace back to a single
+package, `image-size`, reached through `expo → @expo/metro → metro`. Two things about it:
+
+- **Every published version is in the advisory range** (`<=2.0.2`, and 2.0.2 is the
+  latest release). There is no fixed version to move to. `npm audit fix --force` "solves"
+  it by downgrading Expo 57 → 53, a major-version downgrade that would break the app;
+  that is not a fix and is deliberately not applied here.
+- **It never reaches a phone.** Metro is the bundler — it runs on a developer machine or
+  on the EAS build server and emits a JS bundle; Metro itself is not part of the shipped
+  app. The advisory is a denial-of-service via an infinite loop when parsing a malformed
+  ICNS/JXL/HEIF image, so triggering it would mean feeding a hostile image asset into
+  your own build.
+
+The one genuinely fixable finding, `nanoid` (<3.3.18, reached via `expo-router` and
+`postcss`), is pinned to a safe patch release through `overrides` in `package.json`.
+Re-check with `npm audit` after any Expo upgrade — once upstream publishes a patched
+`image-size`, an Expo bump will pick it up and the remaining findings should clear.
+
 ## Open items before any public release
 
 Carried over verbatim from the v1.2 spec — these are flagged there as needing a human, not

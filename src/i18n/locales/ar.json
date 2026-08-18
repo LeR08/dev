@@ -218,7 +218,7 @@
     "subscriptionRowSubtitle": "فكرة في وضع الاختبار، بلا خصم حقيقي",
     "accountRow": "الحساب والمزامنة السحابية",
     "accountRowSubtitle": "اختياري — حافظ على سجلك آمنًا عبر عدة أجهزة",
-    "accountRowLocalOnly": "محلي فقط",
+    "accountSynced": "تمت المزامنة",
     "tutorialRow": "الدليل التعليمي",
     "tutorialRowSubtitle": "أعد مشاهدة الجولة السريعة"
   },

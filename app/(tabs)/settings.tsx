@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
 
+import { AccountRow } from '@/components/AccountRow';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { FadeInView } from '@/components/ui/FadeInView';
@@ -122,12 +123,7 @@ export default function SettingsScreen() {
               onPress={() => router.push('/settings/language')}
             />
             <RowDivider />
-            <Row
-              title={t('settings.accountRow')}
-              subtitle={t('settings.accountRowSubtitle')}
-              value={settings.account?.email ?? t('settings.accountRowLocalOnly')}
-              onPress={() => router.push('/settings/account')}
-            />
+            <AccountRow account={settings.account} />
           </Card>
         </FadeInView>
 

@@ -52,7 +52,8 @@
   },
   "private": true,
   "overrides": {
-    "uuid": "^14.0.1"
+    "uuid": "^14.0.1",
+    "nanoid": "^3.3.18"
   },
   "jest": {
     "preset": "jest-expo",
