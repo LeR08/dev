@@ -1,78 +1,66 @@
-"""TYA icon v4 — the line-art illustration the user supplied (person with a
-phone, a beer, and a pie-chart speech bubble), redrawn as vector so it can be
-rasterised at every size Expo asks for.
+"""Derives every icon size Expo asks for from source-logo.png.
 
-Two things the source artwork can't carry unchanged into a launcher icon,
-handled here:
+source-logo.png is the artwork as supplied — it is the master and is never
+edited here. This script only resizes it and lays it out for the formats
+Android needs; drop a new file in its place and re-run to change the icon.
 
-- Android masks adaptive icons to a circle (and to squircles, teardrops...)
-  and only the middle ~66% is guaranteed visible. The artwork runs
-  edge-to-edge, so the foreground layer is scaled into that safe zone rather
-  than pasted at full bleed, which would clip the phone and the bubble.
-- The background is near-white, so the flat background layer is the same
-  lavender as the illustration: the mark keeps its own edge instead of
-  dissolving into a light wallpaper.
+    python assets-tya/make-icons.py
 
-icon.png and splash-icon.png keep the full composition — they're shown large
-and unmasked, which is where this artwork is at its best.
+The one layout decision, in android-icon-foreground.png: Android masks
+adaptive icons to a circle (and to squircles, teardrops...) and only
+guarantees the middle ~66% is visible. The artwork runs to the edges of its
+square, so it is scaled down into that safe zone rather than pasted at full
+bleed, which would cut off the speech bubble and the shoulder. The flat
+background layer behind it is the artwork's own white, so the mask never
+shows a mismatched sliver.
 """
 
 import os
 
-import cairosvg
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(HERE, "tya-mark.svg")
-OUT = HERE
-BG = (255, 255, 255)  # the illustration's own background
-
-os.makedirs(OUT, exist_ok=True)
-
-
-def render(size, transparent):
-    """Rasterise the SVG at `size`, optionally dropping the background rect."""
-    svg = open(SRC, encoding="utf-8").read()
-    if transparent:
-        svg = svg.replace('<rect width="1024" height="1024" fill="#FFFFFF"/>', "")
-        # The inner fills reference the background colour to punch holes in
-        # overlapping strokes; keep them opaque so the shapes stay readable
-        # over the adaptive background layer.
-    png = cairosvg.svg2png(bytestring=svg.encode(), output_width=size, output_height=size)
-    path = os.path.join(HERE, f"_tmp_{size}_{transparent}.png")
-    open(path, "wb").write(png)
-    return Image.open(path).convert("RGBA")
-
-
-# --- icon.png: full composition, opaque ---
-render(1024, transparent=False).convert("RGB").save(f"{OUT}/icon.png")
-
-# --- splash-icon.png: transparent, shown over the splash background ---
-render(1024, transparent=True).save(f"{OUT}/splash-icon.png")
-
-# --- android-icon-background.png: flat lavender ---
-Image.new("RGBA", (512, 512), BG + (255,)).save(f"{OUT}/android-icon-background.png")
-
-# --- android-icon-foreground.png: artwork scaled into Android's safe zone ---
+SRC = os.path.join(HERE, "source-logo.png")
 SAFE = 0.66
-fg = render(512, transparent=True)
-scaled = fg.resize((int(512 * SAFE), int(512 * SAFE)), Image.LANCZOS)
-canvas = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
-canvas.alpha_composite(scaled, ((512 - scaled.width) // 2, (512 - scaled.height) // 2))
-canvas.save(f"{OUT}/android-icon-foreground.png")
+BG = (255, 255, 255)
 
-# --- android-icon-monochrome.png: same geometry, alpha is what the OS uses ---
-mono = render(432, transparent=True)
-mono_scaled = mono.resize((int(432 * SAFE), int(432 * SAFE)), Image.LANCZOS)
-mono_canvas = Image.new("RGBA", (432, 432), (0, 0, 0, 0))
-mono_canvas.alpha_composite(mono_scaled, ((432 - mono_scaled.width) // 2, (432 - mono_scaled.height) // 2))
-mono_canvas.save(f"{OUT}/android-icon-monochrome.png")
+source = Image.open(SRC).convert("RGB")
+
+
+def resized(size):
+    return source.resize((size, size), Image.LANCZOS)
+
+
+# --- icon.png / splash-icon.png: the artwork, untouched apart from scale ---
+resized(1024).save(os.path.join(HERE, "icon.png"))
+resized(1024).save(os.path.join(HERE, "splash-icon.png"))
 
 # --- favicon.png ---
-render(48, transparent=False).convert("RGB").save(f"{OUT}/favicon.png")
+resized(48).save(os.path.join(HERE, "favicon.png"))
 
-for f in os.listdir(HERE):
-    if f.startswith("_tmp_"):
-        os.remove(os.path.join(HERE, f))
+# --- android-icon-background.png: flat, matching the artwork's background ---
+Image.new("RGB", (512, 512), BG).save(os.path.join(HERE, "android-icon-background.png"))
+
+
+def safe_zone(canvas_size):
+    """The artwork centred inside Android's guaranteed-visible middle."""
+    inner = int(canvas_size * SAFE)
+    canvas = Image.new("RGBA", (canvas_size, canvas_size), (0, 0, 0, 0))
+    canvas.paste(resized(inner), ((canvas_size - inner) // 2, (canvas_size - inner) // 2))
+    return canvas
+
+
+safe_zone(512).save(os.path.join(HERE, "android-icon-foreground.png"))
+
+# --- monochrome: Android 13+ themed icons recolour by alpha, so the white
+# background has to drop out or the whole tile reads as one solid blob. ---
+mono_inner = int(432 * SAFE)
+art = source.resize((mono_inner, mono_inner), Image.LANCZOS).convert("L")
+alpha = art.point(lambda v: 255 - v)  # ink opaque, paper transparent
+shape = Image.new("RGBA", (mono_inner, mono_inner), (0, 0, 0, 255))
+shape.putalpha(alpha)
+mono = Image.new("RGBA", (432, 432), (0, 0, 0, 0))
+mono.paste(shape, ((432 - mono_inner) // 2, (432 - mono_inner) // 2), shape)
+mono.save(os.path.join(HERE, "android-icon-monochrome.png"))
 
 print("done")

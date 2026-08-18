@@ -134,18 +134,15 @@ The application code itself never branches on this — same screens, same logic,
 project. Signing in with the same email/Google account on both shows the same data on both;
 they're two doors into the same house, not two separate apps.
 
-TYA's mark lives at `assets-tya/tya-mark.svg` and every PNG in `assets-tya/` is rasterised
-from it — edit the SVG, re-run the generator, never touch the PNGs by hand. Two constraints
-are baked into that generation and are easy to undo by accident: Android masks adaptive icons
-to a circle and only guarantees the middle ~66%, so the foreground layer is scaled into that
-safe zone instead of full bleed; and the flat background layer must stay the same colour as
-the illustration's own background, or the mask shows a mismatched sliver behind the mark.
+TYA's mark is `assets-tya/source-logo.png` — the artwork as supplied, treated as the master
+and never edited in the repo. Every other PNG in `assets-tya/` is derived from it by
+`python assets-tya/make-icons.py`; to change the icon, replace that one file and re-run.
 
-The artwork is detailed line-art, so it needs room: it reads well from roughly 96px up and
-turns to mush below that. In practice that is fine — a launcher on a xxhdpi/xxxhdpi phone
-draws icons at 144–192 physical px (the "48" in Android's icon spec is dp, not pixels), and
-the app ships no notification icons, which is the only place a genuinely tiny raster would be
-needed. It is still the trade-off that comes with an illustration rather than a glyph.
+The script makes exactly one layout decision, in `android-icon-foreground.png`: Android masks
+adaptive icons to a circle and only guarantees the middle ~66% is visible, so the artwork is
+scaled into that safe zone rather than pasted at full bleed, which would cut off the speech
+bubble and the shoulder. The flat background layer behind it is the artwork's own white, so
+the mask never shows a mismatched sliver. `icon.png` is byte-identical to the source.
 
 Build TYA exactly like Tally, just with its own profile:
 
