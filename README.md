@@ -104,7 +104,7 @@ npm start          # = expo start --dev-client
 
 Open the app on the phone and it connects to that dev server — phone and computer have to be
 on the same network. Edit a file, and the screen updates. You only need to build again when
-something *native* changes: a new package with native code, or an edit to `app.json`'s
+something *native* changes: a new package with native code, or an edit to `app.config.js`'s
 `plugins` / `android` / `ios` sections. Pure JavaScript and TypeScript changes never need one.
 
 For a standalone APK that runs with no computer attached — the one to actually use or hand to
@@ -116,6 +116,40 @@ npx eas build --profile preview --platform android
 
 > On a machine with no `git` installed, prefix EAS commands with `set EAS_NO_VCS=1` (Windows)
 > or `EAS_NO_VCS=1` (macOS/Linux), otherwise the CLI aborts looking for a repository.
+
+### Two apps, one codebase: Tally and TYA
+
+`app.config.js` (not a static `app.json`) reads `APP_VARIANT` and switches everything that
+makes an app a distinct *installable* thing — name, Android package / iOS bundle id, icon set,
+OAuth redirect scheme — between two identities:
+
+| | Tally | TYA |
+|---|---|---|
+| `APP_VARIANT` | unset / `tally` | `tya` |
+| package/bundle id | `com.tally.tracker` | `com.tya.tracker` |
+| icons | `assets/` | `assets-tya/` |
+| EAS profiles | `development`, `preview`, `production` | `tya-development`, `tya-preview` |
+
+The application code itself never branches on this — same screens, same logic, same Firebase
+project. Signing in with the same email/Google account on both shows the same data on both;
+they're two doors into the same house, not two separate apps.
+
+Build TYA exactly like Tally, just with its own profile:
+
+```bash
+npx eas build --profile tya-development --platform android   # once, to get the dev client
+npx eas build --profile tya-preview --platform android       # standalone APK
+```
+
+**Google Sign-In on TYA's native button isn't wired up yet.** It needs its own Android OAuth
+client — same steps as Tally originally did (see [Accounts & cloud
+sync](#accounts--cloud-sync)'s setup notes): run `eas credentials` for the `tya-development` (or
+`tya-preview`) profile to get TYA's own keystore SHA-1, register a **new Android app** for
+`com.tya.tracker` in the *same* Firebase project (Project settings → Add app), paste that SHA-1
+in, then copy the Android OAuth client id Firebase generates and add it as
+`EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` to both `tya-*` profiles in `eas.json`. Until then, the
+Google button on TYA just stays hidden — email/password sign-in already works on the first
+build, same as Tally's did before that step.
 
 ## How it is put together
 
@@ -302,12 +336,12 @@ habits:
   our own copy rather than arbitrary ad-network creative, its content can actually be held to
   "anti-addiction, non-judgmental" rather than whatever an ad auction happens to serve.
 - **The AdMob banner is currently disabled** (`src/ads/AdBanner.tsx` always renders `null`,
-  and `react-native-google-mobile-ads` is removed from `package.json`/`app.json`). It used
+  and `react-native-google-mobile-ads` is removed from `package.json`/`app.config.js`). It used
   Google's own public **test** ad unit ids and rendered fine on a real device build, but
   `react-native-google-mobile-ads@16.4.0` pulls in `play-services-ads:25.4.0`, whose Kotlin
   metadata (2.3.0) is newer than what this project's Gradle/Kotlin toolchain compiles against
   (2.1.x) — that failed `:react-native-google-mobile-ads:compileReleaseKotlin` on EAS Build.
-  Re-add the dependency and the `app.json` plugin entry (see git history for the exact block)
+  Re-add the dependency and the `app.config.js` plugin entry (see git history for the exact block)
   once the Kotlin toolchain version is bumped to match, or once the library ships a build
   compiled against an older Kotlin metadata version. Not a blocker for anything else — it's
   a free-tier banner, not part of auth/sync.
