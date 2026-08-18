@@ -17,6 +17,11 @@ const VARIANTS = {
     iosBundleId: 'com.tally.tracker',
     assetsDir: './assets',
     adaptiveIconBackground: '#E9E4DC',
+    // Each variant is its own EAS project (own build credentials/keystore,
+    // own push/submit config) even though they share this one codebase —
+    // `eas build` prints this id the first time it creates a project for a
+    // dynamic config, since it can't write it back into app.config.js itself.
+    easProjectId: '9a26edad-e401-4e37-936d-4327370f3f99',
   },
   tya: {
     name: 'TYA',
@@ -28,6 +33,7 @@ const VARIANTS = {
     // Matches the green gradient the TYA icon itself starts from, so the
     // adaptive-icon mask never shows a mismatched background sliver.
     adaptiveIconBackground: '#3A8A62',
+    easProjectId: '9b767876-5eec-4875-b368-b1d4b5d6bfe4',
   },
 };
 
@@ -110,5 +116,11 @@ module.exports = {
     experiments: {
       typedRoutes: true,
     },
+    extra: {
+      eas: {
+        projectId: v.easProjectId,
+      },
+    },
+    owner: 'ler08',
   },
 };
