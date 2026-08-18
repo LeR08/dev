@@ -44,7 +44,21 @@ export function Row({ title, subtitle, value, onPress, right, left, emphasis, st
         ) : null}
       </View>
       {value ? (
-        <Text variant="label" tone="muted">
+        // A long value (an email address, most notably) has no natural
+        // width limit of its own, so without one it claims as much space
+        // as it needs and squeezes the title's flex:1 column down to
+        // almost nothing — narrow enough that RN's line-breaker, unable to
+        // fit even one word per line, starts breaking mid-word instead of
+        // at spaces. Capping the value's own width and truncating it (not
+        // the title) keeps the title column — the more important text —
+        // wrapping normally.
+        <Text
+          variant="label"
+          tone="muted"
+          numberOfLines={1}
+          ellipsizeMode="middle"
+          style={{ maxWidth: 130, flexShrink: 1 }}
+        >
           {value}
         </Text>
       ) : null}
