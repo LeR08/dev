@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Field } from '@/components/ui/Field';
 import { Icon } from '@/components/ui/Icon';
+import { LanguagePickerModal } from '@/components/ui/LanguagePickerModal';
+import { LanguagePill } from '@/components/ui/LanguagePill';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
@@ -99,12 +101,14 @@ export default function AuthGateScreen() {
   const theme = useTheme();
   const { t } = useTranslation();
   const toast = useToast();
+  const { settings, updateSettings } = useApp();
 
   const [mode, setMode] = useState<'signIn' | 'signUp'>('signUp');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState<'auth' | 'reset' | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [languagePickerVisible, setLanguagePickerVisible] = useState(false);
   const googleAvailable = isGoogleSignInAvailable();
 
   const submitAuth = async () => {
@@ -152,6 +156,10 @@ export default function AuthGateScreen() {
   return (
     <Screen bottomInset={theme.spacing(6)}>
       <View style={{ gap: theme.spacing(5), paddingTop: theme.spacing(10) }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          <LanguagePill onPress={() => setLanguagePickerVisible(true)} />
+        </View>
+
         <View style={{ gap: theme.spacing(3), alignItems: 'flex-start' }}>
           <View
             style={{
@@ -263,6 +271,13 @@ export default function AuthGateScreen() {
           {t('account.appleNotice')}
         </Text>
       </View>
+
+      <LanguagePickerModal
+        visible={languagePickerVisible}
+        selected={settings.language}
+        onSelect={(language) => void updateSettings({ language })}
+        onDismiss={() => setLanguagePickerVisible(false)}
+      />
     </Screen>
   );
 }
