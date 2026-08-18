@@ -134,6 +134,15 @@ The application code itself never branches on this — same screens, same logic,
 project. Signing in with the same email/Google account on both shows the same data on both;
 they're two doors into the same house, not two separate apps.
 
+TYA's mark lives at `assets-tya/tya-mark.svg` and every PNG in `assets-tya/` is rasterised
+from it — edit the SVG, re-run the generator, never touch the PNGs by hand. Two constraints
+are baked into that generation and are easy to undo by accident: Android masks adaptive icons
+to a circle and only guarantees the middle ~66%, so the foreground layer is scaled into that
+safe zone instead of full bleed; and the flat background layer is the illustration's own
+lavender rather than white, so the mark keeps an edge on a light wallpaper. The artwork is
+detailed line-art — it reads well from about 72px up, and turns to mush at 48px, which is the
+trade-off that comes with using an illustration rather than a glyph as a launcher icon.
+
 Build TYA exactly like Tally, just with its own profile:
 
 ```bash

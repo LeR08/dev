@@ -32,7 +32,7 @@ const VARIANTS = {
     assetsDir: './assets-tya',
     // Matches the green gradient the TYA icon itself starts from, so the
     // adaptive-icon mask never shows a mismatched background sliver.
-    adaptiveIconBackground: '#5B5FEF',
+    adaptiveIconBackground: '#EDEFFA',
     easProjectId: '9b767876-5eec-4875-b368-b1d4b5d6bfe4',
   },
 };

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#EDEFFA"/>
+
+  <g fill="none" stroke="#3B2E9E" stroke-width="21" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- Speech bubble with its tail, drawn first so the mark overlaps it -->
+    <circle cx="754" cy="322" r="188" fill="#F8F9FE"/>
+    <path d="M 662 476 L 628 552 L 712 518 Z" fill="#F8F9FE"/>
+
+    <!-- Skull + face profile, facing right -->
+    <path d="M 296 468
+             C 250 448, 230 400, 234 350
+             C 240 286, 296 244, 358 247
+             C 418 250, 450 291, 450 338
+             C 450 364, 444 382, 436 396
+             C 428 404, 430 411, 438 419
+             L 466 452
+             C 472 460, 466 469, 454 471
+             L 440 473
+             C 434 481, 436 486, 440 492
+             C 442 504, 434 514, 418 520
+             C 398 528, 358 532, 328 522
+             C 310 516, 298 494, 296 468 Z" />
+
+    <!-- Hair: one mass over the skull with a wavy fringe underneath -->
+    <path d="M 234 350
+             C 230 282, 290 238, 360 242
+             C 422 246, 456 286, 452 334
+             C 448 314, 432 296, 408 297
+             C 376 298, 352 318, 336 334
+             C 318 352, 296 358, 278 348
+             C 264 340, 248 341, 234 350 Z" />
+
+    <!-- Neck and shoulders -->
+    <path d="M 296 468 C 298 508, 292 538, 266 554
+             C 196 586, 138 656, 116 746
+             C 102 808, 98 878, 98 1024" />
+    <path d="M 418 520 C 448 542, 486 578, 506 628
+             C 520 662, 524 698, 524 726" />
+
+    <!-- Bent arm: elbow bottom-left, forearm reaching right -->
+    <path d="M 212 762 L 212 862 C 212 874, 221 882, 233 882 L 378 868" />
+
+    <!-- Pointing hand: a closed fist with the index finger extended.
+         The finger is drawn as a separate stroked path over the fist so it
+         reads as a finger and not as a bump on an oval. -->
+    <path d="M 378 868
+             C 386 826, 416 800, 452 794
+             C 486 788, 522 796, 546 816
+             C 566 833, 566 862, 542 876
+             C 502 898, 424 900, 396 890
+             C 383 885, 377 877, 378 868 Z" fill="#EDEFFA"/>
+    <path d="M 466 800
+             L 566 766
+             C 580 761, 590 769, 588 781
+             C 586 793, 572 799, 556 803
+             L 486 822" fill="#EDEFFA"/>
+
+    <!-- Phone, tilted -->
+    <g transform="rotate(-24 664 772)">
+      <rect x="584" y="632" width="160" height="280" rx="28" fill="#F8F9FE"/>
+      <circle cx="664" cy="664" r="9" fill="#3B2E9E" stroke="none"/>
+    </g>
+
+    <!-- Supporting hand cradling the phone from below -->
+    <path d="M 636 856
+             C 664 838, 702 842, 716 866
+             C 730 890, 716 920, 686 930
+             C 664 937, 640 932, 628 918" fill="#EDEFFA"/>
+
+  </g>
+
+  <!-- Pie chart inside the bubble -->
+  <g stroke="none">
+    <path d="M 754 322 L 858 322 A 104 104 0 1 1 754 218 Z" fill="#3B2E9E"/>
+    <path d="M 754 322 L 754 218 A 104 104 0 0 1 858 322 Z" fill="#FFD724"/>
+  </g>
+
+  <!-- Beer glass, sitting in the gap between the head and the bubble tail -->
+  <g stroke="#D9A520" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 508 486 L 520 612 C 521 626, 531 635, 544 635 L 558 635
+             C 571 635, 581 626, 582 612 L 594 486 Z" fill="#FBE38A"/>
+    <path d="M 504 486 C 500 464, 515 452, 530 460
+             C 541 445, 561 447, 569 462
+             C 586 460, 599 471, 597 486 Z" fill="#FDF3C8"/>
+  </g>
+</svg>
