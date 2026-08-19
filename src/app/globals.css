@@ -1,0 +1,85 @@
+@import 'tailwindcss';
+
+/*
+ * A calm city-guide palette: near-black paper, one signal colour, and state
+ * colours reserved for open/closed. Dark is the default because most of this
+ * site is read outdoors in the evening (§12).
+ */
+@theme {
+  --color-ink: #0d0f11;
+  --color-surface: #16191d;
+  --color-surface-2: #1e2227;
+  --color-line: #2a2f36;
+  --color-text: #e9ecef;
+  --color-muted: #9aa3ad;
+  --color-accent: #ff5a3c;
+  /* Text laid over the accent; white on this orange is only 3.1:1. */
+  --color-on-accent: #0d0f11;
+  --color-open: #3fbf8f;
+  --color-soon: #e8b64c;
+  --color-closed: #8b939c;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --color-ink: #f7f8f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f2f4;
+  --color-line: #d9dde2;
+  --color-text: #14171a;
+  --color-muted: #5b636c;
+  --color-accent: #c8341c;
+  --color-on-accent: #ffffff;
+  --color-open: #15734f;
+  --color-soon: #96690a;
+  --color-closed: #6b737c;
+}
+
+html,
+body {
+  background: var(--color-ink);
+  color: var(--color-text);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'tnum' 1;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* §8 accessibility: honour the user's motion preference everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skeletons rather than spinners, per §12. */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.75; }
+}
+.skeleton {
+  background: var(--color-surface-2);
+  animation: pulse-soft 1.6s ease-in-out infinite;
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 11px;
+}
