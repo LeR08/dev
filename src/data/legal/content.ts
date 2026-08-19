@@ -145,7 +145,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'What is collected',
           body: [
-            'Your drink log (what, when, how much, optionally where and a note); optionally, your sex, age, weight, height, spending baseline and reasons for using the app; your app settings.',
+            'Your drink log (what, when, how much, optionally where and a note); your account email address; optionally your name, sex, age, weight, height, spending baseline and reasons for using the app; your app settings.',
           ],
         },
         {
@@ -305,7 +305,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Ce qui est collecté',
           body: [
-            "Votre historique de consommation (quoi, quand, combien, éventuellement où et une note) ; éventuellement votre sexe, âge, poids, taille, référence de dépense et les raisons de votre utilisation de l'application ; vos réglages.",
+            "Votre historique de consommation (quoi, quand, combien, éventuellement où et une note) ; l'adresse e-mail de votre compte ; éventuellement votre nom, sexe, âge, poids, taille, référence de dépense et les raisons de votre utilisation de l'application ; vos réglages.",
           ],
         },
         {
@@ -465,7 +465,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Qué se recopila',
           body: [
-            'Tu historial de consumo (qué, cuándo, cuánto, opcionalmente dónde y una nota); opcionalmente, tu sexo, edad, peso, altura, gasto de referencia y los motivos por los que usas la aplicación; tus ajustes.',
+            'Tu historial de consumo (qué, cuándo, cuánto, opcionalmente dónde y una nota); la dirección de correo electrónico de tu cuenta; opcionalmente tu nombre, sexo, edad, peso, altura, gasto de referencia y los motivos por los que usas la aplicación; tus ajustes.',
           ],
         },
         {
@@ -625,7 +625,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Was erhoben wird',
           body: [
-            'Dein Trink-Protokoll (was, wann, wie viel, optional wo und eine Notiz); optional dein Geschlecht, Alter, Gewicht, Größe, Ausgaben-Referenzwert und die Gründe für die Nutzung der App; deine Einstellungen.',
+            'Dein Trink-Protokoll (was, wann, wie viel, optional wo und eine Notiz); die E-Mail-Adresse deines Kontos; optional dein Name, Geschlecht, Alter, Gewicht, Größe, Ausgaben-Referenzwert und die Gründe für die Nutzung der App; deine Einstellungen.',
           ],
         },
         {
@@ -785,7 +785,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Cosa viene raccolto',
           body: [
-            'Il tuo storico dei consumi (cosa, quando, quanto, eventualmente dove e una nota); facoltativamente il tuo sesso, età, peso, altezza, spesa di riferimento e i motivi per cui usi l\'app; le tue impostazioni.',
+            "Il tuo storico dei consumi (cosa, quando, quanto, eventualmente dove e una nota); l'indirizzo e-mail del tuo account; facoltativamente il tuo nome, sesso, età, peso, altezza, spesa di riferimento e i motivi per cui usi l'app; le tue impostazioni.",
           ],
         },
         {
@@ -945,7 +945,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'O que é recolhido',
           body: [
-            'O teu histórico de consumo (o quê, quando, quanto, opcionalmente onde e uma nota); opcionalmente, o teu sexo, idade, peso, altura, referência de despesa e as razões para usares a aplicação; as tuas definições.',
+            'O teu histórico de consumo (o quê, quando, quanto, opcionalmente onde e uma nota); o endereço de e-mail da tua conta; opcionalmente o teu nome, sexo, idade, peso, altura, referência de despesa e as razões para usares a aplicação; as tuas definições.',
           ],
         },
         {
@@ -1101,7 +1101,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: '收集的信息',
           body: [
-            '你的饮酒记录（内容、时间、数量，可选的地点和备注）；可选的性别、年龄、体重、身高、消费基准以及使用本应用的原因；你的应用设置。',
+            '你的饮酒记录（内容、时间、数量，可选的地点和备注）；你的账户电子邮件地址；可选的姓名、性别、年龄、体重、身高、消费基准以及使用本应用的原因；你的应用设置。',
           ],
         },
         {
@@ -1253,7 +1253,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'ما يتم جمعه',
           body: [
-            'سجل استهلاكك (ماذا، متى، كم، واختياريًا أين مع ملاحظة)؛ واختياريًا جنسك، عمرك، وزنك، طولك، مرجع الإنفاق وأسباب استخدامك للتطبيق؛ إعداداتك.',
+            'سجل استهلاكك (ماذا، متى، كم، واختياريًا أين مع ملاحظة)؛ عنوان البريد الإلكتروني لحسابك؛ واختياريًا اسمك، جنسك، عمرك، وزنك، طولك، مرجع الإنفاق وأسباب استخدامك للتطبيق؛ إعداداتك.',
           ],
         },
         {

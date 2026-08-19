@@ -252,9 +252,14 @@ export type SpendPeriod = 'day' | 'week';
  * notes warn against. Settings stays the single source for all of them.
  */
 export type Profile = {
-  /** Collected at the mock sign-in step (spec follow-up: "sign in pour test"). Never sent anywhere. */
+  /**
+   * Both of these sync. The profile document is pushed to Firestore whole
+   * (see src/sync/firestore.ts's pushOps), so name and email leave the device
+   * with the rest of it — the comments here used to claim the opposite, which
+   * was true only before cloud sync existed.
+   */
   name: string | null;
-  /** Optional; also collected at sign-in. Local-only, never sent anywhere. */
+  /** Pre-filled from the account's own email at onboarding; editable after. */
   email: string | null;
   sex: BiologicalSex;
   /** Null when skipped. 13–120 when set; the app never invents a value. */

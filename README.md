@@ -385,7 +385,9 @@ document rather than eight. A switcher picks the reader's language (defaulting t
 with JavaScript disabled every language simply renders in sequence, so the legal text is never
 hidden behind a script that failed to run.
 
-The URL to give Play is `<your-host>/privacy.html`.
+The URL to give Play is `<your-host>/privacy.html`. [PUBLISHING.md](PUBLISHING.md) carries the
+rest of the store-submission work — the Data safety answers, each traced to the code that
+justifies it, plus content-rating notes and listing drafts.
 
 ## Accounts & cloud sync
 
