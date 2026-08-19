@@ -455,6 +455,58 @@ describe('premises-level address matching', () => {
     expect(parseAddress('Rozengracht 1A').unit).toBe(parseAddress('Rozengracht 1A').unit);
   });
 
+  it('accepts a house letter the directory dropped, in a building with one venue', () => {
+    const shop = {
+      id: 'v1', slug: 'green-place', city: 'amsterdam', name: 'Green Place', legal_name: null,
+      aliases: [], address: 'Kloveniersburgwal 4A', postcode: null, neighbourhood: null,
+      lat: 52.3727, lng: 4.8991, status: 'open', renamed_to: null, licence_number: null,
+      licence_valid_to: null, licence_renewal_pending: false, website: null, phone: null,
+      amenities: {}, hours_licensed: null, hours_weekly: null, hours_actual: null,
+      hours_source: null, hours_updated_at: null, socials: {}, socials_shared: [],
+      website_live: null, osm_id: null, amsterdam_id: 'a1', rating_avg: null, rating_count: 0,
+      sources: {}, fetched_at: '2026-08-19T00:00:00.000Z',
+    } as unknown as Venue;
+
+    applyDirectory([shop], [
+      {
+        slug: 'green-place', name: 'Green Place', address: 'Kloveniersburgwal 4', postcode: null,
+        lat: 52.3727, lng: 4.8991, phone: '020 111 2222', website: null, amenities: [],
+        url: 'https://example.org/green-place',
+      },
+    ]);
+    expect(shop.phone).toBe('020 111 2222');
+  });
+
+  it('demands the exact unit in a building that holds two venues', () => {
+    const make = (slug: string, name: string, address: string) =>
+      ({
+        id: slug, slug, city: 'amsterdam', name, legal_name: null, aliases: [], address,
+        postcode: null, neighbourhood: null, lat: 52.3757, lng: 4.8925, status: 'open',
+        renamed_to: null, licence_number: null, licence_valid_to: null,
+        licence_renewal_pending: false, website: null, phone: null, amenities: {},
+        hours_licensed: null, hours_weekly: null, hours_actual: null, hours_source: null,
+        hours_updated_at: null, socials: {}, socials_shared: [], website_live: null,
+        osm_id: null, amsterdam_id: slug, rating_avg: null, rating_count: 0, sources: {},
+        fetched_at: '2026-08-19T00:00:00.000Z',
+      }) as unknown as Venue;
+
+    // Both sit at Nieuwe Nieuwstraat 32; only the unit tells them apart.
+    const terps = make('terps', 'Terps Army', 'Nieuwe Nieuwstraat 32C');
+    const guapo = make('guapo', 'El Guapo', 'Nieuwe Nieuwstraat 32');
+
+    applyDirectory([terps, guapo], [
+      {
+        slug: 'el-guapo', name: 'El Guapo', address: 'Nieuwe Nieuwstraat 32', postcode: null,
+        lat: 52.3757, lng: 4.8925, phone: '020 333 4444', website: null, amenities: [],
+        url: 'https://example.org/el-guapo',
+      },
+    ]);
+
+    expect(guapo.phone).toBe('020 333 4444');
+    expect(terps.phone).toBeNull();
+    expect(terps.aliases).toEqual([]);
+  });
+
   it('refuses a directory record at a different house number', () => {
     // Andalucia is at Halvemaansteeg 1; Balou is at number 5, 30 m away.
     const andalucia = {

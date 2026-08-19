@@ -101,7 +101,9 @@ export function buildVenues(input: BuildInput): Venue[] {
       city: adapter.city,
       name: enrichment?.name ?? displayName(licence.name),
       legal_name: licence.legalName,
-      aliases: existing?.aliases ?? [],
+      // Derived from the directory pass, so recomputed every run rather than
+      // carried: a name matched in error must not outlive the rule that let it in.
+      aliases: [],
       address: licence.address,
       postcode: licence.postcode,
       neighbourhood,
@@ -247,8 +249,17 @@ export function applyDirectory(venues: Venue[], records: DirectoryRecord[]): {
   const counts = { phones: 0, websites: 0, aliases: 0, amenities: 0 };
   const claimed = new Set<string>();
 
+  /**
+   * Their addresses often drop the house letter the register carries, so
+   * "Kloveniersburgwal 4A" and "Kloveniersburgwal 4" are usually one shop. What
+   * makes that unsafe is not the letter but ambiguity: Nieuwe Nieuwstraat 32
+   * holds both El Guapo and Terps Army. So a building-number match is accepted
+   * only where exactly one venue and exactly one record share that building.
+   */
+  const crowded = crowdedBuildings(venues, records);
+
   for (const venue of venues) {
-    const match = bestDirectoryMatch(venue, records, claimed);
+    const match = bestDirectoryMatch(venue, records, claimed, crowded);
     if (!match) continue;
     claimed.add(match.slug);
 
@@ -289,10 +300,35 @@ export function applyDirectory(venues: Venue[], records: DirectoryRecord[]): {
 }
 
 /** Same three rules as §5.6, applied against the directory's own coordinates. */
+/** Street+number keys where either side lists more than one venue. */
+function crowdedBuildings(venues: Venue[], records: DirectoryRecord[]): Set<string> {
+  const key = (street: string, base: string | null) => `${street}|${base}`;
+  const count = (entries: { street: string; base: string | null }[]) => {
+    const seen = new Map<string, number>();
+    for (const entry of entries) {
+      if (!entry.base) continue;
+      const k = key(entry.street, entry.base);
+      seen.set(k, (seen.get(k) ?? 0) + 1);
+    }
+    return seen;
+  };
+
+  const ours = count(venues.map((venue) => parseAddress(venue.address)));
+  const theirs = count(
+    records.filter((r) => r.address).map((r) => parseAddress(r.address as string)),
+  );
+
+  const crowded = new Set<string>();
+  for (const [k, n] of ours) if (n > 1) crowded.add(k);
+  for (const [k, n] of theirs) if (n > 1) crowded.add(k);
+  return crowded;
+}
+
 function bestDirectoryMatch(
   venue: Venue,
   records: DirectoryRecord[],
   claimed: Set<string>,
+  crowded: Set<string>,
 ): DirectoryRecord | null {
   const mine = parseAddress(venue.address);
   let best: { record: DirectoryRecord; score: number; distance: number } | null = null;
@@ -300,14 +336,15 @@ function bestDirectoryMatch(
   for (const record of records) {
     if (claimed.has(record.slug)) continue;
     const theirs = record.address ? parseAddress(record.address) : null;
-    // Premises-level, not building-level: El Guapo at Nieuwe Nieuwstraat 32 and
-    // Terps Army at 32C are neighbours, not the same shop.
+    const sameStreet = theirs != null && theirs.street === mine.street;
+    const isCrowded = mine.base != null && crowded.has(`${mine.street}|${mine.base}`);
     const sameAddress =
-      theirs != null &&
-      theirs.unit != null &&
-      mine.unit != null &&
-      theirs.street === mine.street &&
-      theirs.unit === mine.unit;
+      sameStreet &&
+      theirs.base != null &&
+      mine.base != null &&
+      theirs.base === mine.base &&
+      // In a building that holds more than one venue, the unit has to agree too.
+      (!isCrowded || theirs.unit === mine.unit);
 
     const distance =
       record.lat != null && record.lng != null
