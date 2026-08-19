@@ -501,11 +501,11 @@ something this codebase can resolve on its own:
   (`src/domain/bac.ts`, `src/data/harm-reduction/`) should be reviewed by a qualified
   addictologist or physician before anyone but you relies on them.
 - **Legal review.** The Terms of Service, Legal Notice and Privacy Policy
-  (`src/data/legal/content.ts`) are editable placeholder templates with `[bracketed]` fields
-  for you to fill in — not reviewed by a lawyer, and jurisdiction-specific requirements aren't
-  covered. They also still describe account creation as opt-in in all 8 languages — that
-  language needs updating (and a lawyer's eyes) now that accounts are mandatory; this
-  codebase hasn't done that rewrite yet, only the code-level gate.
+  (`src/data/legal/content.ts`) have their identity fields filled in (publisher, SIRET,
+  address, director of publication) and now describe the app as it actually behaves: an
+  account is required and cloud sync applies to every user, in all 8 languages. What they
+  have *not* had is a lawyer's eyes — jurisdiction-specific requirements aren't covered, and
+  the wording being accurate is not the same as it being sufficient.
 - **Verify the helpline contacts.** France's numbers came from the spec's own draft table;
   the US/UK ones are ones I'm confident are currently accurate. China, Saudi Arabia and UAE
   (`src/data/resources/{cn,sa,ae}.json`) were researched against official sources — China's

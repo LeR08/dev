@@ -7,6 +7,13 @@
  * address, director of publication) are filled in with the site owner's own
  * details; update them directly here if that information ever changes.
  *
+ * These documents describe the app as it ships: an account is REQUIRED, and
+ * cloud sync therefore applies to every user. That follows app/_layout.tsx,
+ * which gates the app behind sign-in whenever a Firebase project is
+ * configured. The local-only fallback for an unconfigured build is a
+ * development convenience and is deliberately not described here — if that
+ * ever becomes a shipping mode, these texts have to change with it.
+ *
  * Written out in all 8 UI languages so these documents follow whichever
  * language the reader has chosen, same as the rest of the app.
  */
@@ -69,7 +76,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Data & privacy',
           body: [
-            'All data — your log, your profile, your settings — is stored locally on your device only by default. If you choose to create an account, some of this is also copied to your own Firebase project for cloud sync — entirely opt-in; see the Privacy Policy\'s "Cloud sync" section.',
+            'An account is required to use the app. Your log, your profile and your settings are stored on this device; your log, your custom drinks and your profile are also copied to our Firebase project for cloud sync — see the "Cloud sync" section of the Privacy Policy. Your settings stay on this device only.',
           ],
         },
         {
@@ -144,7 +151,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Where it is stored',
           body: [
-            'Only on this device by default — in an SQLite database on iOS/Android, or your browser\'s local storage on the web build. If you create an optional account for cloud sync, the same data (your log, custom drinks and profile) is also stored in Cloud Firestore, part of Google\'s Firebase platform, scoped to your account and never shared with other users — see "Cloud sync (optional)" below.',
+            'On this device — in an SQLite database on iOS/Android, or your browser local storage on the web build. Because an account is required, the same data (your log, custom drinks and profile) is also stored in Cloud Firestore, part of Google Firebase platform, scoped to your account and never shared with other users — see "Cloud sync" below. Your app settings stay on this device only.',
           ],
         },
         {
@@ -155,13 +162,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Sharing',
-          body: ['Nothing is sent anywhere automatically. Data leaves the device only when you explicitly export it, or when you choose to turn on optional cloud sync.'],
+          body: ['Your data is never shared with other users, sold, or used for advertising. It leaves this device in two ways: cloud sync, which is part of using the app, and any export you start yourself.'],
         },
         {
-          heading: 'Cloud sync (optional)',
+          heading: 'Cloud sync',
           body: [
-            'If you create an account from Settings → Account & cloud sync, the same data already described above — your drink log, custom drinks and profile — is copied to your own Firebase project (Firebase Authentication for sign-in, Cloud Firestore for storage), operated by Google as a data processor on our behalf. No additional data is collected just because sync exists.',
-            'This is entirely opt-in: skip account creation and nothing changes. Data residency depends on which Firebase project region is configured for this deployment.',
+            'Because the app requires an account, the same data already described above — your drink log, custom drinks and profile — is copied to our Firebase project (Firebase Authentication for sign-in, Cloud Firestore for storage), operated by Google as a data processor on our behalf. No additional data is collected just because sync exists.',
+            'You can erase all of it at any time: Settings → Account & cloud sync has a "delete my account" option that removes your account and its cloud data outright. Data residency depends on which Firebase project region is configured for this deployment.',
           ],
         },
         {
@@ -229,7 +236,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Données & confidentialité',
           body: [
-            "Toutes les données — votre historique, votre profil, vos réglages — sont stockées uniquement sur votre appareil par défaut. Si vous choisissez de créer un compte, une partie de ces données est également copiée dans votre propre projet Firebase pour la synchronisation cloud — entièrement optionnel ; voir la section « Synchronisation cloud » de la Politique de confidentialité.",
+            "Un compte est nécessaire pour utiliser l'application. Votre historique, votre profil et vos réglages sont stockés sur cet appareil ; votre historique, vos boissons personnalisées et votre profil sont également copiés dans notre projet Firebase pour la synchronisation cloud — voir la section « Synchronisation cloud » de la Politique de confidentialité. Vos réglages, eux, ne quittent pas l'appareil.",
           ],
         },
         {
@@ -304,7 +311,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Où c\'est stocké',
           body: [
-            "Uniquement sur cet appareil par défaut — dans une base SQLite sur iOS/Android, ou le stockage local de votre navigateur pour la version web. Si vous créez un compte optionnel pour la synchronisation cloud, ces mêmes données (historique, boissons personnalisées et profil) sont aussi stockées dans Cloud Firestore, la plateforme Firebase de Google, réservées à votre compte et jamais partagées avec d'autres utilisateurs — voir « Synchronisation cloud (optionnelle) » ci-dessous.",
+            "Sur cet appareil — dans une base SQLite sur iOS/Android, ou le stockage local de votre navigateur pour la version web. Comme un compte est nécessaire, ces mêmes données (historique, boissons personnalisées et profil) sont aussi stockées dans Cloud Firestore, la plateforme Firebase de Google, réservées à votre compte et jamais partagées avec d'autres utilisateurs — voir « Synchronisation cloud » ci-dessous. Vos réglages, eux, restent uniquement sur cet appareil.",
           ],
         },
         {
@@ -315,13 +322,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Partage',
-          body: ["Rien n'est envoyé automatiquement où que ce soit. Les données ne quittent l'appareil que si vous les exportez vous-même, ou si vous activez la synchronisation cloud optionnelle."],
+          body: ["Vos données ne sont jamais partagées avec d'autres utilisateurs, ni vendues, ni utilisées à des fins publicitaires. Elles quittent cet appareil de deux façons : la synchronisation cloud, qui fait partie du fonctionnement de l'application, et les exports que vous déclenchez vous-même."],
         },
         {
-          heading: 'Synchronisation cloud (optionnelle)',
+          heading: 'Synchronisation cloud',
           body: [
-            "Si vous créez un compte depuis Réglages → Compte et synchronisation, les mêmes données décrites ci-dessus — votre historique, vos boissons personnalisées et votre profil — sont copiées dans votre propre projet Firebase (Firebase Authentication pour la connexion, Cloud Firestore pour le stockage), exploité par Google en tant que sous-traitant pour notre compte. Aucune donnée supplémentaire n'est collectée du simple fait que la synchronisation existe.",
-            "C'est entièrement optionnel : ne créez pas de compte et rien ne change. La localisation des données dépend de la région du projet Firebase configurée pour ce déploiement.",
+            "L'application nécessitant un compte, les mêmes données décrites ci-dessus — votre historique, vos boissons personnalisées et votre profil — sont copiées dans notre projet Firebase (Firebase Authentication pour la connexion, Cloud Firestore pour le stockage), exploité par Google en tant que sous-traitant pour notre compte. Aucune donnée supplémentaire n'est collectée du seul fait que la synchronisation existe.",
+            'Vous pouvez tout effacer à tout moment : Réglages → Compte et synchronisation propose une option « supprimer mon compte » qui efface le compte et ses données cloud purement et simplement. La localisation des données dépend de la région du projet Firebase configurée pour ce déploiement.',
           ],
         },
         {
@@ -389,7 +396,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Datos y privacidad',
           body: [
-            'Todos los datos —tu historial, tu perfil, tus ajustes— se almacenan únicamente en tu dispositivo de forma predeterminada. Si decides crear una cuenta, parte de estos datos también se copia a tu propio proyecto de Firebase para la sincronización en la nube — totalmente opcional; consulta el apartado «Sincronización en la nube» de la Política de Privacidad.',
+            'Se necesita una cuenta para usar la aplicación. Tu historial, tu perfil y tus ajustes se almacenan en este dispositivo; tu historial, tus bebidas personalizadas y tu perfil también se copian a nuestro proyecto de Firebase para la sincronización en la nube — consulta el apartado «Sincronización en la nube» de la Política de Privacidad. Tus ajustes no salen del dispositivo.',
           ],
         },
         {
@@ -464,7 +471,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Dónde se almacena',
           body: [
-            'Solo en este dispositivo de forma predeterminada — en una base de datos SQLite en iOS/Android, o en el almacenamiento local de tu navegador en la versión web. Si creas una cuenta opcional para la sincronización en la nube, esos mismos datos (historial, bebidas personalizadas y perfil) también se guardan en Cloud Firestore, la plataforma Firebase de Google, reservados a tu cuenta y nunca compartidos con otros usuarios — consulta «Sincronización en la nube (opcional)» más abajo.',
+            'En este dispositivo — en una base de datos SQLite en iOS/Android, o en el almacenamiento local de tu navegador en la versión web. Como se necesita una cuenta, esos mismos datos (historial, bebidas personalizadas y perfil) también se guardan en Cloud Firestore, la plataforma Firebase de Google, reservados a tu cuenta y nunca compartidos con otros usuarios — consulta «Sincronización en la nube» más abajo. Tus ajustes permanecen solo en este dispositivo.',
           ],
         },
         {
@@ -475,13 +482,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Compartición',
-          body: ['Nada se envía automáticamente a ningún sitio. Los datos solo salen del dispositivo si tú los exportas explícitamente, o si activas la sincronización en la nube opcional.'],
+          body: ['Tus datos nunca se comparten con otros usuarios, ni se venden, ni se usan con fines publicitarios. Salen de este dispositivo de dos maneras: la sincronización en la nube, que forma parte del funcionamiento de la aplicación, y las exportaciones que inicias tú.'],
         },
         {
-          heading: 'Sincronización en la nube (opcional)',
+          heading: 'Sincronización en la nube',
           body: [
-            'Si creas una cuenta desde Ajustes → Cuenta y sincronización, los mismos datos descritos arriba —tu historial, tus bebidas personalizadas y tu perfil— se copian a tu propio proyecto de Firebase (Firebase Authentication para el inicio de sesión, Cloud Firestore para el almacenamiento), operado por Google como encargado del tratamiento en nuestro nombre. No se recopila ningún dato adicional por el mero hecho de que exista la sincronización.',
-            'Esto es totalmente opcional: no crees una cuenta y nada cambia. La ubicación de los datos depende de la región del proyecto de Firebase configurada para este despliegue.',
+            'Como la aplicación requiere una cuenta, los mismos datos descritos arriba —tu historial, tus bebidas personalizadas y tu perfil— se copian a nuestro proyecto de Firebase (Firebase Authentication para el inicio de sesión, Cloud Firestore para el almacenamiento), operado por Google como encargado del tratamiento en nuestro nombre. No se recopila ningún dato adicional por el mero hecho de que exista la sincronización.',
+            'Puedes borrarlo todo cuando quieras: en Ajustes → Cuenta y sincronización hay una opción «eliminar mi cuenta» que borra la cuenta y sus datos en la nube por completo. La ubicación de los datos depende de la región del proyecto de Firebase configurada para este despliegue.',
           ],
         },
         {
@@ -549,7 +556,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Daten & Datenschutz',
           body: [
-            'Alle Daten — dein Protokoll, dein Profil, deine Einstellungen — werden standardmäßig ausschließlich lokal auf deinem Gerät gespeichert. Wenn du ein Konto erstellst, wird ein Teil dieser Daten zusätzlich in dein eigenes Firebase-Projekt für die Cloud-Synchronisierung kopiert — vollständig optional; siehe den Abschnitt „Cloud-Synchronisierung" in der Datenschutzerklärung.',
+            'Für die Nutzung der App ist ein Konto erforderlich. Dein Protokoll, dein Profil und deine Einstellungen werden auf diesem Gerät gespeichert; dein Protokoll, deine eigenen Getränke und dein Profil werden zusätzlich in unser Firebase-Projekt für die Cloud-Synchronisierung kopiert — siehe den Abschnitt „Cloud-Synchronisierung“ in der Datenschutzerklärung. Deine Einstellungen verlassen das Gerät nicht.',
           ],
         },
         {
@@ -624,7 +631,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Wo es gespeichert wird',
           body: [
-            'Standardmäßig nur auf diesem Gerät — in einer SQLite-Datenbank auf iOS/Android oder im lokalen Speicher deines Browsers bei der Web-Version. Wenn du ein optionales Konto für die Cloud-Synchronisierung erstellst, werden dieselben Daten (Protokoll, eigene Getränke und Profil) zusätzlich in Cloud Firestore gespeichert, Teil von Googles Firebase-Plattform, ausschließlich deinem Konto zugeordnet und nie mit anderen Nutzer:innen geteilt — siehe „Cloud-Synchronisierung (optional)" weiter unten.',
+            'Auf diesem Gerät — in einer SQLite-Datenbank auf iOS/Android oder im lokalen Speicher deines Browsers bei der Web-Version. Da ein Konto erforderlich ist, werden dieselben Daten (Protokoll, eigene Getränke und Profil) zusätzlich in Cloud Firestore gespeichert, Teil von Googles Firebase-Plattform, ausschließlich deinem Konto zugeordnet und nie mit anderen Nutzer:innen geteilt — siehe „Cloud-Synchronisierung“ weiter unten. Deine Einstellungen bleiben ausschließlich auf diesem Gerät.',
           ],
         },
         {
@@ -635,13 +642,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Weitergabe',
-          body: ['Nichts wird automatisch irgendwohin gesendet. Daten verlassen das Gerät nur, wenn du sie ausdrücklich exportierst oder die optionale Cloud-Synchronisierung aktivierst.'],
+          body: ['Deine Daten werden nie mit anderen Nutzer:innen geteilt, verkauft oder für Werbung verwendet. Sie verlassen dieses Gerät auf zwei Wegen: über die Cloud-Synchronisierung, die zur Nutzung der App gehört, und über Exporte, die du selbst startest.'],
         },
         {
-          heading: 'Cloud-Synchronisierung (optional)',
+          heading: 'Cloud-Synchronisierung',
           body: [
-            'Wenn du über Einstellungen → Konto & Cloud-Synchronisierung ein Konto erstellst, werden dieselben oben beschriebenen Daten — dein Protokoll, deine eigenen Getränke und dein Profil — in dein eigenes Firebase-Projekt kopiert (Firebase Authentication für die Anmeldung, Cloud Firestore für die Speicherung), das Google in unserem Auftrag als Auftragsverarbeiter betreibt. Allein durch die Existenz der Synchronisierung werden keine zusätzlichen Daten erhoben.',
-            'Dies ist vollständig optional: Ohne Kontoerstellung ändert sich nichts. Wo die Daten liegen, hängt davon ab, welche Firebase-Projektregion für diese Bereitstellung konfiguriert ist.',
+            'Da die App ein Konto voraussetzt, werden dieselben oben beschriebenen Daten — dein Protokoll, deine eigenen Getränke und dein Profil — in unser Firebase-Projekt kopiert (Firebase Authentication für die Anmeldung, Cloud Firestore für die Speicherung), das Google in unserem Auftrag als Auftragsverarbeiter betreibt. Allein durch die Existenz der Synchronisierung werden keine zusätzlichen Daten erhoben.',
+            'Du kannst alles jederzeit löschen: Unter Einstellungen → Konto & Cloud-Synchronisierung gibt es die Option „Konto löschen“, die dein Konto samt Cloud-Daten vollständig entfernt. Wo die Daten liegen, hängt davon ab, welche Firebase-Projektregion für diese Bereitstellung konfiguriert ist.',
           ],
         },
         {
@@ -709,7 +716,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Dati e privacy',
           body: [
-            "Tutti i dati — il tuo storico, il tuo profilo, le tue impostazioni — sono archiviati per impostazione predefinita esclusivamente sul tuo dispositivo. Se scegli di creare un account, parte di questi dati viene copiata anche nel tuo progetto Firebase personale per la sincronizzazione cloud — del tutto facoltativa; vedi la sezione «Sincronizzazione cloud» dell'Informativa sulla privacy.",
+            "Per usare l'app è necessario un account. Il tuo storico, il tuo profilo e le tue impostazioni sono archiviati su questo dispositivo; il tuo storico, le tue bevande personalizzate e il tuo profilo vengono inoltre copiati nel nostro progetto Firebase per la sincronizzazione cloud — vedi la sezione «Sincronizzazione cloud» dell'Informativa sulla privacy. Le tue impostazioni non lasciano il dispositivo.",
           ],
         },
         {
@@ -784,7 +791,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Dove viene archiviato',
           body: [
-            "Solo su questo dispositivo per impostazione predefinita — in un database SQLite su iOS/Android, oppure nell'archiviazione locale del browser per la versione web. Se crei un account facoltativo per la sincronizzazione cloud, questi stessi dati (storico, bevande personalizzate e profilo) vengono archiviati anche in Cloud Firestore, la piattaforma Firebase di Google, riservati al tuo account e mai condivisi con altri utenti — vedi «Sincronizzazione cloud (facoltativa)» qui sotto.",
+            "Su questo dispositivo — in un database SQLite su iOS/Android, oppure nell'archiviazione locale del browser per la versione web. Poiché è necessario un account, questi stessi dati (storico, bevande personalizzate e profilo) vengono archiviati anche in Cloud Firestore, la piattaforma Firebase di Google, riservati al tuo account e mai condivisi con altri utenti — vedi «Sincronizzazione cloud» qui sotto. Le tue impostazioni restano solo su questo dispositivo.",
           ],
         },
         {
@@ -795,13 +802,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Condivisione',
-          body: ['Nulla viene inviato automaticamente da nessuna parte. I dati lasciano il dispositivo solo se li esporti esplicitamente, oppure se attivi la sincronizzazione cloud facoltativa.'],
+          body: ["I tuoi dati non vengono mai condivisi con altri utenti, venduti o usati a fini pubblicitari. Lasciano questo dispositivo in due modi: la sincronizzazione cloud, che fa parte del funzionamento dell'app, e le esportazioni che avvii tu."],
         },
         {
-          heading: 'Sincronizzazione cloud (facoltativa)',
+          heading: 'Sincronizzazione cloud',
           body: [
-            "Se crei un account da Impostazioni → Account e sincronizzazione, gli stessi dati descritti sopra — il tuo storico, le tue bevande personalizzate e il tuo profilo — vengono copiati nel tuo progetto Firebase personale (Firebase Authentication per l'accesso, Cloud Firestore per l'archiviazione), gestito da Google come responsabile del trattamento per nostro conto. Nessun dato aggiuntivo viene raccolto per il solo fatto che la sincronizzazione esiste.",
-            "È del tutto facoltativa: non creare un account e nulla cambia. La residenza dei dati dipende dalla regione del progetto Firebase configurata per questa distribuzione.",
+            "Poiché l'app richiede un account, gli stessi dati descritti sopra — il tuo storico, le tue bevande personalizzate e il tuo profilo — vengono copiati nel nostro progetto Firebase (Firebase Authentication per l'accesso, Cloud Firestore per l'archiviazione), gestito da Google come responsabile del trattamento per nostro conto. Nessun dato aggiuntivo viene raccolto per il solo fatto che la sincronizzazione esista.",
+            "Puoi cancellare tutto in qualsiasi momento: in Impostazioni → Account e sincronizzazione trovi l'opzione «elimina il mio account», che rimuove del tutto l'account e i suoi dati cloud. La residenza dei dati dipende dalla regione del progetto Firebase configurata per questa distribuzione.",
           ],
         },
         {
@@ -869,7 +876,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Dados e privacidade',
           body: [
-            'Todos os dados — o teu histórico, o teu perfil, as tuas definições — são armazenados apenas no teu dispositivo por predefinição. Se decidires criar uma conta, parte destes dados é também copiada para o teu próprio projeto Firebase para sincronização na nuvem — totalmente opcional; consulta a secção «Sincronização na nuvem» da Política de Privacidade.',
+            'É necessária uma conta para usar a aplicação. O teu histórico, o teu perfil e as tuas definições são armazenados neste dispositivo; o teu histórico, as tuas bebidas personalizadas e o teu perfil são também copiados para o nosso projeto Firebase para sincronização na nuvem — consulta a secção «Sincronização na nuvem» da Política de Privacidade. As tuas definições não saem do dispositivo.',
           ],
         },
         {
@@ -944,7 +951,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Onde é armazenado',
           body: [
-            'Apenas neste dispositivo por predefinição — numa base de dados SQLite em iOS/Android, ou no armazenamento local do teu navegador na versão web. Se criares uma conta opcional para sincronização na nuvem, esses mesmos dados (histórico, bebidas personalizadas e perfil) são também guardados no Cloud Firestore, a plataforma Firebase da Google, reservados à tua conta e nunca partilhados com outros utilizadores — consulta «Sincronização na nuvem (opcional)» abaixo.',
+            'Neste dispositivo — numa base de dados SQLite em iOS/Android, ou no armazenamento local do teu navegador na versão web. Uma vez que é necessária uma conta, esses mesmos dados (histórico, bebidas personalizadas e perfil) são também guardados no Cloud Firestore, a plataforma Firebase da Google, reservados à tua conta e nunca partilhados com outros utilizadores — consulta «Sincronização na nuvem» abaixo. As tuas definições ficam apenas neste dispositivo.',
           ],
         },
         {
@@ -955,13 +962,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Partilha',
-          body: ['Nada é enviado automaticamente para lado nenhum. Os dados só saem do dispositivo se os exportares explicitamente, ou se ativares a sincronização na nuvem opcional.'],
+          body: ['Os teus dados nunca são partilhados com outros utilizadores, vendidos ou usados para publicidade. Saem deste dispositivo de duas formas: a sincronização na nuvem, que faz parte do funcionamento da aplicação, e as exportações que inicias tu.'],
         },
         {
-          heading: 'Sincronização na nuvem (opcional)',
+          heading: 'Sincronização na nuvem',
           body: [
-            'Se criares uma conta em Definições → Conta e sincronização, os mesmos dados descritos acima — o teu histórico, as tuas bebidas personalizadas e o teu perfil — são copiados para o teu próprio projeto Firebase (Firebase Authentication para o início de sessão, Cloud Firestore para o armazenamento), operado pela Google como subcontratante em nosso nome. Não é recolhido nenhum dado adicional apenas por a sincronização existir.',
-            'Isto é totalmente opcional: não crias uma conta e nada muda. A localização dos dados depende da região do projeto Firebase configurada para esta implementação.',
+            'Uma vez que a aplicação exige uma conta, os mesmos dados descritos acima — o teu histórico, as tuas bebidas personalizadas e o teu perfil — são copiados para o nosso projeto Firebase (Firebase Authentication para o início de sessão, Cloud Firestore para o armazenamento), operado pela Google como subcontratante em nosso nome. Não é recolhido nenhum dado adicional apenas por a sincronização existir.',
+            'Podes apagar tudo a qualquer momento: em Definições → Conta e sincronização existe a opção «eliminar a minha conta», que remove por completo a conta e os respetivos dados na nuvem. A localização dos dados depende da região do projeto Firebase configurada para esta implementação.',
           ],
         },
         {
@@ -1028,7 +1035,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: '数据与隐私',
-          body: ['默认情况下，所有数据——你的记录、个人资料、设置——仅存储在你的设备上。如果你选择创建账户，其中部分数据也会复制到你自己的 Firebase 项目以实现云同步——完全可选；详见隐私政策中的"云同步"部分。'],
+          body: ['使用本应用需要账户。你的记录、个人资料和设置存储在本设备上；你的记录、自定义饮品和个人资料还会复制到我们的 Firebase 项目以实现云同步——详见隐私政策中的「云同步」部分。你的设置不会离开本设备。'],
         },
         {
           heading: '条款变更',
@@ -1099,7 +1106,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: '存储位置',
-          body: ['默认情况下仅存储在本设备上——在 iOS/Android 上为 SQLite 数据库，网页版则为浏览器本地存储。如果你创建可选账户以启用云同步，相同的数据（记录、自定义饮品和个人资料）也会存储在 Cloud Firestore 中——Google Firebase 平台的一部分，仅归属于你的账户，绝不会与其他用户共享——详见下方"云同步（可选）"。'],
+          body: ['存储在本设备上——在 iOS/Android 上为 SQLite 数据库，网页版则为浏览器本地存储。由于需要账户，相同的数据（记录、自定义饮品和个人资料）也会存储在 Cloud Firestore 中——Google Firebase 平台的一部分，仅归属于你的账户，绝不会与其他用户共享——详见下方「云同步」。你的设置仅保留在本设备上。'],
         },
         {
           heading: '使用目的',
@@ -1107,13 +1114,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: '数据共享',
-          body: ['不会自动向任何地方发送任何数据。只有在你主动导出数据，或开启可选的云同步时，数据才会离开设备。'],
+          body: ['你的数据绝不会与其他用户共享、出售或用于广告。数据以两种方式离开本设备：云同步（属于应用的正常运行），以及你自己发起的导出。'],
         },
         {
-          heading: '云同步（可选）',
+          heading: '云同步',
           body: [
-            '如果你通过设置 → 账户与云同步创建账户，上述相同数据——你的记录、自定义饮品和个人资料——会被复制到你自己的 Firebase 项目中（使用 Firebase Authentication 进行登录，使用 Cloud Firestore 进行存储），该项目由 Google 作为我们的数据处理者运营。仅仅因为同步功能存在，并不会额外收集任何数据。',
-            '此功能完全可选：不创建账户则一切保持不变。数据存储的地理位置取决于此部署所配置的 Firebase 项目区域。',
+            '由于本应用需要账户，上述相同数据——你的记录、自定义饮品和个人资料——会被复制到我们的 Firebase 项目中（使用 Firebase Authentication 进行登录，使用 Cloud Firestore 进行存储），该项目由 Google 作为我们的数据处理者运营。仅仅因为同步功能存在，并不会额外收集任何数据。',
+            '你可以随时删除全部数据：在设置 → 账户与云同步中有「删除我的账户」选项，可彻底删除账户及其云端数据。数据存储的地理位置取决于此部署所配置的 Firebase 项目区域。',
           ],
         },
         {
@@ -1180,7 +1187,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'البيانات والخصوصية',
-          body: ['بشكل افتراضي، تُخزَّن جميع البيانات — سجلك، ملفك الشخصي، إعداداتك — فقط على جهازك. إذا اخترت إنشاء حساب، يُنسخ جزء من هذه البيانات أيضًا إلى مشروع Firebase الخاص بك للمزامنة السحابية — وهذا اختياري بالكامل؛ راجع قسم «المزامنة السحابية» في سياسة الخصوصية.'],
+          body: ['يتطلّب استخدام التطبيق إنشاء حساب. تُخزَّن سجلك وملفك الشخصي وإعداداتك على هذا الجهاز؛ كما تُنسخ سجلك ومشروباتك المخصصة وملفك الشخصي إلى مشروع Firebase الخاص بنا للمزامنة السحابية — راجع قسم «المزامنة السحابية» في سياسة الخصوصية. أما إعداداتك فلا تغادر الجهاز.'],
         },
         {
           heading: 'تعديلات على هذه الشروط',
@@ -1251,7 +1258,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'أين يُخزَّن',
-          body: ['بشكل افتراضي، فقط على هذا الجهاز — في قاعدة بيانات SQLite على iOS/Android، أو في التخزين المحلي لمتصفحك في نسخة الويب. إذا أنشأت حسابًا اختياريًا للمزامنة السحابية، تُخزَّن هذه البيانات نفسها (السجل، المشروبات المخصصة، والملف الشخصي) أيضًا في Cloud Firestore، وهي جزء من منصة Firebase التابعة لـ Google، مقتصرة على حسابك ولا تُشارَك أبدًا مع مستخدمين آخرين — راجع «المزامنة السحابية (اختيارية)» أدناه.'],
+          body: ['على هذا الجهاز — في قاعدة بيانات SQLite على iOS/Android، أو في التخزين المحلي لمتصفحك في نسخة الويب. وبما أنّ الحساب مطلوب، تُخزَّن هذه البيانات نفسها (السجل، المشروبات المخصصة، والملف الشخصي) أيضًا في Cloud Firestore، وهي جزء من منصة Firebase التابعة لـ Google، مقتصرة على حسابك ولا تُشارَك أبدًا مع مستخدمين آخرين — راجع «المزامنة السحابية» أدناه. أما إعداداتك فتبقى على هذا الجهاز فقط.'],
         },
         {
           heading: 'الغرض من استخدامه',
@@ -1259,13 +1266,13 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'المشاركة',
-          body: ['لا يُرسَل أي شيء تلقائيًا إلى أي جهة. لا تغادر البيانات الجهاز إلا عند تصديرها صراحةً من قِبلك، أو عند تفعيل المزامنة السحابية الاختيارية.'],
+          body: ['لا تُشارَك بياناتك أبدًا مع مستخدمين آخرين، ولا تُباع، ولا تُستخدَم لأغراض إعلانية. وهي تغادر هذا الجهاز بطريقتين: المزامنة السحابية، وهي جزء من عمل التطبيق، وأي تصدير تبدأه بنفسك.'],
         },
         {
-          heading: 'المزامنة السحابية (اختيارية)',
+          heading: 'المزامنة السحابية',
           body: [
-            'إذا أنشأت حسابًا من الإعدادات ← الحساب والمزامنة السحابية، تُنسخ نفس البيانات الموضحة أعلاه — سجلك، ومشروباتك المخصصة، وملفك الشخصي — إلى مشروع Firebase الخاص بك (Firebase Authentication لتسجيل الدخول، وCloud Firestore للتخزين)، الذي تُشغّله Google بصفتها معالِج بيانات نيابة عنا. لا يُجمَع أي بيانات إضافية لمجرد وجود ميزة المزامنة.',
-            'هذه الميزة اختيارية بالكامل: لا تُنشئ حسابًا ولن يتغيّر شيء. يعتمد موقع تخزين البيانات على منطقة مشروع Firebase المُهيَّأة لهذا النشر.',
+            'بما أنّ التطبيق يتطلّب حسابًا، تُنسخ نفس البيانات الموضحة أعلاه — سجلك، ومشروباتك المخصصة، وملفك الشخصي — إلى مشروع Firebase الخاص بنا (Firebase Authentication لتسجيل الدخول، وCloud Firestore للتخزين)، الذي تُشغّله Google بصفتها معالِج بيانات نيابة عنا. لا يُجمَع أي بيانات إضافية لمجرد وجود ميزة المزامنة.',
+            'يمكنك حذف كل ذلك في أي وقت: في الإعدادات ← الحساب والمزامنة السحابية يوجد خيار «حذف حسابي» الذي يزيل حسابك وبياناتك السحابية نهائيًا. يعتمد موقع تخزين البيانات على منطقة مشروع Firebase المُهيَّأة لهذا النشر.',
           ],
         },
         {
