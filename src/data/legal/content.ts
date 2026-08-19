@@ -35,7 +35,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     terms: {
       title: 'Terms of Service',
       intro:
-        'This app is currently a personal test build (spec v1.2, "TEST MODE"): not distributed publicly, not linked to any account or server. These terms describe how it works today and are meant to be replaced with reviewed, jurisdiction-specific terms before any public release.',
+        'These terms govern your use of the app. By using it, you accept them as they stand at the time of use.',
       sections: [
         {
           heading: 'Purpose',
@@ -101,7 +101,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     },
     notice: {
       title: 'Legal Notice',
-      intro: 'Placeholder legal notice. Fill in the bracketed fields with your own details before this app leaves test mode.',
+      intro: 'Legal notice and publisher identification for this app, as required under French law.',
       sections: [
         {
           heading: 'Publisher',
@@ -140,7 +140,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     privacy: {
       title: 'Privacy Policy',
       intro:
-        'Not explicitly requested by the original spec, but added here because the profile added in v1.2 collects sensitive personal information (§4) — it deserves its own clear statement alongside the Terms and Legal Notice.',
+        'This policy explains what the app records, where it is stored, who can reach it, and how to erase it.',
       sections: [
         {
           heading: 'What is collected',
@@ -195,7 +195,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     terms: {
       title: "Conditions générales d'utilisation",
       intro:
-        "Cette application est actuellement une version de test personnelle (spec v1.2, « TEST MODE ») : non distribuée publiquement, non liée à un compte ou un serveur. Ces conditions décrivent son fonctionnement actuel et sont destinées à être remplacées par des conditions relues et adaptées à votre juridiction avant toute publication.",
+        "Ces conditions régissent votre utilisation de l'application. En l'utilisant, vous les acceptez telles qu'elles sont au moment de votre utilisation.",
       sections: [
         {
           heading: 'Objet',
@@ -261,7 +261,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     },
     notice: {
       title: 'Mentions légales',
-      intro: 'Mentions légales type. Complétez les champs entre crochets avec vos propres informations avant que l\'application ne sorte du mode test.',
+      intro: "Mentions légales et identification de l'éditeur de l'application, conformément au droit français.",
       sections: [
         {
           heading: 'Éditeur',
@@ -300,7 +300,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     privacy: {
       title: 'Politique de confidentialité',
       intro:
-        "Non explicitement demandée dans la spec d'origine, mais ajoutée ici car le profil introduit en v1.2 collecte des informations personnelles sensibles (§4) — cela mérite une déclaration claire à part, aux côtés des CGU et des mentions légales.",
+        "Cette politique explique ce que l'application enregistre, où ces données sont stockées, qui peut y accéder et comment les effacer.",
       sections: [
         {
           heading: 'Ce qui est collecté',
@@ -355,7 +355,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     terms: {
       title: 'Condiciones Generales de Uso',
       intro:
-        'Esta aplicación es actualmente una versión de prueba personal (spec v1.2, «MODO PRUEBA»): no se distribuye públicamente, no está vinculada a ninguna cuenta ni servidor. Estas condiciones describen su funcionamiento actual y están destinadas a ser sustituidas por condiciones revisadas y adaptadas a tu jurisdicción antes de cualquier publicación.',
+        'Estas condiciones rigen tu uso de la aplicación. Al usarla, las aceptas tal y como están en el momento de su uso.',
       sections: [
         {
           heading: 'Objeto',
@@ -421,7 +421,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     },
     notice: {
       title: 'Aviso Legal',
-      intro: 'Aviso legal de ejemplo. Completa los campos entre corchetes con tus propios datos antes de que esta aplicación salga del modo de prueba.',
+      intro: 'Aviso legal e identificación del editor de esta aplicación, conforme a la legislación francesa.',
       sections: [
         {
           heading: 'Editor',
@@ -460,7 +460,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     privacy: {
       title: 'Política de Privacidad',
       intro:
-        'No solicitada explícitamente en la spec original, pero añadida aquí porque el perfil introducido en la v1.2 recopila información personal sensible (§4) — merece una declaración clara propia, junto con las Condiciones y el Aviso Legal.',
+        'Esta política explica qué registra la aplicación, dónde se almacena, quién puede acceder a ello y cómo borrarlo.',
       sections: [
         {
           heading: 'Qué se recopila',
@@ -515,7 +515,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     terms: {
       title: 'Allgemeine Geschäftsbedingungen',
       intro:
-        'Diese App ist derzeit eine persönliche Testversion (Spezifikation v1.2, „TESTMODUS“): nicht öffentlich verbreitet, nicht mit einem Konto oder Server verbunden. Diese Bedingungen beschreiben die aktuelle Funktionsweise und sollen vor jeder öffentlichen Veröffentlichung durch geprüfte, an deine Rechtsordnung angepasste Bedingungen ersetzt werden.',
+        'Diese Bedingungen regeln deine Nutzung der App. Mit der Nutzung akzeptierst du sie in ihrer jeweils geltenden Fassung.',
       sections: [
         {
           heading: 'Zweck',
@@ -581,7 +581,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     },
     notice: {
       title: 'Impressum',
-      intro: 'Muster-Impressum. Fülle die eckigen Klammern mit deinen eigenen Angaben aus, bevor diese App den Testmodus verlässt.',
+      intro: 'Impressum und Angaben zum Anbieter dieser App gemäß französischem Recht.',
       sections: [
         {
           heading: 'Herausgeber',
@@ -620,7 +620,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     privacy: {
       title: 'Datenschutzerklärung',
       intro:
-        'In der ursprünglichen Spezifikation nicht ausdrücklich gefordert, aber hier hinzugefügt, weil das in v1.2 eingeführte Profil sensible personenbezogene Daten erfasst (§4) — das verdient eine eigene klare Erklärung neben den AGB und dem Impressum.',
+        'Diese Erklärung beschreibt, was die App aufzeichnet, wo es gespeichert wird, wer darauf zugreifen kann und wie du es löschst.',
       sections: [
         {
           heading: 'Was erhoben wird',
@@ -675,7 +675,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     terms: {
       title: 'Termini di Servizio',
       intro:
-        'Questa app è attualmente una versione di test personale (spec v1.2, «MODALITÀ TEST»): non distribuita pubblicamente, non collegata ad alcun account o server. Questi termini descrivono il suo funzionamento attuale e sono destinati a essere sostituiti da termini revisionati e adattati alla propria giurisdizione prima di qualsiasi pubblicazione.',
+        "Queste condizioni disciplinano il tuo utilizzo dell'app. Utilizzandola, le accetti nella versione in vigore al momento dell'uso.",
       sections: [
         {
           heading: 'Finalità',
@@ -741,7 +741,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     },
     notice: {
       title: 'Note Legali',
-      intro: 'Note legali di esempio. Compila i campi tra parentesi con i tuoi dati prima che questa app esca dalla modalità test.',
+      intro: "Note legali e identificazione dell'editore dell'app, ai sensi del diritto francese.",
       sections: [
         {
           heading: 'Editore',
@@ -780,7 +780,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     privacy: {
       title: 'Informativa sulla Privacy',
       intro:
-        "Non esplicitamente richiesta dalla spec originale, ma aggiunta qui perché il profilo introdotto nella v1.2 raccoglie informazioni personali sensibili (§4) — merita una dichiarazione chiara a parte, accanto ai Termini e alle Note legali.",
+        "Questa informativa spiega che cosa registra l'app, dove vengono archiviati i dati, chi può accedervi e come cancellarli.",
       sections: [
         {
           heading: 'Cosa viene raccolto',
@@ -835,7 +835,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     terms: {
       title: 'Termos de Utilização',
       intro:
-        'Esta aplicação é atualmente uma versão de teste pessoal (spec v1.2, «MODO DE TESTE»): não distribuída publicamente, não associada a nenhuma conta ou servidor. Estes termos descrevem o funcionamento atual e destinam-se a ser substituídos por termos revistos e adaptados à tua jurisdição antes de qualquer publicação.',
+        'Estes termos regem a tua utilização da aplicação. Ao usá-la, aceitas os termos tal como se encontram no momento da utilização.',
       sections: [
         {
           heading: 'Objetivo',
@@ -901,7 +901,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     },
     notice: {
       title: 'Aviso Legal',
-      intro: 'Aviso legal de exemplo. Preenche os campos entre parênteses retos com os teus próprios dados antes de esta aplicação sair do modo de teste.',
+      intro: 'Informações legais e identificação do editor desta aplicação, nos termos da legislação francesa.',
       sections: [
         {
           heading: 'Editor',
@@ -940,7 +940,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     privacy: {
       title: 'Política de Privacidade',
       intro:
-        'Não solicitada explicitamente pela spec original, mas adicionada aqui porque o perfil introduzido na v1.2 recolhe informação pessoal sensível (§4) — merece uma declaração clara própria, a par dos Termos e do Aviso Legal.',
+        'Esta política explica o que a aplicação regista, onde fica armazenado, quem lhe pode aceder e como apagá-lo.',
       sections: [
         {
           heading: 'O que é recolhido',
@@ -995,7 +995,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     terms: {
       title: '服务条款',
       intro:
-        '本应用目前是个人测试版本（规范 v1.2，"测试模式"）：不对外公开发布，不与任何账户或服务器关联。本条款描述了应用目前的运行方式，在正式公开发布前将替换为经过审核、适用于具体司法辖区的条款。',
+        '本条款约束你对本应用的使用。使用本应用即表示你接受使用时有效的条款。',
       sections: [
         {
           heading: '用途',
@@ -1059,7 +1059,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     },
     notice: {
       title: '法律声明',
-      intro: '法律声明示例。请在本应用退出测试模式之前，用你自己的信息填写方括号中的内容。',
+      intro: '本应用的法律声明与发行方信息，依据法国法律提供。',
       sections: [
         {
           heading: '发布者',
@@ -1096,7 +1096,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     privacy: {
       title: '隐私政策',
       intro:
-        '原始规范中并未明确要求，但由于 v1.2 中新增的个人资料收集了敏感个人信息（§4），因此这里单独添加了一份清晰的声明，与服务条款和法律声明并列。',
+        '本政策说明本应用记录哪些内容、数据存储在何处、谁可以访问，以及如何删除。',
       sections: [
         {
           heading: '收集的信息',
@@ -1147,7 +1147,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     terms: {
       title: 'شروط الخدمة',
       intro:
-        'هذا التطبيق هو حاليًا نسخة اختبار شخصية (المواصفة v1.2، «وضع الاختبار»): غير موزّع للعامة، وغير مرتبط بأي حساب أو خادم. تصف هذه الشروط طريقة عمله حاليًا، والمقصود استبدالها بشروط مُراجَعة تتوافق مع الولاية القضائية الخاصة بك قبل أي إصدار عام.',
+        'تحكم هذه الشروط استخدامك للتطبيق. وباستخدامك له، فإنك تقبل هذه الشروط بصيغتها السارية وقت الاستخدام.',
       sections: [
         {
           heading: 'الغرض',
@@ -1211,7 +1211,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     },
     notice: {
       title: 'الإشعار القانوني',
-      intro: 'إشعار قانوني نموذجي. أكمل الحقول الموجودة بين قوسين ببياناتك الخاصة قبل أن يخرج هذا التطبيق من وضع الاختبار.',
+      intro: 'البيانات القانونية وتعريف ناشر التطبيق، وفقًا للقانون الفرنسي.',
       sections: [
         {
           heading: 'الناشر',
@@ -1248,7 +1248,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
     privacy: {
       title: 'سياسة الخصوصية',
       intro:
-        'لم تُطلب صراحةً في المواصفة الأصلية، لكنها أُضيفت هنا لأن الملف الشخصي المُدخل في الإصدار v1.2 يجمع معلومات شخصية حساسة (§4) — وهذا يستحق بيانًا واضحًا منفصلاً إلى جانب شروط الخدمة والإشعار القانوني.',
+        'توضّح هذه السياسة ما يسجّله التطبيق، وأين تُخزَّن البيانات، ومن يمكنه الوصول إليها، وكيفية حذفها.',
       sections: [
         {
           heading: 'ما يتم جمعه',

@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Tally / TYA</title>
+<meta name="description" content="Privacy Policy for the Tally / TYA alcohol tracking app.">
+<style>
+  :root {
+    --bg: #F7F5F2; --surface: #FFFFFF; --text: #1C1A17; --muted: #6E675F;
+    --border: #E4DFD7; --accent: #4240C7; --accent-soft: #E8E8FC;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14120F; --surface: #1E1B18; --text: #F3EFE9; --muted: #A9A099;
+      --border: #332E2A; --accent: #9698F5; --accent-soft: #28284F;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem 1rem 5rem;
+    background: var(--bg); color: var(--text);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 46rem; margin: 0 auto; }
+  .masthead { margin-bottom: 2rem; }
+  .app-name { font-weight: 700; letter-spacing: -0.02em; font-size: 1.1rem; }
+  .updated { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+  nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.25rem 0 2rem; }
+  .lang {
+    font: inherit; font-size: 0.9rem; cursor: pointer;
+    padding: 0.35rem 0.8rem; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--muted);
+  }
+  .lang[aria-current="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .doc {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 1.75rem; margin-bottom: 1.5rem;
+  }
+  h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 0.75rem; letter-spacing: -0.02em; }
+  h2 { font-size: 1.05rem; margin: 1.75rem 0 0.4rem; }
+  .intro { color: var(--muted); margin: 0; }
+  p { margin: 0 0 0.6rem; overflow-wrap: break-word; }
+  footer { max-width: 46rem; margin: 2.5rem auto 0; color: var(--muted); font-size: 0.85rem; }
+  a { color: var(--accent); }
+  /* Without JavaScript every language stays visible, so the text is never
+     hidden behind a script that failed to run. */
+  .js .doc { display: none; }
+  .js .doc.is-active { display: block; }
+</style>
+</head>
+<body>
+<main>
+  <div class="masthead">
+    <div class="app-name">Tally / TYA</div>
+    <div class="updated">Last updated: 2026-08-19</div>
+  </div>
+
+  <nav aria-label="Language">
+      <button type="button" data-target="en" class="lang">English</button>
+      <button type="button" data-target="fr" class="lang">Français</button>
+      <button type="button" data-target="es" class="lang">Español</button>
+      <button type="button" data-target="de" class="lang">Deutsch</button>
+      <button type="button" data-target="it" class="lang">Italiano</button>
+      <button type="button" data-target="pt" class="lang">Português</button>
+      <button type="button" data-target="zh" class="lang">中文</button>
+      <button type="button" data-target="ar" class="lang">العربية</button>
+  </nav>
+
+      <article class="doc" data-locale="en" lang="en">
+        <h1>Privacy Policy</h1>
+        <p class="intro">This policy explains what the app records, where it is stored, who can reach it, and how to erase it.</p>
+        <section>
+          <h2>What is collected</h2>
+          <p>Your drink log (what, when, how much, optionally where and a note); optionally, your sex, age, weight, height, spending baseline and reasons for using the app; your app settings.</p>
+        </section>
+        <section>
+          <h2>Where it is stored</h2>
+          <p>On this device — in an SQLite database on iOS/Android, or your browser local storage on the web build. Because an account is required, the same data (your log, custom drinks and profile) is also stored in Cloud Firestore, part of Google Firebase platform, scoped to your account and never shared with other users — see &quot;Cloud sync&quot; below. Your app settings stay on this device only.</p>
+        </section>
+        <section>
+          <h2>What it is used for</h2>
+          <p>Showing you your own history, charts and estimates. Nothing is used for any purpose beyond what you see in the app.</p>
+        </section>
+        <section>
+          <h2>Sharing</h2>
+          <p>Your data is never shared with other users, sold, or used for advertising. It leaves this device in two ways: cloud sync, which is part of using the app, and any export you start yourself.</p>
+        </section>
+        <section>
+          <h2>Cloud sync</h2>
+          <p>Because the app requires an account, the same data already described above — your drink log, custom drinks and profile — is copied to our Firebase project (Firebase Authentication for sign-in, Cloud Firestore for storage), operated by Google as a data processor on our behalf. No additional data is collected just because sync exists.</p>
+          <p>You can erase all of it at any time: Settings → Account &amp; cloud sync has a &quot;delete my account&quot; option that removes your account and its cloud data outright. Data residency depends on which Firebase project region is configured for this deployment.</p>
+        </section>
+        <section>
+          <h2>Your rights</h2>
+          <p>You can view, edit, or delete any entry at any time. Settings → Data &amp; privacy has a &quot;delete all my data&quot; option that removes everything, including your profile, and starts you back at onboarding.</p>
+          <p>If you have an account, Settings → Account &amp; cloud sync has a &quot;delete my account&quot; option that permanently deletes your account and all associated cloud data — a complete erasure, not just a sign-out.</p>
+        </section>
+        <section>
+          <h2>Data controller &amp; contact</h2>
+          <p>Name or company name (data controller): LaSolutionDigital</p>
+          <p>Business registration number — SIRET: 93866525400018</p>
+          <p>Address: 6 rue du Fort, 08260 Eteignières, France</p>
+          <p>Contact email: romainlambert@lasolutiondigital.com</p>
+          <p>Phone: +33 6 43 50 16 37</p>
+        </section>
+      </article>
+      <article class="doc" data-locale="fr" lang="fr">
+        <h1>Politique de confidentialité</h1>
+        <p class="intro">Cette politique explique ce que l'application enregistre, où ces données sont stockées, qui peut y accéder et comment les effacer.</p>
+        <section>
+          <h2>Ce qui est collecté</h2>
+          <p>Votre historique de consommation (quoi, quand, combien, éventuellement où et une note) ; éventuellement votre sexe, âge, poids, taille, référence de dépense et les raisons de votre utilisation de l'application ; vos réglages.</p>
+        </section>
+        <section>
+          <h2>Où c'est stocké</h2>
+          <p>Sur cet appareil — dans une base SQLite sur iOS/Android, ou le stockage local de votre navigateur pour la version web. Comme un compte est nécessaire, ces mêmes données (historique, boissons personnalisées et profil) sont aussi stockées dans Cloud Firestore, la plateforme Firebase de Google, réservées à votre compte et jamais partagées avec d'autres utilisateurs — voir « Synchronisation cloud » ci-dessous. Vos réglages, eux, restent uniquement sur cet appareil.</p>
+        </section>
+        <section>
+          <h2>Utilisation</h2>
+          <p>Pour vous montrer votre propre historique, vos graphiques et vos estimations. Rien n'est utilisé à d'autres fins que ce que vous voyez dans l'application.</p>
+        </section>
+        <section>
+          <h2>Partage</h2>
+          <p>Vos données ne sont jamais partagées avec d'autres utilisateurs, ni vendues, ni utilisées à des fins publicitaires. Elles quittent cet appareil de deux façons : la synchronisation cloud, qui fait partie du fonctionnement de l'application, et les exports que vous déclenchez vous-même.</p>
+        </section>
+        <section>
+          <h2>Synchronisation cloud</h2>
+          <p>L'application nécessitant un compte, les mêmes données décrites ci-dessus — votre historique, vos boissons personnalisées et votre profil — sont copiées dans notre projet Firebase (Firebase Authentication pour la connexion, Cloud Firestore pour le stockage), exploité par Google en tant que sous-traitant pour notre compte. Aucune donnée supplémentaire n'est collectée du seul fait que la synchronisation existe.</p>
+          <p>Vous pouvez tout effacer à tout moment : Réglages → Compte et synchronisation propose une option « supprimer mon compte » qui efface le compte et ses données cloud purement et simplement. La localisation des données dépend de la région du projet Firebase configurée pour ce déploiement.</p>
+        </section>
+        <section>
+          <h2>Vos droits</h2>
+          <p>Vous pouvez consulter, modifier ou supprimer toute entrée à tout moment. Réglages → Données &amp; confidentialité propose une option « tout supprimer » qui efface tout, y compris votre profil, et vous ramène à l'accueil initial.</p>
+          <p>Si vous avez un compte, Réglages → Compte et synchronisation propose une option « supprimer mon compte » qui supprime définitivement votre compte et toutes les données associées dans le cloud — une suppression complète, pas seulement une déconnexion.</p>
+        </section>
+        <section>
+          <h2>Responsable du traitement &amp; contact</h2>
+          <p>Nom ou raison sociale (responsable du traitement) : LaSolutionDigital</p>
+          <p>SIRET : 93866525400018</p>
+          <p>Adresse : 6 rue du Fort, 08260 Eteignières</p>
+          <p>E-mail de contact : romainlambert@lasolutiondigital.com</p>
+          <p>Téléphone : +33 6 43 50 16 37</p>
+        </section>
+      </article>
+      <article class="doc" data-locale="es" lang="es">
+        <h1>Política de Privacidad</h1>
+        <p class="intro">Esta política explica qué registra la aplicación, dónde se almacena, quién puede acceder a ello y cómo borrarlo.</p>
+        <section>
+          <h2>Qué se recopila</h2>
+          <p>Tu historial de consumo (qué, cuándo, cuánto, opcionalmente dónde y una nota); opcionalmente, tu sexo, edad, peso, altura, gasto de referencia y los motivos por los que usas la aplicación; tus ajustes.</p>
+        </section>
+        <section>
+          <h2>Dónde se almacena</h2>
+          <p>En este dispositivo — en una base de datos SQLite en iOS/Android, o en el almacenamiento local de tu navegador en la versión web. Como se necesita una cuenta, esos mismos datos (historial, bebidas personalizadas y perfil) también se guardan en Cloud Firestore, la plataforma Firebase de Google, reservados a tu cuenta y nunca compartidos con otros usuarios — consulta «Sincronización en la nube» más abajo. Tus ajustes permanecen solo en este dispositivo.</p>
+        </section>
+        <section>
+          <h2>Para qué se usa</h2>
+          <p>Para mostrarte tu propio historial, gráficos y estimaciones. Nada se utiliza para ningún fin más allá de lo que ves en la aplicación.</p>
+        </section>
+        <section>
+          <h2>Compartición</h2>
+          <p>Tus datos nunca se comparten con otros usuarios, ni se venden, ni se usan con fines publicitarios. Salen de este dispositivo de dos maneras: la sincronización en la nube, que forma parte del funcionamiento de la aplicación, y las exportaciones que inicias tú.</p>
+        </section>
+        <section>
+          <h2>Sincronización en la nube</h2>
+          <p>Como la aplicación requiere una cuenta, los mismos datos descritos arriba —tu historial, tus bebidas personalizadas y tu perfil— se copian a nuestro proyecto de Firebase (Firebase Authentication para el inicio de sesión, Cloud Firestore para el almacenamiento), operado por Google como encargado del tratamiento en nuestro nombre. No se recopila ningún dato adicional por el mero hecho de que exista la sincronización.</p>
+          <p>Puedes borrarlo todo cuando quieras: en Ajustes → Cuenta y sincronización hay una opción «eliminar mi cuenta» que borra la cuenta y sus datos en la nube por completo. La ubicación de los datos depende de la región del proyecto de Firebase configurada para este despliegue.</p>
+        </section>
+        <section>
+          <h2>Tus derechos</h2>
+          <p>Puedes consultar, editar o eliminar cualquier registro en cualquier momento. Ajustes → Datos y privacidad incluye una opción «eliminar todos mis datos» que borra todo, incluido tu perfil, y te devuelve a la pantalla de inicio.</p>
+          <p>Si tienes una cuenta, Ajustes → Cuenta y sincronización incluye una opción «eliminar mi cuenta» que borra permanentemente tu cuenta y todos los datos asociados en la nube — una eliminación completa, no solo un cierre de sesión.</p>
+        </section>
+        <section>
+          <h2>Responsable del tratamiento y contacto</h2>
+          <p>Nombre o razón social (responsable del tratamiento): LaSolutionDigital</p>
+          <p>Número de identificación fiscal / registro mercantil — SIRET: 93866525400018</p>
+          <p>Dirección: 6 rue du Fort, 08260 Eteignières, Francia</p>
+          <p>Correo de contacto: romainlambert@lasolutiondigital.com</p>
+          <p>Teléfono: +33 6 43 50 16 37</p>
+        </section>
+      </article>
+      <article class="doc" data-locale="de" lang="de">
+        <h1>Datenschutzerklärung</h1>
+        <p class="intro">Diese Erklärung beschreibt, was die App aufzeichnet, wo es gespeichert wird, wer darauf zugreifen kann und wie du es löschst.</p>
+        <section>
+          <h2>Was erhoben wird</h2>
+          <p>Dein Trink-Protokoll (was, wann, wie viel, optional wo und eine Notiz); optional dein Geschlecht, Alter, Gewicht, Größe, Ausgaben-Referenzwert und die Gründe für die Nutzung der App; deine Einstellungen.</p>
+        </section>
+        <section>
+          <h2>Wo es gespeichert wird</h2>
+          <p>Auf diesem Gerät — in einer SQLite-Datenbank auf iOS/Android oder im lokalen Speicher deines Browsers bei der Web-Version. Da ein Konto erforderlich ist, werden dieselben Daten (Protokoll, eigene Getränke und Profil) zusätzlich in Cloud Firestore gespeichert, Teil von Googles Firebase-Plattform, ausschließlich deinem Konto zugeordnet und nie mit anderen Nutzer:innen geteilt — siehe „Cloud-Synchronisierung“ weiter unten. Deine Einstellungen bleiben ausschließlich auf diesem Gerät.</p>
+        </section>
+        <section>
+          <h2>Wofür es verwendet wird</h2>
+          <p>Um dir deinen eigenen Verlauf, Diagramme und Schätzungen anzuzeigen. Nichts wird für einen Zweck verwendet, der über das hinausgeht, was du in der App siehst.</p>
+        </section>
+        <section>
+          <h2>Weitergabe</h2>
+          <p>Deine Daten werden nie mit anderen Nutzer:innen geteilt, verkauft oder für Werbung verwendet. Sie verlassen dieses Gerät auf zwei Wegen: über die Cloud-Synchronisierung, die zur Nutzung der App gehört, und über Exporte, die du selbst startest.</p>
+        </section>
+        <section>
+          <h2>Cloud-Synchronisierung</h2>
+          <p>Da die App ein Konto voraussetzt, werden dieselben oben beschriebenen Daten — dein Protokoll, deine eigenen Getränke und dein Profil — in unser Firebase-Projekt kopiert (Firebase Authentication für die Anmeldung, Cloud Firestore für die Speicherung), das Google in unserem Auftrag als Auftragsverarbeiter betreibt. Allein durch die Existenz der Synchronisierung werden keine zusätzlichen Daten erhoben.</p>
+          <p>Du kannst alles jederzeit löschen: Unter Einstellungen → Konto &amp; Cloud-Synchronisierung gibt es die Option „Konto löschen“, die dein Konto samt Cloud-Daten vollständig entfernt. Wo die Daten liegen, hängt davon ab, welche Firebase-Projektregion für diese Bereitstellung konfiguriert ist.</p>
+        </section>
+        <section>
+          <h2>Deine Rechte</h2>
+          <p>Du kannst jeden Eintrag jederzeit einsehen, bearbeiten oder löschen. Einstellungen → Daten &amp; Datenschutz bietet eine Option „Alle meine Daten löschen&quot;, die alles entfernt, einschließlich deines Profils, und dich zurück zum Einrichtungsbildschirm bringt.</p>
+          <p>Wenn du ein Konto hast, bietet Einstellungen → Konto &amp; Cloud-Synchronisierung die Option „Konto löschen&quot;, die dein Konto und alle zugehörigen Cloud-Daten dauerhaft löscht — eine vollständige Löschung, nicht nur eine Abmeldung.</p>
+        </section>
+        <section>
+          <h2>Verantwortlicher &amp; Kontakt</h2>
+          <p>Name oder Firmenname (Verantwortlicher): LaSolutionDigital</p>
+          <p>Handelsregisternummer — SIRET: 93866525400018</p>
+          <p>Adresse: 6 rue du Fort, 08260 Eteignières, Frankreich</p>
+          <p>Kontakt-E-Mail: romainlambert@lasolutiondigital.com</p>
+          <p>Telefon: +33 6 43 50 16 37</p>
+        </section>
+      </article>
+      <article class="doc" data-locale="it" lang="it">
+        <h1>Informativa sulla Privacy</h1>
+        <p class="intro">Questa informativa spiega che cosa registra l'app, dove vengono archiviati i dati, chi può accedervi e come cancellarli.</p>
+        <section>
+          <h2>Cosa viene raccolto</h2>
+          <p>Il tuo storico dei consumi (cosa, quando, quanto, eventualmente dove e una nota); facoltativamente il tuo sesso, età, peso, altezza, spesa di riferimento e i motivi per cui usi l'app; le tue impostazioni.</p>
+        </section>
+        <section>
+          <h2>Dove viene archiviato</h2>
+          <p>Su questo dispositivo — in un database SQLite su iOS/Android, oppure nell'archiviazione locale del browser per la versione web. Poiché è necessario un account, questi stessi dati (storico, bevande personalizzate e profilo) vengono archiviati anche in Cloud Firestore, la piattaforma Firebase di Google, riservati al tuo account e mai condivisi con altri utenti — vedi «Sincronizzazione cloud» qui sotto. Le tue impostazioni restano solo su questo dispositivo.</p>
+        </section>
+        <section>
+          <h2>A cosa viene usato</h2>
+          <p>Per mostrarti il tuo storico, i tuoi grafici e le tue stime. Nulla viene utilizzato per scopi diversi da quelli che vedi nell'app.</p>
+        </section>
+        <section>
+          <h2>Condivisione</h2>
+          <p>I tuoi dati non vengono mai condivisi con altri utenti, venduti o usati a fini pubblicitari. Lasciano questo dispositivo in due modi: la sincronizzazione cloud, che fa parte del funzionamento dell'app, e le esportazioni che avvii tu.</p>
+        </section>
+        <section>
+          <h2>Sincronizzazione cloud</h2>
+          <p>Poiché l'app richiede un account, gli stessi dati descritti sopra — il tuo storico, le tue bevande personalizzate e il tuo profilo — vengono copiati nel nostro progetto Firebase (Firebase Authentication per l'accesso, Cloud Firestore per l'archiviazione), gestito da Google come responsabile del trattamento per nostro conto. Nessun dato aggiuntivo viene raccolto per il solo fatto che la sincronizzazione esista.</p>
+          <p>Puoi cancellare tutto in qualsiasi momento: in Impostazioni → Account e sincronizzazione trovi l'opzione «elimina il mio account», che rimuove del tutto l'account e i suoi dati cloud. La residenza dei dati dipende dalla regione del progetto Firebase configurata per questa distribuzione.</p>
+        </section>
+        <section>
+          <h2>I tuoi diritti</h2>
+          <p>Puoi visualizzare, modificare o eliminare qualsiasi voce in qualsiasi momento. Impostazioni → Dati e privacy include un'opzione «elimina tutti i miei dati» che cancella tutto, incluso il tuo profilo, e ti riporta alla schermata iniziale.</p>
+          <p>Se hai un account, Impostazioni → Account e sincronizzazione include un'opzione «elimina il mio account» che elimina definitivamente il tuo account e tutti i dati cloud associati — una cancellazione completa, non solo una disconnessione.</p>
+        </section>
+        <section>
+          <h2>Titolare del trattamento e contatto</h2>
+          <p>Nome o ragione sociale (titolare del trattamento): LaSolutionDigital</p>
+          <p>Numero di registrazione dell'attività — SIRET: 93866525400018</p>
+          <p>Indirizzo: 6 rue du Fort, 08260 Eteignières, Francia</p>
+          <p>E-mail di contatto: romainlambert@lasolutiondigital.com</p>
+          <p>Telefono: +33 6 43 50 16 37</p>
+        </section>
+      </article>
+      <article class="doc" data-locale="pt" lang="pt">
+        <h1>Política de Privacidade</h1>
+        <p class="intro">Esta política explica o que a aplicação regista, onde fica armazenado, quem lhe pode aceder e como apagá-lo.</p>
+        <section>
+          <h2>O que é recolhido</h2>
+          <p>O teu histórico de consumo (o quê, quando, quanto, opcionalmente onde e uma nota); opcionalmente, o teu sexo, idade, peso, altura, referência de despesa e as razões para usares a aplicação; as tuas definições.</p>
+        </section>
+        <section>
+          <h2>Onde é armazenado</h2>
+          <p>Neste dispositivo — numa base de dados SQLite em iOS/Android, ou no armazenamento local do teu navegador na versão web. Uma vez que é necessária uma conta, esses mesmos dados (histórico, bebidas personalizadas e perfil) são também guardados no Cloud Firestore, a plataforma Firebase da Google, reservados à tua conta e nunca partilhados com outros utilizadores — consulta «Sincronização na nuvem» abaixo. As tuas definições ficam apenas neste dispositivo.</p>
+        </section>
+        <section>
+          <h2>Para que é utilizado</h2>
+          <p>Para te mostrar o teu próprio histórico, gráficos e estimativas. Nada é utilizado para qualquer outro fim além do que vês na aplicação.</p>
+        </section>
+        <section>
+          <h2>Partilha</h2>
+          <p>Os teus dados nunca são partilhados com outros utilizadores, vendidos ou usados para publicidade. Saem deste dispositivo de duas formas: a sincronização na nuvem, que faz parte do funcionamento da aplicação, e as exportações que inicias tu.</p>
+        </section>
+        <section>
+          <h2>Sincronização na nuvem</h2>
+          <p>Uma vez que a aplicação exige uma conta, os mesmos dados descritos acima — o teu histórico, as tuas bebidas personalizadas e o teu perfil — são copiados para o nosso projeto Firebase (Firebase Authentication para o início de sessão, Cloud Firestore para o armazenamento), operado pela Google como subcontratante em nosso nome. Não é recolhido nenhum dado adicional apenas por a sincronização existir.</p>
+          <p>Podes apagar tudo a qualquer momento: em Definições → Conta e sincronização existe a opção «eliminar a minha conta», que remove por completo a conta e os respetivos dados na nuvem. A localização dos dados depende da região do projeto Firebase configurada para esta implementação.</p>
+        </section>
+        <section>
+          <h2>Os teus direitos</h2>
+          <p>Podes consultar, editar ou eliminar qualquer registo a qualquer momento. Definições → Dados e privacidade tem uma opção «eliminar todos os meus dados» que remove tudo, incluindo o teu perfil, e leva-te de volta ao início.</p>
+          <p>Se tiveres uma conta, Definições → Conta e sincronização tem uma opção «eliminar a minha conta» que apaga permanentemente a tua conta e todos os dados associados na nuvem — uma eliminação completa, não apenas um términus de sessão.</p>
+        </section>
+        <section>
+          <h2>Responsável pelo tratamento e contacto</h2>
+          <p>Nome ou firma (responsável pelo tratamento): LaSolutionDigital</p>
+          <p>Número de registo comercial — SIRET: 93866525400018</p>
+          <p>Morada: 6 rue du Fort, 08260 Eteignières, França</p>
+          <p>E-mail de contacto: romainlambert@lasolutiondigital.com</p>
+          <p>Telefone: +33 6 43 50 16 37</p>
+        </section>
+      </article>
+      <article class="doc" data-locale="zh" lang="zh">
+        <h1>隐私政策</h1>
+        <p class="intro">本政策说明本应用记录哪些内容、数据存储在何处、谁可以访问，以及如何删除。</p>
+        <section>
+          <h2>收集的信息</h2>
+          <p>你的饮酒记录（内容、时间、数量，可选的地点和备注）；可选的性别、年龄、体重、身高、消费基准以及使用本应用的原因；你的应用设置。</p>
+        </section>
+        <section>
+          <h2>存储位置</h2>
+          <p>存储在本设备上——在 iOS/Android 上为 SQLite 数据库，网页版则为浏览器本地存储。由于需要账户，相同的数据（记录、自定义饮品和个人资料）也会存储在 Cloud Firestore 中——Google Firebase 平台的一部分，仅归属于你的账户，绝不会与其他用户共享——详见下方「云同步」。你的设置仅保留在本设备上。</p>
+        </section>
+        <section>
+          <h2>使用目的</h2>
+          <p>用于向你展示你自己的记录、图表和估算值。除你在应用中看到的内容外，不作任何其他用途。</p>
+        </section>
+        <section>
+          <h2>数据共享</h2>
+          <p>你的数据绝不会与其他用户共享、出售或用于广告。数据以两种方式离开本设备：云同步（属于应用的正常运行），以及你自己发起的导出。</p>
+        </section>
+        <section>
+          <h2>云同步</h2>
+          <p>由于本应用需要账户，上述相同数据——你的记录、自定义饮品和个人资料——会被复制到我们的 Firebase 项目中（使用 Firebase Authentication 进行登录，使用 Cloud Firestore 进行存储），该项目由 Google 作为我们的数据处理者运营。仅仅因为同步功能存在，并不会额外收集任何数据。</p>
+          <p>你可以随时删除全部数据：在设置 → 账户与云同步中有「删除我的账户」选项，可彻底删除账户及其云端数据。数据存储的地理位置取决于此部署所配置的 Firebase 项目区域。</p>
+        </section>
+        <section>
+          <h2>你的权利</h2>
+          <p>你可以随时查看、编辑或删除任何记录。设置 → 数据与隐私 中有&quot;删除我的所有数据&quot;选项，可清除包括个人资料在内的所有内容，并让你回到初始设置流程。</p>
+          <p>如果你拥有账户，设置 → 账户与云同步中的&quot;删除我的账户&quot;选项会永久删除你的账户及其在云端的所有相关数据——这是彻底删除，而不仅仅是退出登录。</p>
+        </section>
+        <section>
+          <h2>数据控制者与联系方式</h2>
+          <p>姓名或公司名称（数据控制者）：LaSolutionDigital</p>
+          <p>工商注册号——SIRET：93866525400018</p>
+          <p>地址：6 rue du Fort, 08260 Eteignières, 法国</p>
+          <p>联系邮箱：romainlambert@lasolutiondigital.com</p>
+          <p>电话：+33 6 43 50 16 37</p>
+        </section>
+      </article>
+      <article class="doc" data-locale="ar" lang="ar" dir="rtl">
+        <h1>سياسة الخصوصية</h1>
+        <p class="intro">توضّح هذه السياسة ما يسجّله التطبيق، وأين تُخزَّن البيانات، ومن يمكنه الوصول إليها، وكيفية حذفها.</p>
+        <section>
+          <h2>ما يتم جمعه</h2>
+          <p>سجل استهلاكك (ماذا، متى، كم، واختياريًا أين مع ملاحظة)؛ واختياريًا جنسك، عمرك، وزنك، طولك، مرجع الإنفاق وأسباب استخدامك للتطبيق؛ إعداداتك.</p>
+        </section>
+        <section>
+          <h2>أين يُخزَّن</h2>
+          <p>على هذا الجهاز — في قاعدة بيانات SQLite على iOS/Android، أو في التخزين المحلي لمتصفحك في نسخة الويب. وبما أنّ الحساب مطلوب، تُخزَّن هذه البيانات نفسها (السجل، المشروبات المخصصة، والملف الشخصي) أيضًا في Cloud Firestore، وهي جزء من منصة Firebase التابعة لـ Google، مقتصرة على حسابك ولا تُشارَك أبدًا مع مستخدمين آخرين — راجع «المزامنة السحابية» أدناه. أما إعداداتك فتبقى على هذا الجهاز فقط.</p>
+        </section>
+        <section>
+          <h2>الغرض من استخدامه</h2>
+          <p>لعرض سجلك ورسومك البيانية وتقديراتك الخاصة. لا يُستخدم أي شيء لأي غرض يتجاوز ما تراه في التطبيق.</p>
+        </section>
+        <section>
+          <h2>المشاركة</h2>
+          <p>لا تُشارَك بياناتك أبدًا مع مستخدمين آخرين، ولا تُباع، ولا تُستخدَم لأغراض إعلانية. وهي تغادر هذا الجهاز بطريقتين: المزامنة السحابية، وهي جزء من عمل التطبيق، وأي تصدير تبدأه بنفسك.</p>
+        </section>
+        <section>
+          <h2>المزامنة السحابية</h2>
+          <p>بما أنّ التطبيق يتطلّب حسابًا، تُنسخ نفس البيانات الموضحة أعلاه — سجلك، ومشروباتك المخصصة، وملفك الشخصي — إلى مشروع Firebase الخاص بنا (Firebase Authentication لتسجيل الدخول، وCloud Firestore للتخزين)، الذي تُشغّله Google بصفتها معالِج بيانات نيابة عنا. لا يُجمَع أي بيانات إضافية لمجرد وجود ميزة المزامنة.</p>
+          <p>يمكنك حذف كل ذلك في أي وقت: في الإعدادات ← الحساب والمزامنة السحابية يوجد خيار «حذف حسابي» الذي يزيل حسابك وبياناتك السحابية نهائيًا. يعتمد موقع تخزين البيانات على منطقة مشروع Firebase المُهيَّأة لهذا النشر.</p>
+        </section>
+        <section>
+          <h2>حقوقك</h2>
+          <p>يمكنك عرض أو تعديل أو حذف أي إدخال في أي وقت. تتضمن الإعدادات ← البيانات والخصوصية خيار «حذف جميع بياناتي» الذي يمسح كل شيء، بما في ذلك ملفك الشخصي، ويعيدك إلى شاشة الإعداد الأولي.</p>
+          <p>إذا كان لديك حساب، يتضمن الإعدادات ← الحساب والمزامنة السحابية خيار «حذف حسابي» الذي يحذف حسابك نهائيًا وجميع البيانات السحابية المرتبطة به — حذف كامل، وليس مجرد تسجيل خروج.</p>
+        </section>
+        <section>
+          <h2>المتحكم بالبيانات والتواصل</h2>
+          <p>الاسم أو اسم الشركة (المتحكم بالبيانات): LaSolutionDigital</p>
+          <p>رقم السجل التجاري — SIRET: 93866525400018</p>
+          <p>العنوان: 6 rue du Fort, 08260 Eteignières, فرنسا</p>
+          <p>البريد الإلكتروني للتواصل: romainlambert@lasolutiondigital.com</p>
+          <p>الهاتف: +33 6 43 50 16 37</p>
+        </section>
+      </article>
+</main>
+
+<footer>
+  <p>Tally and TYA are two builds of the same application, published by LaSolutionDigital.
+  Contact: <a href="mailto:romainlambert@lasolutiondigital.com">romainlambert@lasolutiondigital.com</a></p>
+  <p><a href="./privacy.html">Privacy Policy</a> · <a href="./terms.html">Terms of Service</a> · <a href="./notice.html">Legal Notice</a></p>
+</footer>
+
+<script>
+  document.documentElement.classList.add('js');
+  var docs = document.querySelectorAll('.doc');
+  var buttons = document.querySelectorAll('.lang');
+  function show(locale) {
+    docs.forEach(function (d) { d.classList.toggle('is-active', d.dataset.locale === locale); });
+    buttons.forEach(function (b) { b.setAttribute('aria-current', String(b.dataset.target === locale)); });
+    document.documentElement.lang = locale;
+    try { localStorage.setItem('legal-lang', locale); } catch (e) {}
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.target); }); });
+  var known = ["en","fr","es","de","it","pt","zh","ar"];
+  var stored = null;
+  try { stored = localStorage.getItem('legal-lang'); } catch (e) {}
+  var fromBrowser = (navigator.language || 'en').slice(0, 2);
+  show(known.indexOf(stored) > -1 ? stored : known.indexOf(fromBrowser) > -1 ? fromBrowser : 'en');
+</script>
+</body>
+</html>

@@ -364,6 +364,29 @@ habits:
 Whether to monetize at all, and how, is a human decision this codebase deliberately no longer
 pre-empts. Flagged again under [Open items](#open-items-before-any-public-release).
 
+## The public legal pages
+
+Google Play requires a privacy policy reachable at a public URL, outside the app. Rather than
+paste the text into a web page — which diverges from the app the first time either is edited —
+`scripts/build-legal-site.mjs` reads the same `src/data/legal/content.ts` the app renders and
+emits static HTML from it:
+
+```bash
+npm run build:legal   # writes docs/{privacy,terms,notice,index}.html
+```
+
+Regenerate after **any** edit to `content.ts`, and commit the result; the pages are checked in
+so a host can serve them directly. `docs/` is the folder GitHub Pages serves when you point it
+at *Settings → Pages → Source: main, /docs* — any static host works just as well, since the
+pages have no dependencies and make no external requests.
+
+Each document is one page carrying all eight languages, so there is one canonical URL per
+document rather than eight. A switcher picks the reader's language (defaulting to the browser's);
+with JavaScript disabled every language simply renders in sequence, so the legal text is never
+hidden behind a script that failed to run.
+
+The URL to give Play is `<your-host>/privacy.html`.
+
 ## Accounts & cloud sync
 
 **Account creation is mandatory** — a deliberate product decision (business model depends on it,
