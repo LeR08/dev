@@ -619,3 +619,63 @@ describe('the sources map only claims fields that have a value', () => {
     expect(venue.sources.phone).toBeUndefined();
   });
 });
+
+describe('manual overrides are untouchable', () => {
+  const licence = {
+    sourceId: 'a1', name: 'Shop', legalName: 'Shop', address: 'Damrak 1', postcode: null,
+    lat: 52.375, lng: 4.895, licenceNumber: null, licenceValidTo: null,
+    licenceRenewalPending: false, hoursLicensed: null, hasTerrace: false,
+  };
+
+  const build = (overrides: Record<string, unknown>) =>
+    buildVenues({
+      adapter: amsterdamAdapter, licences: [licence], matches: [], neighbourhoods: [],
+      overrides: overrides as never, now: TODAY, previous: [], osmAvailable: true,
+    })[0];
+
+  const directoryRecord = {
+    slug: 'shop', name: 'Different Name', address: 'Damrak 1', postcode: null,
+    lat: 52.375, lng: 4.895, phone: '020 999 9999', website: 'https://directory.example',
+    amenities: ['toilet'], url: 'https://example.org/shop',
+  };
+
+  it('records which fields were pinned, and credits them to the correction', () => {
+    const venue = build({ a1: { phone: '020 111 1111' } });
+    expect(venue.phone).toBe('020 111 1111');
+    expect(venue.sources.phone).toBe('manual');
+    expect(venue.override_fields).toEqual(['phone']);
+  });
+
+  it('keys on the slug as readily as on the licence id', () => {
+    const venue = build({ shop: { phone: '020 222 2222' } });
+    expect(venue.phone).toBe('020 222 2222');
+  });
+
+  it('stops the directory writing over a pinned field', () => {
+    const venue = build({ a1: { phone: '020 111 1111', website: 'https://pinned.example' } });
+    applyDirectory([venue], [directoryRecord]);
+    expect(venue.phone).toBe('020 111 1111');
+    expect(venue.website).toBe('https://pinned.example');
+    expect(venue.sources.phone).toBe('manual');
+  });
+
+  it('stops the directory adding to pinned aliases or amenities', () => {
+    const venue = build({ a1: { aliases: ['My Name'], amenities: { wifi: true } } });
+    applyDirectory([venue], [directoryRecord]);
+    expect(venue.aliases).toEqual(['My Name']);
+    expect(venue.amenities).toEqual({ wifi: true });
+  });
+
+  it('still lets the directory fill everything that was not pinned', () => {
+    const venue = build({ a1: { phone: '020 111 1111' } });
+    applyDirectory([venue], [directoryRecord]);
+    expect(venue.website).toBe('https://directory.example');
+    expect(venue.sources.website).toBe('directory');
+  });
+
+  it('ignores a field named in override_fields but absent from the entry', () => {
+    const venue = build({ a1: { override_fields: ['phone', 'website'], phone: '020 111 1111' } });
+    expect(venue.override_fields).toEqual(['phone']);
+    expect(venue.website).toBeNull();
+  });
+});

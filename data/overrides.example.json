@@ -1,0 +1,32 @@
+{
+  "_readme": [
+    "Hand-written corrections. Copy this file to overrides.json and replace the",
+    "placeholders — every value below is fake on purpose, so copying this file",
+    "unedited cannot publish anything untrue.",
+    "",
+    "Key each entry by the venue's amsterdam_id or by its slug; both resolve.",
+    "Field names match data/venues.json exactly.",
+    "A field named here is pinned: no automated pass will ever write it, and the",
+    "page credits it as a manual correction.",
+    "Add 'override_fields' only to pin a field to a value it already has."
+  ],
+
+  "REPLACE-WITH-A-SLUG": {
+    "phone": "+31 20 000 0000",
+    "website": "https://replace.example",
+    "aliases": ["The name on the sign", "An older name people still use"]
+  },
+
+  "REPLACE-WITH-AN-AMSTERDAM-ID": {
+    "name": "The name to display",
+    "amenities": { "terrace": true, "wheelchair": false, "wifi": true },
+    "socials": { "instagram": "replace_me" }
+  },
+
+  "REPLACE-WITH-A-SLUG-THAT-HAS-CLOSED": {
+    "status": "closed",
+    "hours_actual": "Mo-Su 09:00-01:00",
+    "hours_source": "community",
+    "override_fields": ["status", "hours_actual", "hours_source"]
+  }
+}

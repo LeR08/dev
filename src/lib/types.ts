@@ -81,6 +81,11 @@ export const Venue = z.object({
   hours_actual: z.string().nullable().default(null),
   hours_source: HoursSource.nullable().default(null),
   hours_updated_at: z.string().nullable().default(null),
+  /**
+   * Fields pinned by hand in data/overrides.json. No automated pass may write
+   * these — §10 requires a manual correction to survive every later run.
+   */
+  override_fields: z.array(z.string()).default([]),
   /** Handles the venue publishes on its own website (§5.2 precedence: venue first). */
   socials: z.record(z.string()).default({}),
   /** Networks whose handle is a chain account shared with another venue. */

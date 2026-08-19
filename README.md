@@ -53,8 +53,7 @@ OpenStreetMap/Overpass ─┘                        ▲
   venue trades under, which the register often does not carry.
 * Unmatched OSM records land in `data/pending-venues.json` for human review; they are never
   published automatically.
-* Manual corrections go in `data/overrides.json` keyed by `amsterdam_id` or `slug`, with an
-  `override_fields` list. The ETL never overwrites them.
+* Manual corrections go in `data/overrides.json`. See below.
 
 The nightly GitHub Action refreshes the snapshot and commits it. A run whose row count moves more
 than 25% aborts and keeps the previous data, so a broken upstream response can never empty the
@@ -76,6 +75,30 @@ products, and never its images.
 > substantial extraction from a database regardless of credit. Individual facts
 > are not protected and this takes a small subset of one city, but have the
 > lawyer confirm it along with L1, L2 and the review feature.
+
+### Correcting something by hand
+
+`data/overrides.json` is the escape hatch, and it outranks every source. Copy
+`data/overrides.example.json` over it and edit. Key each entry by the venue's
+`amsterdam_id` or by its `slug` — both resolve — and name the fields exactly as
+they appear in `data/venues.json`:
+
+```json
+{
+  "the-bulldog": {
+    "phone": "+31 20 625 6278",
+    "aliases": ["The Bulldog Ex-Policestation"]
+  }
+}
+```
+
+A field named here is *pinned*. Every automated pass skips it: the licence
+import, the OpenStreetMap merge, the directory fill, the socials read. The venue
+page credits it as a manual correction rather than to a source that did not
+supply it. Nothing you write here is ever silently replaced, which is the point
+— it is the one place where your judgement beats the pipeline's.
+
+Pass `override_fields` only to pin a field to the value it already has.
 
 ### The licence end date is a renewal calendar
 

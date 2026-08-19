@@ -198,7 +198,10 @@ async function main(): Promise<void> {
  * venue's contact details.
  */
 async function attachSocials(venues: Venue[]): Promise<number> {
-  const withSite = venues.filter((venue) => venue.website);
+  // A hand-pinned field is off limits to every automated pass, this one included.
+  const withSite = venues.filter(
+    (venue) => venue.website && !venue.override_fields.includes('socials'),
+  );
   if (withSite.length === 0) return 0;
 
   let failures = 0;

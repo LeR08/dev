@@ -135,6 +135,7 @@ export function buildVenues(input: BuildInput): Venue[] {
       // Derived from the directory pass, so recomputed every run rather than
       // carried: a name matched in error must not outlive the rule that let it in.
       aliases: [],
+      override_fields: [],
       address: licence.address,
       postcode: licence.postcode,
       neighbourhood,
@@ -216,17 +217,27 @@ function uniqueSlug(candidate: string, taken: Set<string>, neighbourhood: string
   return slug;
 }
 
+/**
+ * Hand-written corrections from data/overrides.json, keyed by `amsterdam_id` or
+ * by `slug`. The fields written are recorded on the venue so that every later
+ * pass — the directory fill, the socials read — leaves them alone. Without that
+ * record a correction survives `buildVenues` and is then quietly overwritten a
+ * few lines later, which is the same bug in a different coat.
+ */
 function applyOverrides(venue: Venue, overrides: Overrides): Venue {
   const override = overrides[venue.amsterdam_id ?? ''] ?? overrides[venue.slug];
   if (!override) return venue;
-  const fields = override.override_fields ?? Object.keys(override).filter((key) => key !== 'override_fields');
+
+  const fields = (
+    override.override_fields ?? Object.keys(override).filter((key) => key !== 'override_fields')
+  ).filter((field) => field in override);
+
   const result = { ...venue };
   for (const field of fields) {
-    if (field in override) {
-      (result as Record<string, unknown>)[field] = (override as Record<string, unknown>)[field];
-      result.sources = { ...result.sources, [field]: 'manual' };
-    }
+    (result as Record<string, unknown>)[field] = (override as Record<string, unknown>)[field];
+    result.sources = { ...result.sources, [field]: 'manual' };
   }
+  result.override_fields = fields;
   return result;
 }
 
@@ -294,18 +305,20 @@ export function applyDirectory(venues: Venue[], records: DirectoryRecord[]): {
     if (!match) continue;
     claimed.add(match.slug);
 
-    if (!venue.phone && match.phone) {
+    const pinned = new Set(venue.override_fields);
+
+    if (!pinned.has('phone') && !venue.phone && match.phone) {
       venue.phone = match.phone;
       venue.sources = { ...venue.sources, phone: 'directory' };
       counts.phones += 1;
     }
-    if (!venue.website && match.website) {
+    if (!pinned.has('website') && !venue.website && match.website) {
       venue.website = match.website;
       venue.sources = { ...venue.sources, website: 'directory' };
       counts.websites += 1;
     }
 
-    const theirName = match.name.trim();
+    const theirName = pinned.has('aliases') ? '' : match.name.trim();
     const known = [venue.name, venue.legal_name, ...venue.aliases]
       .filter((value): value is string => typeof value === 'string')
       .map(normalizeName);
@@ -316,7 +329,7 @@ export function applyDirectory(venues: Venue[], records: DirectoryRecord[]): {
     }
 
     const added: Record<string, boolean> = {};
-    for (const key of match.amenities) {
+    for (const key of pinned.has('amenities') ? [] : match.amenities) {
       const mapped = DIRECTORY_AMENITIES[key];
       if (mapped && !(mapped in venue.amenities)) added[mapped] = true;
     }
