@@ -1,0 +1,51 @@
+name: Nightly ETL
+
+on:
+  schedule:
+    # 03:00 Europe/Amsterdam — 01:00 UTC in summer, 02:00 in winter. Cron has no
+    # timezone, so this fires at 01:00 UTC and the job is idempotent either way.
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    inputs:
+      allow_drift:
+        description: 'Publish even if the row count moved more than 25%'
+        type: boolean
+        default: false
+
+concurrency:
+  group: etl
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Refresh the venue snapshot
+        env:
+          ETL_USER_AGENT: ${{ vars.ETL_USER_AGENT || 'the-smoke-trail/0.1 (+https://github.com/LeR08/dev)' }}
+        run: npm run etl ${{ inputs.allow_drift && '-- --allow-drift' || '' }}
+
+      # A failed run leaves data/ untouched, so there is simply nothing to commit.
+      - name: Verify the new snapshot still builds
+        run: npm test && npm run build
+
+      - name: Commit the refreshed data
+        run: |
+          if git diff --quiet -- data/; then
+            echo "No data changes."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "chore(data): nightly refresh of the Amsterdam venue snapshot"
+          git push
