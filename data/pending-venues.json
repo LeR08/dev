@@ -10,7 +10,7 @@
       "name": "Coffeeshop 158",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/717804018",
@@ -30,7 +30,7 @@
       "shop": "cannabis",
       "website": "https://www.amsterdamseedcenter.com"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/2364940130",
@@ -47,7 +47,7 @@
       "softdrugs": "yes",
       "wheelchair": "limited"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/2506067316",
@@ -75,7 +75,7 @@
       "website": "https://www.coffeeshopclubmedia.nl/",
       "wheelchair": "limited"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/2721522174",
@@ -94,7 +94,7 @@
       "source": "BAG",
       "source:date": "2014-02-11"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/2729937432",
@@ -115,7 +115,7 @@
       "source:date": "2014-02-11",
       "website": "https://azarius.nl/pages/azarius_kerkstraat/"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/2737805640",
@@ -136,7 +136,7 @@
       "source:date": "2014-02-11",
       "wheelchair": "no"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/2848698196",
@@ -158,7 +158,7 @@
       "source:date": "2014-05-07",
       "website": "https://www.coffeeshopnoord.com"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/3939447657",
@@ -175,7 +175,7 @@
       "shop": "cannabis",
       "wheelchair": "limited"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/4089931981",
@@ -189,7 +189,7 @@
       "name": "Bulldog Cafe Mack",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/4135906815",
@@ -205,7 +205,7 @@
       "shop": "cannabis",
       "wheelchair": "yes"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/4194051856",
@@ -223,7 +223,7 @@
       "shop": "cannabis",
       "website": "https://www.somaseeds.nl"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/4212536376",
@@ -236,7 +236,7 @@
       "name:zh": "大麻店",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/8932661547",
@@ -257,7 +257,7 @@
       "website": "https://kashmirlounge.nl",
       "wheelchair": "limited"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/11189859237",
@@ -269,7 +269,7 @@
       "name": "Mr K Coffeeshop",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/11237949044",
@@ -282,7 +282,7 @@
       "shop": "cannabis",
       "wheelchair": "no"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   },
   {
     "osm_id": "node/12085611883",
@@ -294,6 +294,6 @@
       "name": "S.W.E.D.",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T18:21:43.481Z"
+    "first_seen": "2026-08-19T20:00:36.218Z"
   }
 ]

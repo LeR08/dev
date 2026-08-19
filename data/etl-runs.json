@@ -1,5 +1,34 @@
 [
   {
+    "id": "824c04f3-36e9-4a67-b604-ddc43ea43526",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T20:17:51.651Z",
+    "finished_at": "2026-08-19T20:36:35.890Z",
+    "inserted": 0,
+    "updated": 157,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues",
+      "socials: 1 sites unreachable"
+    ]
+  },
+  {
+    "id": "4a8f1a5b-a6e7-44ef-8e7c-9038cad6b1ec",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T20:00:36.218Z",
+    "finished_at": "2026-08-19T20:15:14.228Z",
+    "inserted": 0,
+    "updated": 157,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 17,
+    "errors": [
+      "socials: 1 sites unreachable"
+    ]
+  },
+  {
     "id": "d5b93c37-d2de-422b-87f0-c8b9c5b515c7",
     "source": "amsterdam",
     "started_at": "2026-08-19T18:28:55.524Z",

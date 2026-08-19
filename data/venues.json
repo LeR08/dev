@@ -1,10 +1,11 @@
 {
-  "generated_at": "2026-08-19T18:28:55.524Z",
+  "generated_at": "2026-08-19T20:17:51.651Z",
   "city": "amsterdam",
   "attribution": [
     "Contains data from Gemeente Amsterdam (CC BY 4.0)",
     "© OpenStreetMap contributors (ODbL)",
-    "Some phone numbers and trading names via coffeeshopfinder.nl"
+    "Some phone numbers and trading names via coffeeshopfinder.nl",
+    "Street-level photos © Mapillary contributors (CC BY-SA 4.0)"
   ],
   "venues": [
     {
@@ -16,6 +17,15 @@
       "aliases": [
         "7th Heaven (Coffeeshop 137)"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "125400033917655",
+        "path": "/photos/125400033917655.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-28T08:41:33.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Brouwersgracht 137-H",
       "postcode": "1015 GE",
       "neighbourhood": "Jordaan",
@@ -124,7 +134,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -138,9 +148,10 @@
         "status": "amsterdam",
         "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "8dc1b3f4-68e3-4e17-8ee6-bbb5b83d0c72",
@@ -149,6 +160,15 @@
       "name": "1e Hulp",
       "legal_name": "Coffeeshop 1e Hulp",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1027650496434686",
+        "path": "/photos/1027650496434686.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-06-22T11:51:01.085Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Marnixstraat 194-H",
       "postcode": "1016 TJ",
       "neighbourhood": "Jordaan",
@@ -257,7 +277,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -271,9 +291,10 @@
         "status": "amsterdam",
         "hours": "amsterdam",
         "phone": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "c366a4e8-6572-417d-89f0-671c0107e3a4",
@@ -284,6 +305,8 @@
       "aliases": [
         "420 Cafe"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Oudebrugsteeg 27-H",
       "postcode": "1012 JN",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -390,7 +413,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -406,7 +429,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "aa589484-ab17-4668-b9b9-4de2e42b8439",
@@ -415,6 +438,15 @@
       "name": "Abraxas",
       "legal_name": "Abraxas",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1356677759610707",
+        "path": "/photos/1356677759610707.jpg",
+        "credit": "hautetension08",
+        "captured_at": "2026-05-07T20:25:23.744Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Jonge Roelensteeg 12-H",
       "postcode": "1012 PL",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -430,8 +462,8 @@
       "amenities": {
         "terrace": true,
         "wheelchair": true,
-        "lounge": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true
       },
       "hours_licensed": null,
       "hours_actual": "Mo-Su 08:00-01:00",
@@ -480,7 +512,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -493,12 +525,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "10f95a1d-23a4-47bb-bf64-b550c8c2de13",
@@ -507,6 +539,15 @@
       "name": "Amnesia",
       "legal_name": "Amnesia",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1282129689060812",
+        "path": "/photos/1282129689060812.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-10T16:06:34.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Herengracht 133-H",
       "postcode": "1015 BG",
       "neighbourhood": "Grachtengordel-West",
@@ -617,7 +658,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -631,9 +672,10 @@
         "status": "amsterdam",
         "hours": "amsterdam",
         "website": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "c8f4eb4e-6de0-4242-ab8b-c9d9e7e874d4",
@@ -644,6 +686,15 @@
       "aliases": [
         "Green Place Haarlemmerstraat"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1229329914620091",
+        "path": "/photos/1229329914620091.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-05T20:14:22.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Haarlemmerstraat 6",
       "postcode": "1013 ER",
       "neighbourhood": "Haarlemmerbuurt",
@@ -752,7 +803,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "officialgreenplace"
       },
@@ -768,14 +819,14 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "30b820f0-fa89-439e-a041-c3d224bfb147",
@@ -784,6 +835,15 @@
       "name": "Andalucia",
       "legal_name": "Andalucia",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1351138025499915",
+        "path": "/photos/1351138025499915.jpg",
+        "credit": "greenger",
+        "captured_at": "2023-09-25T09:44:17.466Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Halvemaansteeg 1",
       "postcode": "1017 CR",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -887,7 +947,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -899,9 +959,10 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "0354913b-5ff4-4702-8789-b1703ef96bc9",
@@ -912,6 +973,15 @@
       "aliases": [
         "The Plug Westerdok"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1054539420587278",
+        "path": "/photos/1054539420587278.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-06-19T08:10:42.094Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Barentszstraat 130",
       "postcode": "1013 NS",
       "neighbourhood": "Spaarndammerbuurt/Zeeheldenbuurt",
@@ -925,11 +995,11 @@
       "website": "https://www.babashops.nl",
       "phone": "020 233 6425",
       "amenities": {
-        "wifi": true,
         "wheelchair": true,
+        "wifi": true,
+        "toilet": true,
         "lounge": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -1021,7 +1091,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -1034,12 +1104,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "hours": "amsterdam",
         "phone": "directory",
+        "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "5c1aa894-b8b2-4a68-b9a8-8784e419d783",
@@ -1048,6 +1118,15 @@
       "name": "Babylon",
       "legal_name": "Babylon",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1391556211634032",
+        "path": "/photos/1391556211634032.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-04T14:03:51.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Beursstraat 27A",
       "postcode": "1012 JV",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -1155,7 +1234,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -1168,9 +1247,10 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "cbefcac1-0681-4e7b-aed9-9d1bf8bee6b4",
@@ -1179,6 +1259,15 @@
       "name": "Bagheera",
       "legal_name": "Bagheera",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "216081204539296",
+        "path": "/photos/216081204539296.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-10T17:48:19.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Kloveniersburgwal 60-H",
       "postcode": "1012 CX",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -1286,7 +1375,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -1301,9 +1390,10 @@
         "hours": "amsterdam",
         "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e8dc6615-c926-4866-947f-025c46a38f18",
@@ -1314,6 +1404,15 @@
       "aliases": [
         "Balou"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1639639849885911",
+        "path": "/photos/1639639849885911.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-10T17:38:52.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Halvemaansteeg 5",
       "postcode": "1017 CR",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -1421,7 +1520,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshop.balou.amsterdam",
         "facebook": "people"
@@ -1442,9 +1541,10 @@
         "website": "directory",
         "aliases": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "1ac35009-c688-4cf8-a091-ee74799e74f9",
@@ -1453,6 +1553,15 @@
       "name": "Barney's Coffeeshop",
       "legal_name": "Barney's Coffeeshop",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1778618640215818",
+        "path": "/photos/1778618640215818.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-05-20T11:21:47.083Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Haarlemmerstraat 102-H",
       "postcode": "1013 EW",
       "neighbourhood": "Haarlemmerbuurt",
@@ -1561,7 +1670,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "barneys_amsterdam",
         "facebook": "BarneysUptownAmsterdam",
@@ -1580,10 +1689,10 @@
         "website": "osm",
         "amenities": "osm",
         "hours": "osm",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "11a1485f-f848-48dd-b64d-baf48478f062",
@@ -1592,6 +1701,15 @@
       "name": "Barraka",
       "legal_name": "Barraka",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "574618128980770",
+        "path": "/photos/574618128980770.jpg",
+        "credit": "algirdasc",
+        "captured_at": "2025-05-03T17:13:36.920Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Gravenstraat 9",
       "postcode": "1012 NL",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -1607,8 +1725,8 @@
       "amenities": {
         "terrace": true,
         "card_payment": true,
-        "parking": true,
-        "toilet": true
+        "toilet": true,
+        "parking": true
       },
       "hours_licensed": [
         [
@@ -1700,7 +1818,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -1712,13 +1830,13 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
-        "website": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "c08ab1b8-b8c0-4029-985a-0ffc7eb49843",
@@ -1727,6 +1845,15 @@
       "name": "Basjoe",
       "legal_name": "Basjoe",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "212924111546040",
+        "path": "/photos/212924111546040.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-10T17:48:21.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Kloveniersburgwal 62-H",
       "postcode": "1012 CX",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -1836,7 +1963,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -1851,9 +1978,10 @@
         "hours": "amsterdam",
         "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "9f79e1c8-aaa1-4e0b-8872-defce7096f3f",
@@ -1864,6 +1992,15 @@
       "aliases": [
         "Best Friends Oud-Zuid"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1292995855667066",
+        "path": "/photos/1292995855667066.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-08-15T11:24:08.101Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Amstelveenseweg 61-H",
       "postcode": "1075 VV",
       "neighbourhood": "Willemspark",
@@ -1877,8 +2014,8 @@
       "website": "https://bestfriendsamsterdam.com/locations/oud-zuid/",
       "phone": null,
       "amenities": {
-        "drinks_snacks": true,
-        "toilet": true
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -1970,7 +2107,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "bestfriendsamsterdam",
         "facebook": "coffeeshopbestfriends"
@@ -1991,10 +2128,10 @@
         "website": "osm",
         "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "1bcbc6b7-73e2-4dfd-a14a-6a114f69fe26",
@@ -2005,6 +2142,8 @@
       "aliases": [
         "Best Friends - Oost"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Niasstraat 1-H",
       "postcode": "1095 TS",
       "neighbourhood": "Indische Buurt-Oost",
@@ -2019,8 +2158,8 @@
       "phone": null,
       "amenities": {
         "terrace": true,
-        "wifi": true,
         "wheelchair": true,
+        "wifi": true,
         "drinks_snacks": true
       },
       "hours_licensed": [
@@ -2113,7 +2252,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "bestfriendsamsterdam",
         "facebook": "coffeeshopbestfriends"
@@ -2131,14 +2270,13 @@
         "name": "osm",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e4f1d3fc-2f7a-4bc4-a680-e3198f635f15",
@@ -2149,6 +2287,8 @@
       "aliases": [
         "Best Friends - Zuid-Oost"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Hettenheuvelweg 35",
       "postcode": "1101 BM",
       "neighbourhood": "Amstel III/Bullewijk",
@@ -2258,7 +2398,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "bestfriendsamsterdam",
         "facebook": "coffeeshopbestfriends"
@@ -2282,7 +2422,7 @@
         "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "2723290b-df92-4246-87db-6f81595f4db8",
@@ -2293,6 +2433,15 @@
       "aliases": [
         "Bluebird"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1251589942159459",
+        "path": "/photos/1251589942159459.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-19T16:41:09.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Sint Antoniesbreestraat 71",
       "postcode": "1011 HB",
       "neighbourhood": "Nieuwmarkt/Lastage",
@@ -2309,10 +2458,10 @@
         "terrace": true,
         "wheelchair": false,
         "wifi": true,
-        "smoking": "separated",
         "card_payment": true,
+        "toilet": true,
         "lounge": true,
-        "toilet": true
+        "smoking": "separated"
       },
       "hours_licensed": [
         [
@@ -2404,7 +2553,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -2417,13 +2566,13 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "dff96ecb-7b96-4e7c-821c-ac21492e2a18",
@@ -2432,6 +2581,15 @@
       "name": "Blue Lagoon",
       "legal_name": "Blue Lagoon",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "799591711824138",
+        "path": "/photos/799591711824138.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-26T10:07:19.500Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Overtoom 342-O",
       "postcode": "1054 JE",
       "neighbourhood": "Helmersbuurt",
@@ -2445,12 +2603,12 @@
       "website": null,
       "phone": "020 221 3399",
       "amenities": {
+        "terrace": true,
         "wheelchair": false,
         "wifi": true,
-        "terrace": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -2542,7 +2700,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -2554,12 +2712,12 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "7a6e7601-5f04-46f6-be63-5ffd374752a1",
@@ -2568,6 +2726,15 @@
       "name": "Blue Sea",
       "legal_name": "Blue Sea B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1063278228184563",
+        "path": "/photos/1063278228184563.jpg",
+        "credit": "Lowiekse",
+        "captured_at": "2023-11-05T12:41:41.396Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Van Woustraat 87-H",
       "postcode": "1074 AE",
       "neighbourhood": "Nieuwe Pijp",
@@ -2582,8 +2749,8 @@
       "phone": "020 676 1991",
       "amenities": {
         "terrace": true,
-        "card_payment": true,
         "wheelchair": true,
+        "card_payment": true,
         "toilet": true
       },
       "hours_licensed": [
@@ -2676,7 +2843,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "facebook": "coffeeshopsams",
         "x": "coffeeshopsams"
@@ -2695,13 +2862,13 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "342d5b7d-83bb-493b-b36c-049d00c7770f",
@@ -2712,6 +2879,8 @@
       "aliases": [
         "Boerejongens Center"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Utrechtsestraat 21",
       "postcode": "1017 VH",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -2726,9 +2895,9 @@
       "phone": "020 447 3557",
       "amenities": {
         "wheelchair": false,
-        "smoking": "separated",
         "card_payment": true,
-        "toilet": true
+        "toilet": true,
+        "smoking": "separated"
       },
       "hours_licensed": [
         [
@@ -2820,7 +2989,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -2833,13 +3002,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "1d9efaff-3664-4f15-8d1c-770b2536e945",
@@ -2850,6 +3018,15 @@
       "aliases": [
         "Boerejongens West"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "2941427145990218",
+        "path": "/photos/2941427145990218.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-21T19:08:43.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Baarsjesweg 239",
       "postcode": "1058 AA",
       "neighbourhood": "Westindische Buurt",
@@ -2864,8 +3041,8 @@
       "phone": "020 810 0025",
       "amenities": {
         "terrace": false,
-        "drinks_snacks": true,
-        "parking": true
+        "parking": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -2957,7 +3134,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -2970,13 +3147,13 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a89dcd67-9060-48a1-b735-4a560b7a21e2",
@@ -2985,6 +3162,15 @@
       "name": "Bronx",
       "legal_name": "Bronx",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1064533881768449",
+        "path": "/photos/1064533881768449.jpg",
+        "credit": "robot8a",
+        "captured_at": "2025-06-19T15:23:44.036Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Marnixstraat 92-H",
       "postcode": "1015 VZ",
       "neighbourhood": "Jordaan",
@@ -2998,11 +3184,11 @@
       "website": null,
       "phone": "020 779 8939",
       "amenities": {
+        "terrace": true,
         "wifi": true,
         "card_payment": true,
-        "terrace": true,
-        "parking": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "parking": true
       },
       "hours_licensed": [
         [
@@ -3094,7 +3280,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -3106,11 +3292,11 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "osm",
         "phone": "directory",
-        "amenities_extra": "directory"
+        "hours": "osm",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "7274d5da-343a-4e06-b39d-af7d07541620",
@@ -3119,6 +3305,8 @@
       "name": "Bullwackie",
       "legal_name": "Coffeeshop Bullwackie",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Woestduinstraat 76",
       "postcode": "1058 TJ",
       "neighbourhood": "Hoofddorppleinbuurt",
@@ -3227,7 +3415,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -3243,7 +3431,7 @@
         "phone": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "bb95d3b6-5b73-4097-a8d4-7fc5ae67b7a3",
@@ -3254,6 +3442,8 @@
       "aliases": [
         "Aktama 2"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Hudsonstraat 156",
       "postcode": "1057 ST",
       "neighbourhood": "Hoofdweg e.o.",
@@ -3365,7 +3555,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -3382,7 +3572,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "6e52d534-189b-4a6d-8f01-86dc2d483807",
@@ -3391,6 +3581,8 @@
       "name": "Carmona",
       "legal_name": "Coffeeshop Carmona",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Tweede Jan van der Heijdenstraat 43-H",
       "postcode": "1074 XN",
       "neighbourhood": "Oude Pijp",
@@ -3407,10 +3599,10 @@
         "terrace": true,
         "wheelchair": true,
         "card_payment": true,
-        "drinks_snacks": true,
-        "parking": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "parking": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -3502,7 +3694,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshop_carmona",
         "facebook": "coffeeshopsams",
@@ -3522,13 +3714,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "5de41daa-8a18-4072-ba93-b4b1106c4c2c",
@@ -3539,6 +3730,15 @@
       "aliases": [
         "Catch33"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1355701718935804",
+        "path": "/photos/1355701718935804.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-02-12T14:18:09.090Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Nassaukade 33-H",
       "postcode": "1052 CK",
       "neighbourhood": "Staatsliedenbuurt",
@@ -3647,7 +3847,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -3663,9 +3863,10 @@
         "phone": "directory",
         "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "4d426ab1-2686-4920-94cf-8a89c7a0bd94",
@@ -3674,6 +3875,8 @@
       "name": "Chapiteau",
       "legal_name": "Coffeeshop Chapiteau",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Van Boetzelaerstraat 31-H",
       "postcode": "1051 CT",
       "neighbourhood": "Staatsliedenbuurt",
@@ -3689,8 +3892,8 @@
       "amenities": {
         "wifi": true,
         "card_payment": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -3782,7 +3985,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -3795,10 +3998,9 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "phone": "osm",
-        "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "aa673efb-ff07-46b7-990a-665f59730e93",
@@ -3807,6 +4009,8 @@
       "name": "City Hall",
       "legal_name": "City Hall",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Oudezijds Voorburgwal 189A",
       "postcode": "1012 EW",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -3915,7 +4119,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -3932,7 +4136,7 @@
         "website": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "dcb7d5b9-76c5-4279-a9ce-0769a3580aad",
@@ -3941,6 +4145,8 @@
       "name": "Coffeeshop \"Atlas\"",
       "legal_name": "Café / Coffeeshop \"Atlas\"",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Buikslotermeerplein 389",
       "postcode": "1025 XE",
       "neighbourhood": "Buikslotermeer",
@@ -4048,7 +4254,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -4064,7 +4270,7 @@
         "website": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "9c657193-9565-4967-a9d2-352830980a2e",
@@ -4073,6 +4279,8 @@
       "name": "Coffeeshop Yoyo",
       "legal_name": "Galerie/Coffeeshop Yoyo",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Tweede Jan van der Heijdenstraat 79-H",
       "postcode": "1074 XS",
       "neighbourhood": "Oude Pijp",
@@ -4183,7 +4391,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -4199,7 +4407,7 @@
         "phone": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "8c81feae-9df0-4645-b854-10a3a40c6528",
@@ -4210,6 +4418,8 @@
       "aliases": [
         "Katsu"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Eerste Van der Helststraat 70-H",
       "postcode": "1072 NZ",
       "neighbourhood": "Oude Pijp",
@@ -4226,8 +4436,8 @@
         "terrace": true,
         "wheelchair": false,
         "card_payment": true,
-        "drinks_snacks": true,
-        "parking": true
+        "parking": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -4319,7 +4529,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -4332,13 +4542,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "41d14699-53b4-4900-a11d-71af00cd0b39",
@@ -4347,6 +4556,8 @@
       "name": "Crash Light",
       "legal_name": "Crash Light",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Pretoriusstraat 67-H",
       "postcode": "1092 GB",
       "neighbourhood": "Transvaalbuurt",
@@ -4455,7 +4666,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -4470,7 +4681,7 @@
         "hours": "amsterdam",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "8119a52a-86bf-426d-88d9-81742e27ccad",
@@ -4479,6 +4690,15 @@
       "name": "Crush",
       "legal_name": "Crush",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1308250240121652",
+        "path": "/photos/1308250240121652.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-21T12:34:28.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Marnixstraat 383-O",
       "postcode": "1016 XR",
       "neighbourhood": "Jordaan",
@@ -4585,7 +4805,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -4599,9 +4819,10 @@
         "status": "amsterdam",
         "hours": "amsterdam",
         "phone": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a8fc9ec3-f3f9-429e-8912-174cccad326f",
@@ -4610,6 +4831,8 @@
       "name": "D & L",
       "legal_name": "Coffeeshop D & L",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Govert Flinckstraat 323-H",
       "postcode": "1074 CB",
       "neighbourhood": "Oude Pijp",
@@ -4625,9 +4848,9 @@
       "amenities": {
         "wheelchair": false,
         "card_payment": true,
+        "toilet": true,
         "lounge": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -4719,7 +4942,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -4732,10 +4955,9 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "amenities": "osm",
-        "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e712c596-2a4c-47a3-b33e-04362590bf2b",
@@ -4746,6 +4968,15 @@
       "aliases": [
         "Amsterdam"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1442960256342626",
+        "path": "/photos/1442960256342626.jpg",
+        "credit": "ottor",
+        "captured_at": "2024-09-10T08:06:02.791Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Haarlemmerstraat 44",
       "postcode": "1013 ES",
       "neighbourhood": "Haarlemmerbuurt",
@@ -4761,8 +4992,8 @@
       "amenities": {
         "wheelchair": false,
         "lounge": true,
-        "drinks_snacks": true,
-        "parking": true
+        "parking": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -4854,7 +5085,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -4871,9 +5102,9 @@
         "amenities": "osm",
         "hours": "osm",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "c3d21a83-7c52-4f7e-87a1-5e1fb0c6e38e",
@@ -4884,6 +5115,15 @@
       "aliases": [
         "Het Ballonnetje"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "2049577779232628",
+        "path": "/photos/2049577779232628.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-03-13T07:47:50.205Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Roetersstraat 12-H",
       "postcode": "1018 WD",
       "neighbourhood": "Weesperbuurt/Plantage",
@@ -4900,9 +5140,9 @@
         "terrace": true,
         "wheelchair": true,
         "card_payment": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -4994,7 +5234,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshophetballonnetje",
         "facebook": "coffeeshop.hetballonnetje"
@@ -5010,14 +5250,14 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "bb27f98a-f7db-4856-aa0c-fd98d1534fc6",
@@ -5028,6 +5268,8 @@
       "aliases": [
         "Dampkring"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Handboogstraat 29-H",
       "postcode": "1012 XM",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -5042,10 +5284,10 @@
       "phone": "020 638 0705",
       "amenities": {
         "card_payment": true,
-        "lounge": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -5137,7 +5379,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -5150,12 +5392,11 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "hours": "osm",
         "phone": "directory",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "hours": "osm",
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "d92d521c-a537-4343-9856-d541efe66b6d",
@@ -5164,6 +5405,15 @@
       "name": "de Jolly Joker",
       "legal_name": "Coffeeshop de Jolly Joker",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1503368234920307",
+        "path": "/photos/1503368234920307.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-06-19T08:04:07.090Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Nieuwmarkt 4A-1",
       "postcode": "1012 CR",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -5271,7 +5521,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "Coffeeshopdejolly",
         "facebook": "The",
@@ -5290,9 +5540,10 @@
         "hours": "amsterdam",
         "website": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "8ab98323-4c0c-4357-b1f7-c8ad56072640",
@@ -5301,6 +5552,15 @@
       "name": "De Kade",
       "legal_name": "De Kade B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "491119516590970",
+        "path": "/photos/491119516590970.jpg",
+        "credit": "ottor",
+        "captured_at": "2024-05-30T16:27:52.573Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Stadionkade 107",
       "postcode": "1076 BN",
       "neighbourhood": "Stadionbuurt",
@@ -5408,7 +5668,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "dekadeboutique",
         "facebook": "dekadeboutique",
@@ -5428,10 +5688,10 @@
         "phone": "osm",
         "amenities": "osm",
         "hours": "amsterdam",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "d733c27d-5be1-40cf-8ae9-af01f56bfab8",
@@ -5442,6 +5702,15 @@
       "aliases": [
         "De Kroon"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1394102211388438",
+        "path": "/photos/1394102211388438.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-07T20:20:21.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Oudebrugsteeg 26",
       "postcode": "1012 JP",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -5552,7 +5821,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -5568,9 +5837,10 @@
         "phone": "directory",
         "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e499d3c7-718f-4f68-b2ed-5cecf7deab79",
@@ -5579,6 +5849,15 @@
       "name": "De Republiek",
       "legal_name": "Coffeeshop De Republiek",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1341161551145066",
+        "path": "/photos/1341161551145066.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-01-07T09:42:30.092Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Tweede Nassaustraat 1A",
       "postcode": "1052 BJ",
       "neighbourhood": "Staatsliedenbuurt",
@@ -5687,7 +5966,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thecoffeeshopscom"
       },
@@ -5707,9 +5986,10 @@
         "phone": "directory",
         "website": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "f29ce772-c04b-401c-91bb-4eed7b12b5cf",
@@ -5718,6 +5998,15 @@
       "name": "De Supermarkt",
       "legal_name": "Coffeeshop De Supermarkt",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1058519429532058",
+        "path": "/photos/1058519429532058.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-05-23T14:38:53.092Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Frederik Hendrikstraat 69-H",
       "postcode": "1052 HL",
       "neighbourhood": "Frederik Hendrikbuurt",
@@ -5827,7 +6116,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thecoffeeshopscom"
       },
@@ -5847,9 +6136,10 @@
         "phone": "directory",
         "website": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "99c79669-1186-4fb9-9274-8c37f7429118",
@@ -5860,6 +6150,15 @@
       "aliases": [
         "Tweede Kamer"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1231029361108828",
+        "path": "/photos/1231029361108828.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-27T16:36:15.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Heisteeg 6-H",
       "postcode": "1012 WC",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -5968,7 +6267,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -5981,13 +6280,13 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "8bdf0a9f-7f20-44d1-8d79-afc009adc2fa",
@@ -5996,6 +6295,8 @@
       "name": "DNA",
       "legal_name": "TRIMAT BV Coffeeshop DNA",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Achillesstraat 104",
       "postcode": "1076 RH",
       "neighbourhood": "Stadionbuurt",
@@ -6102,7 +6403,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -6117,10 +6418,9 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm",
-        "amenities_extra": "directory"
+        "hours": "osm"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "87c9a8cc-a971-4795-aff3-68e19dad191c",
@@ -6129,6 +6429,15 @@
       "name": "Eastwood",
       "legal_name": "Coffeeshop Eastwood",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1716773299476419",
+        "path": "/photos/1716773299476419.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-05-15T10:19:59.097Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Pieter Vlamingstraat 286",
       "postcode": "1093 DK",
       "neighbourhood": "Dapperbuurt",
@@ -6143,9 +6452,9 @@
       "phone": null,
       "amenities": {
         "wheelchair": false,
+        "air_conditioning": true,
         "lounge": true,
-        "drinks_snacks": true,
-        "air_conditioning": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -6237,7 +6546,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -6251,9 +6560,9 @@
         "status": "amsterdam",
         "amenities": "osm",
         "hours": "osm",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "08cc2728-1aae-4013-920e-baad4f6d929a",
@@ -6264,6 +6573,8 @@
       "aliases": [
         "Betty Too"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Reguliersdwarsstraat 29",
       "postcode": "1017 BJ",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -6372,7 +6683,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -6389,7 +6700,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "216b5b51-1f9c-4948-b518-beeb29212481",
@@ -6400,6 +6711,15 @@
       "aliases": [
         "Easy Times Prinsengracht"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "992729407038379",
+        "path": "/photos/992729407038379.jpg",
+        "credit": "hautetension08",
+        "captured_at": "2026-05-07T18:40:34.606Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Prinsengracht 476-H",
       "postcode": "1017 KG",
       "neighbourhood": "De Weteringschans",
@@ -6509,7 +6829,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -6521,14 +6841,14 @@
         "name": "osm",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
         "phone": "osm",
         "amenities": "osm",
         "hours": "amsterdam",
-        "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "0ceaa739-6f42-44ee-acf4-784a6592dd1a",
@@ -6537,6 +6857,8 @@
       "name": "El Marssa",
       "legal_name": "Coffeeshop El Marssa",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Witte de Withstraat 106-H",
       "postcode": "1057 ZG",
       "neighbourhood": "Chassébuurt",
@@ -6645,7 +6967,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -6657,10 +6979,9 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "17160c4f-d640-4ba1-b551-cef45bbbd2a4",
@@ -6669,6 +6990,15 @@
       "name": "Family First",
       "legal_name": "Family First",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1265542087412081",
+        "path": "/photos/1265542087412081.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-10T17:41:28.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Amstel 36-H",
       "postcode": "1017 AB",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -6682,8 +7012,8 @@
       "website": "https://www.familyfirstamsterdam.com/",
       "phone": null,
       "amenities": {
-        "card_payment": true,
         "wheelchair": true,
+        "card_payment": true,
         "toilet": true
       },
       "hours_licensed": [
@@ -6766,7 +7096,7 @@
         []
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -6780,9 +7110,9 @@
         "status": "amsterdam",
         "website": "osm",
         "hours": "osm",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "5e12bf6b-1bb2-47f8-a42f-79fee9b1cf63",
@@ -6791,6 +7121,8 @@
       "name": "Flash Back",
       "legal_name": "Coffeeshop Flash Back",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Hudsonstraat 138",
       "postcode": "1057 SR",
       "neighbourhood": "Hoofdweg e.o.",
@@ -6900,7 +7232,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -6916,7 +7248,7 @@
         "phone": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "0f4e675c-32b6-4473-8d7e-d0cb40f73946",
@@ -6925,6 +7257,15 @@
       "name": "Flower Power",
       "legal_name": "Flower Power",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "267693052322248",
+        "path": "/photos/267693052322248.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-09T19:47:37.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Rozengracht 139",
       "postcode": "1016 LV",
       "neighbourhood": "Jordaan",
@@ -6940,9 +7281,9 @@
       "amenities": {
         "wifi": true,
         "card_payment": true,
+        "toilet": true,
         "lounge": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -7034,7 +7375,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -7046,12 +7387,12 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
-        "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory"
+        "phone": "directory",
+        "hours": "amsterdam",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "3e06f26c-1dd5-49bf-93bf-8c29ed36965b",
@@ -7060,6 +7401,8 @@
       "name": "Free I",
       "legal_name": "Free I",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Reguliersdwarsstraat 70-H",
       "postcode": "1017 BN",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -7076,9 +7419,9 @@
         "wheelchair": false,
         "wifi": true,
         "card_payment": true,
-        "lounge": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true
       },
       "hours_licensed": [
         [
@@ -7170,7 +7513,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -7183,10 +7526,9 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "amenities": "osm",
-        "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "0dc3f1b2-7b58-4920-8e48-26de42d46b98",
@@ -7195,6 +7537,8 @@
       "name": "Freedom",
       "legal_name": "Coffeeshop Freedom",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Van Hogendorpstraat 201-H",
       "postcode": "1051 CA",
       "neighbourhood": "Staatsliedenbuurt",
@@ -7305,7 +7649,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -7321,7 +7665,7 @@
         "phone": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "af5e3b81-da97-4832-9709-eaccc168ee0f",
@@ -7330,6 +7674,15 @@
       "name": "Funny People Coffeeshop",
       "legal_name": "Funny People Coffeeshop",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1034546820409590",
+        "path": "/photos/1034546820409590.jpg",
+        "credit": "Lowiekse",
+        "captured_at": "2020-05-30T11:09:44.087Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "tt. Vasumweg 4C",
       "postcode": "1033 SC",
       "neighbourhood": "Noordelijke IJ-oevers-West",
@@ -7437,7 +7790,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "facebook": "CoffeeshopFunnyPeople",
         "email": "lemming@coffeeshop.freeuk.com"
@@ -7458,9 +7811,10 @@
         "phone": "directory",
         "website": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "41ca9d91-2ecf-4986-b76c-2b5f4c6d1859",
@@ -7471,6 +7825,15 @@
       "aliases": [
         "Get Down To It"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "2040825696863386",
+        "path": "/photos/2040825696863386.jpg",
+        "credit": "hautetension08",
+        "captured_at": "2026-05-07T18:46:58.612Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Korte Leidsedwarsstraat 77",
       "postcode": "1017 PW",
       "neighbourhood": "De Weteringschans",
@@ -7580,7 +7943,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "facebook": "security"
       },
@@ -7599,9 +7962,10 @@
         "website": "directory",
         "aliases": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "9c631744-5015-4635-83b4-7c22afbf24df",
@@ -7610,6 +7974,15 @@
       "name": "Goa",
       "legal_name": "Goa",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1386972481712293",
+        "path": "/photos/1386972481712293.jpg",
+        "credit": "mfa",
+        "captured_at": "2022-08-20T11:34:08.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Kloveniersburgwal 42C",
       "postcode": "1012 CW",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -7625,10 +7998,10 @@
       "amenities": {
         "terrace": true,
         "wifi": true,
+        "toilet": true,
         "lounge": true,
-        "drinks_snacks": true,
         "parking": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -7720,7 +8093,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -7734,9 +8107,9 @@
         "status": "amsterdam",
         "amenities": "osm",
         "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "98031831-4293-446a-ac27-8ac4173d1fd0",
@@ -7747,6 +8120,8 @@
       "aliases": [
         "Green House United"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Haarlemmerstraat 64-H",
       "postcode": "1013 ET",
       "neighbourhood": "Haarlemmerbuurt",
@@ -7763,8 +8138,8 @@
         "wheelchair": false,
         "wifi": true,
         "card_payment": true,
-        "drinks_snacks": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -7856,7 +8231,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "greenhousecoffeeshops",
         "facebook": "greenhousecoffeeshops"
@@ -7874,15 +8249,14 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
-        "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "99d38f09-cee0-4de7-8739-9cb03e4c25b2",
@@ -7893,6 +8267,8 @@
       "aliases": [
         "Green House Centrum"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Oudezijds Voorburgwal 191",
       "postcode": "1012 EW",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -7909,10 +8285,10 @@
         "terrace": true,
         "wheelchair": false,
         "wifi": true,
-        "smoking": "no",
-        "drinks_snacks": true,
+        "toilet": true,
         "parking": true,
-        "toilet": true
+        "drinks_snacks": true,
+        "smoking": "no"
       },
       "hours_licensed": [
         [
@@ -8004,7 +8380,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -8019,10 +8395,9 @@
         "website": "osm",
         "amenities": "osm",
         "hours": "osm",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "56a3fea4-2090-4e86-94ee-af017e767454",
@@ -8031,6 +8406,15 @@
       "name": "Green Place",
       "legal_name": "Green Place",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "189410116884104",
+        "path": "/photos/189410116884104.jpg",
+        "credit": "mfa",
+        "captured_at": "2022-08-20T11:33:32.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Kloveniersburgwal 4A",
       "postcode": "1012 CT",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -8140,7 +8524,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "officialgreenplace"
       },
@@ -8159,9 +8543,10 @@
         "hours": "amsterdam",
         "website": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "30a2351a-ee16-4a25-bd2d-25b1a85e33ff",
@@ -8172,6 +8557,8 @@
       "aliases": [
         "Green House Tol"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Tolstraat 91-H",
       "postcode": "1074 VG",
       "neighbourhood": "Nieuwe Pijp",
@@ -8280,7 +8667,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "greenhousecoffeeshops",
         "facebook": "greenhousecoffeeshops"
@@ -8302,10 +8689,9 @@
         "amenities": "osm",
         "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "6b3d8b28-38a8-44e1-9ab5-a69e3f4dfe42",
@@ -8314,6 +8700,15 @@
       "name": "Grey Area Coffeeshop",
       "legal_name": "Grey Area Coffeeshop",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1292480651705011",
+        "path": "/photos/1292480651705011.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-10T16:07:53.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Oude Leliestraat 2",
       "postcode": "1015 AW",
       "neighbourhood": "Grachtengordel-West",
@@ -8329,9 +8724,9 @@
       "amenities": {
         "wifi": true,
         "card_payment": true,
-        "lounge": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true
       },
       "hours_licensed": [
         [
@@ -8423,7 +8818,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -8436,11 +8831,11 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "hours": "amsterdam",
         "phone": "directory",
-        "amenities_extra": "directory"
+        "hours": "amsterdam",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "73326de9-1761-4244-9069-76af05466ea8",
@@ -8449,6 +8844,15 @@
       "name": "Happy Feelings",
       "legal_name": "Happy Feelings",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1206935137508851",
+        "path": "/photos/1206935137508851.jpg",
+        "credit": "algirdasc",
+        "captured_at": "2025-05-03T18:30:09.640Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Kerkstraat 51-H",
       "postcode": "1017 GC",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -8462,11 +8866,11 @@
       "website": "https://www.happyfeelingsstore.com/",
       "phone": null,
       "amenities": {
-        "card_payment": true,
         "terrace": true,
+        "card_payment": true,
+        "toilet": true,
         "lounge": true,
-        "parking": true,
-        "toilet": true
+        "parking": true
       },
       "hours_licensed": [
         [
@@ -8558,7 +8962,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "happyfeelingsamsterdam",
         "facebook": "CoffeeshopHappyFeelings",
@@ -8574,12 +8978,12 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "osm",
         "website": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "hours": "osm",
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "5ffbab8c-055f-444f-882e-5df0ca85bfb9",
@@ -8590,6 +8994,15 @@
       "aliases": [
         "Coffeeshop Hashtag"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "496922128203765",
+        "path": "/photos/496922128203765.jpg",
+        "credit": "ainali",
+        "captured_at": "2021-06-02T10:05:05.625Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Reguliersgracht 27-H",
       "postcode": "1017 LK",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -8700,7 +9113,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -8714,9 +9127,10 @@
         "status": "amsterdam",
         "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "cbd6105a-5799-4f4c-b1b2-1a241fc6ec12",
@@ -8725,6 +9139,8 @@
       "name": "Het Gelderse",
       "legal_name": "Het Gelderse",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Geldersekade 54-H",
       "postcode": "1012 BK",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -8740,8 +9156,8 @@
       "amenities": {
         "wifi": true,
         "card_payment": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -8833,7 +9249,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -8845,12 +9261,11 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
-        "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory"
+        "phone": "directory",
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "24251481-adf9-4b87-b1ba-68409adeea1e",
@@ -8861,6 +9276,15 @@
       "aliases": [
         "De Overkant"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "237520142210188",
+        "path": "/photos/237520142210188.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-07T13:15:49.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Nieuwe Herengracht 71",
       "postcode": "1011 RR",
       "neighbourhood": "Nieuwmarkt/Lastage",
@@ -8876,8 +9300,8 @@
       "amenities": {
         "terrace": true,
         "card_payment": true,
-        "lounge": true,
-        "toilet": true
+        "toilet": true,
+        "lounge": true
       },
       "hours_licensed": [
         [
@@ -8969,7 +9393,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -8981,13 +9405,13 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "6c1a8bff-c231-4fbf-9d1a-5dd082138553",
@@ -8998,6 +9422,15 @@
       "aliases": [
         "The Plug West"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1045233854294008",
+        "path": "/photos/1045233854294008.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-05-12T12:19:40.096Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Frederik Hendrikstraat 123-H",
       "postcode": "1052 HP",
       "neighbourhood": "Frederik Hendrikbuurt",
@@ -9105,7 +9538,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -9121,9 +9554,10 @@
         "phone": "directory",
         "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "28b98db8-bd0e-41ef-8d8c-ac6f7e6e2832",
@@ -9134,6 +9568,8 @@
       "aliases": [
         "Hunter's Coffeeshop Amsterdam Noord"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Waterlandplein 7",
       "postcode": "1024 LL",
       "neighbourhood": "Waterlandpleinbuurt",
@@ -9241,7 +9677,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -9253,12 +9689,11 @@
         "name": "osm",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
         "website": "directory",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "hours": "amsterdam",
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "6903ffb6-c548-4a9e-8c4e-91c0873b32a6",
@@ -9269,6 +9704,15 @@
       "aliases": [
         "Hunter's Coffeeshop Amsterdam Noord"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1301422838280204",
+        "path": "/photos/1301422838280204.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-08-21T07:29:42.090Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Papaverweg 2",
       "postcode": "1032 KH",
       "neighbourhood": "Volewijck",
@@ -9282,12 +9726,12 @@
       "website": "https://hunters-coffeeshop.com/locations/papaverweg-2/",
       "phone": null,
       "amenities": {
+        "terrace": true,
         "wifi": true,
         "card_payment": true,
-        "terrace": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -9379,7 +9823,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -9394,9 +9838,9 @@
         "website": "osm",
         "hours": "osm",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "c075b100-7ca0-4bf5-9b3e-202a35b4b98a",
@@ -9407,6 +9851,15 @@
       "aliases": [
         "Hunter's Coffeeshop Amsterdam Centrum"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "289755900283771",
+        "path": "/photos/289755900283771.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-27T16:51:48.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Utrechtsestraat 14-H",
       "postcode": "1017 VN",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -9514,7 +9967,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -9530,9 +9983,9 @@
         "amenities": "osm",
         "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "b7a3c830-9e48-4246-9402-1ab418491abe",
@@ -9543,6 +9996,8 @@
       "aliases": [
         "Hunter's Coffeeshop Amsterdam West"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Orteliusstraat 193",
       "postcode": "1056 NP",
       "neighbourhood": "Van Galenbuurt",
@@ -9556,10 +10011,10 @@
       "website": "https://www.hunters-coffeeshop.com/",
       "phone": null,
       "amenities": {
-        "wifi": true,
         "terrace": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "wifi": true,
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -9651,7 +10106,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -9663,12 +10118,11 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
         "website": "directory",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "hours": "amsterdam",
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "0ea4efe8-d642-4d42-9f7b-f4422246a417",
@@ -9677,6 +10131,15 @@
       "name": "Ibiza",
       "legal_name": "Coffeeshop Ibiza",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1162876860237336",
+        "path": "/photos/1162876860237336.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-06-08T10:26:00.093Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Hemonystraat 16-H",
       "postcode": "1074 BP",
       "neighbourhood": "Oude Pijp",
@@ -9690,14 +10153,14 @@
       "website": "https://www.coffeeshopibiza.com/",
       "phone": "+31 20 223 2534",
       "amenities": {
+        "terrace": true,
         "wheelchair": false,
         "wifi": true,
         "card_payment": true,
-        "terrace": true,
-        "lounge": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -9789,7 +10252,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -9805,9 +10268,9 @@
         "phone": "osm",
         "amenities": "osm",
         "hours": "osm",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "6395cd71-84c6-470b-a30e-384c3b3ce341",
@@ -9816,6 +10279,8 @@
       "name": "Johnny",
       "legal_name": "Johnny",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Elandsgracht 3-H",
       "postcode": "1016 TM",
       "neighbourhood": "Jordaan",
@@ -9832,9 +10297,9 @@
         "terrace": true,
         "wifi": true,
         "card_payment": true,
+        "toilet": true,
         "lounge": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -9926,7 +10391,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshopjohnny",
         "facebook": "coffeeshopjohnny",
@@ -9942,14 +10407,13 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
-        "website": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "eac3f4e6-4f7c-4985-ab0d-e9f8cedb79b8",
@@ -9960,6 +10424,8 @@
       "aliases": [
         "De Watersnip"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Lodewijk van Deysselstraat 37",
       "postcode": "1064 HL",
       "neighbourhood": "Slotermeer-West",
@@ -10068,7 +10534,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -10086,7 +10552,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "b06bcbfa-f151-4fef-8626-67ac1da7e549",
@@ -10095,6 +10561,8 @@
       "name": "Kadinsky",
       "legal_name": "Kadinsky",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Langebrugsteeg 7A",
       "postcode": "1012 GB",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -10109,9 +10577,9 @@
       "phone": "020 420 2132",
       "amenities": {
         "terrace": true,
+        "wheelchair": true,
         "wifi": true,
-        "card_payment": true,
-        "wheelchair": true
+        "card_payment": true
       },
       "hours_licensed": [
         [
@@ -10203,7 +10671,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -10215,13 +10683,12 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "amenities": "osm",
-        "hours": "amsterdam",
-        "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory"
+        "phone": "directory",
+        "amenities": "osm",
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "db3fc811-6db4-4244-81c1-72ab60495832",
@@ -10230,6 +10697,15 @@
       "name": "Kadinsky",
       "legal_name": "Kadinsky",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "222767482984447",
+        "path": "/photos/222767482984447.jpg",
+        "credit": "mapfool",
+        "captured_at": "2017-09-14T12:21:23.715Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Rosmarijnsteeg 9",
       "postcode": "1012 RP",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -10336,7 +10812,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -10349,9 +10825,10 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "amenities": "osm",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "7257ac84-a027-44f7-8bfc-0ed5adb6a47c",
@@ -10362,6 +10839,15 @@
       "aliases": [
         "Kadinsky Front Page"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "126852183319042",
+        "path": "/photos/126852183319042.jpg",
+        "credit": "filipb",
+        "captured_at": "2022-05-19T14:33:37.551Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Zoutsteeg 14",
       "postcode": "1012 LX",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -10377,8 +10863,8 @@
       "amenities": {
         "terrace": true,
         "card_payment": true,
-        "parking": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "parking": true
       },
       "hours_licensed": [
         [
@@ -10470,7 +10956,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -10482,14 +10968,14 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
-        "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "14314675-1628-480a-9fcd-722cf1601337",
@@ -10500,6 +10986,15 @@
       "aliases": [
         "De Prijs"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1314152039795465",
+        "path": "/photos/1314152039795465.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-02-26T15:34:28.731Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Surinamestraat 7-H",
       "postcode": "1058 GJ",
       "neighbourhood": "Hoofddorppleinbuurt",
@@ -10513,11 +11008,11 @@
       "website": "https://amsterdamcoffeeshops.com/item/de-prijs",
       "phone": "+31 20 669 0620",
       "amenities": {
+        "terrace": true,
         "wifi": true,
         "card_payment": true,
-        "terrace": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -10609,7 +11104,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -10621,13 +11116,13 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
         "phone": "osm",
         "hours": "amsterdam",
-        "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "8260869a-4a75-4d08-944f-3005513b84da",
@@ -10638,6 +11133,8 @@
       "aliases": [
         "Happy Days"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Amsteldijk 139-H",
       "postcode": "1079 LE",
       "neighbourhood": "Rijnbuurt",
@@ -10651,8 +11148,8 @@
       "website": "https://www.coffeeshop.tours/coffeeshops/happy-days/",
       "phone": "020 661 3986",
       "amenities": {
-        "wifi": true,
         "terrace": true,
+        "wifi": true,
         "toilet": true
       },
       "hours_licensed": null,
@@ -10680,10 +11177,9 @@
         "website": "osm",
         "phone": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "5b3cfe51-06ca-428d-afc1-9115e41de7bd",
@@ -10692,6 +11188,8 @@
       "name": "La Tertulia",
       "legal_name": "La Tertulia",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Prinsengracht 312-H",
       "postcode": "1016 HX",
       "neighbourhood": "Jordaan",
@@ -10800,7 +11298,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -10817,7 +11315,7 @@
         "website": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "ea7b68cb-4c23-41fc-9387-6a0400b1ab32",
@@ -10826,6 +11324,8 @@
       "name": "Loft",
       "legal_name": "Coffeeshop Loft",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Jan van Galenstraat 285-H",
       "postcode": "1056 CA",
       "neighbourhood": "Van Galenbuurt",
@@ -10934,7 +11434,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thecoffeeshopscom"
       },
@@ -10951,13 +11451,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "ea071d63-2833-47ea-a673-1ca8304729d2",
@@ -10968,6 +11467,8 @@
       "aliases": [
         "Club Media"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Gerard Doustraat 85",
       "postcode": "1072 VN",
       "neighbourhood": "Oude Pijp",
@@ -11077,7 +11578,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "clubmediaamsterdam",
         "facebook": "2008"
@@ -11099,7 +11600,7 @@
         "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "d81b0625-b332-4078-893b-64b016ac77fe",
@@ -11110,6 +11611,8 @@
       "aliases": [
         "Mediterrané"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Spuistraat 80-H",
       "postcode": "1012 TX",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -11218,7 +11721,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -11236,7 +11739,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "6a4e0947-dde5-48a8-8512-2d0cb07256d6",
@@ -11245,6 +11748,8 @@
       "name": "Millennium",
       "legal_name": "Millennium",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Jan Hanzenstraat 109-H",
       "postcode": "1053 SN",
       "neighbourhood": "Bellamybuurt",
@@ -11260,10 +11765,10 @@
       "amenities": {
         "wifi": true,
         "card_payment": true,
-        "lounge": true,
-        "parking": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true,
+        "parking": true
       },
       "hours_licensed": [
         [
@@ -11355,7 +11860,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -11367,10 +11872,9 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "21d99698-3c4d-4eac-93d0-e2d6520e07e0",
@@ -11381,6 +11885,8 @@
       "aliases": [
         "Nachtegaal"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Krugerplein 22-H",
       "postcode": "1091 KZ",
       "neighbourhood": "Transvaalbuurt",
@@ -11487,7 +11993,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -11505,7 +12011,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "7cefdbc4-e2a7-4f63-a4b3-3dec5f059b53",
@@ -11514,6 +12020,8 @@
       "name": "NCC Power Flower Amsterdam",
       "legal_name": "NCC Power Flower Amsterdam",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Admiraal De Ruijterweg 104-H",
       "postcode": "1056 GP",
       "neighbourhood": "Geuzenbuurt",
@@ -11617,7 +12125,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -11631,7 +12139,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "f0a4f89e-ef44-4ee5-8c80-f6ddbfe57527",
@@ -11640,6 +12148,8 @@
       "name": "New Times",
       "legal_name": "New Times",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Spuistraat 260-H",
       "postcode": "1012 VW",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -11657,9 +12167,9 @@
         "wheelchair": false,
         "wifi": true,
         "card_payment": true,
+        "toilet": true,
         "lounge": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -11751,7 +12261,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -11763,12 +12273,11 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "amenities": "osm",
-        "hours": "amsterdam",
         "website": "directory",
-        "amenities_extra": "directory"
+        "amenities": "osm",
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e452c0e8-bab1-400c-bcb5-3b0a827bc05a",
@@ -11779,6 +12288,8 @@
       "aliases": [
         "Kooi"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Amstelstraat 35",
       "postcode": "1017 DA",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -11793,8 +12304,8 @@
       "phone": null,
       "amenities": {
         "card_payment": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -11886,7 +12397,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -11900,10 +12411,9 @@
         "status": "amsterdam",
         "website": "osm",
         "hours": "amsterdam",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a9c59efb-ec4f-40c7-ad15-fc33b925b5ec",
@@ -11912,6 +12422,8 @@
       "name": "Nice Place",
       "legal_name": "Coffeeshop Nice Place",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Van Ostadestraat 290-H",
       "postcode": "1073 TW",
       "neighbourhood": "Nieuwe Pijp",
@@ -11926,9 +12438,9 @@
       "phone": null,
       "amenities": {
         "card_payment": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -12020,7 +12532,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "facebook": "coffeeshopsams",
         "x": "coffeeshopsams"
@@ -12040,10 +12552,9 @@
         "status": "amsterdam",
         "website": "osm",
         "hours": "amsterdam",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "54ad0062-a876-47e4-9564-ab7308030a3d",
@@ -12052,6 +12563,8 @@
       "name": "Nogal Wiedes",
       "legal_name": "Nogal Wiedes",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Czaar Peterstraat 122-H",
       "postcode": "1018 PV",
       "neighbourhood": "Oostelijke Eilanden/Kadijken",
@@ -12067,8 +12580,8 @@
       "amenities": {
         "wifi": true,
         "card_payment": true,
-        "drinks_snacks": true,
-        "parking": true
+        "parking": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -12160,7 +12673,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -12172,12 +12685,11 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
-        "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory"
+        "phone": "directory",
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e01ff7fe-7d50-4e54-a707-09269921b502",
@@ -12186,6 +12698,15 @@
       "name": "Oost",
       "legal_name": "Coffeeshop Oost",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "884753521260899",
+        "path": "/photos/884753521260899.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-03-27T07:46:01.080Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Derde Oosterparkstraat 73-H",
       "postcode": "1091 JV",
       "neighbourhood": "Oosterparkbuurt",
@@ -12292,7 +12813,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshopoost",
         "facebook": "people",
@@ -12312,12 +12833,12 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "osm",
         "website": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "hours": "osm",
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "dd050653-35e5-4f6f-9ac3-3de8e91aec8a",
@@ -12326,6 +12847,8 @@
       "name": "Pacific",
       "legal_name": "Coffeeshop Pacific",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Balthasar Floriszstraat 10-H",
       "postcode": "1071 VC",
       "neighbourhood": "Museumkwartier",
@@ -12339,8 +12862,8 @@
       "website": "https://coffeeshop-pacific.business.site/",
       "phone": "+31 20 671 0318",
       "amenities": {
-        "card_payment": true,
         "terrace": true,
+        "card_payment": true,
         "lounge": true
       },
       "hours_licensed": [
@@ -12433,7 +12956,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -12447,10 +12970,9 @@
         "status": "amsterdam",
         "website": "osm",
         "phone": "osm",
-        "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a1528030-b31c-468e-a39f-5b175c1a8a0a",
@@ -12459,6 +12981,15 @@
       "name": "Papillon",
       "legal_name": "Coffeeshop Papillon",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1329578218546638",
+        "path": "/photos/1329578218546638.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-09-30T15:26:11.086Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Van der Helstplein 8-H",
       "postcode": "1072 PH",
       "neighbourhood": "Nieuwe Pijp",
@@ -12474,8 +13005,8 @@
       "amenities": {
         "wheelchair": false,
         "card_payment": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -12567,7 +13098,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "papillon.coffeeshop.amsterdam",
         "facebook": "CoffeeshopPapillonAmsterdam",
@@ -12584,13 +13115,13 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "fc655e2f-4e7d-4469-b321-396e73bacc1a",
@@ -12599,6 +13130,15 @@
       "name": "Paradox",
       "legal_name": "Paradox",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "200349589638529",
+        "path": "/photos/200349589638529.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-20T11:45:45.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Eerste Bloemdwarsstraat 2-H",
       "postcode": "1016 KS",
       "neighbourhood": "Jordaan",
@@ -12612,13 +13152,13 @@
       "website": "https://paradoxcoffeeshop.com",
       "phone": "+31 20 623 5639",
       "amenities": {
+        "wheelchair": true,
         "wifi": true,
         "card_payment": true,
-        "wheelchair": true,
-        "lounge": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -12710,7 +13250,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "paradox.coffeeshop",
         "facebook": "paradoxcoffeeshop",
@@ -12729,10 +13269,10 @@
         "website": "osm",
         "phone": "osm",
         "hours": "osm",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "cb81f3c6-c280-4525-9833-599736a2a329",
@@ -12743,6 +13283,8 @@
       "aliases": [
         "Boerejongens BIJ"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Bonairestraat 78",
       "postcode": "1058 XL",
       "neighbourhood": "Westindische Buurt",
@@ -12852,7 +13394,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -12870,7 +13412,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "c5a866db-7259-4b97-881b-1dbb58b71000",
@@ -12881,6 +13423,15 @@
       "aliases": [
         "Green House Namaste"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1039041020456293",
+        "path": "/photos/1039041020456293.jpg",
+        "credit": "greenger",
+        "captured_at": "2023-09-25T10:07:41.900Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Waterlooplein 345",
       "postcode": "1011 PG",
       "neighbourhood": "Nieuwmarkt/Lastage",
@@ -12988,7 +13539,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -13004,9 +13555,10 @@
         "phone": "directory",
         "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "964e03b5-3040-4cfd-8d6c-7f94ccad111b",
@@ -13015,6 +13567,15 @@
       "name": "Popeye",
       "legal_name": "Coffeeshop Popeye",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "2308778192633765",
+        "path": "/photos/2308778192633765.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-05T20:08:03.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Haarlemmerstraat 63-H",
       "postcode": "1013 EK",
       "neighbourhood": "Haarlemmerbuurt",
@@ -13028,12 +13589,12 @@
       "website": "https://www.coffeeshop-popeye.nl",
       "phone": "020 623 0829",
       "amenities": {
+        "terrace": true,
         "wheelchair": false,
         "wifi": true,
         "card_payment": true,
-        "terrace": true,
-        "drinks_snacks": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -13125,7 +13686,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "popeyecoffeeshop",
         "email": "shop@coffeeshop-popeye.nl"
@@ -13141,13 +13702,13 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "4a10a587-8156-4b91-adb3-1202816fd6f3",
@@ -13156,6 +13717,8 @@
       "name": "Prix D'Ami",
       "legal_name": "Cafe City Hall BV / Prix D'Ami",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Haringpakkerssteeg 3",
       "postcode": "1012 LR",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -13263,7 +13826,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshopprixdami",
         "facebook": "prixdami.nl",
@@ -13285,7 +13848,7 @@
         "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "942dc677-378f-40b4-8386-09ff315e956e",
@@ -13296,6 +13859,8 @@
       "aliases": [
         "Program Coffeeshop | De Pijp Amsterdam"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Daniël Stalpertstraat 78-H",
       "postcode": "1072 XK",
       "neighbourhood": "Oude Pijp",
@@ -13312,8 +13877,8 @@
         "wheelchair": false,
         "wifi": true,
         "card_payment": true,
-        "parking": true,
-        "toilet": true
+        "toilet": true,
+        "parking": true
       },
       "hours_licensed": [
         [
@@ -13405,7 +13970,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshopdepijp.amsterdam"
       },
@@ -13423,10 +13988,9 @@
         "amenities": "osm",
         "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a4547c48-7390-478d-96e3-2172f3cb2a74",
@@ -13435,6 +13999,15 @@
       "name": "Reefer",
       "legal_name": "Reefer",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1305314924636120",
+        "path": "/photos/1305314924636120.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-06-18T12:58:28.087Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Sint Antoniesbreestraat 77",
       "postcode": "1011 HB",
       "neighbourhood": "Nieuwmarkt/Lastage",
@@ -13543,7 +14116,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -13558,9 +14131,10 @@
         "hours": "amsterdam",
         "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "3614d0dd-2bea-4550-8b6a-b444d414fdce",
@@ -13571,6 +14145,8 @@
       "aliases": [
         "Relax Zuid"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Vechtstraat 9-H",
       "postcode": "1078 RE",
       "neighbourhood": "IJselbuurt",
@@ -13586,9 +14162,9 @@
       "amenities": {
         "wifi": true,
         "card_payment": true,
+        "toilet": true,
         "lounge": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -13670,7 +14246,7 @@
         []
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshoprelax",
         "facebook": "CoffeeshopRelax",
@@ -13695,13 +14271,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "hours": "osm",
         "phone": "directory",
+        "hours": "osm",
         "aliases": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e14c8f3c-6c28-4165-9f1a-279cee1ed29f",
@@ -13712,6 +14287,15 @@
       "aliases": [
         "Relax"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1322040765018359",
+        "path": "/photos/1322040765018359.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-01T15:25:04.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Binnen Oranjestraat 9-H",
       "postcode": "1013 HZ",
       "neighbourhood": "Haarlemmerbuurt",
@@ -13726,9 +14310,9 @@
       "phone": "020 331 1828",
       "amenities": {
         "wheelchair": false,
-        "drinks_snacks": true,
+        "toilet": true,
         "parking": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -13820,7 +14404,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshoprelax",
         "facebook": "CoffeeshopRelax",
@@ -13845,14 +14429,14 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "140558e1-6a8e-41e3-b98a-6f60f7aa8077",
@@ -13861,6 +14445,8 @@
       "name": "Resin",
       "legal_name": "Resin",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Hekelveld 7A",
       "postcode": "1012 SN",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -13968,7 +14554,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -13983,7 +14569,7 @@
         "hours": "amsterdam",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "547f1868-7c46-4bfe-a2ae-62d704dc8b07",
@@ -13992,6 +14578,8 @@
       "name": "Rick's Juice Bar",
       "legal_name": "Rick's Juice Bar BV",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Oudezijds Voorburgwal 250-H",
       "postcode": "1012 GK",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -14097,7 +14685,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -14111,7 +14699,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "bc22ca68-0605-432b-b4ed-6232382dcb1c",
@@ -14120,6 +14708,8 @@
       "name": "Risky Business",
       "legal_name": "Coffeeshop Marley's B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Bos en Lommerweg 163A",
       "postcode": "1055 DS",
       "neighbourhood": "Landlust",
@@ -14133,14 +14723,14 @@
       "website": "https://coffeeshopriskybusiness.nl/",
       "phone": null,
       "amenities": {
-        "wifi": true,
-        "card_payment": true,
         "terrace": true,
         "wheelchair": true,
-        "lounge": true,
-        "parking": true,
+        "wifi": true,
+        "card_payment": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true,
+        "parking": true
       },
       "hours_licensed": [
         [
@@ -14232,7 +14822,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -14245,10 +14835,9 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "hours": "osm",
-        "amenities_extra": "directory"
+        "hours": "osm"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "785c8396-83e2-44e6-8cb1-a0285273e0b7",
@@ -14257,6 +14846,8 @@
       "name": "Rock-it",
       "legal_name": "Rock It B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Nieuwmarkt 12-H",
       "postcode": "1012 CR",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -14365,7 +14956,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -14378,10 +14969,9 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "amenities": "osm",
-        "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "654d98bb-2d7f-47a7-b17c-829f23b1dfc5",
@@ -14392,6 +14982,15 @@
       "aliases": [
         "Rockland"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "172028538824667",
+        "path": "/photos/172028538824667.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-10T16:09:30.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Raadhuisstraat 8",
       "postcode": "1016 DE",
       "neighbourhood": "Grachtengordel-West",
@@ -14406,11 +15005,11 @@
       "phone": null,
       "amenities": {
         "terrace": true,
-        "wifi": true,
         "wheelchair": true,
-        "drinks_snacks": true,
+        "wifi": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -14502,7 +15101,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -14517,9 +15116,9 @@
         "amenities": "osm",
         "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "14f8460e-2c99-4256-9573-0f8910ac355b",
@@ -14528,6 +15127,8 @@
       "name": "Roots",
       "legal_name": "Coffeeshop Roots Hoekenrode B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Hoekenrode 14B",
       "postcode": "1102 BR",
       "neighbourhood": "Amsterdamse Poort e.o.",
@@ -14541,9 +15142,9 @@
       "website": "https://roots-coffeeshop.nl/locaties/amsterdam-zuidoost/",
       "phone": null,
       "amenities": {
+        "wheelchair": true,
         "wifi": true,
         "card_payment": true,
-        "wheelchair": true,
         "toilet": true
       },
       "hours_licensed": [
@@ -14636,7 +15237,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -14649,10 +15250,9 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "hours": "osm",
-        "amenities_extra": "directory"
+        "hours": "osm"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "95cd66e1-67fc-4527-b48e-7a33d90abf71",
@@ -14661,6 +15261,8 @@
       "name": "Roxy",
       "legal_name": "Coffeeshop Roxy",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Gerard Doustraat 188-H",
       "postcode": "1073 XA",
       "neighbourhood": "Oude Pijp",
@@ -14676,10 +15278,10 @@
       "amenities": {
         "terrace": true,
         "wifi": true,
-        "lounge": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -14771,7 +15373,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshoproxy"
       },
@@ -14786,13 +15388,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "63e26bb3-6851-4fef-8dd8-585b39a98535",
@@ -14803,6 +15404,8 @@
       "aliases": [
         "Ruthless Amsterdam"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Hoofdweg 174-H",
       "postcode": "1057 DC",
       "neighbourhood": "Hoofdweg e.o.",
@@ -14914,7 +15517,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -14930,7 +15533,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "f225db61-a2d2-4824-b881-37cfc0884566",
@@ -14941,6 +15544,15 @@
       "aliases": [
         "Mr. K"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "252835870701903",
+        "path": "/photos/252835870701903.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-21T12:09:52.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Tweede Laurierdwarsstraat 44-H",
       "postcode": "1016 RB",
       "neighbourhood": "Jordaan",
@@ -15049,7 +15661,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "microgeneticaseedbank",
         "facebook": "microgenetica",
@@ -15070,9 +15682,10 @@
         "website": "directory",
         "aliases": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "d1708b60-d9f4-407b-9ba3-08306911c607",
@@ -15081,6 +15694,15 @@
       "name": "Sativa Amsterdam",
       "legal_name": "Sativa Amsterdam",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "2503114486500683",
+        "path": "/photos/2503114486500683.jpg",
+        "credit": "shravan91",
+        "captured_at": "2016-10-04T12:34:43.615Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Spuistraat 118",
       "postcode": "1012 VA",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -15096,8 +15718,8 @@
       "amenities": {
         "terrace": true,
         "card_payment": true,
-        "lounge": true,
-        "toilet": true
+        "toilet": true,
+        "lounge": true
       },
       "hours_licensed": [
         [
@@ -15189,7 +15811,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -15203,9 +15825,9 @@
         "status": "amsterdam",
         "amenities": "osm",
         "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "f5ee04e3-5453-435e-9628-e3fe358fdb61",
@@ -15214,6 +15836,15 @@
       "name": "Sensemillia",
       "legal_name": "Coffeeshop Sensemillia",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1188573531577771",
+        "path": "/photos/1188573531577771.jpg",
+        "credit": "ainali",
+        "captured_at": "2019-09-23T16:35:34.044Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Gillis van Ledenberchstraat 135-H",
       "postcode": "1052 VE",
       "neighbourhood": "Frederik Hendrikbuurt",
@@ -15227,8 +15858,8 @@
       "website": "https://www.sensemillia.com/",
       "phone": "020 686 5144",
       "amenities": {
-        "card_payment": true,
         "wheelchair": true,
+        "card_payment": true,
         "drinks_snacks": true
       },
       "hours_licensed": [
@@ -15321,7 +15952,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshopsensemillia",
         "facebook": "sharer.php"
@@ -15336,13 +15967,13 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
-        "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "phone": "directory",
+        "hours": "amsterdam",
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "22bdb3f0-4398-41bc-80f6-1b6dc281a0df",
@@ -15351,6 +15982,15 @@
       "name": "Siberië Coffeeshop",
       "legal_name": "Siberie B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1117168225509490",
+        "path": "/photos/1117168225509490.jpg",
+        "credit": "chuck",
+        "captured_at": "2022-05-03T11:21:47.328Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Brouwersgracht 11-H",
       "postcode": "1015 GA",
       "neighbourhood": "Grachtengordel-West",
@@ -15367,10 +16007,10 @@
         "terrace": false,
         "wheelchair": true,
         "wifi": true,
-        "smoking": "separated",
         "card_payment": true,
+        "parking": true,
         "drinks_snacks": true,
-        "parking": true
+        "smoking": "separated"
       },
       "hours_licensed": [
         [
@@ -15462,7 +16102,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thecoffeeshopscom"
       },
@@ -15479,13 +16119,13 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "01abe054-1ce7-43f1-b8ef-420e78946d22",
@@ -15496,6 +16136,8 @@
       "aliases": [
         "New Amsterdam"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Hoofdweg 226-H",
       "postcode": "1057 DG",
       "neighbourhood": "Hoofdweg e.o.",
@@ -15607,7 +16249,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshopnewamsterdam",
         "email": "info@coffeeshop-newamsterdam.com"
@@ -15628,7 +16270,7 @@
         "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "b368adaa-d0d7-4d85-8092-5aa88c51e5d2",
@@ -15639,6 +16281,15 @@
       "aliases": [
         "Boerejongens Sloterdijk"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1018644465543454",
+        "path": "/photos/1018644465543454.jpg",
+        "credit": "it_s_so_funny",
+        "captured_at": "2017-08-21T12:12:57.518Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Humberweg 2",
       "postcode": "1043 AC",
       "neighbourhood": "Sloterdijk Nieuw-West",
@@ -15652,10 +16303,10 @@
       "website": "https://coffeeshopsloterdijk.com",
       "phone": "+31 6 55955400",
       "amenities": {
-        "wifi": true,
-        "card_payment": true,
         "terrace": true,
         "wheelchair": true,
+        "wifi": true,
+        "card_payment": true,
         "air_conditioning": true
       },
       "hours_licensed": [
@@ -15748,10 +16399,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
-      "website_live": true,
+      "website_live": false,
       "osm_id": "node/11999135774",
       "amsterdam_id": "266515028",
       "rating_avg": null,
@@ -15764,9 +16415,9 @@
         "phone": "osm",
         "hours": "osm",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "1ce1d983-c1a3-4449-bd4f-5cd60dac8864",
@@ -15777,6 +16428,15 @@
       "aliases": [
         "Smokey"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "173791715678275",
+        "path": "/photos/173791715678275.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-27T16:50:17.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Rembrandtplein 24",
       "postcode": "1017 CV",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -15886,7 +16546,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -15899,13 +16559,13 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "1480392f-fdf0-411f-ac46-15f43d7de1fd",
@@ -15914,6 +16574,8 @@
       "name": "SOLO",
       "legal_name": "Coffeeshop SOLO",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Korte Koningsstraat 2",
       "postcode": "1011 GA",
       "neighbourhood": "Nieuwmarkt/Lastage",
@@ -15927,12 +16589,12 @@
       "website": "http://coffeeshopsolo.nl",
       "phone": "+31 20 4200428",
       "amenities": {
+        "wheelchair": true,
         "wifi": true,
         "card_payment": true,
-        "wheelchair": true,
+        "toilet": true,
         "lounge": true,
-        "parking": true,
-        "toilet": true
+        "parking": true
       },
       "hours_licensed": [
         [
@@ -15994,7 +16656,7 @@
         []
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "solo_amsterdam",
         "facebook": "coffeeshopsolo"
@@ -16012,10 +16674,9 @@
         "website": "osm",
         "phone": "osm",
         "hours": "osm",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "8adb1929-91fd-43b0-9b9f-3a5672aed5d7",
@@ -16026,6 +16687,8 @@
       "aliases": [
         "Stone's"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Ruysdaelkade 145-H",
       "postcode": "1072 AR",
       "neighbourhood": "Oude Pijp",
@@ -16042,8 +16705,8 @@
         "wheelchair": false,
         "wifi": true,
         "card_payment": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -16135,7 +16798,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshopstones",
         "facebook": "Coffeeshopstones",
@@ -16157,10 +16820,9 @@
         "amenities": "osm",
         "hours": "osm",
         "aliases": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a14c67bb-2511-400a-95ca-b370ae4f8a99",
@@ -16171,6 +16833,15 @@
       "aliases": [
         "Strain Hunters"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "167556162919229",
+        "path": "/photos/167556162919229.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-02T14:22:03.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Singel 387-H",
       "postcode": "1012 WN",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -16187,9 +16858,9 @@
         "terrace": true,
         "wifi": true,
         "card_payment": true,
-        "drinks_snacks": true,
+        "toilet": true,
         "parking": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -16281,7 +16952,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "greenhousecoffeeshops",
         "facebook": "greenhousecoffeeshops"
@@ -16299,14 +16970,14 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "website": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "2903f48a-d63c-48a7-a6af-8fc5342517c7",
@@ -16315,6 +16986,8 @@
       "name": "SuperFly",
       "legal_name": "SuperFly Amsterdam B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Van Woustraat 193-H",
       "postcode": "1074 AN",
       "neighbourhood": "Zuid Pijp",
@@ -16424,7 +17097,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -16437,12 +17110,11 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "amenities": "osm",
-        "hours": "osm",
         "phone": "directory",
-        "amenities_extra": "directory"
+        "amenities": "osm",
+        "hours": "osm"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "456d506f-54a8-4c81-80c9-1a6f232db246",
@@ -16451,6 +17123,15 @@
       "name": "Superskunk",
       "legal_name": "Coffeeshop Superskunk",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1662995535041006",
+        "path": "/photos/1662995535041006.jpg",
+        "credit": "hautetension08",
+        "captured_at": "2026-05-07T18:40:27.402Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Prinsengracht 480-H",
       "postcode": "1017 KG",
       "neighbourhood": "De Weteringschans",
@@ -16465,9 +17146,9 @@
       "phone": null,
       "amenities": {
         "terrace": true,
-        "drinks_snacks": true,
+        "toilet": true,
         "parking": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -16559,7 +17240,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -16573,9 +17254,9 @@
         "status": "amsterdam",
         "amenities": "osm",
         "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "d04ebae2-d38f-4ad3-a3a6-34afdcaabf45",
@@ -16584,6 +17265,15 @@
       "name": "t Keteltje",
       "legal_name": "t Keteltje",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1757816158477226",
+        "path": "/photos/1757816158477226.jpg",
+        "credit": "robot8a",
+        "captured_at": "2025-06-19T15:23:32.040Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Marnixstraat 74-H",
       "postcode": "1015 VX",
       "neighbourhood": "Jordaan",
@@ -16598,13 +17288,13 @@
       "phone": "+31 20 622 6998",
       "amenities": {
         "terrace": true,
+        "wheelchair": true,
         "wifi": true,
         "card_payment": true,
-        "wheelchair": true,
-        "lounge": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -16696,7 +17386,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -16708,13 +17398,13 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
         "phone": "osm",
         "amenities": "osm",
         "hours": "osm",
-        "website": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "c5e1ac06-dcc5-423e-b3b9-d0073e5b71c9",
@@ -16723,6 +17413,8 @@
       "name": "Terps Army",
       "legal_name": "Terps Army",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Nieuwe Nieuwstraat 32C",
       "postcode": "1012 NH",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -16831,7 +17523,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -16846,7 +17538,7 @@
         "hours": "amsterdam",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "8dc97f92-ccfa-469c-81f1-7bf64874c3bd",
@@ -16857,6 +17549,8 @@
       "aliases": [
         "Terps Army 2"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Zieseniskade 22-H",
       "postcode": "1017 RT",
       "neighbourhood": "De Weteringschans",
@@ -16964,7 +17658,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -16980,7 +17674,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "58e87ad3-9828-40b9-969e-2896769ffc43",
@@ -16991,6 +17685,15 @@
       "aliases": [
         "Tha Dogg House a Snoop Dogg Store"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1026971983372197",
+        "path": "/photos/1026971983372197.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-07-06T16:44:48.086Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Marnixstraat 333-H",
       "postcode": "1016 TC",
       "neighbourhood": "Jordaan",
@@ -17098,7 +17801,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thadogghouse.ams",
         "tiktok": "thadogghouse.ams",
@@ -17118,9 +17821,10 @@
         "website": "directory",
         "aliases": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "0a4c33b6-fffc-4b81-84ca-ecf6c29fec58",
@@ -17131,6 +17835,15 @@
       "aliases": [
         "Black star"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "256070440234806",
+        "path": "/photos/256070440234806.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-09T20:04:42.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Rozengracht 1A",
       "postcode": "1016 LP",
       "neighbourhood": "Jordaan",
@@ -17240,7 +17953,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -17254,9 +17967,10 @@
         "status": "amsterdam",
         "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "8b0c74ca-0d5c-485e-adc1-144ce4de814c",
@@ -17265,6 +17979,15 @@
       "name": "The Border",
       "legal_name": "The Border B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1018242323705735",
+        "path": "/photos/1018242323705735.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-05-04T12:04:47.098Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Amstelveenseweg 1160",
       "postcode": "1081 JW",
       "neighbourhood": "Buitenveldert-West",
@@ -17279,8 +18002,8 @@
       "phone": "+31 20 642 0681",
       "amenities": {
         "wifi": true,
-        "parking": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "parking": true
       },
       "hours_licensed": [
         [
@@ -17372,7 +18095,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "theborderamsterdam",
         "facebook": "theborderamsterdam",
@@ -17391,10 +18114,10 @@
         "website": "osm",
         "phone": "osm",
         "hours": "amsterdam",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "0ff8395b-2729-4f87-afa0-bda81c278d55",
@@ -17405,6 +18128,15 @@
       "aliases": [
         "The Bulldog Ex-Policestation"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "2149797448894682",
+        "path": "/photos/2149797448894682.jpg",
+        "credit": "hautetension08",
+        "captured_at": "2026-05-07T18:45:36.553Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Leidseplein 17A",
       "postcode": "1017 PS",
       "neighbourhood": "De Weteringschans",
@@ -17514,7 +18246,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thebulldogamsterdam",
         "facebook": "TheBulldog1975",
@@ -17543,9 +18275,10 @@
         "website": "directory",
         "aliases": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a314e55f-575b-402d-939f-70558e31c867",
@@ -17556,6 +18289,8 @@
       "aliases": [
         "The Bulldog Energy"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Oudezijds Voorburgwal 220",
       "postcode": "1012 GJ",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -17666,7 +18401,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thebulldogamsterdam",
         "facebook": "TheBulldogAms",
@@ -17696,7 +18431,7 @@
         "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "2323130f-6524-4e52-8ff8-df16150dd797",
@@ -17705,6 +18440,8 @@
       "name": "The Bulldog Port 26",
       "legal_name": "Coffeeshop The Bulldog Port 26",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Coenhavenweg 26",
       "postcode": "1013 BL",
       "neighbourhood": "Coenhaven/Minervahaven",
@@ -17721,8 +18458,8 @@
         "terrace": true,
         "wifi": true,
         "card_payment": true,
-        "lounge": true,
-        "toilet": true
+        "toilet": true,
+        "lounge": true
       },
       "hours_licensed": [
         [
@@ -17814,7 +18551,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -17827,12 +18564,11 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "amenities": "osm",
-        "hours": "amsterdam",
         "phone": "directory",
-        "amenities_extra": "directory"
+        "amenities": "osm",
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "b2f8f4f3-87ff-4d87-aac5-520ec1e76884",
@@ -17843,6 +18579,8 @@
       "aliases": [
         "The Bulldog Rockshop"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Singel 12-H",
       "postcode": "1013 GA",
       "neighbourhood": "Haarlemmerbuurt",
@@ -17857,10 +18595,10 @@
       "phone": "020 627 8900",
       "amenities": {
         "terrace": true,
-        "smoking": "dedicated",
-        "drinks_snacks": true,
+        "toilet": true,
         "parking": true,
-        "toilet": true
+        "drinks_snacks": true,
+        "smoking": "dedicated"
       },
       "hours_licensed": [
         [
@@ -17952,7 +18690,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thebulldogamsterdam",
         "facebook": "TheBulldog1975",
@@ -17977,14 +18715,13 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
         "aliases": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "7ea57968-d364-4721-9398-2e30a1df8c64",
@@ -17993,6 +18730,8 @@
       "name": "The Bulldog The First",
       "legal_name": "Wilvri Coffee-Shops B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Oudezijds Voorburgwal 90-H",
       "postcode": "1012 GG",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -18009,10 +18748,10 @@
         "terrace": true,
         "wifi": true,
         "card_payment": true,
-        "lounge": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -18104,7 +18843,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thebulldogamsterdam",
         "facebook": "TheBulldog1975",
@@ -18129,13 +18868,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "b412df1f-0bf2-44a2-826f-ef2f1f6ce5f9",
@@ -18146,6 +18884,8 @@
       "aliases": [
         "The Bush Docter"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Thorbeckeplein 28",
       "postcode": "1017 CS",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -18161,10 +18901,10 @@
       "amenities": {
         "terrace": true,
         "wifi": true,
-        "drinks_snacks": true,
-        "parking": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "parking": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -18256,7 +18996,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -18270,10 +19010,9 @@
         "status": "amsterdam",
         "amenities": "osm",
         "hours": "amsterdam",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "7cca4c4b-c83c-4580-8148-67378339b5d4",
@@ -18282,6 +19021,8 @@
       "name": "The Corner",
       "legal_name": "The Corner",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Spaarndammerdijk 9",
       "postcode": "1013 ZM",
       "neighbourhood": "Spaarndammerbuurt/Zeeheldenbuurt",
@@ -18392,7 +19133,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -18407,7 +19148,7 @@
         "hours": "amsterdam",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a077ac62-0be9-4457-8609-4eba60133293",
@@ -18416,6 +19157,15 @@
       "name": "The Dolphins",
       "legal_name": "Coffeeshop The Dolphins",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1446398983013481",
+        "path": "/photos/1446398983013481.jpg",
+        "credit": "algirdasc",
+        "captured_at": "2025-05-03T18:30:07.120Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Kerkstraat 39",
       "postcode": "1017 GB",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -18522,7 +19272,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "thedolphinsamsterdam",
         "facebook": "coffeeshopthedolphins",
@@ -18539,13 +19289,13 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "osm",
-        "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "phone": "directory",
+        "hours": "osm",
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a5e016ed-8cc0-4850-a899-adf92c39dce7",
@@ -18554,6 +19304,8 @@
       "name": "The Dream",
       "legal_name": "Coffeeshop The Dream",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Witte de Withstraat 30A-H",
       "postcode": "1057 XZ",
       "neighbourhood": "Chassébuurt",
@@ -18657,7 +19409,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -18671,7 +19423,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e3a84635-c220-4d52-9058-8463da6db798",
@@ -18680,6 +19432,8 @@
       "name": "The Greenhouse Effect",
       "legal_name": "The Greenhouse Effect",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Nieuwmarkt 14-H",
       "postcode": "1012 CR",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -18786,7 +19540,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -18803,7 +19557,7 @@
         "website": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "ebcf0518-f43f-4fe7-a545-6c6c5748d2bf",
@@ -18812,6 +19566,8 @@
       "name": "The Hit",
       "legal_name": "The Hit B.V.",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Rusland 16",
       "postcode": "1012 CL",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -18921,7 +19677,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshopthehit"
       },
@@ -18941,7 +19697,7 @@
         "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "dd95a003-8089-4080-9eeb-69d08be1c041",
@@ -18952,6 +19708,8 @@
       "aliases": [
         "The Old Church"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Amstel 8-H",
       "postcode": "1017 AA",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -18965,9 +19723,9 @@
       "website": "https://www.theoldchurch.amsterdam",
       "phone": "020 370 7547",
       "amenities": {
+        "wheelchair": true,
         "wifi": true,
         "card_payment": true,
-        "wheelchair": true,
         "drinks_snacks": true
       },
       "hours_licensed": [
@@ -19060,7 +19818,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -19073,12 +19831,11 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "hours": "amsterdam",
         "phone": "directory",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "hours": "amsterdam",
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "05c82ac9-a3ac-41ee-b620-03e3f143b37f",
@@ -19089,6 +19846,8 @@
       "aliases": [
         "The Otherside"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Reguliersdwarsstraat 6",
       "postcode": "1017 BM",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -19198,7 +19957,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshoptheotherside",
         "facebook": "CoffeeshopTheOtherside"
@@ -19220,7 +19979,7 @@
         "amenities_extra": "directory",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "a322382b-4fb5-4743-95fb-93e80d6f6e6d",
@@ -19229,6 +19988,8 @@
       "name": "The Plug East",
       "legal_name": "The Plug East",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Eerste Oosterparkstraat 47-H",
       "postcode": "1091 GV",
       "neighbourhood": "Weesperzijde",
@@ -19335,7 +20096,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -19347,12 +20108,11 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "osm",
-        "phone": "directory",
         "website": "directory",
-        "amenities_extra": "directory"
+        "phone": "directory",
+        "hours": "osm"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "79a6a67a-c4c4-4f92-b682-0cf023222eaf",
@@ -19361,6 +20121,15 @@
       "name": "The Rookies",
       "legal_name": "Coffeeshop The Rookies",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1752038579384566",
+        "path": "/photos/1752038579384566.jpg",
+        "credit": "hautetension08",
+        "captured_at": "2026-05-07T18:49:12.386Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Korte Leidsedwarsstraat 147",
       "postcode": "1017 PZ",
       "neighbourhood": "De Weteringschans",
@@ -19471,7 +20240,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshoptherookies",
         "facebook": "CoffeeshopTheRookiesAmsterdam",
@@ -19490,9 +20259,10 @@
         "hours": "amsterdam",
         "website": "directory",
         "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "be269b4b-b5f9-48b2-8e87-7f695fd84bbd",
@@ -19501,6 +20271,8 @@
       "name": "The Saint",
       "legal_name": "The Saint",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Regulierssteeg 2",
       "postcode": "1017 CP",
       "neighbourhood": "Grachtengordel-Zuid",
@@ -19516,12 +20288,12 @@
       "amenities": {
         "terrace": true,
         "wheelchair": true,
-        "smoking": "outside",
         "wifi": true,
         "card_payment": true,
+        "air_conditioning": true,
         "lounge": true,
         "parking": true,
-        "air_conditioning": true
+        "smoking": "outside"
       },
       "hours_licensed": [
         [
@@ -19613,7 +20385,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -19625,12 +20397,11 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "amenities": "osm",
-        "hours": "amsterdam",
         "website": "directory",
-        "amenities_extra": "directory"
+        "amenities": "osm",
+        "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "3e670311-5c49-4073-81e2-afdaf69aed25",
@@ -19641,6 +20412,8 @@
       "aliases": [
         "Spirit Amsterdam"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Westerstraat 121A",
       "postcode": "1015 LZ",
       "neighbourhood": "Jordaan",
@@ -19656,10 +20429,10 @@
       "amenities": {
         "terrace": true,
         "wheelchair": true,
+        "toilet": true,
         "lounge": true,
-        "drinks_snacks": true,
         "parking": true,
-        "toilet": true
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -19751,7 +20524,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -19763,13 +20536,12 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "26522e8e-12b7-4912-ad8f-4f67f2a2753a",
@@ -19778,6 +20550,15 @@
       "name": "The Store",
       "legal_name": "Coffeeshop The Store",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1081489526572722",
+        "path": "/photos/1081489526572722.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-05-07T12:47:47.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Singel 14-H",
       "postcode": "1013 GA",
       "neighbourhood": "Haarlemmerbuurt",
@@ -19792,8 +20573,8 @@
       "phone": "020 626 3900",
       "amenities": {
         "terrace": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -19885,7 +20666,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "coffeeshop_the_store",
         "facebook": "thestoreamsterdam",
@@ -19901,14 +20682,14 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "amsterdam",
-        "phone": "directory",
-        "website": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "3fcef262-f58e-4427-a05c-35c98fb1be14",
@@ -19917,6 +20698,8 @@
       "name": "The Stud",
       "legal_name": "The Stud BV",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Molukkenstraat 581",
       "postcode": "1095 BJ",
       "neighbourhood": "Indische Buurt-Oost",
@@ -20023,7 +20806,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "facebook": "CoffeeshopTheStud",
         "email": "info@thestud.nl"
@@ -20039,12 +20822,11 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "hours": "amsterdam",
         "phone": "directory",
-        "amenities_extra": "directory",
+        "hours": "amsterdam",
         "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e44ffed9-bc62-4f64-ae6a-b67d673137b7",
@@ -20055,6 +20837,15 @@
       "aliases": [
         "Coffeeshop Smokerdam"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "915473340672132",
+        "path": "/photos/915473340672132.jpg",
+        "credit": "ottor",
+        "captured_at": "2024-12-17T10:04:05.027Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Vechtstraat 63-H",
       "postcode": "1079 JA",
       "neighbourhood": "Rijnbuurt",
@@ -20068,11 +20859,11 @@
       "website": "https://www.coffeeshop.tours/coffeeshops/topweazle/",
       "phone": "020 238 4177",
       "amenities": {
+        "wheelchair": true,
         "wifi": true,
         "card_payment": true,
-        "wheelchair": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -20164,7 +20955,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -20177,12 +20968,12 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "website": "osm",
-        "hours": "amsterdam",
         "phone": "directory",
+        "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "ba78ad23-77eb-453c-94cb-46f0dbe088da",
@@ -20191,6 +20982,15 @@
       "name": "Trefpunt",
       "legal_name": "Coffeeshop Trefpunt",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "2437125870001106",
+        "path": "/photos/2437125870001106.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-06-20T14:25:31.095Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Zeeburgerdijk 33-H",
       "postcode": "1093 SL",
       "neighbourhood": "Dapperbuurt",
@@ -20204,11 +21004,11 @@
       "website": "https://www.coffeeshopdirect.com/Trefpunt2.html",
       "phone": null,
       "amenities": {
-        "wifi": true,
         "terrace": true,
         "wheelchair": true,
-        "drinks_snacks": true,
-        "toilet": true
+        "wifi": true,
+        "toilet": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -20300,7 +21100,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "instagram": "trefpuntamsterdam",
         "email": "lemming@coffeeshop.freeuk.com"
@@ -20317,12 +21117,12 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
         "website": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "hours": "amsterdam",
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "db54786c-f5de-480c-ab58-f03db1e4d49a",
@@ -20333,6 +21133,8 @@
       "aliases": [
         "The Plug Utopia"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Nieuwezijds Voorburgwal 132",
       "postcode": "1012 SH",
       "neighbourhood": "Burgwallen-Nieuwe Zijde",
@@ -20443,7 +21245,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": true,
@@ -20460,7 +21262,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "3655858f-2d29-4c92-9f95-b48043a01355",
@@ -20469,6 +21271,15 @@
       "name": "Vondel",
       "legal_name": "Coffeeshop Vondel",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "2355753341523682",
+        "path": "/photos/2355753341523682.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-05-12T12:09:10.088Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Overtoom 451-H",
       "postcode": "1054 KH",
       "neighbourhood": "Overtoomse Sluis",
@@ -20484,10 +21295,10 @@
       "amenities": {
         "terrace": false,
         "wifi": true,
-        "lounge": true,
-        "drinks_snacks": true,
         "toilet": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "lounge": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -20579,7 +21390,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -20591,13 +21402,13 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
+        "website": "directory",
+        "phone": "directory",
         "amenities": "osm",
         "hours": "osm",
-        "phone": "directory",
-        "website": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "e1e87098-8604-4ba8-b815-8523ca3301cc",
@@ -20606,6 +21417,8 @@
       "name": "Voyagers",
       "legal_name": "Voyagers",
       "aliases": [],
+      "override_fields": [],
+      "photo": null,
       "address": "Geldersekade 2-H",
       "postcode": "1012 BH",
       "neighbourhood": "Burgwallen-Oude Zijde",
@@ -20622,10 +21435,10 @@
         "terrace": false,
         "wheelchair": false,
         "wifi": true,
-        "smoking": "yes",
         "card_payment": true,
         "lounge": true,
-        "drinks_snacks": true
+        "drinks_snacks": true,
+        "smoking": "yes"
       },
       "hours_licensed": [
         [
@@ -20717,7 +21530,7 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -20731,10 +21544,9 @@
         "status": "amsterdam",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm",
-        "amenities_extra": "directory"
+        "hours": "osm"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "426636bd-0fb0-4f0a-87ec-345ccb7dc9a4",
@@ -20745,6 +21557,8 @@
       "aliases": [
         "Warda"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Van Woustraat 147-H",
       "postcode": "1074 AJ",
       "neighbourhood": "Nieuwe Pijp",
@@ -20761,8 +21575,8 @@
         "wheelchair": false,
         "wifi": true,
         "card_payment": true,
-        "drinks_snacks": true,
-        "air_conditioning": true
+        "air_conditioning": true,
+        "drinks_snacks": true
       },
       "hours_licensed": [
         [
@@ -20854,7 +21668,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -20868,10 +21682,9 @@
         "status": "amsterdam",
         "amenities": "osm",
         "hours": "amsterdam",
-        "aliases": "directory",
-        "amenities_extra": "directory"
+        "aliases": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "98f9738d-dddd-4a22-a19b-466e7760798d",
@@ -20882,6 +21695,15 @@
       "aliases": [
         "Warda 2"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1569357570893202",
+        "path": "/photos/1569357570893202.jpg",
+        "credit": "ottor",
+        "captured_at": "2025-09-12T14:21:32.094Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Javastraat 104-H",
       "postcode": "1094 HN",
       "neighbourhood": "Indische Buurt-West",
@@ -20895,11 +21717,11 @@
       "website": null,
       "phone": null,
       "amenities": {
+        "terrace": true,
         "wifi": true,
         "card_payment": true,
-        "terrace": true,
-        "lounge": true,
-        "toilet": true
+        "toilet": true,
+        "lounge": true
       },
       "hours_licensed": [
         [
@@ -20991,7 +21813,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -21005,9 +21827,9 @@
         "status": "amsterdam",
         "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory"
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "f9995285-e3e6-40dc-b4b1-a6dff19aa7e2",
@@ -21018,6 +21840,15 @@
       "aliases": [
         "Massawa"
       ],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1317234628861752",
+        "path": "/photos/1317234628861752.jpg",
+        "credit": "richlv",
+        "captured_at": "2023-06-21T19:19:21.000Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Chasséstraat 4",
       "postcode": "1057 JD",
       "neighbourhood": "Chassébuurt",
@@ -21124,7 +21955,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {
         "facebook": "CoffeeshopMassawa",
         "email": "lemming@coffeeshop.freeuk.com"
@@ -21141,14 +21972,14 @@
         "name": "amsterdam",
         "address": "amsterdam",
         "status": "amsterdam",
-        "hours": "amsterdam",
-        "phone": "directory",
         "website": "directory",
+        "phone": "directory",
+        "hours": "amsterdam",
         "aliases": "directory",
-        "amenities_extra": "directory",
-        "socials": "venue-website"
+        "socials": "venue-website",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "1bffbb05-7b08-4633-a831-a79462dcae54",
@@ -21159,6 +21990,8 @@
       "aliases": [
         "De Bommel"
       ],
+      "override_fields": [],
+      "photo": null,
       "address": "Balboastraat 19-H",
       "postcode": "1057 VT",
       "neighbourhood": "Hoofdweg e.o.",
@@ -21268,7 +22101,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": false,
@@ -21285,7 +22118,7 @@
         "aliases": "directory",
         "amenities_extra": "directory"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     },
     {
       "id": "7ddda4b2-0c74-4679-bad2-f53efa490f86",
@@ -21294,6 +22127,15 @@
       "name": "Ying Yang",
       "legal_name": "Ying Yang",
       "aliases": [],
+      "override_fields": [],
+      "photo": {
+        "source": "mapillary",
+        "id": "1509178514544658",
+        "path": "/photos/1509178514544658.jpg",
+        "credit": "ottor",
+        "captured_at": "2026-01-07T09:40:06.085Z",
+        "license": "CC BY-SA 4.0"
+      },
       "address": "Knollendamstraat 5",
       "postcode": "1013 TL",
       "neighbourhood": "Spaarndammerbuurt/Zeeheldenbuurt",
@@ -21402,7 +22244,7 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T18:28:55.524Z",
+      "hours_updated_at": "2026-08-19T20:17:51.651Z",
       "socials": {},
       "socials_shared": [],
       "website_live": null,
@@ -21415,9 +22257,10 @@
         "address": "amsterdam",
         "status": "amsterdam",
         "hours": "amsterdam",
-        "amenities_extra": "directory"
+        "amenities_extra": "directory",
+        "photo": "mapillary"
       },
-      "fetched_at": "2026-08-19T18:28:55.524Z"
+      "fetched_at": "2026-08-19T20:17:51.651Z"
     }
   ]
 }
