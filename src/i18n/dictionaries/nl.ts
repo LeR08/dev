@@ -112,6 +112,10 @@ export const nl: Dictionary = {
     terrace: 'Terras',
     wheelchair: 'Rolstoeltoegankelijk',
     wifi: 'Wifi',
+    socials: `Volgen`,
+    chainAccount: `Ketenaccount, gedeeld met andere vestigingen`,
+    renewalPending: `De vergunning van deze zaak is op {date} verlopen en de gemeente heeft nog geen verlenging gepubliceerd. In dit register betekent dat meestal een lopende verlenging en geen sluiting — controleer het toch voordat je langsgaat.`,
+    websiteDown: `Deze website reageerde niet bij de laatste controle.`,
   },
   hours: {
     community: 'Gecorrigeerd via een geverifieerde melding',

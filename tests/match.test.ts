@@ -8,6 +8,7 @@ const licence = (over: Partial<LicenceRecord> & { sourceId: string; name: string
   postcode: null,
   licenceNumber: null,
   licenceValidTo: null,
+  licenceRenewalPending: false,
   hoursLicensed: null,
   hasTerrace: false,
   ...over,

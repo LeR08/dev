@@ -114,6 +114,10 @@ export const en = {
     terrace: 'Terrace',
     wheelchair: 'Wheelchair accessible',
     wifi: 'Wi-Fi',
+    socials: `Follow`,
+    chainAccount: `Chain account, shared with other branches`,
+    renewalPending: `The licence for this venue passed its end date on {date} and the city has not yet published a renewal. In this register that normally means a renewal in progress rather than a closure — but check before travelling.`,
+    websiteDown: `This website did not respond on the last check.`,
   },
   hours: {
     community: 'Corrected by a verified community report',

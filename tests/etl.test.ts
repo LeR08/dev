@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './fixtures/amsterdam-wfs.json';
-import { coordinatesOf, isCoffeeshop, toLicenceRecord } from '@/etl/adapters/amsterdam';
+import { coordinatesOf, daysExpired, isCoffeeshop, RENEWAL_GRACE_DAYS, toLicenceRecord } from '@/etl/adapters/amsterdam';
 import { buildVenues, carryForwardClosed, diffCounts, displayName } from '@/etl/build';
 import { assertOsmCountPlausible, assertRowCountPlausible, EtlAbort } from '@/etl/run';
+import { markSharedHandles } from '@/etl/sources/socials';
 import { amsterdamAdapter } from '@/etl/adapters/amsterdam';
 import { inBBox } from '@/lib/geo';
 import type { Venue } from '@/lib/types';
@@ -27,12 +28,13 @@ describe('coffeeshop selection', () => {
     expect(isCoffeeshop(row.properties, TODAY)).toBe(true);
   });
 
-  it('drops a licence whose end date has passed', () => {
+  it('keeps a licence whose end date passed weeks ago, and drops one long gone', () => {
     const row = byName('420CAFE');
     expect(row.properties.einddatum).toBe('2026-07-01');
-    expect(isCoffeeshop(row.properties, TODAY)).toBe(false);
-    // …but it was in scope while the licence was still valid.
-    expect(isCoffeeshop(row.properties, new Date(2026, 0, 1))).toBe(true);
+    // Seven weeks past its end date and still granted: a renewal in flight.
+    expect(isCoffeeshop(row.properties, TODAY)).toBe(true);
+    // A year later, with no renewal published, it is genuinely gone.
+    expect(isCoffeeshop(row.properties, new Date(2027, 6, 1))).toBe(false);
   });
 
   it('drops a licence that is not granted', () => {
@@ -261,5 +263,75 @@ describe('previous data survives a failed source', () => {
     await expect(brokenAdapter.fetchLicences()).rejects.toThrow('HTTP 500');
     // Nothing overwrote the snapshot: the run aborts before any write.
     expect(previous).toHaveLength(licences.length);
+  });
+});
+
+describe('licence renewal grace window', () => {
+  const granted = (endDate: string | null) => ({
+    zaak_categorie: 'Coffeeshop',
+    zaak_specificatie: 'Coffeeshop',
+    status_vergunning: 'Verleend',
+    einddatum: endDate,
+  });
+
+  it('keeps a licence that is still current', () => {
+    expect(isCoffeeshop(granted('2028-01-01'), TODAY)).toBe(true);
+    expect(daysExpired('2028-01-01', TODAY)).toBe(0);
+  });
+
+  it('keeps a recently expired but still-granted licence', () => {
+    // The register is a renewal calendar: 152 of 158 licences end on the first
+    // of a month and renewals are published late. Dropping these deletes
+    // operating venues — The Bulldog on Leidseplein expired 2026-07-01 and is
+    // very much open.
+    expect(isCoffeeshop(granted('2026-07-01'), TODAY)).toBe(true);
+    expect(daysExpired('2026-07-01', TODAY)).toBe(49);
+  });
+
+  it('drops a licence expired beyond the grace window', () => {
+    expect(RENEWAL_GRACE_DAYS).toBe(180);
+    expect(isCoffeeshop(granted('2025-01-01'), TODAY)).toBe(false);
+  });
+
+  it('still drops a licence that was never granted, however recent', () => {
+    expect(isCoffeeshop({ ...granted('2028-01-01'), status_vergunning: 'Ingetrokken' }, TODAY)).toBe(false);
+  });
+
+  it('treats a missing end date as open-ended', () => {
+    expect(daysExpired(null, TODAY)).toBe(0);
+    expect(daysExpired('', TODAY)).toBe(0);
+    expect(daysExpired('not a date', TODAY)).toBe(0);
+    expect(isCoffeeshop(granted(null), TODAY)).toBe(true);
+  });
+
+  it('flags the renewal on the record rather than hiding it', () => {
+    const record = toLicenceRecord({
+      geometry: { type: 'Point', coordinates: [4.883, 52.363] },
+      properties: {
+        ...granted('2026-07-01'),
+        id: 1,
+        zaaknaam: 'The Bulldog',
+        adres: 'Leidseplein 17A',
+      },
+    })!;
+    expect(record.licenceRenewalPending).toBe(true);
+  });
+});
+
+describe('social handles', () => {
+  it('separates a chain account from a venue account', () => {
+    // The Bulldog's branches all point at one Instagram; Popeye's is its own.
+    const shared = markSharedHandles({
+      'bulldog-leidseplein': { instagram: 'thebulldogamsterdam', facebook: 'TheBulldog1975' },
+      'bulldog-port': { instagram: 'thebulldogamsterdam', facebook: 'TheBulldog1975' },
+      popeye: { instagram: 'popeyecoffeeshop' },
+    });
+    expect(shared['bulldog-leidseplein']).toEqual(['instagram', 'facebook']);
+    expect(shared['bulldog-port']).toEqual(['instagram', 'facebook']);
+    expect(shared.popeye).toBeUndefined();
+  });
+
+  it('reports nothing when every handle is unique', () => {
+    expect(markSharedHandles({ a: { instagram: 'one' }, b: { instagram: 'two' } })).toEqual({});
   });
 });

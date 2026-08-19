@@ -112,6 +112,10 @@ export const de: Dictionary = {
     terrace: 'Terrasse',
     wheelchair: 'Barrierefrei zugänglich',
     wifi: 'WLAN',
+    socials: `Folgen`,
+    chainAccount: `Ketten-Konto, geteilt mit anderen Filialen`,
+    renewalPending: `Die Konzession dieses Betriebs ist am {date} abgelaufen und die Stadt hat noch keine Verlängerung veröffentlicht. In diesem Register bedeutet das meist eine laufende Verlängerung und keine Schließung — prüfen Sie es dennoch vor dem Besuch.`,
+    websiteDown: `Diese Website hat bei der letzten Prüfung nicht geantwortet.`,
   },
   hours: {
     community: 'Durch eine geprüfte Meldung korrigiert',

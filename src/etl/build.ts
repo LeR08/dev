@@ -107,6 +107,7 @@ export function buildVenues(input: BuildInput): Venue[] {
       renamed_to: existing?.renamed_to ?? null,
       licence_number: licence.licenceNumber,
       licence_valid_to: licence.licenceValidTo,
+      licence_renewal_pending: licence.licenceRenewalPending,
       website: enrichment?.website ?? null,
       phone: enrichment?.phone ?? null,
       amenities,
@@ -115,6 +116,10 @@ export function buildVenues(input: BuildInput): Venue[] {
       hours_weekly: hoursWeekly,
       hours_source: hoursSource,
       hours_updated_at: hoursSource ? timestamp : null,
+      // Carried from the previous run; the socials pass below refreshes them.
+      socials: existing?.socials ?? {},
+      socials_shared: existing?.socials_shared ?? [],
+      website_live: existing?.website_live ?? null,
       osm_id: enrichment?.osmId ?? null,
       amsterdam_id: licence.sourceId,
       rating_avg: existing?.rating_avg ?? null,

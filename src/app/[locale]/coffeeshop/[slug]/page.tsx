@@ -98,6 +98,15 @@ export default async function VenuePage({
         </div>
       </header>
 
+      {venue.status === 'open' && venue.licence_renewal_pending && venue.licence_valid_to && (
+        <p
+          role="status"
+          className="mt-5 rounded-xl border border-[color-mix(in_srgb,var(--color-soon)_38%,transparent)] bg-[color-mix(in_srgb,var(--color-soon)_10%,transparent)] p-3.5 text-sm"
+        >
+          {format(dict.venue.renewalPending, { date: formatDate(venue.licence_valid_to, locale) })}
+        </p>
+      )}
+
       {venue.status !== 'open' && (
         <p
           role="status"
@@ -161,7 +170,10 @@ export default async function VenuePage({
         </div>
       </Section>
 
-      {(Object.keys(venue.amenities).length > 0 || venue.website || venue.phone) && (
+      {(Object.keys(venue.amenities).length > 0 ||
+        venue.website ||
+        venue.phone ||
+        Object.keys(venue.socials).length > 0) && (
         <Section title={dict.venue.details}>
           <ul className="flex flex-wrap gap-2">
             {Object.entries(venue.amenities)
@@ -182,6 +194,9 @@ export default async function VenuePage({
                 >
                   {venue.website.replace(/^https?:\/\//, '')}
                 </a>
+                {venue.website_live === false && (
+                  <span className="block text-xs text-[var(--color-muted)]">{dict.venue.websiteDown}</span>
+                )}
               </Row>
             )}
             {venue.phone && (
@@ -202,6 +217,35 @@ export default async function VenuePage({
               </Row>
             )}
           </dl>
+
+          {Object.keys(venue.socials).length > 0 && (
+            <div className="mt-4 border-t border-[var(--color-line)] pt-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--color-muted)]">
+                {dict.venue.socials}
+              </p>
+              <ul className="mt-2.5 flex flex-wrap gap-2">
+                {Object.entries(venue.socials)
+                  .filter(([network]) => network in SOCIAL_URLS)
+                  .map(([network, handle]) => (
+                    <li key={network}>
+                      <a
+                        className="chip hover:text-[var(--color-text)]"
+                        href={SOCIAL_URLS[network](handle)}
+                        rel="noopener noreferrer nofollow"
+                      >
+                        {SOCIAL_NAMES[network]}
+                        <span className="text-[var(--color-muted)]">
+                          {network === 'youtube' ? '' : `@${handle}`}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+              {venue.socials_shared.length > 0 && (
+                <p className="mt-2 text-xs text-[var(--color-muted)]">{dict.venue.chainAccount}</p>
+              )}
+            </div>
+          )}
         </Section>
       )}
 
@@ -240,6 +284,23 @@ export default async function VenuePage({
     </article>
   );
 }
+
+/** Handles are stored bare; the platform URL is rebuilt here. */
+const SOCIAL_URLS: Record<string, (handle: string) => string> = {
+  instagram: (h) => `https://instagram.com/${h}`,
+  facebook: (h) => `https://facebook.com/${h}`,
+  tiktok: (h) => `https://tiktok.com/@${h}`,
+  x: (h) => `https://x.com/${h}`,
+  youtube: (h) => (h.startsWith('UC') ? `https://youtube.com/channel/${h}` : `https://youtube.com/@${h}`),
+};
+
+const SOCIAL_NAMES: Record<string, string> = {
+  instagram: 'Instagram',
+  facebook: 'Facebook',
+  tiktok: 'TikTok',
+  x: 'X',
+  youtube: 'YouTube',
+};
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

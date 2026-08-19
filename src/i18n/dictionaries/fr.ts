@@ -112,6 +112,10 @@ export const fr: Dictionary = {
     terrace: 'Terrasse',
     wheelchair: 'Accessible en fauteuil roulant',
     wifi: 'Wi-Fi',
+    socials: `Suivre`,
+    chainAccount: `Compte d’enseigne, partagé avec d’autres établissements`,
+    renewalPending: `La licence de cet établissement a dépassé sa date de fin le {date} et la ville n’a pas encore publié de renouvellement. Dans ce registre cela signifie en général un renouvellement en cours et non une fermeture — vérifiez tout de même avant de vous déplacer.`,
+    websiteDown: `Ce site web n’a pas répondu lors du dernier contrôle.`,
   },
   hours: {
     community: 'Corrigé par un signalement vérifié',

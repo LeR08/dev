@@ -7,6 +7,8 @@ import { matchSources } from '@/etl/match';
 import { fetchOsmVenues } from '@/etl/sources/overpass';
 import type { OsmRecord } from '@/etl/sources/overpass';
 import { buildVenues, carryForwardClosed, diffCounts } from '@/etl/build';
+import { checkSite, markSharedHandles } from '@/etl/sources/socials';
+import type { SocialProfile } from '@/etl/sources/socials';
 import {
   appendRun,
   readOverrides,
@@ -101,6 +103,11 @@ async function main(): Promise<void> {
     osmAvailable,
   });
 
+  // 3b. Read each venue's own website for its social accounts and to see
+  //     whether it still answers. Failures keep the previous values.
+  const socialErrors = await attachSocials(built);
+  if (socialErrors > 0) errors.push(`socials: ${socialErrors} sites unreachable`);
+
   const { venues, missingRuns, closed } = carryForwardClosed(built, previous, state.missingRuns, startedAt);
   const counts = diffCounts(built, previous);
   console.log(
@@ -154,6 +161,46 @@ async function main(): Promise<void> {
   };
   await appendRun(run);
   console.log(`ETL finished — ${snapshot.venues.length} venues in the snapshot`);
+}
+
+/**
+ * Visits each venue's website once, at a polite concurrency, and records the
+ * handles it publishes plus whether it answered at all. A site that fails keeps
+ * whatever the last successful run found — one flaky host must not erase a
+ * venue's contact details.
+ */
+async function attachSocials(venues: Venue[]): Promise<number> {
+  const withSite = venues.filter((venue) => venue.website);
+  if (withSite.length === 0) return 0;
+
+  let failures = 0;
+  const CONCURRENCY = 4;
+  for (let i = 0; i < withSite.length; i += CONCURRENCY) {
+    await Promise.all(
+      withSite.slice(i, i + CONCURRENCY).map(async (venue) => {
+        const check = await checkSite(venue.website!);
+        venue.website_live = check.live;
+        // Only an unreachable host counts as a failure worth reporting; a host
+        // that answered 404 gave us a real, if unwelcome, answer.
+        if (check.status === 0) failures += 1;
+        if (check.status === 0 || check.status >= 400) return;
+        if (Object.keys(check.socials).length > 0) {
+          venue.socials = check.socials as Record<string, string>;
+          venue.sources = { ...venue.sources, socials: 'venue-website' };
+        }
+      }),
+    );
+  }
+
+  const shared = markSharedHandles(
+    Object.fromEntries(withSite.map((venue) => [venue.slug, venue.socials as SocialProfile])),
+  );
+  for (const venue of withSite) venue.socials_shared = shared[venue.slug] ?? [];
+
+  const found = withSite.filter((venue) => Object.keys(venue.socials).length > 0).length;
+  const live = withSite.filter((venue) => venue.website_live).length;
+  console.log(`  socials: ${found}/${withSite.length} venues publish a handle; ${live} sites answered`);
+  return failures;
 }
 
 /**

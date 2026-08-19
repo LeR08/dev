@@ -1,5 +1,20 @@
 [
   {
+    "id": "897b1a15-0633-439b-b55e-0a93f2f8cb9a",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T17:14:07.759Z",
+    "finished_at": "2026-08-19T17:16:17.632Z",
+    "inserted": 12,
+    "updated": 145,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues",
+      "socials: 8 sites unreachable"
+    ]
+  },
+  {
     "id": "5c7ed529-5217-450a-96c7-0f658b02770b",
     "source": "amsterdam",
     "started_at": "2026-08-19T15:18:06.859Z",

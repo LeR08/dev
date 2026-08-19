@@ -19,6 +19,8 @@ export interface LicenceRecord {
   lng: number;
   licenceNumber: string | null;
   licenceValidTo: string | null;
+  /** End date passed, licence still granted — a renewal the register has not published. */
+  licenceRenewalPending: boolean;
   /** Outer bound permitted by the licence — never presented as trading hours. */
   hoursLicensed: WeeklyHours | null;
   hasTerrace: boolean;

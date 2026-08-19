@@ -20,6 +20,21 @@ function wfsUrl(dataset: string, typeName: string, count = 5000): string {
 }
 
 /**
+ * How long after its end date a granted licence is still treated as live.
+ *
+ * The register is a renewal calendar, not a closure log: 152 of 158 coffeeshop
+ * licences end on the first of a month, no licence in the dataset has been
+ * expired for more than four months, and every recently-expired row still reads
+ * `status_vergunning = "Verleend"`. Renewals are simply published late. Cutting
+ * on the end date alone therefore deletes operating venues — The Bulldog on
+ * Leidseplein among them — so a granted licence stays live through this window
+ * and is flagged in the UI rather than dropped.
+ */
+export const RENEWAL_GRACE_DAYS = 180;
+
+const DAY_MS = 86_400_000;
+
+/**
  * Filed under either column: some coffeeshops carry
  * `zaak_categorie = "Onbekend"` with `zaak_specificatie = "Coffeeshop"`
  * (420CAFE, Oudebrugsteeg 27-H is the canonical example), so filtering on the
@@ -32,12 +47,16 @@ export function isCoffeeshop(properties: Record<string, unknown>, today = new Da
 
   if (String(properties.status_vergunning ?? '').toLowerCase() !== 'verleend') return false;
 
-  const endDate = properties.einddatum;
-  if (typeof endDate === 'string' && endDate.trim() !== '') {
-    const parsed = new Date(endDate);
-    if (!Number.isNaN(parsed.getTime()) && parsed < startOfDay(today)) return false;
-  }
-  return true;
+  return daysExpired(properties.einddatum, today) <= RENEWAL_GRACE_DAYS;
+}
+
+/** Days since the licence's end date; 0 while it is still current. */
+export function daysExpired(endDate: unknown, today = new Date()): number {
+  if (typeof endDate !== 'string' || endDate.trim() === '') return 0;
+  const parsed = new Date(endDate);
+  if (Number.isNaN(parsed.getTime())) return 0;
+  const elapsed = startOfDay(today).getTime() - parsed.getTime();
+  return elapsed <= 0 ? 0 : Math.floor(elapsed / DAY_MS);
 }
 
 function startOfDay(date: Date): Date {
@@ -85,6 +104,9 @@ export function toLicenceRecord(feature: {
     lng: coordinates.lng,
     licenceNumber: properties.zaaknummer != null ? String(properties.zaaknummer) : null,
     licenceValidTo: typeof properties.einddatum === 'string' ? properties.einddatum : null,
+    // Past its end date but still granted: the city has not published the
+    // renewal yet. Shown with a caveat, never silently dropped.
+    licenceRenewalPending: daysExpired(properties.einddatum) > 0,
     hoursLicensed: expandLicenceHours({
       sunThuFrom: properties.openingstijden_zo_do_van,
       sunThuTo: properties.openingstijden_zo_do_tot,

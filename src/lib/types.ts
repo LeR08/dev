@@ -48,6 +48,12 @@ export const Venue = z.object({
   renamed_to: z.string().nullable().default(null),
   licence_number: z.string().nullable().default(null),
   licence_valid_to: z.string().nullable().default(null),
+  /**
+   * The licence's end date has passed but the city still lists it as granted.
+   * In this register that means a renewal in flight, not a closure — see
+   * RENEWAL_GRACE_DAYS in the Amsterdam adapter.
+   */
+  licence_renewal_pending: z.boolean().default(false),
   website: z.string().nullable().default(null),
   phone: z.string().nullable().default(null),
   amenities: Amenities.default({}),
@@ -63,6 +69,12 @@ export const Venue = z.object({
   hours_actual: z.string().nullable().default(null),
   hours_source: HoursSource.nullable().default(null),
   hours_updated_at: z.string().nullable().default(null),
+  /** Handles the venue publishes on its own website (§5.2 precedence: venue first). */
+  socials: z.record(z.string()).default({}),
+  /** Networks whose handle is a chain account shared with another venue. */
+  socials_shared: z.array(z.string()).default([]),
+  /** Whether the venue's own website answered on the last run. */
+  website_live: z.boolean().nullable().default(null),
   osm_id: z.string().nullable().default(null),
   amsterdam_id: z.string().nullable().default(null),
   rating_avg: z.number().nullable().default(null),

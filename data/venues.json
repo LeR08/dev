@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-19T15:18:06.859Z",
+  "generated_at": "2026-08-19T17:14:07.759Z",
   "city": "amsterdam",
   "attribution": [
     "Contains data from Gemeente Amsterdam (CC BY 4.0)",
@@ -21,6 +21,7 @@
       "renamed_to": null,
       "licence_number": "17338",
       "licence_valid_to": "2028-04-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -116,7 +117,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "10763249125",
       "rating_avg": null,
@@ -127,7 +131,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "8dc1b3f4-68e3-4e17-8ee6-bbb5b83d0c72",
@@ -144,6 +148,7 @@
       "renamed_to": null,
       "licence_number": "13418",
       "licence_valid_to": "2028-05-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -237,7 +242,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266507186",
       "rating_avg": null,
@@ -248,7 +256,132 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "c366a4e8-6572-417d-89f0-671c0107e3a4",
+      "slug": "420cafe",
+      "city": "amsterdam",
+      "name": "420CAFE",
+      "legal_name": "420CAFE",
+      "address": "Oudebrugsteeg 27-H",
+      "postcode": "1012 JN",
+      "neighbourhood": "Burgwallen-Nieuwe Zijde",
+      "lat": 52.375907946055015,
+      "lng": 4.895861857138864,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "2874",
+      "licence_valid_to": "2026-07-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {},
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "266501091",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "aa589484-ab17-4668-b9b9-4de2e42b8439",
@@ -265,6 +398,7 @@
       "renamed_to": null,
       "licence_number": "13383",
       "licence_valid_to": "2028-04-01",
+      "licence_renewal_pending": false,
       "website": "https://www.abraxas.tv",
       "phone": null,
       "amenities": {
@@ -317,7 +451,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/4869724563",
       "amsterdam_id": "45256700917",
       "rating_avg": null,
@@ -331,7 +468,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "10f95a1d-23a4-47bb-bf64-b550c8c2de13",
@@ -348,6 +485,7 @@
       "renamed_to": null,
       "licence_number": "7600",
       "licence_valid_to": "2027-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -443,7 +581,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "43673413287",
       "rating_avg": null,
@@ -454,7 +595,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "c8f4eb4e-6de0-4242-ab8b-c9d9e7e874d4",
@@ -471,6 +612,7 @@
       "renamed_to": null,
       "licence_number": "14312",
       "licence_valid_to": "2026-09-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -566,7 +708,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/1223264264",
       "amsterdam_id": "266509097",
       "rating_avg": null,
@@ -580,7 +725,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "30b820f0-fa89-439e-a041-c3d224bfb147",
@@ -597,6 +742,7 @@
       "renamed_to": null,
       "licence_number": "11767",
       "licence_valid_to": "2029-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -690,7 +836,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266514421",
       "rating_avg": null,
@@ -701,7 +850,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "0354913b-5ff4-4702-8789-b1703ef96bc9",
@@ -718,6 +867,7 @@
       "renamed_to": null,
       "licence_number": "13523",
       "licence_valid_to": "2027-02-01",
+      "licence_renewal_pending": false,
       "website": "https://www.babashops.nl",
       "phone": null,
       "amenities": {},
@@ -811,7 +961,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/5414879011",
       "amsterdam_id": "266505939",
       "rating_avg": null,
@@ -825,7 +978,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "5c1aa894-b8b2-4a68-b9a8-8784e419d783",
@@ -842,6 +995,7 @@
       "renamed_to": null,
       "licence_number": "15397",
       "licence_valid_to": "2028-04-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -935,7 +1089,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266500944",
       "rating_avg": null,
@@ -946,7 +1103,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "cbefcac1-0681-4e7b-aed9-9d1bf8bee6b4",
@@ -963,6 +1120,7 @@
       "renamed_to": null,
       "licence_number": "2290",
       "licence_valid_to": "2028-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -1058,7 +1216,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "44784729598",
       "rating_avg": null,
@@ -1069,7 +1230,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "e8dc6615-c926-4866-947f-025c46a38f18",
@@ -1086,6 +1247,7 @@
       "renamed_to": null,
       "licence_number": "19069",
       "licence_valid_to": "2026-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -1179,7 +1341,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "44060704521",
       "rating_avg": null,
@@ -1190,7 +1355,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "1ac35009-c688-4cf8-a091-ee74799e74f9",
@@ -1207,6 +1372,7 @@
       "renamed_to": null,
       "licence_number": "7557",
       "licence_valid_to": "2027-10-01",
+      "licence_renewal_pending": false,
       "website": "https://www.barneysamsterdam.com",
       "phone": null,
       "amenities": {
@@ -1302,7 +1468,14 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "barneys_amsterdam",
+        "facebook": "BarneysUptownAmsterdam",
+        "x": "Barneys_1986"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2721575087",
       "amsterdam_id": "266502181",
       "rating_avg": null,
@@ -1314,9 +1487,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "11a1485f-f848-48dd-b64d-baf48478f062",
@@ -1333,6 +1507,7 @@
       "renamed_to": null,
       "licence_number": "1990",
       "licence_valid_to": "2028-05-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -1428,7 +1603,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2721723327",
       "amsterdam_id": "46071548172",
       "rating_avg": null,
@@ -1442,7 +1620,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "c08ab1b8-b8c0-4029-985a-0ffc7eb49843",
@@ -1459,6 +1637,7 @@
       "renamed_to": null,
       "licence_number": "9071",
       "licence_valid_to": "2027-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -1554,7 +1733,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "43673414192",
       "rating_avg": null,
@@ -1565,7 +1747,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "9f79e1c8-aaa1-4e0b-8872-defce7096f3f",
@@ -1582,6 +1764,7 @@
       "renamed_to": null,
       "licence_number": "14554",
       "licence_valid_to": "2027-09-01",
+      "licence_renewal_pending": false,
       "website": "https://bestfriendsamsterdam.com/locations/oud-zuid/",
       "phone": null,
       "amenities": {},
@@ -1675,7 +1858,13 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "bestfriendsamsterdam",
+        "facebook": "coffeeshopbestfriends"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/8284992823",
       "amsterdam_id": "266508986",
       "rating_avg": null,
@@ -1687,9 +1876,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "1bcbc6b7-73e2-4dfd-a14a-6a114f69fe26",
@@ -1706,6 +1896,7 @@
       "renamed_to": null,
       "licence_number": "1444",
       "licence_valid_to": "2029-03-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -1801,7 +1992,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2830012945",
       "amsterdam_id": "49314248873",
       "rating_avg": null,
@@ -1815,7 +2009,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "e4f1d3fc-2f7a-4bc4-a680-e3198f635f15",
@@ -1832,6 +2026,7 @@
       "renamed_to": null,
       "licence_number": "17177",
       "licence_valid_to": "2029-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -1925,7 +2120,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "8610585109",
       "rating_avg": null,
@@ -1936,7 +2134,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "2723290b-df92-4246-87db-6f81595f4db8",
@@ -1953,6 +2151,7 @@
       "renamed_to": null,
       "licence_number": "14693",
       "licence_valid_to": "2027-02-01",
+      "licence_renewal_pending": false,
       "website": "http://www.coffeeshopbluebird.nl/",
       "phone": null,
       "amenities": {
@@ -2051,7 +2250,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/3273663361",
       "amsterdam_id": "43673414385",
       "rating_avg": null,
@@ -2065,7 +2267,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "dff96ecb-7b96-4e7c-821c-ac21492e2a18",
@@ -2082,6 +2284,7 @@
       "renamed_to": null,
       "licence_number": "12465",
       "licence_valid_to": "2027-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -2177,7 +2380,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2809964733",
       "amsterdam_id": "9942005707",
       "rating_avg": null,
@@ -2191,7 +2397,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "7a6e7601-5f04-46f6-be63-5ffd374752a1",
@@ -2208,6 +2414,7 @@
       "renamed_to": null,
       "licence_number": "15009",
       "licence_valid_to": "2028-02-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshop.tours/coffeeshops/blue-sea/",
       "phone": null,
       "amenities": {
@@ -2303,7 +2510,16 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "facebook": "coffeeshopsams",
+        "x": "coffeeshopsams"
+      },
+      "socials_shared": [
+        "facebook",
+        "x"
+      ],
+      "website_live": true,
       "osm_id": "node/4544744786",
       "amsterdam_id": "266514049",
       "rating_avg": null,
@@ -2315,9 +2531,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "342d5b7d-83bb-493b-b36c-049d00c7770f",
@@ -2334,6 +2551,7 @@
       "renamed_to": null,
       "licence_number": "11832",
       "licence_valid_to": "2028-04-01",
+      "licence_renewal_pending": false,
       "website": "https://www.boerejongens.com",
       "phone": null,
       "amenities": {
@@ -2430,7 +2648,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/9039135755",
       "amsterdam_id": "266500731",
       "rating_avg": null,
@@ -2444,7 +2665,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "1d9efaff-3664-4f15-8d1c-770b2536e945",
@@ -2461,6 +2682,7 @@
       "renamed_to": null,
       "licence_number": "6904",
       "licence_valid_to": "2028-09-01",
+      "licence_renewal_pending": false,
       "website": "https://www.boerejongens.com/",
       "phone": null,
       "amenities": {
@@ -2556,7 +2778,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2814238934",
       "amsterdam_id": "266501688",
       "rating_avg": null,
@@ -2570,7 +2795,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "a89dcd67-9060-48a1-b735-4a560b7a21e2",
@@ -2587,6 +2812,7 @@
       "renamed_to": null,
       "licence_number": "9193",
       "licence_valid_to": "2026-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -2680,7 +2906,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2743670684",
       "amsterdam_id": "43673414194",
       "rating_avg": null,
@@ -2694,7 +2923,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "7274d5da-343a-4e06-b39d-af7d07541620",
@@ -2711,6 +2940,7 @@
       "renamed_to": null,
       "licence_number": "1475",
       "licence_valid_to": "2028-06-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -2804,7 +3034,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266501731",
       "rating_avg": null,
@@ -2815,7 +3048,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "bb95d3b6-5b73-4097-a8d4-7fc5ae67b7a3",
@@ -2832,6 +3065,7 @@
       "renamed_to": null,
       "licence_number": "18863",
       "licence_valid_to": "2027-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -2925,7 +3159,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "47400534406",
       "rating_avg": null,
@@ -2936,7 +3173,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "6e52d534-189b-4a6d-8f01-86dc2d483807",
@@ -2953,6 +3190,7 @@
       "renamed_to": null,
       "licence_number": "5020",
       "licence_valid_to": "2027-12-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshop.tours/coffeeshops/carmona/",
       "phone": null,
       "amenities": {
@@ -3049,7 +3287,17 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "coffeeshop_carmona",
+        "facebook": "coffeeshopsams",
+        "x": "coffeeshopsams"
+      },
+      "socials_shared": [
+        "facebook",
+        "x"
+      ],
+      "website_live": true,
       "osm_id": "node/2817535349",
       "amsterdam_id": "266512760",
       "rating_avg": null,
@@ -3061,9 +3309,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "5de41daa-8a18-4072-ba93-b4b1106c4c2c",
@@ -3080,6 +3329,7 @@
       "renamed_to": null,
       "licence_number": "5896",
       "licence_valid_to": "2028-07-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -3175,7 +3425,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "49434297306",
       "rating_avg": null,
@@ -3186,7 +3439,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "4d426ab1-2686-4920-94cf-8a89c7a0bd94",
@@ -3203,6 +3456,7 @@
       "renamed_to": null,
       "licence_number": "59",
       "licence_valid_to": "2029-04-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": "+31 20 6822548",
       "amenities": {},
@@ -3296,7 +3550,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2808998760",
       "amsterdam_id": "266502052",
       "rating_avg": null,
@@ -3310,7 +3567,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "aa673efb-ff07-46b7-990a-665f59730e93",
@@ -3327,6 +3584,7 @@
       "renamed_to": null,
       "licence_number": "8244",
       "licence_valid_to": "2028-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -3422,7 +3680,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "49314248751",
       "rating_avg": null,
@@ -3433,7 +3694,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "dcb7d5b9-76c5-4279-a9ce-0769a3580aad",
@@ -3450,6 +3711,7 @@
       "renamed_to": null,
       "licence_number": "18231",
       "licence_valid_to": "2027-02-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -3543,7 +3805,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "30234171152",
       "rating_avg": null,
@@ -3554,7 +3819,134 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "9c657193-9565-4967-a9d2-352830980a2e",
+      "slug": "galerie-coffeeshop-yoyo",
+      "city": "amsterdam",
+      "name": "Coffeeshop Yoyo",
+      "legal_name": "Galerie/Coffeeshop Yoyo",
+      "address": "Tweede Jan van der Heijdenstraat 79-H",
+      "postcode": "1074 XS",
+      "neighbourhood": "Oude Pijp",
+      "lat": 52.35633565307749,
+      "lng": 4.903124503359204,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "4954",
+      "licence_valid_to": "2026-08-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {
+        "terrace": true
+      },
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "03:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "03:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "03:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "03:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "50372415382",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "8c81feae-9df0-4645-b854-10a3a40c6528",
@@ -3571,6 +3963,7 @@
       "renamed_to": null,
       "licence_number": "12840",
       "licence_valid_to": "2027-09-01",
+      "licence_renewal_pending": false,
       "website": "https://www.katsu.nl/",
       "phone": null,
       "amenities": {
@@ -3667,7 +4060,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2817613328",
       "amsterdam_id": "266506202",
       "rating_avg": null,
@@ -3681,7 +4077,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "41d14699-53b4-4900-a11d-71af00cd0b39",
@@ -3698,6 +4094,7 @@
       "renamed_to": null,
       "licence_number": "4456",
       "licence_valid_to": "2027-05-31",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -3791,7 +4188,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266508712",
       "rating_avg": null,
@@ -3802,7 +4202,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "8119a52a-86bf-426d-88d9-81742e27ccad",
@@ -3819,6 +4219,7 @@
       "renamed_to": null,
       "licence_number": "15974",
       "licence_valid_to": "2027-07-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -3912,7 +4313,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "272394203",
       "rating_avg": null,
@@ -3923,7 +4327,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "a8fc9ec3-f3f9-429e-8912-174cccad326f",
@@ -3940,6 +4344,7 @@
       "renamed_to": null,
       "licence_number": "4898",
       "licence_valid_to": "2027-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -4035,7 +4440,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2506133344",
       "amsterdam_id": "266511161",
       "rating_avg": null,
@@ -4049,7 +4457,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "e712c596-2a4c-47a3-b33e-04362590bf2b",
@@ -4066,6 +4474,7 @@
       "renamed_to": null,
       "licence_number": "7715",
       "licence_valid_to": "2028-06-01",
+      "licence_renewal_pending": false,
       "website": "https://www.dampkring.amsterdam",
       "phone": "+31 20 427 6739",
       "amenities": {
@@ -4161,7 +4570,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2399746758",
       "amsterdam_id": "266507337",
       "rating_avg": null,
@@ -4175,7 +4587,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "c3d21a83-7c52-4f7e-87a1-5e1fb0c6e38e",
@@ -4192,6 +4604,7 @@
       "renamed_to": null,
       "licence_number": "15773",
       "licence_valid_to": "2029-02-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshophetballonnetje.nl/",
       "phone": null,
       "amenities": {
@@ -4288,7 +4701,13 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "coffeeshophetballonnetje",
+        "facebook": "coffeeshop.hetballonnetje"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2742803490",
       "amsterdam_id": "49314248980",
       "rating_avg": null,
@@ -4300,9 +4719,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "bb27f98a-f7db-4856-aa0c-fd98d1534fc6",
@@ -4319,6 +4739,7 @@
       "renamed_to": null,
       "licence_number": "13057",
       "licence_valid_to": "2028-01-01",
+      "licence_renewal_pending": false,
       "website": "https://dampkringcoffeeshopamsterdam.business.site/",
       "phone": null,
       "amenities": {},
@@ -4412,7 +4833,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/5040954429",
       "amsterdam_id": "266512321",
       "rating_avg": null,
@@ -4426,7 +4850,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "d92d521c-a537-4343-9856-d541efe66b6d",
@@ -4443,6 +4867,7 @@
       "renamed_to": null,
       "licence_number": "14368",
       "licence_valid_to": "2028-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -4536,7 +4961,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266500744",
       "rating_avg": null,
@@ -4547,7 +4975,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "8ab98323-4c0c-4357-b1f7-c8ad56072640",
@@ -4564,6 +4992,7 @@
       "renamed_to": null,
       "licence_number": "1468",
       "licence_valid_to": "2027-03-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshopdekade.nl/",
       "phone": "+31 20 673 8102",
       "amenities": {
@@ -4659,7 +5088,14 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "dekadeboutique",
+        "facebook": "dekadeboutique",
+        "tiktok": "koffieshopdekade"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2816951849",
       "amsterdam_id": "31262831439",
       "rating_avg": null,
@@ -4671,9 +5107,387 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
+        "hours": "amsterdam",
+        "socials": "venue-website"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "d733c27d-5be1-40cf-8ae9-af01f56bfab8",
+      "slug": "coffeeshop-de-kroon-twee",
+      "city": "amsterdam",
+      "name": "De Kroon Twee",
+      "legal_name": "Coffeeshop De Kroon Twee",
+      "address": "Oudebrugsteeg 26",
+      "postcode": "1012 JP",
+      "neighbourhood": "Burgwallen-Nieuwe Zijde",
+      "lat": 52.37598039268686,
+      "lng": 4.895993224354233,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "16146",
+      "licence_valid_to": "2026-07-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {},
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "19676762953",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "e499d3c7-718f-4f68-b2ed-5cecf7deab79",
+      "slug": "coffeeshop-de-republiek",
+      "city": "amsterdam",
+      "name": "De Republiek",
+      "legal_name": "Coffeeshop De Republiek",
+      "address": "Tweede Nassaustraat 1A",
+      "postcode": "1052 BJ",
+      "neighbourhood": "Staatsliedenbuurt",
+      "lat": 52.38215339022185,
+      "lng": 4.878593495085221,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "328",
+      "licence_valid_to": "2026-06-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {},
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "49340896603",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "f29ce772-c04b-401c-91bb-4eed7b12b5cf",
+      "slug": "coffeeshop-de-supermarkt",
+      "city": "amsterdam",
+      "name": "De Supermarkt",
+      "legal_name": "Coffeeshop De Supermarkt",
+      "address": "Frederik Hendrikstraat 69-H",
+      "postcode": "1052 HL",
+      "neighbourhood": "Frederik Hendrikbuurt",
+      "lat": 52.375796203787495,
+      "lng": 4.873761444433072,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "99",
+      "licence_valid_to": "2026-06-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {
+        "terrace": true
+      },
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "43673413888",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "99c79669-1186-4fb9-9274-8c37f7429118",
@@ -4690,6 +5504,7 @@
       "renamed_to": null,
       "licence_number": "2138",
       "licence_valid_to": "2028-01-01",
+      "licence_renewal_pending": false,
       "website": "https://tweedekamer.shop",
       "phone": null,
       "amenities": {
@@ -4785,7 +5600,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/3273681661",
       "amsterdam_id": "266512824",
       "rating_avg": null,
@@ -4799,7 +5617,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "8bdf0a9f-7f20-44d1-8d79-afc009adc2fa",
@@ -4816,6 +5634,7 @@
       "renamed_to": null,
       "licence_number": "13277",
       "licence_valid_to": "2028-07-01",
+      "licence_renewal_pending": false,
       "website": "https://coffeeshopdna.com",
       "phone": "+31 20 6648279",
       "amenities": {
@@ -4911,7 +5730,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/2816951830",
       "amsterdam_id": "266506386",
       "rating_avg": null,
@@ -4925,7 +5747,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "87c9a8cc-a971-4795-aff3-68e19dad191c",
@@ -4942,6 +5764,7 @@
       "renamed_to": null,
       "licence_number": "13340",
       "licence_valid_to": "2028-03-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -5037,7 +5860,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2826848381",
       "amsterdam_id": "266502760",
       "rating_avg": null,
@@ -5051,7 +5877,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "08cc2728-1aae-4013-920e-baad4f6d929a",
@@ -5068,6 +5894,7 @@
       "renamed_to": null,
       "licence_number": "15356",
       "licence_valid_to": "2028-06-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -5161,7 +5988,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "43673414513",
       "rating_avg": null,
@@ -5172,7 +6002,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "216b5b51-1f9c-4948-b518-beeb29212481",
@@ -5189,6 +6019,7 @@
       "renamed_to": null,
       "licence_number": "16593",
       "licence_valid_to": "2027-04-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": "+31 6 24304992",
       "amenities": {
@@ -5284,7 +6115,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2730037315",
       "amsterdam_id": "49314248807",
       "rating_avg": null,
@@ -5298,7 +6132,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "0ceaa739-6f42-44ee-acf4-784a6592dd1a",
@@ -5315,6 +6149,7 @@
       "renamed_to": null,
       "licence_number": "701",
       "licence_valid_to": "2028-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -5408,7 +6243,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/9023838211",
       "amsterdam_id": "266508430",
       "rating_avg": null,
@@ -5422,7 +6260,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "17160c4f-d640-4ba1-b551-cef45bbbd2a4",
@@ -5439,6 +6277,7 @@
       "renamed_to": null,
       "licence_number": "17776",
       "licence_valid_to": "2029-01-01",
+      "licence_renewal_pending": false,
       "website": "https://www.familyfirstamsterdam.com/",
       "phone": null,
       "amenities": {},
@@ -5522,7 +6361,10 @@
         []
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/9082002107",
       "amsterdam_id": "18603056329",
       "rating_avg": null,
@@ -5536,7 +6378,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "5e12bf6b-1bb2-47f8-a42f-79fee9b1cf63",
@@ -5553,6 +6395,7 @@
       "renamed_to": null,
       "licence_number": "443",
       "licence_valid_to": "2028-03-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -5646,7 +6489,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266509919",
       "rating_avg": null,
@@ -5657,7 +6503,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "0f4e675c-32b6-4473-8d7e-d0cb40f73946",
@@ -5674,6 +6520,7 @@
       "renamed_to": null,
       "licence_number": "3464",
       "licence_valid_to": "2028-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -5767,7 +6614,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2721820327",
       "amsterdam_id": "266514596",
       "rating_avg": null,
@@ -5781,7 +6631,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "3e06f26c-1dd5-49bf-93bf-8c29ed36965b",
@@ -5798,6 +6648,7 @@
       "renamed_to": null,
       "licence_number": "6922",
       "licence_valid_to": "2027-02-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -5893,7 +6744,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2725879840",
       "amsterdam_id": "266500822",
       "rating_avg": null,
@@ -5907,7 +6761,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "0dc3f1b2-7b58-4920-8e48-26de42d46b98",
@@ -5924,6 +6778,7 @@
       "renamed_to": null,
       "licence_number": "14403",
       "licence_valid_to": "2027-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -6017,7 +6872,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266507104",
       "rating_avg": null,
@@ -6028,7 +6886,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "af5e3b81-da97-4832-9709-eaccc168ee0f",
@@ -6045,6 +6903,7 @@
       "renamed_to": null,
       "licence_number": "12107",
       "licence_valid_to": "2027-03-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -6138,7 +6997,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266508675",
       "rating_avg": null,
@@ -6149,7 +7011,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "41ca9d91-2ecf-4986-b76c-2b5f4c6d1859",
@@ -6166,6 +7028,7 @@
       "renamed_to": null,
       "licence_number": "17804",
       "licence_valid_to": "2028-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -6259,7 +7122,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "20245486547",
       "rating_avg": null,
@@ -6270,7 +7136,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "9c631744-5015-4635-83b4-7c22afbf24df",
@@ -6287,6 +7153,7 @@
       "renamed_to": null,
       "licence_number": "9539",
       "licence_valid_to": "2028-04-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -6382,7 +7249,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2724826982",
       "amsterdam_id": "45256700926",
       "rating_avg": null,
@@ -6396,7 +7266,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "98031831-4293-446a-ac27-8ac4173d1fd0",
@@ -6413,6 +7283,7 @@
       "renamed_to": null,
       "licence_number": "7507",
       "licence_valid_to": "2028-04-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -6508,7 +7379,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/10839796643",
       "amsterdam_id": "10038280118",
       "rating_avg": null,
@@ -6522,7 +7396,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "99d38f09-cee0-4de7-8739-9cb03e4c25b2",
@@ -6539,6 +7413,7 @@
       "renamed_to": null,
       "licence_number": "3027",
       "licence_valid_to": "2028-04-01",
+      "licence_renewal_pending": false,
       "website": "https://www.greenhouse.org/",
       "phone": null,
       "amenities": {
@@ -6637,7 +7512,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/3273823061",
       "amsterdam_id": "44784729588",
       "rating_avg": null,
@@ -6651,7 +7529,134 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "56a3fea4-2090-4e86-94ee-af017e767454",
+      "slug": "green-place",
+      "city": "amsterdam",
+      "name": "Green Place",
+      "legal_name": "Green Place",
+      "address": "Kloveniersburgwal 4A",
+      "postcode": "1012 CT",
+      "neighbourhood": "Burgwallen-Oude Zijde",
+      "lat": 52.37209338525447,
+      "lng": 4.899296171379122,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "16226",
+      "licence_valid_to": "2026-08-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {
+        "terrace": true
+      },
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "584911844",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "30a2351a-ee16-4a25-bd2d-25b1a85e33ff",
@@ -6668,6 +7673,7 @@
       "renamed_to": null,
       "licence_number": "5740",
       "licence_valid_to": "2028-08-01",
+      "licence_renewal_pending": false,
       "website": "https://greenhousecoffeeshops.com/locations/green-house-pijp-coffeeshop",
       "phone": null,
       "amenities": {
@@ -6763,7 +7769,13 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "greenhousecoffeeshops",
+        "facebook": "greenhousecoffeeshops"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2817836795",
       "amsterdam_id": "266511482",
       "rating_avg": null,
@@ -6775,9 +7787,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "6b3d8b28-38a8-44e1-9ab5-a69e3f4dfe42",
@@ -6794,6 +7807,7 @@
       "renamed_to": null,
       "licence_number": "11800",
       "licence_valid_to": "2029-02-01",
+      "licence_renewal_pending": false,
       "website": "https://www.greyarea.nl/",
       "phone": null,
       "amenities": {},
@@ -6887,7 +7901,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/4785073316",
       "amsterdam_id": "266514404",
       "rating_avg": null,
@@ -6901,7 +7918,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "73326de9-1761-4244-9069-76af05466ea8",
@@ -6918,6 +7935,7 @@
       "renamed_to": null,
       "licence_number": "8441",
       "licence_valid_to": "2029-02-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -7011,7 +8029,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2729940481",
       "amsterdam_id": "266516255",
       "rating_avg": null,
@@ -7025,7 +8046,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "5ffbab8c-055f-444f-882e-5df0ca85bfb9",
@@ -7042,6 +8063,7 @@
       "renamed_to": null,
       "licence_number": "6801",
       "licence_valid_to": "2027-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -7137,7 +8159,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "43673414846",
       "rating_avg": null,
@@ -7148,7 +8173,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "cbd6105a-5799-4f4c-b1b2-1a241fc6ec12",
@@ -7165,6 +8190,7 @@
       "renamed_to": null,
       "licence_number": "16867",
       "licence_valid_to": "2027-07-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -7258,7 +8284,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2725662864",
       "amsterdam_id": "40625001082",
       "rating_avg": null,
@@ -7272,7 +8301,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "24251481-adf9-4b87-b1ba-68409adeea1e",
@@ -7289,6 +8318,7 @@
       "renamed_to": null,
       "licence_number": "16496",
       "licence_valid_to": "2027-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -7384,7 +8414,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2741083751",
       "amsterdam_id": "43673414239",
       "rating_avg": null,
@@ -7398,7 +8431,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "6c1a8bff-c231-4fbf-9d1a-5dd082138553",
@@ -7415,6 +8448,7 @@
       "renamed_to": null,
       "licence_number": "17587",
       "licence_valid_to": "2026-10-02",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -7508,7 +8542,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "46681169147",
       "rating_avg": null,
@@ -7519,7 +8556,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "28b98db8-bd0e-41ef-8d8c-ac6f7e6e2832",
@@ -7536,6 +8573,7 @@
       "renamed_to": null,
       "licence_number": "12064",
       "licence_valid_to": "2027-03-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -7629,7 +8667,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/11092306073",
       "amsterdam_id": "266514693",
       "rating_avg": null,
@@ -7643,7 +8684,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "6903ffb6-c548-4a9e-8c4e-91c0873b32a6",
@@ -7660,6 +8701,7 @@
       "renamed_to": null,
       "licence_number": "12065",
       "licence_valid_to": "2027-03-01",
+      "licence_renewal_pending": false,
       "website": "https://hunters-coffeeshop.com/locations/papaverweg-2/",
       "phone": null,
       "amenities": {},
@@ -7753,7 +8795,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/9081961245",
       "amsterdam_id": "266510991",
       "rating_avg": null,
@@ -7767,7 +8812,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "c075b100-7ca0-4bf5-9b3e-202a35b4b98a",
@@ -7784,6 +8829,7 @@
       "renamed_to": null,
       "licence_number": "12660",
       "licence_valid_to": "2027-03-01",
+      "licence_renewal_pending": false,
       "website": "https://hunters-coffeeshop.com/",
       "phone": null,
       "amenities": {
@@ -7880,7 +8926,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/2725878222",
       "amsterdam_id": "43673414606",
       "rating_avg": null,
@@ -7894,7 +8943,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "b7a3c830-9e48-4246-9402-1ab418491abe",
@@ -7911,6 +8960,7 @@
       "renamed_to": null,
       "licence_number": "12608",
       "licence_valid_to": "2027-03-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -8004,7 +9054,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/10589198689",
       "amsterdam_id": "266512780",
       "rating_avg": null,
@@ -8018,7 +9071,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "0ea4efe8-d642-4d42-9f7b-f4422246a417",
@@ -8035,6 +9088,7 @@
       "renamed_to": null,
       "licence_number": "6726",
       "licence_valid_to": "2028-05-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshopibiza.com/",
       "phone": "+31 20 223 2534",
       "amenities": {
@@ -8130,7 +9184,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/2817534208",
       "amsterdam_id": "266512396",
       "rating_avg": null,
@@ -8144,7 +9201,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "6395cd71-84c6-470b-a30e-384c3b3ce341",
@@ -8161,6 +9218,7 @@
       "renamed_to": null,
       "licence_number": "1929",
       "licence_valid_to": "2029-04-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -8256,7 +9314,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2721825212",
       "amsterdam_id": "49314248775",
       "rating_avg": null,
@@ -8270,7 +9331,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "eac3f4e6-4f7c-4985-ab0d-e9f8cedb79b8",
@@ -8287,6 +9348,7 @@
       "renamed_to": null,
       "licence_number": "17568",
       "licence_valid_to": "2029-03-31",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -8380,7 +9442,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "14348014204",
       "rating_avg": null,
@@ -8391,7 +9456,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "b06bcbfa-f151-4fef-8626-67ac1da7e549",
@@ -8408,6 +9473,7 @@
       "renamed_to": null,
       "licence_number": "2448",
       "licence_valid_to": "2029-08-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -8503,7 +9569,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2724220416",
       "amsterdam_id": "266501465",
       "rating_avg": null,
@@ -8517,7 +9586,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "db3fc811-6db4-4244-81c1-72ab60495832",
@@ -8534,6 +9603,7 @@
       "renamed_to": null,
       "licence_number": "3472",
       "licence_valid_to": "2029-08-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -8630,7 +9700,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2722212673",
       "amsterdam_id": "266504003",
       "rating_avg": null,
@@ -8644,7 +9717,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "7257ac84-a027-44f7-8bfc-0ed5adb6a47c",
@@ -8661,6 +9734,7 @@
       "renamed_to": null,
       "licence_number": "3994",
       "licence_valid_to": "2029-08-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -8756,7 +9830,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2721722609",
       "amsterdam_id": "266516277",
       "rating_avg": null,
@@ -8770,7 +9847,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "14314675-1628-480a-9fcd-722cf1601337",
@@ -8787,6 +9864,7 @@
       "renamed_to": null,
       "licence_number": "19525",
       "licence_valid_to": "2028-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": "+31 20 669 0620",
       "amenities": {},
@@ -8880,7 +9958,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/1538261143",
       "amsterdam_id": "46489901539",
       "rating_avg": null,
@@ -8894,7 +9975,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "8260869a-4a75-4d08-944f-3005513b84da",
@@ -8911,6 +9992,7 @@
       "renamed_to": null,
       "licence_number": "14821",
       "licence_valid_to": "2027-11-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshop.tours/coffeeshops/happy-days/",
       "phone": null,
       "amenities": {},
@@ -8919,6 +10001,15 @@
       "hours_weekly": null,
       "hours_source": null,
       "hours_updated_at": null,
+      "socials": {
+        "facebook": "coffeeshopsams",
+        "x": "coffeeshopsams"
+      },
+      "socials_shared": [
+        "facebook",
+        "x"
+      ],
+      "website_live": true,
       "osm_id": "node/2818221736",
       "amsterdam_id": "44760239943",
       "rating_avg": null,
@@ -8929,9 +10020,10 @@
         "status": "amsterdam",
         "website": "osm",
         "phone": "osm",
-        "amenities": "osm"
+        "amenities": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "5b3cfe51-06ca-428d-afc1-9115e41de7bd",
@@ -8948,6 +10040,7 @@
       "renamed_to": null,
       "licence_number": "3171",
       "licence_valid_to": "2027-08-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -9043,7 +10136,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "43673414666",
       "rating_avg": null,
@@ -9054,7 +10150,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "ea7b68cb-4c23-41fc-9387-6a0400b1ab32",
@@ -9071,6 +10167,7 @@
       "renamed_to": null,
       "licence_number": "7668",
       "licence_valid_to": "2028-06-01",
+      "licence_renewal_pending": false,
       "website": "https://thecoffeeshops.com",
       "phone": null,
       "amenities": {
@@ -9168,7 +10265,14 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "thecoffeeshopscom"
+      },
+      "socials_shared": [
+        "instagram"
+      ],
+      "website_live": true,
       "osm_id": "node/2811994743",
       "amsterdam_id": "46071548205",
       "rating_avg": null,
@@ -9180,9 +10284,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "ea071d63-2833-47ea-a673-1ca8304729d2",
@@ -9199,6 +10304,7 @@
       "renamed_to": null,
       "licence_number": "12238",
       "licence_valid_to": "2029-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -9292,7 +10398,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266510158",
       "rating_avg": null,
@@ -9303,7 +10412,132 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "d81b0625-b332-4078-893b-64b016ac77fe",
+      "slug": "mediterranee",
+      "city": "amsterdam",
+      "name": "Mediterranee",
+      "legal_name": "Mediterranee",
+      "address": "Spuistraat 80-H",
+      "postcode": "1012 TX",
+      "neighbourhood": "Burgwallen-Nieuwe Zijde",
+      "lat": 52.37559337256142,
+      "lng": 4.891547832564633,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "3622",
+      "licence_valid_to": "2026-07-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {},
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "266506922",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "6a4e0947-dde5-48a8-8512-2d0cb07256d6",
@@ -9320,6 +10554,7 @@
       "renamed_to": null,
       "licence_number": "16646",
       "licence_valid_to": "2026-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -9413,7 +10648,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/8712066315",
       "amsterdam_id": "3430906934",
       "rating_avg": null,
@@ -9427,7 +10665,132 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "21d99698-3c4d-4eac-93d0-e2d6520e07e0",
+      "slug": "coffeeshop-nagtegaal",
+      "city": "amsterdam",
+      "name": "Nagtegaal",
+      "legal_name": "Coffeeshop Nagtegaal",
+      "address": "Krugerplein 22-H",
+      "postcode": "1091 KZ",
+      "neighbourhood": "Transvaalbuurt",
+      "lat": 52.354028034180054,
+      "lng": 4.919325105852462,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "1113",
+      "licence_valid_to": "2026-07-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {},
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "266508246",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "7cefdbc4-e2a7-4f63-a4b3-3dec5f059b53",
@@ -9444,6 +10807,7 @@
       "renamed_to": null,
       "licence_number": "18931",
       "licence_valid_to": "2028-02-26",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -9537,7 +10901,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "42374181525",
       "rating_avg": null,
@@ -9548,7 +10915,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "f0a4f89e-ef44-4ee5-8c80-f6ddbfe57527",
@@ -9565,6 +10932,7 @@
       "renamed_to": null,
       "licence_number": "13685",
       "licence_valid_to": "2028-07-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -9661,7 +11029,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2722210188",
       "amsterdam_id": "46873507494",
       "rating_avg": null,
@@ -9675,7 +11046,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "e452c0e8-bab1-400c-bcb5-3b0a827bc05a",
@@ -9692,6 +11063,7 @@
       "renamed_to": null,
       "licence_number": "18823",
       "licence_valid_to": "2027-07-01",
+      "licence_renewal_pending": false,
       "website": "https://kooi.business.site/",
       "phone": null,
       "amenities": {},
@@ -9785,7 +11157,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/2725879124",
       "amsterdam_id": "39847823846",
       "rating_avg": null,
@@ -9799,7 +11174,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "a9c59efb-ec4f-40c7-ad15-fc33b925b5ec",
@@ -9816,6 +11191,7 @@
       "renamed_to": null,
       "licence_number": "6479",
       "licence_valid_to": "2026-09-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshop.tours/coffeeshops/nice-place/",
       "phone": null,
       "amenities": {},
@@ -9909,7 +11285,16 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "facebook": "coffeeshopsams",
+        "x": "coffeeshopsams"
+      },
+      "socials_shared": [
+        "facebook",
+        "x"
+      ],
+      "website_live": true,
       "osm_id": "node/2507144203",
       "amsterdam_id": "266502458",
       "rating_avg": null,
@@ -9921,9 +11306,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "54ad0062-a876-47e4-9564-ab7308030a3d",
@@ -9940,6 +11326,7 @@
       "renamed_to": null,
       "licence_number": "19547",
       "licence_valid_to": "2028-05-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -10033,7 +11420,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2743100994",
       "amsterdam_id": "46604671965",
       "rating_avg": null,
@@ -10047,7 +11437,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "e01ff7fe-7d50-4e54-a707-09269921b502",
@@ -10064,6 +11454,7 @@
       "renamed_to": null,
       "licence_number": "17266",
       "licence_valid_to": "2028-11-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -10157,7 +11548,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/12729261516",
       "amsterdam_id": "9820996863",
       "rating_avg": null,
@@ -10171,7 +11565,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "dd050653-35e5-4f6f-9ac3-3de8e91aec8a",
@@ -10188,6 +11582,7 @@
       "renamed_to": null,
       "licence_number": "944",
       "licence_valid_to": "2028-07-01",
+      "licence_renewal_pending": false,
       "website": "https://coffeeshop-pacific.business.site/",
       "phone": "+31 20 671 0318",
       "amenities": {},
@@ -10281,7 +11676,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/3899090812",
       "amsterdam_id": "266505317",
       "rating_avg": null,
@@ -10295,7 +11693,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "a1528030-b31c-468e-a39f-5b175c1a8a0a",
@@ -10312,6 +11710,7 @@
       "renamed_to": null,
       "licence_number": "19673",
       "licence_valid_to": "2029-02-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshoppapillonamsterdam.nl",
       "phone": null,
       "amenities": {
@@ -10407,7 +11806,14 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "papillon.coffeeshop.amsterdam",
+        "facebook": "CoffeeshopPapillonAmsterdam",
+        "email": "info@papillonamsterdam.nl"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2817716490",
       "amsterdam_id": "47233189020",
       "rating_avg": null,
@@ -10419,9 +11825,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "fc655e2f-4e7d-4469-b321-396e73bacc1a",
@@ -10438,6 +11845,7 @@
       "renamed_to": null,
       "licence_number": "1702",
       "licence_valid_to": "2029-07-01",
+      "licence_renewal_pending": false,
       "website": "https://paradoxcoffeeshop.com",
       "phone": "+31 20 623 5639",
       "amenities": {},
@@ -10531,7 +11939,14 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "paradox.coffeeshop",
+        "facebook": "paradoxcoffeeshop",
+        "youtube": "UCTH6SWTRsubTfCVnslz-WNg"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/1289051062",
       "amsterdam_id": "266505601",
       "rating_avg": null,
@@ -10543,9 +11958,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "cb81f3c6-c280-4525-9833-599736a2a329",
@@ -10562,6 +11978,7 @@
       "renamed_to": null,
       "licence_number": "9158",
       "licence_valid_to": "2027-04-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -10655,7 +12072,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266509479",
       "rating_avg": null,
@@ -10666,7 +12086,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "c5a866db-7259-4b97-881b-1dbb58b71000",
@@ -10683,6 +12103,7 @@
       "renamed_to": null,
       "licence_number": "3861",
       "licence_valid_to": "2028-04-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -10778,7 +12199,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266510898",
       "rating_avg": null,
@@ -10789,7 +12213,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "964e03b5-3040-4cfd-8d6c-7f94ccad111b",
@@ -10806,6 +12230,7 @@
       "renamed_to": null,
       "licence_number": "19414",
       "licence_valid_to": "2028-05-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshop-popeye.nl",
       "phone": null,
       "amenities": {
@@ -10901,7 +12326,13 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "popeyecoffeeshop",
+        "email": "shop@coffeeshop-popeye.nl"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/558302941",
       "amsterdam_id": "45807467813",
       "rating_avg": null,
@@ -10913,9 +12344,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "4a10a587-8156-4b91-adb3-1202816fd6f3",
@@ -10932,6 +12364,7 @@
       "renamed_to": null,
       "licence_number": "11530",
       "licence_valid_to": "2028-09-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -11025,7 +12458,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266504862",
       "rating_avg": null,
@@ -11036,7 +12472,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "942dc677-378f-40b4-8386-09ff315e956e",
@@ -11053,6 +12489,7 @@
       "renamed_to": null,
       "licence_number": "18740",
       "licence_valid_to": "2027-11-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshopdepijp.amsterdam",
       "phone": null,
       "amenities": {
@@ -11148,7 +12585,12 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "coffeeshopdepijp.amsterdam"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2817516105",
       "amsterdam_id": "37767701644",
       "rating_avg": null,
@@ -11160,9 +12602,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "a4547c48-7390-478d-96e3-2172f3cb2a74",
@@ -11179,6 +12622,7 @@
       "renamed_to": null,
       "licence_number": "3564",
       "licence_valid_to": "2027-06-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -11274,7 +12718,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "43673414530",
       "rating_avg": null,
@@ -11285,7 +12732,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "3614d0dd-2bea-4550-8b6a-b444d414fdce",
@@ -11302,6 +12749,7 @@
       "renamed_to": null,
       "licence_number": "12487",
       "licence_valid_to": "2029-01-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshop-relax.nl/",
       "phone": null,
       "amenities": {},
@@ -11385,7 +12833,22 @@
         []
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "coffeeshoprelax",
+        "facebook": "CoffeeshopRelax",
+        "x": "coffeeshoprelax",
+        "youtube": "UCZFhC_wheDpWOaPQHgwd0hg",
+        "email": "info@coffeeshop-relax.nl"
+      },
+      "socials_shared": [
+        "instagram",
+        "facebook",
+        "x",
+        "youtube",
+        "email"
+      ],
+      "website_live": true,
       "osm_id": "node/460478679",
       "amsterdam_id": "266510220",
       "rating_avg": null,
@@ -11397,9 +12860,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "e14c8f3c-6c28-4165-9f1a-279cee1ed29f",
@@ -11416,6 +12880,7 @@
       "renamed_to": null,
       "licence_number": "17701",
       "licence_valid_to": "2028-09-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshop-relax.nl",
       "phone": null,
       "amenities": {
@@ -11511,7 +12976,22 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "coffeeshoprelax",
+        "facebook": "CoffeeshopRelax",
+        "x": "coffeeshoprelax",
+        "youtube": "UCZFhC_wheDpWOaPQHgwd0hg",
+        "email": "info@coffeeshop-relax.nl"
+      },
+      "socials_shared": [
+        "instagram",
+        "facebook",
+        "x",
+        "youtube",
+        "email"
+      ],
+      "website_live": true,
       "osm_id": "node/2721299940",
       "amsterdam_id": "17095168737",
       "rating_avg": null,
@@ -11523,9 +13003,135 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "140558e1-6a8e-41e3-b98a-6f60f7aa8077",
+      "slug": "resin",
+      "city": "amsterdam",
+      "name": "Resin",
+      "legal_name": "Resin",
+      "address": "Hekelveld 7A",
+      "postcode": "1012 SN",
+      "neighbourhood": "Burgwallen-Nieuwe Zijde",
+      "lat": 52.3777752897221,
+      "lng": 4.89535652724909,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "9068",
+      "licence_valid_to": "2026-07-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {},
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "266504754",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "547f1868-7c46-4bfe-a2ae-62d704dc8b07",
@@ -11542,6 +13148,7 @@
       "renamed_to": null,
       "licence_number": "12091",
       "licence_valid_to": "2029-06-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -11637,7 +13244,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "43673413866",
       "rating_avg": null,
@@ -11648,7 +13258,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "bc22ca68-0605-432b-b4ed-6232382dcb1c",
@@ -11665,6 +13275,7 @@
       "renamed_to": null,
       "licence_number": "18194",
       "licence_valid_to": "2026-11-01",
+      "licence_renewal_pending": false,
       "website": "https://coffeeshopriskybusiness.nl/",
       "phone": null,
       "amenities": {},
@@ -11758,7 +13369,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/2808851953",
       "amsterdam_id": "27477019012",
       "rating_avg": null,
@@ -11772,7 +13386,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "785c8396-83e2-44e6-8cb1-a0285273e0b7",
@@ -11789,6 +13403,7 @@
       "renamed_to": null,
       "licence_number": "13694",
       "licence_valid_to": "2028-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -11885,7 +13500,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/251171043",
       "amsterdam_id": "46873507573",
       "rating_avg": null,
@@ -11899,7 +13517,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "654d98bb-2d7f-47a7-b17c-829f23b1dfc5",
@@ -11916,6 +13534,7 @@
       "renamed_to": null,
       "licence_number": "10759",
       "licence_valid_to": "2028-08-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -12011,7 +13630,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/538534956",
       "amsterdam_id": "47762992701",
       "rating_avg": null,
@@ -12025,7 +13647,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "14f8460e-2c99-4256-9573-0f8910ac355b",
@@ -12042,6 +13664,7 @@
       "renamed_to": null,
       "licence_number": "13781",
       "licence_valid_to": "2028-10-01",
+      "licence_renewal_pending": false,
       "website": "https://roots-coffeeshop.nl/locaties/amsterdam-zuidoost/",
       "phone": null,
       "amenities": {},
@@ -12135,7 +13758,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/8234792078",
       "amsterdam_id": "266501533",
       "rating_avg": null,
@@ -12149,7 +13775,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "95cd66e1-67fc-4527-b48e-7a33d90abf71",
@@ -12166,6 +13792,7 @@
       "renamed_to": null,
       "licence_number": "10277",
       "licence_valid_to": "2027-01-01",
+      "licence_renewal_pending": false,
       "website": "http://coffeeshoproxy.nl/",
       "phone": null,
       "amenities": {
@@ -12261,7 +13888,12 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "coffeeshoproxy"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2817512888",
       "amsterdam_id": "43673414202",
       "rating_avg": null,
@@ -12273,9 +13905,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "63e26bb3-6851-4fef-8dd8-585b39a98535",
@@ -12292,6 +13925,7 @@
       "renamed_to": null,
       "licence_number": "367",
       "licence_valid_to": "2029-08-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -12387,7 +14021,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "50372415378",
       "rating_avg": null,
@@ -12398,7 +14035,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "f225db61-a2d2-4824-b881-37cfc0884566",
@@ -12415,6 +14052,7 @@
       "renamed_to": null,
       "licence_number": "14307",
       "licence_valid_to": "2026-11-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -12508,7 +14146,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "272385874",
       "rating_avg": null,
@@ -12519,7 +14160,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "d1708b60-d9f4-407b-9ba3-08306911c607",
@@ -12536,6 +14177,7 @@
       "renamed_to": null,
       "licence_number": "14977",
       "licence_valid_to": "2027-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -12631,7 +14273,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2721519223",
       "amsterdam_id": "43673414690",
       "rating_avg": null,
@@ -12645,7 +14290,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "f5ee04e3-5453-435e-9628-e3fe358fdb61",
@@ -12662,6 +14307,7 @@
       "renamed_to": null,
       "licence_number": "5927",
       "licence_valid_to": "2027-03-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -12755,7 +14401,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2809576572",
       "amsterdam_id": "48389605428",
       "rating_avg": null,
@@ -12769,7 +14418,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "22bdb3f0-4398-41bc-80f6-1b6dc281a0df",
@@ -12786,6 +14435,7 @@
       "renamed_to": null,
       "licence_number": "6235",
       "licence_valid_to": "2028-06-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshopsiberie.nl",
       "phone": null,
       "amenities": {
@@ -12884,7 +14534,14 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "thecoffeeshopscom"
+      },
+      "socials_shared": [
+        "instagram"
+      ],
+      "website_live": true,
       "osm_id": "node/2399748452",
       "amsterdam_id": "266512040",
       "rating_avg": null,
@@ -12896,9 +14553,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "01abe054-1ce7-43f1-b8ef-420e78946d22",
@@ -12915,6 +14573,7 @@
       "renamed_to": null,
       "licence_number": "1574",
       "licence_valid_to": "2027-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -13010,7 +14669,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "44000020423",
       "rating_avg": null,
@@ -13021,7 +14683,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "b368adaa-d0d7-4d85-8092-5aa88c51e5d2",
@@ -13038,6 +14700,7 @@
       "renamed_to": null,
       "licence_number": "14232",
       "licence_valid_to": "2026-12-11",
+      "licence_renewal_pending": false,
       "website": "https://coffeeshopsloterdijk.com",
       "phone": "+31 6 55955400",
       "amenities": {},
@@ -13131,7 +14794,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/11999135774",
       "amsterdam_id": "266515028",
       "rating_avg": null,
@@ -13145,7 +14811,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "1ce1d983-c1a3-4449-bd4f-5cd60dac8864",
@@ -13162,6 +14828,7 @@
       "renamed_to": null,
       "licence_number": "12553",
       "licence_valid_to": "2027-02-01",
+      "licence_renewal_pending": false,
       "website": "https://smokey.nl/",
       "phone": null,
       "amenities": {
@@ -13257,7 +14924,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2725878856",
       "amsterdam_id": "43673414486",
       "rating_avg": null,
@@ -13271,7 +14941,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "1480392f-fdf0-411f-ac46-15f43d7de1fd",
@@ -13288,6 +14958,7 @@
       "renamed_to": null,
       "licence_number": "9522",
       "licence_valid_to": "2028-06-01",
+      "licence_renewal_pending": false,
       "website": "http://coffeeshopsolo.nl",
       "phone": "+31 20 4200428",
       "amenities": {},
@@ -13351,7 +15022,13 @@
         []
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "solo_amsterdam",
+        "facebook": "coffeeshopsolo"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2725748640",
       "amsterdam_id": "46021070653",
       "rating_avg": null,
@@ -13363,9 +15040,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "8adb1929-91fd-43b0-9b9f-3a5672aed5d7",
@@ -13382,6 +15060,7 @@
       "renamed_to": null,
       "licence_number": "12156",
       "licence_valid_to": "2027-10-01",
+      "licence_renewal_pending": false,
       "website": "https://coffeeshopstones.nl/",
       "phone": "+31 20 671 5370",
       "amenities": {
@@ -13478,7 +15157,15 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "coffeeshopstones",
+        "facebook": "Coffeeshopstones",
+        "x": "stones_amst",
+        "youtube": "UCipqbSWdusjE8L3Y_FgxQzw"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2506629001",
       "amsterdam_id": "266502172",
       "rating_avg": null,
@@ -13490,9 +15177,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "a14c67bb-2511-400a-95ca-b370ae4f8a99",
@@ -13509,6 +15197,7 @@
       "renamed_to": null,
       "licence_number": "16271",
       "licence_valid_to": "2026-09-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -13604,7 +15293,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/4453223381",
       "amsterdam_id": "50372416148",
       "rating_avg": null,
@@ -13618,7 +15310,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "2903f48a-d63c-48a7-a6af-8fc5342517c7",
@@ -13635,6 +15327,7 @@
       "renamed_to": null,
       "licence_number": "18431",
       "licence_valid_to": "2027-05-01",
+      "licence_renewal_pending": false,
       "website": "https://coffeeshopsuperfly.nl/location/amsterdam",
       "phone": null,
       "amenities": {
@@ -13730,7 +15423,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2817854636",
       "amsterdam_id": "31885970696",
       "rating_avg": null,
@@ -13744,7 +15440,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "456d506f-54a8-4c81-80c9-1a6f232db246",
@@ -13761,6 +15457,7 @@
       "renamed_to": null,
       "licence_number": "12035",
       "licence_valid_to": "2029-05-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -13856,7 +15553,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/524111724",
       "amsterdam_id": "43673414154",
       "rating_avg": null,
@@ -13870,7 +15570,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "d04ebae2-d38f-4ad3-a3a6-34afdcaabf45",
@@ -13887,6 +15587,7 @@
       "renamed_to": null,
       "licence_number": "11529",
       "licence_valid_to": "2028-09-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": "+31 20 622 6998",
       "amenities": {
@@ -13982,7 +15683,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2743668776",
       "amsterdam_id": "47762992697",
       "rating_avg": null,
@@ -13996,23 +15700,24 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
-      "id": "8dc97f92-ccfa-469c-81f1-7bf64874c3bd",
+      "id": "c5e1ac06-dcc5-423e-b3b9-d0073e5b71c9",
       "slug": "terps-army",
       "city": "amsterdam",
       "name": "Terps Army",
       "legal_name": "Terps Army",
-      "address": "Zieseniskade 22-H",
-      "postcode": "1017 RT",
-      "neighbourhood": "De Weteringschans",
-      "lat": 52.36167602888036,
-      "lng": 4.886242048544769,
+      "address": "Nieuwe Nieuwstraat 32C",
+      "postcode": "1012 NH",
+      "neighbourhood": "Burgwallen-Nieuwe Zijde",
+      "lat": 52.37535918112024,
+      "lng": 4.893577025225443,
       "status": "open",
       "renamed_to": null,
-      "licence_number": "17548",
-      "licence_valid_to": "2028-07-01",
+      "licence_number": "16043",
+      "licence_valid_to": "2026-07-01",
+      "licence_renewal_pending": true,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -14106,7 +15811,135 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "28386362597",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "8dc97f92-ccfa-469c-81f1-7bf64874c3bd",
+      "slug": "terps-army-de-weteringschans",
+      "city": "amsterdam",
+      "name": "Terps Army",
+      "legal_name": "Terps Army",
+      "address": "Zieseniskade 22-H",
+      "postcode": "1017 RT",
+      "neighbourhood": "De Weteringschans",
+      "lat": 52.36167602888036,
+      "lng": 4.886242048544769,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "17548",
+      "licence_valid_to": "2028-07-01",
+      "licence_renewal_pending": false,
+      "website": null,
+      "phone": null,
+      "amenities": {},
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "49314248967",
       "rating_avg": null,
@@ -14117,7 +15950,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "58e87ad3-9828-40b9-969e-2896769ffc43",
@@ -14134,6 +15967,7 @@
       "renamed_to": null,
       "licence_number": "18541",
       "licence_valid_to": "2027-02-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -14229,7 +16063,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "47762992785",
       "rating_avg": null,
@@ -14240,7 +16077,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "0a4c33b6-fffc-4b81-84ca-ecf6c29fec58",
@@ -14257,6 +16094,7 @@
       "renamed_to": null,
       "licence_number": "16795",
       "licence_valid_to": "2027-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -14352,7 +16190,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "43673414352",
       "rating_avg": null,
@@ -14363,7 +16204,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "8b0c74ca-0d5c-485e-adc1-144ce4de814c",
@@ -14380,6 +16221,7 @@
       "renamed_to": null,
       "licence_number": "10893",
       "licence_valid_to": "2028-04-01",
+      "licence_renewal_pending": false,
       "website": "https://www.theborder.nl/",
       "phone": "+31 20 642 0681",
       "amenities": {},
@@ -14473,7 +16315,14 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "theborderamsterdam",
+        "facebook": "theborderamsterdam",
+        "email": "info@theborder.nl"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/1595360510",
       "amsterdam_id": "44353280330",
       "rating_avg": null,
@@ -14485,9 +16334,262 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
+        "hours": "amsterdam",
+        "socials": "venue-website"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "0ff8395b-2729-4f87-afa0-bda81c278d55",
+      "slug": "the-bulldog",
+      "city": "amsterdam",
+      "name": "The Bulldog",
+      "legal_name": "The Bulldog",
+      "address": "Leidseplein 17A",
+      "postcode": "1017 PS",
+      "neighbourhood": "De Weteringschans",
+      "lat": 52.363946341987955,
+      "lng": 4.883280102673144,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "2490",
+      "licence_valid_to": "2026-07-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {},
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "266515174",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
+    },
+    {
+      "id": "a314e55f-575b-402d-939f-70558e31c867",
+      "slug": "the-bulldog-b-v-burgwallen-oude-zijde",
+      "city": "amsterdam",
+      "name": "The Bulldog",
+      "legal_name": "The Bulldog B.V.",
+      "address": "Oudezijds Voorburgwal 220",
+      "postcode": "1012 GJ",
+      "neighbourhood": "Burgwallen-Oude Zijde",
+      "lat": 52.37251215081358,
+      "lng": 4.896237213715902,
+      "status": "open",
+      "renamed_to": null,
+      "licence_number": "3034",
+      "licence_valid_to": "2026-06-01",
+      "licence_renewal_pending": true,
+      "website": null,
+      "phone": null,
+      "amenities": {
+        "terrace": true
+      },
+      "hours_licensed": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_actual": null,
+      "hours_weekly": [
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ],
+        [
+          {
+            "from": "07:00",
+            "to": "01:00"
+          }
+        ]
+      ],
+      "hours_source": "licence",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
+      "osm_id": null,
+      "amsterdam_id": "50372415386",
+      "rating_avg": null,
+      "rating_count": 0,
+      "sources": {
+        "name": "amsterdam",
+        "address": "amsterdam",
+        "status": "amsterdam",
+        "hours": "amsterdam"
+      },
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "2323130f-6524-4e52-8ff8-df16150dd797",
@@ -14504,6 +16606,7 @@
       "renamed_to": null,
       "licence_number": "12444",
       "licence_valid_to": "2029-06-01",
+      "licence_renewal_pending": false,
       "website": "https://www.thebulldog.com/the-bulldog-port-26",
       "phone": null,
       "amenities": {
@@ -14599,7 +16702,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/5414831892",
       "amsterdam_id": "50372416099",
       "rating_avg": null,
@@ -14613,7 +16719,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "b2f8f4f3-87ff-4d87-aac5-520ec1e76884",
@@ -14630,6 +16736,7 @@
       "renamed_to": null,
       "licence_number": "8500",
       "licence_valid_to": "2029-01-01",
+      "licence_renewal_pending": false,
       "website": "https://thebulldog.com/locations/coffeeshops/the-bulldog-rockshop/",
       "phone": null,
       "amenities": {
@@ -14726,7 +16833,22 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "thebulldogamsterdam",
+        "facebook": "TheBulldog1975",
+        "tiktok": "thebulldog.com",
+        "youtube": "UCevKFGq2maMBes__t6SktEg",
+        "email": "info@thebulldog.com"
+      },
+      "socials_shared": [
+        "instagram",
+        "facebook",
+        "tiktok",
+        "youtube",
+        "email"
+      ],
+      "website_live": true,
       "osm_id": "node/2721575560",
       "amsterdam_id": "49314248755",
       "rating_avg": null,
@@ -14738,9 +16860,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "7ea57968-d364-4721-9398-2e30a1df8c64",
@@ -14757,6 +16880,7 @@
       "renamed_to": null,
       "licence_number": "14770",
       "licence_valid_to": "2027-05-01",
+      "licence_renewal_pending": false,
       "website": "https://thebulldog.com/locations/coffeeshops/the-bulldog-the-first/",
       "phone": null,
       "amenities": {
@@ -14852,7 +16976,22 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "instagram": "thebulldogamsterdam",
+        "facebook": "TheBulldog1975",
+        "tiktok": "thebulldog.com",
+        "youtube": "UCevKFGq2maMBes__t6SktEg",
+        "email": "info@thebulldog.com"
+      },
+      "socials_shared": [
+        "instagram",
+        "facebook",
+        "tiktok",
+        "youtube",
+        "email"
+      ],
+      "website_live": true,
       "osm_id": "node/2724286155",
       "amsterdam_id": "38727246006",
       "rating_avg": null,
@@ -14864,9 +17003,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "osm"
+        "hours": "osm",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "b412df1f-0bf2-44a2-826f-ef2f1f6ce5f9",
@@ -14883,6 +17023,7 @@
       "renamed_to": null,
       "licence_number": "12329",
       "licence_valid_to": "2026-09-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -14978,7 +17119,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2725878880",
       "amsterdam_id": "43673414125",
       "rating_avg": null,
@@ -14992,7 +17136,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "7cca4c4b-c83c-4580-8148-67378339b5d4",
@@ -15009,6 +17153,7 @@
       "renamed_to": null,
       "licence_number": "15041",
       "licence_valid_to": "2029-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -15102,7 +17247,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "49394159006",
       "rating_avg": null,
@@ -15113,7 +17261,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "a077ac62-0be9-4457-8609-4eba60133293",
@@ -15130,6 +17278,7 @@
       "renamed_to": null,
       "licence_number": "16253",
       "licence_valid_to": "2026-09-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -15223,7 +17372,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2729938504",
       "amsterdam_id": "822709221",
       "rating_avg": null,
@@ -15237,7 +17389,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "a5e016ed-8cc0-4850-a899-adf92c39dce7",
@@ -15254,6 +17406,7 @@
       "renamed_to": null,
       "licence_number": "12730",
       "licence_valid_to": "2027-06-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -15347,7 +17500,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266500697",
       "rating_avg": null,
@@ -15358,7 +17514,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "e3a84635-c220-4d52-9058-8463da6db798",
@@ -15375,6 +17531,7 @@
       "renamed_to": null,
       "licence_number": "16416",
       "licence_valid_to": "2026-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -15470,7 +17627,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "43673414221",
       "rating_avg": null,
@@ -15481,7 +17641,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "ebcf0518-f43f-4fe7-a545-6c6c5748d2bf",
@@ -15498,6 +17658,7 @@
       "renamed_to": null,
       "licence_number": "18994",
       "licence_valid_to": "2027-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -15593,7 +17754,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "44000020419",
       "rating_avg": null,
@@ -15604,7 +17768,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "dd95a003-8089-4080-9eeb-69d08be1c041",
@@ -15621,6 +17785,7 @@
       "renamed_to": null,
       "licence_number": "19323",
       "licence_valid_to": "2028-01-01",
+      "licence_renewal_pending": false,
       "website": "https://www.theoldchurch.amsterdam",
       "phone": null,
       "amenities": {},
@@ -15714,7 +17879,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/5643369136",
       "amsterdam_id": "45256706276",
       "rating_avg": null,
@@ -15728,7 +17896,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "05c82ac9-a3ac-41ee-b620-03e3f143b37f",
@@ -15745,6 +17913,7 @@
       "renamed_to": null,
       "licence_number": "10744",
       "licence_valid_to": "2027-03-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -15838,7 +18007,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266515093",
       "rating_avg": null,
@@ -15849,7 +18021,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "a322382b-4fb5-4743-95fb-93e80d6f6e6d",
@@ -15866,6 +18038,7 @@
       "renamed_to": null,
       "licence_number": "18730",
       "licence_valid_to": "2027-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -15959,7 +18132,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/12073756871",
       "amsterdam_id": "37667000213",
       "rating_avg": null,
@@ -15973,7 +18149,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "79a6a67a-c4c4-4f92-b682-0cf023222eaf",
@@ -15990,6 +18166,7 @@
       "renamed_to": null,
       "licence_number": "8822",
       "licence_valid_to": "2027-01-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -16085,7 +18262,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266506776",
       "rating_avg": null,
@@ -16096,7 +18276,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "be269b4b-b5f9-48b2-8e87-7f695fd84bbd",
@@ -16113,6 +18293,7 @@
       "renamed_to": null,
       "licence_number": "5979",
       "licence_valid_to": "2028-10-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -16210,7 +18391,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/3088861486",
       "amsterdam_id": "47762992720",
       "rating_avg": null,
@@ -16224,7 +18408,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "3e670311-5c49-4073-81e2-afdaf69aed25",
@@ -16241,6 +18425,7 @@
       "renamed_to": null,
       "licence_number": "19166",
       "licence_valid_to": "2028-02-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -16336,7 +18521,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/4438891989",
       "amsterdam_id": "44512695407",
       "rating_avg": null,
@@ -16350,7 +18538,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "26522e8e-12b7-4912-ad8f-4f67f2a2753a",
@@ -16367,6 +18555,7 @@
       "renamed_to": null,
       "licence_number": "15117",
       "licence_valid_to": "2027-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -16462,7 +18651,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2399748068",
       "amsterdam_id": "44000020405",
       "rating_avg": null,
@@ -16476,7 +18668,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "3fcef262-f58e-4427-a05c-35c98fb1be14",
@@ -16493,6 +18685,7 @@
       "renamed_to": null,
       "licence_number": "11467",
       "licence_valid_to": "2028-12-01",
+      "licence_renewal_pending": false,
       "website": "https://thestud.nl/",
       "phone": null,
       "amenities": {},
@@ -16586,7 +18779,13 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {
+        "facebook": "CoffeeshopTheStud",
+        "email": "info@thestud.nl"
+      },
+      "socials_shared": [],
+      "website_live": true,
       "osm_id": "node/2830041149",
       "amsterdam_id": "14312145061",
       "rating_avg": null,
@@ -16598,9 +18797,10 @@
         "website": "osm",
         "phone": "osm",
         "amenities": "osm",
-        "hours": "amsterdam"
+        "hours": "amsterdam",
+        "socials": "venue-website"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "e44ffed9-bc62-4f64-ae6a-b67d673137b7",
@@ -16617,6 +18817,7 @@
       "renamed_to": null,
       "licence_number": "10111",
       "licence_valid_to": "2028-07-01",
+      "licence_renewal_pending": false,
       "website": "https://www.coffeeshop.tours/coffeeshops/topweazle/",
       "phone": null,
       "amenities": {},
@@ -16710,7 +18911,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": false,
       "osm_id": "node/2818224706",
       "amsterdam_id": "266501734",
       "rating_avg": null,
@@ -16724,7 +18928,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "ba78ad23-77eb-453c-94cb-46f0dbe088da",
@@ -16741,6 +18945,7 @@
       "renamed_to": null,
       "licence_number": "10510",
       "licence_valid_to": "2027-06-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -16834,7 +19039,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2826849068",
       "amsterdam_id": "266504511",
       "rating_avg": null,
@@ -16848,7 +19056,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "db54786c-f5de-480c-ab58-f03db1e4d49a",
@@ -16865,6 +19073,7 @@
       "renamed_to": null,
       "licence_number": "8019",
       "licence_valid_to": "2029-07-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -16960,7 +19169,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "49434297310",
       "rating_avg": null,
@@ -16971,7 +19183,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "3655858f-2d29-4c92-9f95-b48043a01355",
@@ -16988,6 +19200,7 @@
       "renamed_to": null,
       "licence_number": "11181",
       "licence_valid_to": "2028-05-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -17083,7 +19296,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/4737767822",
       "amsterdam_id": "266509631",
       "rating_avg": null,
@@ -17097,7 +19313,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "e1e87098-8604-4ba8-b815-8523ca3301cc",
@@ -17114,6 +19330,7 @@
       "renamed_to": null,
       "licence_number": "1962",
       "licence_valid_to": "2029-05-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": "+31 20 624 6871",
       "amenities": {
@@ -17212,7 +19429,10 @@
         ]
       ],
       "hours_source": "osm",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/3274483361",
       "amsterdam_id": "49314248757",
       "rating_avg": null,
@@ -17226,7 +19446,7 @@
         "amenities": "osm",
         "hours": "osm"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "426636bd-0fb0-4f0a-87ec-345ccb7dc9a4",
@@ -17243,6 +19463,7 @@
       "renamed_to": null,
       "licence_number": "16510",
       "licence_valid_to": "2027-06-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {
@@ -17338,7 +19559,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2817834221",
       "amsterdam_id": "33534572110",
       "rating_avg": null,
@@ -17352,7 +19576,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "98f9738d-dddd-4a22-a19b-466e7760798d",
@@ -17369,6 +19593,7 @@
       "renamed_to": null,
       "licence_number": "16685",
       "licence_valid_to": "2027-05-31",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -17462,7 +19687,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/2348145627",
       "amsterdam_id": "3651680353",
       "rating_avg": null,
@@ -17476,7 +19704,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "f9995285-e3e6-40dc-b4b1-a6dff19aa7e2",
@@ -17493,6 +19721,7 @@
       "renamed_to": null,
       "licence_number": "19694",
       "licence_valid_to": "2029-03-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -17586,7 +19815,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": "node/9011995709",
       "amsterdam_id": "47400562558",
       "rating_avg": null,
@@ -17600,7 +19832,7 @@
         "amenities": "osm",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "1bffbb05-7b08-4633-a831-a79462dcae54",
@@ -17617,6 +19849,7 @@
       "renamed_to": null,
       "licence_number": "19023",
       "licence_valid_to": "2028-05-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -17710,7 +19943,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "48876750345",
       "rating_avg": null,
@@ -17721,7 +19957,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     },
     {
       "id": "7ddda4b2-0c74-4679-bad2-f53efa490f86",
@@ -17738,6 +19974,7 @@
       "renamed_to": null,
       "licence_number": "9233",
       "licence_valid_to": "2027-12-01",
+      "licence_renewal_pending": false,
       "website": null,
       "phone": null,
       "amenities": {},
@@ -17831,7 +20068,10 @@
         ]
       ],
       "hours_source": "licence",
-      "hours_updated_at": "2026-08-19T15:18:06.859Z",
+      "hours_updated_at": "2026-08-19T17:14:07.759Z",
+      "socials": {},
+      "socials_shared": [],
+      "website_live": null,
       "osm_id": null,
       "amsterdam_id": "266507997",
       "rating_avg": null,
@@ -17842,7 +20082,7 @@
         "status": "amsterdam",
         "hours": "amsterdam"
       },
-      "fetched_at": "2026-08-19T15:18:06.859Z"
+      "fetched_at": "2026-08-19T17:14:07.759Z"
     }
   ]
 }
