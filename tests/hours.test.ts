@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { expandLicenceHours, parseLicenceTime } from '@/lib/hours/parse';
-import { amsterdamWallClock, badgeLabel, evaluateWeekly, openState, resolveHours } from '@/lib/hours/core';
+import { amsterdamWallClock, badgeDescriptor, evaluateWeekly, openState, resolveHours } from '@/lib/hours/core';
 import type { WeeklyHours } from '@/lib/types';
 
 /** An instant expressed as Amsterdam wall clock, then converted back to UTC. */
@@ -206,12 +206,20 @@ describe('tier selection', () => {
   });
 });
 
-describe('badge copy', () => {
-  it('never renders an unknown state as closed', () => {
-    expect(badgeLabel({ kind: 'unknown' })).toEqual({ text: 'Hours unknown', tone: 'unknown' });
+describe('badge descriptor', () => {
+  it('never collapses an unknown state into closed', () => {
+    expect(badgeDescriptor({ kind: 'unknown' })).toEqual({ key: 'unknown', tone: 'unknown' });
   });
 
-  it('names the closing time when open', () => {
-    expect(badgeLabel({ kind: 'open', until: '01:00', closingSoon: false, minutesLeft: 200 }).text).toBe('Open until 01:00');
+  it('carries the closing time as data, for the locale to phrase', () => {
+    expect(badgeDescriptor({ kind: 'open', until: '01:00', closingSoon: false, minutesLeft: 200 })).toEqual(
+      { key: 'openUntil', time: '01:00', tone: 'open' },
+    );
+    expect(badgeDescriptor({ kind: 'open', until: '01:00', closingSoon: true, minutesLeft: 20 })).toEqual(
+      { key: 'closingSoon', time: '01:00', tone: 'soon' },
+    );
+    expect(badgeDescriptor({ kind: 'closed', opensAt: '07:00', opensDay: 2 })).toEqual(
+      { key: 'opensAt', time: '07:00', tone: 'closed' },
+    );
   });
 });

@@ -20,13 +20,13 @@ advertising cannabis, and the whole project is built around that constraint.
 | M3 | Three-tier opening-hours engine, open-now filters | done |
 | M4 | OpenStreetMap enrichment, matching, pending-venue queue | done |
 | M5 | Auth, reviews, reports, admin moderation | not started |
-| M6 | i18n, a11y pass, perf budget, legal review | partial (SEO, JSON-LD, 18+ gate, a11y basics done; Dutch locale not yet) |
+| M6 | i18n, a11y pass, perf budget, legal review | partial (English, Dutch, German and French; SEO, JSON-LD, 18+ gate, a11y done — legal review outstanding) |
 
 ## Running it
 
 ```bash
 npm install
-npm run dev          # http://localhost:3000
+npm run dev          # http://localhost:3000 — redirects to /en
 npm test             # unit + integration
 npm run e2e          # Playwright, builds and serves first
 npm run etl          # refresh data/venues.json from the live sources
@@ -74,6 +74,22 @@ Rules are expanded into concrete weekly intervals **by the ETL**, not in the bro
 `opening_hours.js` out of the page bundle and, because the job runs nightly, public-holiday rules
 land on the right day. Evaluation is always in `Europe/Amsterdam`, never the device timezone, and
 a closing time earlier than its opening time means the next day.
+
+## Languages
+
+English, Dutch, German and French, on locale-prefixed routes (`/nl/coffeeshop/…`),
+with `hreflang` on every page and a sitemap that pairs the four. The bare paths
+redirect to English.
+
+All copy lives in `src/i18n/dictionaries/`, one file per locale. English is the
+canonical shape and the others are typed against it, so a missing or renamed key
+is a compile error rather than a blank on the page. Entries are plain strings
+with `{placeholder}` slots — never functions, so a server component can hand a
+dictionary straight to a client component.
+
+Nothing linguistic is hard-coded: weekday names, dates, number formatting and
+plural rules all come from `Intl` for the active locale. Adding a fifth language
+means adding one file and one entry in `LOCALES`.
 
 ## Adding another city
 

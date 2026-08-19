@@ -1,0 +1,216 @@
+import type { Dictionary } from '@/i18n/dictionaries/en';
+
+export const de: Dictionary = {
+  meta: {
+    siteName: 'The Smoke Trail',
+    tagline: 'Lizenzierte Amsterdamer Coffeeshops: wo sie sind und wann sie offen haben',
+    homeDescription:
+      'Jeder lizenzierte Coffeeshop in Amsterdam auf einer Karte, mit Öffnungszeiten, Adressen und deren Quelle. Keine Produkte, keine Preise.',
+    venueDescription: `{name} — lizenzierter Coffeeshop in der {where}, Amsterdam. Öffnungszeiten, Lage und Bewertungen von Besuchern.`,
+    neighbourhoodDescription: `{count} lizenzierte Coffeeshops in {name}, Amsterdam, mit Adressen und Öffnungszeiten.`,
+  },
+  nav: {
+    skip: 'Zum Inhalt springen',
+    neighbourhoods: 'Stadtteile',
+    data: 'Daten',
+    language: 'Sprache',
+    toLight: 'Zum hellen Design wechseln',
+    toDark: 'Zum dunklen Design wechseln',
+  },
+  ageGate: {
+    title: 'Sie müssen 18 Jahre oder älter sein',
+    body: 'Dies ist ein informatives Verzeichnis lizenzierter Coffeeshops in Amsterdam. Das niederländische Recht beschränkt den Zutritt zu diesen Betrieben auf Erwachsene ab 18 Jahren. Diese Seite führt weder Produkte noch Preise.',
+    confirm: 'Ich bin 18 oder älter',
+    leave: 'Diese Seite verlassen',
+    note: 'Ihre Auswahl wird nur in diesem Browser gespeichert. Es wird nichts an einen Server gesendet.',
+  },
+  home: {
+    heading: `{count} lizenzierte Coffeeshops in Amsterdam`,
+    intro:
+      'Adressen, Öffnungszeiten und die jeweilige Konzession, aufgebaut aus dem Register der Stadt selbst.',
+    updated: `Aktualisiert am {date}`,
+    noProducts: 'Ein Verzeichnis von Betrieben — keine Produkte, keine Preise.',
+  },
+  search: {
+    label: 'Coffeeshops nach Name, Straße oder Stadtteil durchsuchen',
+    placeholder: 'Nach Name, Straße oder Stadtteil suchen',
+  },
+  nearMe: {
+    cta: 'Betriebe in meiner Nähe',
+    waiting: 'Warten auf Ihren Browser…',
+    note: 'Ihr Standort wird nur in diesem Browser zum Sortieren der Liste genutzt. Er erreicht uns nie.',
+    sorting: 'Nach Entfernung von Ihrem Standort sortiert',
+    clear: 'Zurücksetzen',
+    denied: 'Kein Problem — der Standortzugriff ist deaktiviert.',
+    unavailable: 'Dieser Browser bietet keinen Standortzugriff.',
+    pick: 'Wählen Sie stattdessen einen Stadtteil:',
+    all: 'Alle Stadtteile',
+    neighbourhood: 'Stadtteil',
+  },
+  filters: {
+    legend: 'Filter',
+    openNow: 'Jetzt geöffnet',
+    openLate: 'Nach 23:00 geöffnet',
+    terrace: 'Terrasse',
+    wheelchair: 'Barrierefrei',
+    highlyRated: 'Bewertung 4+',
+    hasReviews: 'Mit Bewertungen',
+    neighbourhood: 'Stadtteil',
+    includeClosed: 'Geschlossene anzeigen',
+  },
+  sort: {
+    label: 'Sortieren',
+    name: 'Name',
+    rating: 'Bewertung',
+    distance: 'Entfernung',
+    updated: 'Kürzlich aktualisiert',
+  },
+  list: {
+    venues: 'Betriebe',
+    count: { one: `{count} Betrieb`, other: `{count} Betriebe` },
+    inNeighbourhood: `in {name}`,
+    empty: 'Kein Betrieb erfüllt alle diese Filter.',
+    drop: `„{label}“ entfernen, um {gain} zu sehen`,
+    clearAll: 'Alle Filter zurücksetzen',
+    list: 'Liste',
+    map: 'Karte',
+    away: `{distance} entfernt`,
+    details: 'Details',
+    closePreview: 'Vorschau schließen',
+    mapFailed: 'Die Karte konnte nicht geladen werden. Die Liste daneben enthält alle Betriebe.',
+  },
+  badge: {
+    openUntil: `Geöffnet bis {time}`,
+    closingSoon: `Schließt bald · {time}`,
+    opensAt: `Öffnet um {time}`,
+    closed: 'Geschlossen',
+    unknown: 'Öffnungszeiten unbekannt',
+    permanentlyClosed: 'Dauerhaft geschlossen',
+    renamed: 'Umbenannt',
+  },
+  venue: {
+    breadcrumb: 'Alle Betriebe',
+    where: 'Wo',
+    openingHours: 'Öffnungszeiten',
+    details: 'Details',
+    reviews: 'Bewertungen',
+    reviewsSoon:
+      'Besucherbewertungen sind noch nicht freigeschaltet. Wir hosten eigene Bewertungen, statt sie von anderen Seiten zu übernehmen.',
+    nearby: 'Nächstgelegene Betriebe',
+    copyAddress: 'Adresse kopieren',
+    copied: 'Adresse kopiert',
+    directionsGoogle: 'Route (Google)',
+    directionsApple: 'Route (Apple)',
+    website: 'Website',
+    phone: 'Telefon',
+    licence: 'Konzession',
+    validTo: `gültig bis {date}`,
+    weeklyCaption: `Wöchentliche Öffnungszeiten von {name}`,
+    closedNotice:
+      'Dieser Betrieb steht nicht mehr im Register der erteilten Betriebskonzessionen der Stadt. Er bleibt hier erhalten, damit die Adresse auffindbar bleibt.',
+    renamedNotice: 'Dieser Betrieb wurde umbenannt.',
+    terrace: 'Terrasse',
+    wheelchair: 'Barrierefrei zugänglich',
+    wifi: 'WLAN',
+  },
+  hours: {
+    community: 'Durch eine geprüfte Meldung korrigiert',
+    osm: 'Zeiten von OpenStreetMap',
+    licence: 'Zeiten aus der Amsterdamer Betriebskonzession',
+    updated: `, aktualisiert am {date}`,
+    qualifier:
+      'Dies sind die von der Konzession erlaubten Zeiten — tatsächlich kann früher geschlossen werden.',
+    none: 'Für diesen Betrieb sind keine Öffnungszeiten erfasst.',
+    contribute: 'Sie kennen sie? Nutzen Sie den Meldelink weiter unten.',
+    unknown: 'Öffnungszeiten unbekannt.',
+  },
+  report: {
+    open: 'Falsche Angaben melden',
+    title: `Falsche Angaben zu {name} melden`,
+    what: 'Was stimmt nicht?',
+    wrongHours: 'Die Öffnungszeiten stimmen nicht',
+    closed: 'Dieser Betrieb hat geschlossen',
+    wrongAddress: 'Die Adresse stimmt nicht',
+    other: 'Etwas anderes',
+    details: 'Erläuterung (optional)',
+    send: 'Meldung senden',
+    sent: 'Danke — ein Moderator sieht sich das an.',
+    unavailable:
+      'Meldungen werden noch nicht gesammelt. Es wurde nichts gesendet und nichts gespeichert.',
+  },
+  neighbourhoods: {
+    title: 'Stadtteile',
+    intro:
+      'Die Grenzen stammen aus der Stadtteilebene der Stadt selbst, ein Betrieb liegt also in genau dem Stadtteil, dem ihn die Gemeinde zuordnet.',
+    heading: `Coffeeshops in {name}`,
+    count: { one: `{count} Betrieb erfasst.`, other: `{count} Betriebe erfasst.` },
+    seeOnMap: `{name} auf der Karte ansehen`,
+  },
+  aboutData: {
+    title: 'Woher diese Daten stammen',
+    intro:
+      'Diese Seite verbindet zwei offene Datensätze und fügt ihnen nichts hinzu außer Struktur. Jedes Feld auf einer Betriebsseite nennt die Quelle, aus der es stammt.',
+    attribution: 'Quellenangabe',
+    licenceTitle: '1. Amsterdamer Register der Betriebskonzessionen',
+    licenceBody:
+      'Die Stadt veröffentlicht jede erteilte Betriebskonzession als offenen WFS-Dienst unter CC BY 4.0. Wir wählen die Einträge aus, deren Kategorie oder Spezifikation „Coffeeshop“ lautet, deren Konzessionsstatus „erteilt“ ist und deren Enddatum noch nicht verstrichen ist. Dieses Register bestimmt, welche Betriebe hier stehen, wie sie offiziell heißen und wo sie liegen.',
+    licenceHours:
+      'Die Konzession enthält auch Öffnungszeiten. Das sind die von der Genehmigung erlaubten Zeiten — meist 07:00 bis 01:00 — nicht die Zeiten, zu denen ein Betrieb tatsächlich öffnet. Wir zeigen sie nur, wenn nichts Besseres vorliegt, und immer mit diesem Vorbehalt.',
+    osmTitle: '2. OpenStreetMap',
+    osmBody:
+      'Websites, Telefonnummern, Barrierefreiheit, Terrassen und echte Öffnungszeiten kommen von OpenStreetMap und werden einmal pro Nacht abgefragt. Ein OSM-Eintrag wird einem lizenzierten Betrieb nur zugeordnet, wenn er innerhalb von 40 m liegt und einen ähnlichen Namen trägt, dieselbe Straße und Hausnummer teilt oder innerhalb von 150 m einen nahezu identischen Namen führt. Alles andere wartet in einer Prüfliste, statt veröffentlicht zu werden.',
+    reviewsTitle: '3. Bewertungen',
+    reviewsBody:
+      'Bewertungen werden hier von Besuchern geschrieben und von uns gespeichert. Wir übernehmen keine Bewertungen von Google, TripAdvisor oder anderswo.',
+    cadenceTitle: 'Aktualisierung und aktueller Stand',
+    cadenceBody:
+      'Die Pipeline läuft nächtlich um 03:00 Europe/Amsterdam. Ein Lauf mit unplausiblen Daten wird abgebrochen und der vorherige Stand bleibt erhalten, damit eine kaputte Antwort einer Quelle dieses Verzeichnis nie leeren kann. Ein Betrieb, der zwei aufeinanderfolgende Läufe im Konzessionsregister fehlt, wird als geschlossen markiert — nie gelöscht, denn „hat der Laden noch offen?“ ist eine Frage, die eine Antwort verdient.',
+    statVenues: 'Erfasste Betriebe',
+    statOpen: 'Derzeit lizenziert',
+    statOsm: 'Zeiten von OpenStreetMap',
+    statLicence: 'Zeiten nur aus der Konzession',
+    statUnknown: 'Zeiten unbekannt',
+    statGenerated: 'Stand erstellt',
+    notTitle: 'Was diese Seite nicht tut',
+    not1: 'Keine Produktkarten, Sorten, Preise, Wirkstärke oder Bestände.',
+    not2: 'Kein Bestellen, Reservieren oder Liefern.',
+    not3: 'Keine gesponserte Platzierung und keine Werbung.',
+    not4: 'Keine Inhalte, die sich an Minderjährige richten.',
+    verify:
+      'Konzessionen und Öffnungszeiten ändern sich schneller als jeder nächtliche Lauf. Prüfen Sie vor Ort, bevor Sie zu einem Betrieb fahren.',
+    seeAlso: 'Siehe auch unsere Datenschutzerklärung',
+  },
+  privacy: {
+    title: 'Datenschutz',
+    locationTitle: 'Ihr Standort',
+    locationBody:
+      'Wenn Sie auf „Betriebe in meiner Nähe“ tippen, fragt Ihr Browser um Erlaubnis und übergibt Ihre Koordinaten an die Seite. Entfernungen werden auf Ihrem Gerät berechnet. Ihre Koordinaten werden nie an uns übertragen, nie protokolliert und nie gespeichert. Die Ablehnung kostet Sie nur die Sortierung nach Entfernung — alles andere funktioniert weiter.',
+    storedTitle: 'Was in Ihrem Browser gespeichert wird',
+    storedBody:
+      'Drei Werte, alle nur lokal in diesem Browser: Ihre Bestätigung, dass Sie 18 oder älter sind, Ihre Einstellung für helles oder dunkles Design und Ihre Sprache. Das Löschen der Websitedaten entfernt sie.',
+    analyticsTitle: 'Statistiken',
+    analyticsBody:
+      'Keine Statistikdienste Dritter und keine Werbe- oder Tracking-Cookies. Sollte je eine Zugriffszählung hinzukommen, erfolgt sie ohne Cookies und auf eigenen Servern.',
+    reviewsTitle: 'Bewertungen und Meldungen',
+    reviewsBody:
+      'Bewertungen sind noch nicht freigeschaltet. Sobald sie es sind, speichert ein Konto eine Benutzer-ID, einen Anzeigenamen und Zeitstempel — mehr nicht. Sie können Ihre Daten exportieren und löschen, Rechtsgrundlage ist die Einwilligung bei der Anmeldung. Rohe IP-Adressen werden nicht aufbewahrt; die Ratenbegrenzung nutzt einen kurzlebigen gehashten Schlüssel, der sich nicht in eine Adresse zurückverwandeln lässt.',
+    contactTitle: 'Kontakt',
+    contactBody:
+      'Für eine Auskunft oder Korrektur nutzen Sie den Meldelink auf einer beliebigen Betriebsseite. Diese Erklärung wird von einem niederländischen Anwalt geprüft, bevor Bewertungen öffnen.',
+  },
+  notFound: {
+    title: 'Seite nicht gefunden',
+    body: 'Suchten Sie einen Betrieb, der hier einmal stand? Suchen Sie nach dem Namen — geschlossene Betriebe bleiben auf der Seite.',
+    cta: 'Zurück zum Verzeichnis',
+  },
+  footer: {
+    sources: 'Datenquellen',
+    howCollected: 'Wie diese Daten erhoben werden',
+    health: 'Gesundheit und Sicherheit',
+    about: 'Über',
+    privacy: 'Datenschutz',
+    adults: 'Strikt ab 18. Rein informativ.',
+    verify:
+      'Konzessionen und Öffnungszeiten ändern sich. Prüfen Sie vor Ort, bevor Sie zu einem Betrieb fahren.',
+  },
+};

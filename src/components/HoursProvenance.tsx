@@ -1,47 +1,38 @@
 import { resolveHours } from '@/lib/hours/core';
+import { format, formatDate, type Locale } from '@/i18n/config';
+import type { Dictionary } from '@/i18n';
 import type { Venue } from '@/lib/types';
 
-const SOURCE_COPY: Record<string, string> = {
-  community: 'Corrected by a verified community report',
-  osm: 'Hours from OpenStreetMap',
-  licence: 'Hours from the Amsterdam operating licence',
-};
-
 /**
- * §11 and acceptance gate: hours never appear without their source, and the
+ * §11 and the acceptance gate: hours never appear without their source, and the
  * licence tier never appears without the qualifier that it is an outer bound.
  */
-export function HoursProvenance({ venue }: { venue: Venue }) {
+export function HoursProvenance({
+  venue,
+  dict,
+  locale,
+}: {
+  venue: Venue;
+  dict: Dictionary['hours'];
+  locale: Locale;
+}) {
   const resolved = resolveHours(venue);
+
   if (!resolved.source) {
     return (
       <p className="text-sm text-[var(--color-muted)]">
-        No opening hours are recorded for this venue.{' '}
-        <span className="text-[var(--color-text)]">Know them? Use the report link below.</span>
+        {dict.none} <span className="text-[var(--color-text)]">{dict.contribute}</span>
       </p>
     );
   }
 
-  const updated = resolved.updatedAt
-    ? new Date(resolved.updatedAt).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-        timeZone: 'Europe/Amsterdam',
-      })
-    : null;
-
   return (
     <div className="text-sm text-[var(--color-muted)]">
       <p>
-        {SOURCE_COPY[resolved.source]}
-        {updated ? `, updated ${updated}` : ''}.
+        {dict[resolved.source]}
+        {resolved.updatedAt ? format(dict.updated, { date: formatDate(resolved.updatedAt, locale) }) : ''}.
       </p>
-      {resolved.qualified && (
-        <p className="mt-1 text-[var(--color-soon)]">
-          These are the hours the licence permits — the actual closing time may be earlier.
-        </p>
-      )}
+      {resolved.qualified && <p className="mt-1.5 text-[var(--color-soon)]">{dict.qualifier}</p>}
     </div>
   );
 }

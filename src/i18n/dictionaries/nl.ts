@@ -1,0 +1,216 @@
+import type { Dictionary } from '@/i18n/dictionaries/en';
+
+export const nl: Dictionary = {
+  meta: {
+    siteName: 'The Smoke Trail',
+    tagline: 'Vergunde Amsterdamse coffeeshops: waar ze zijn en wanneer ze open zijn',
+    homeDescription:
+      'Elke vergunde coffeeshop in Amsterdam op één kaart, met openingstijden, adressen en hun bron. Geen producten, geen prijzen.',
+    venueDescription: `{name} — vergunde coffeeshop aan {where}, Amsterdam. Openingstijden, locatie en beoordelingen van bezoekers.`,
+    neighbourhoodDescription: `{count} vergunde coffeeshops in {name}, Amsterdam, met adressen en openingstijden.`,
+  },
+  nav: {
+    skip: 'Naar de inhoud',
+    neighbourhoods: 'Wijken',
+    data: 'Gegevens',
+    language: 'Taal',
+    toLight: 'Overschakelen naar het lichte thema',
+    toDark: 'Overschakelen naar het donkere thema',
+  },
+  ageGate: {
+    title: 'Je moet 18 jaar of ouder zijn',
+    body: 'Dit is een informatieve gids van vergunde coffeeshops in Amsterdam. De Nederlandse wet beperkt de toegang tot deze zaken tot volwassenen van 18 jaar en ouder. Deze site vermeldt geen producten en geen prijzen.',
+    confirm: 'Ik ben 18 jaar of ouder',
+    leave: 'Deze site verlaten',
+    note: 'Je keuze wordt alleen in deze browser bewaard. Er wordt niets naar een server gestuurd.',
+  },
+  home: {
+    heading: `{count} vergunde coffeeshops in Amsterdam`,
+    intro:
+      'Adressen, openingstijden en de vergunning erachter, samengesteld uit het register van de gemeente zelf.',
+    updated: `Bijgewerkt op {date}`,
+    noProducts: 'Een gids van zaken — geen producten, geen prijzen.',
+  },
+  search: {
+    label: 'Zoek coffeeshops op naam, straat of wijk',
+    placeholder: 'Zoek op naam, straat of wijk',
+  },
+  nearMe: {
+    cta: 'Zaken in mijn buurt',
+    waiting: 'Wachten op je browser…',
+    note: 'Je locatie wordt in deze browser gebruikt om de lijst te sorteren. Wij ontvangen die nooit.',
+    sorting: 'Gesorteerd op afstand vanaf jouw locatie',
+    clear: 'Wissen',
+    denied: 'Geen probleem — locatietoegang staat uit.',
+    unavailable: 'Deze browser biedt geen locatietoegang.',
+    pick: 'Kies in plaats daarvan een wijk:',
+    all: 'Alle wijken',
+    neighbourhood: 'Wijk',
+  },
+  filters: {
+    legend: 'Filters',
+    openNow: 'Nu open',
+    openLate: 'Open na 23:00',
+    terrace: 'Terras',
+    wheelchair: 'Rolstoeltoegankelijk',
+    highlyRated: 'Beoordeeld 4+',
+    hasReviews: 'Met beoordelingen',
+    neighbourhood: 'Wijk',
+    includeClosed: 'Gesloten tonen',
+  },
+  sort: {
+    label: 'Sorteren',
+    name: 'Naam',
+    rating: 'Beoordeling',
+    distance: 'Afstand',
+    updated: 'Onlangs bijgewerkt',
+  },
+  list: {
+    venues: 'Zaken',
+    count: { one: `{count} zaak`, other: `{count} zaken` },
+    inNeighbourhood: `in {name}`,
+    empty: 'Geen zaken voldoen aan al deze filters.',
+    drop: `Laat “{label}” vallen voor {gain}`,
+    clearAll: 'Alle filters wissen',
+    list: 'Lijst',
+    map: 'Kaart',
+    away: `{distance} verderop`,
+    details: 'Details',
+    closePreview: 'Voorbeeld sluiten',
+    mapFailed: 'De kaart kon niet laden. De lijst ernaast bevat alle zaken.',
+  },
+  badge: {
+    openUntil: `Open tot {time}`,
+    closingSoon: `Sluit bijna · {time}`,
+    opensAt: `Opent om {time}`,
+    closed: 'Gesloten',
+    unknown: 'Openingstijden onbekend',
+    permanentlyClosed: 'Definitief gesloten',
+    renamed: 'Hernoemd',
+  },
+  venue: {
+    breadcrumb: 'Alle zaken',
+    where: 'Waar',
+    openingHours: 'Openingstijden',
+    details: 'Details',
+    reviews: 'Beoordelingen',
+    reviewsSoon:
+      'Beoordelingen van bezoekers zijn nog niet geopend. Wij hosten onze eigen beoordelingen in plaats van ze van andere sites over te nemen.',
+    nearby: 'Dichtstbijzijnde zaken',
+    copyAddress: 'Adres kopiëren',
+    copied: 'Adres gekopieerd',
+    directionsGoogle: 'Route (Google)',
+    directionsApple: 'Route (Apple)',
+    website: 'Website',
+    phone: 'Telefoon',
+    licence: 'Vergunning',
+    validTo: `geldig tot {date}`,
+    weeklyCaption: `Wekelijkse openingstijden van {name}`,
+    closedNotice:
+      'Deze zaak staat niet meer in het register van verleende exploitatievergunningen van de gemeente. Hij blijft hier staan zodat het adres vindbaar blijft.',
+    renamedNotice: 'Deze zaak is hernoemd.',
+    terrace: 'Terras',
+    wheelchair: 'Rolstoeltoegankelijk',
+    wifi: 'Wifi',
+  },
+  hours: {
+    community: 'Gecorrigeerd via een geverifieerde melding',
+    osm: 'Tijden van OpenStreetMap',
+    licence: 'Tijden uit de Amsterdamse exploitatievergunning',
+    updated: `, bijgewerkt op {date}`,
+    qualifier:
+      'Dit zijn de tijden die de vergunning toestaat — in werkelijkheid kan er eerder gesloten worden.',
+    none: 'Voor deze zaak zijn geen openingstijden vastgelegd.',
+    contribute: 'Weet je ze? Gebruik de meldlink hieronder.',
+    unknown: 'Openingstijden onbekend.',
+  },
+  report: {
+    open: 'Onjuiste informatie melden',
+    title: `Onjuiste informatie melden over {name}`,
+    what: 'Wat klopt er niet?',
+    wrongHours: 'De openingstijden kloppen niet',
+    closed: 'Deze zaak is gesloten',
+    wrongAddress: 'Het adres klopt niet',
+    other: 'Iets anders',
+    details: 'Toelichting (optioneel)',
+    send: 'Melding versturen',
+    sent: 'Dank je — een moderator kijkt ernaar.',
+    unavailable:
+      'Meldingen worden nog niet verzameld. Er is niets verstuurd en niets opgeslagen.',
+  },
+  neighbourhoods: {
+    title: 'Wijken',
+    intro:
+      'De grenzen komen uit de wijkenlaag van de gemeente zelf, dus een zaak ligt in dezelfde wijk als waar de gemeente hem plaatst.',
+    heading: `Coffeeshops in {name}`,
+    count: { one: `{count} zaak geregistreerd.`, other: `{count} zaken geregistreerd.` },
+    seeOnMap: `Bekijk {name} op de kaart`,
+  },
+  aboutData: {
+    title: 'Waar deze gegevens vandaan komen',
+    intro:
+      'Deze site combineert twee openbare datasets en voegt er niets aan toe behalve structuur. Elk veld op een pagina noemt de bron waar het vandaan komt.',
+    attribution: 'Bronvermelding',
+    licenceTitle: '1. Amsterdams register van exploitatievergunningen',
+    licenceBody:
+      'De gemeente publiceert elke verleende exploitatievergunning als open WFS-dienst onder CC BY 4.0. Wij selecteren de records waarvan de categorie of specificatie “Coffeeshop” is, waarvan de vergunningstatus “Verleend” is en waarvan de einddatum nog niet is verstreken. Dat register bepaalt welke zaken hier staan, hoe ze officieel heten en waar ze liggen.',
+    licenceHours:
+      'De vergunning bevat ook openingstijden. Dat zijn de tijden die de vergunning toestaat — meestal 07:00 tot 01:00 — niet de tijden waarop een zaak daadwerkelijk open is. Wij tonen ze alleen als er niets beters is, en altijd met dat voorbehoud erbij.',
+    osmTitle: '2. OpenStreetMap',
+    osmBody:
+      'Websites, telefoonnummers, toegankelijkheid, terrassen en echte openingstijden komen van OpenStreetMap, één keer per nacht opgevraagd. Een OSM-record wordt alleen aan een vergunde zaak gekoppeld als het binnen 40 m ligt met een vergelijkbare naam, exact dezelfde straat en huisnummer heeft, of binnen 150 m een vrijwel identieke naam draagt. Al het andere wacht in een controlewachtrij in plaats van gepubliceerd te worden.',
+    reviewsTitle: '3. Beoordelingen',
+    reviewsBody:
+      'Beoordelingen worden hier door bezoekers geschreven en door ons bewaard. Wij nemen geen beoordelingen over van Google, TripAdvisor of elders.',
+    cadenceTitle: 'Actualisatie en huidige stand',
+    cadenceBody:
+      'De pijplijn draait elke nacht om 03:00 Europe/Amsterdam. Een run die onwaarschijnlijke gegevens oplevert wordt afgebroken en de vorige momentopname blijft staan, zodat een kapot antwoord van een bron deze gids nooit kan leegmaken. Een zaak die twee opeenvolgende runs uit het vergunningregister verdwijnt wordt als gesloten gemarkeerd — nooit verwijderd, want “is deze zaak nog open?” is een vraag die een antwoord verdient.',
+    statVenues: 'Zaken in de gids',
+    statOpen: 'Nu vergund',
+    statOsm: 'Tijden van OpenStreetMap',
+    statLicence: 'Tijden alleen uit de vergunning',
+    statUnknown: 'Tijden onbekend',
+    statGenerated: 'Momentopname gemaakt',
+    notTitle: 'Wat deze site niet doet',
+    not1: 'Geen productmenu’s, soorten, prijzen, sterkte of voorraad.',
+    not2: 'Geen bestellen, reserveren of bezorgen.',
+    not3: 'Geen gesponsorde plaatsing en geen advertenties.',
+    not4: 'Geen inhoud gericht op minderjarigen.',
+    verify:
+      'Vergunningen en openingstijden veranderen sneller dan welke nachtelijke run dan ook. Controleer ter plaatse voordat je naar een zaak reist.',
+    seeAlso: 'Zie ook onze privacyverklaring',
+  },
+  privacy: {
+    title: 'Privacy',
+    locationTitle: 'Jouw locatie',
+    locationBody:
+      'Als je op “zaken in mijn buurt” tikt, vraagt je browser toestemming en geeft je coördinaten aan de pagina. Afstanden worden op je eigen apparaat berekend. Je coördinaten worden nooit naar ons verstuurd, nooit gelogd en nooit bewaard. De vraag weigeren kost je alleen het sorteren op afstand — al het andere blijft werken.',
+    storedTitle: 'Wat er in je browser wordt bewaard',
+    storedBody:
+      'Drie waarden, alleen lokaal in deze browser: je bevestiging dat je 18 of ouder bent, je voorkeur voor licht of donker, en je taal. Sitegegevens wissen verwijdert ze.',
+    analyticsTitle: 'Statistieken',
+    analyticsBody:
+      'Geen statistieken van derden en geen advertentie- of trackingcookies. Als er ooit bezoekersaantallen worden geteld, gebeurt dat zonder cookies en op onze eigen servers.',
+    reviewsTitle: 'Beoordelingen en meldingen',
+    reviewsBody:
+      'Beoordelingen zijn nog niet geopend. Zodra dat wel zo is, bewaart een account een gebruikers-id, een weergavenaam en tijdstempels — meer niet. Je kunt je gegevens exporteren en verwijderen, en de grondslag is de toestemming die je bij aanmelding geeft. Ruwe IP-adressen worden niet bewaard; de snelheidsbegrenzing gebruikt een kortstondige gehashte sleutel die niet naar een adres is te herleiden.',
+    contactTitle: 'Contact',
+    contactBody:
+      'Gebruik voor een verzoek of correctie de meldlink op een willekeurige pagina van een zaak. Deze verklaring wordt door een Nederlandse jurist beoordeeld voordat beoordelingen opengaan.',
+  },
+  notFound: {
+    title: 'Pagina niet gevonden',
+    body: 'Zocht je een zaak die hier ooit stond? Zoek op naam — gesloten zaken blijven op de site staan.',
+    cta: 'Terug naar de gids',
+  },
+  footer: {
+    sources: 'Gegevensbronnen',
+    howCollected: 'Hoe deze gegevens worden verzameld',
+    health: 'Gezondheid en veiligheid',
+    about: 'Over',
+    privacy: 'Privacy',
+    adults: 'Strikt 18+. Uitsluitend informatief.',
+    verify:
+      'Vergunningen en openingstijden veranderen. Controleer ter plaatse voordat je naar een zaak reist.',
+  },
+};

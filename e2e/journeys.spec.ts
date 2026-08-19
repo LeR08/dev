@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('journey 1: landing shows venues with an open/closed badge, then a detail page', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/en');
 
   const list = page.getByRole('list', { name: 'Venues' }).getByRole('listitem');
   await expect(list.first()).toBeVisible();
@@ -27,10 +27,11 @@ test('journey 1: landing shows venues with an open/closed badge, then a detail p
   await firstCard.getByRole('link').first().click();
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await expect(page.getByRole('link', { name: /Directions \(Google\)/ })).toBeVisible();
+  await expect(page).toHaveURL(/\/en\/coffeeshop\//);
 });
 
 test('journey 2: fuzzy search finds a venue by an approximate name', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/en');
   await page.getByLabel(/Search coffeeshops/).fill('dampkring');
 
   const results = page.getByRole('list', { name: 'Venues' }).getByRole('listitem');
@@ -40,9 +41,9 @@ test('journey 2: fuzzy search finds a venue by an approximate name', async ({ pa
 });
 
 test('journey 3: the map renders and a pin preview links to the detail page', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto('/en');
   if (testInfo.project.name === 'mobile') {
-    await page.getByRole('button', { name: 'map', exact: true }).click();
+    await page.getByRole('button', { name: 'Map', exact: true }).click();
   }
   await expect(page.locator('.maplibregl-canvas')).toBeVisible({ timeout: 30_000 });
   // L4: the licence and OSM notices must be reachable on the map itself.
@@ -55,7 +56,7 @@ test('the 18+ interstitial appears on a first visit and persists the choice', as
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  await page.goto('/');
+  await page.goto('/en');
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   await expect(dialog).toContainText('18 or over');
@@ -69,7 +70,7 @@ test('the 18+ interstitial appears on a first visit and persists the choice', as
 });
 
 test('filters narrow the list, live in the URL, and offer a way out of an empty result', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/en');
   const results = page.getByRole('list', { name: 'Venues' }).getByRole('listitem');
   const before = await results.count();
 
@@ -102,7 +103,7 @@ test('near me falls back to a neighbourhood picker when permission is refused', 
       },
     });
   });
-  await page.goto('/');
+  await page.goto('/en');
   await page.getByRole('button', { name: 'Find venues near me' }).click();
   const picker = page.getByLabel('Neighbourhood', { exact: true });
   await expect(picker).toBeVisible({ timeout: 15_000 });
@@ -112,7 +113,7 @@ test('near me falls back to a neighbourhood picker when permission is refused', 
 });
 
 test('venue pages carry LocalBusiness structured data', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/en');
   await page.getByRole('list', { name: 'Venues' }).getByRole('listitem').first().getByRole('link').first().click();
 
   const jsonLd = await page.locator('script[type="application/ld+json"]').first().textContent();
@@ -124,8 +125,39 @@ test('venue pages carry LocalBusiness structured data', async ({ page }) => {
   expect(parsed.aggregateRating).toBeUndefined();
 });
 
+test('every locale renders its own words, its own lang and its own hreflang set', async ({ page }) => {
+  const expectations = [
+    { locale: 'en', heading: /licensed coffeeshops in Amsterdam/, search: /Search by name/ },
+    { locale: 'nl', heading: /vergunde coffeeshops in Amsterdam/, search: /Zoek op naam/ },
+    { locale: 'de', heading: /lizenzierte Coffeeshops in Amsterdam/, search: /Nach Name/ },
+    { locale: 'fr', heading: /coffeeshops licenciés à Amsterdam/, search: /Rechercher par nom/ },
+  ];
+
+  for (const { locale, heading, search } of expectations) {
+    await page.goto(`/${locale}`);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
+    await expect(page.getByPlaceholder(search)).toBeVisible();
+    await expect(page.locator('html')).toHaveAttribute('lang', locale);
+    // Four translations plus x-default, on every locale.
+    await expect(page.locator('link[rel="alternate"]')).toHaveCount(5);
+  }
+});
+
+test('the language picker keeps you on the same venue', async ({ page }) => {
+  await page.goto('/en');
+  await page.getByRole('list', { name: 'Venues' }).getByRole('listitem').first().getByRole('link').first().click();
+  await page.waitForURL(/\/en\/coffeeshop\//);
+  const slug = new URL(page.url()).pathname.split('/').pop();
+
+  await page.getByRole('button', { name: 'Language' }).click();
+  await page.getByRole('option', { name: 'Deutsch' }).click();
+
+  await expect(page).toHaveURL(new RegExp(`/de/coffeeshop/${slug}$`));
+  await expect(page.getByRole('heading', { name: 'Öffnungszeiten' })).toBeVisible();
+});
+
 test('attribution is visible on /about-data', async ({ page }) => {
-  await page.goto('/about-data');
+  await page.goto('/en/about-data');
   await expect(page.getByText('Contains data from Gemeente Amsterdam (CC BY 4.0)').first()).toBeVisible();
   await expect(page.getByText('© OpenStreetMap contributors (ODbL)').first()).toBeVisible();
 });

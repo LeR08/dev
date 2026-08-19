@@ -2,13 +2,21 @@
 
 import { useState } from 'react';
 
-export function CopyAddress({ address }: { address: string }) {
+export function CopyAddress({
+  address,
+  label,
+  copiedLabel,
+}: {
+  address: string;
+  label: string;
+  copiedLabel: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   return (
     <button
       type="button"
-      className="rounded-md border border-[var(--color-line)] px-3 py-2 text-sm"
+      className="btn-quiet px-3 py-2 text-sm"
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(address);
@@ -19,7 +27,7 @@ export function CopyAddress({ address }: { address: string }) {
         }
       }}
     >
-      <span aria-live="polite">{copied ? 'Address copied' : 'Copy address'}</span>
+      <span aria-live="polite">{copied ? copiedLabel : label}</span>
     </button>
   );
 }

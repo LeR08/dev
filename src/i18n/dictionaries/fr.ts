@@ -1,0 +1,216 @@
+import type { Dictionary } from '@/i18n/dictionaries/en';
+
+export const fr: Dictionary = {
+  meta: {
+    siteName: 'The Smoke Trail',
+    tagline: 'Les coffeeshops licenciés d’Amsterdam : où ils sont et quand ils sont ouverts',
+    homeDescription:
+      'Tous les coffeeshops licenciés d’Amsterdam sur une carte, avec horaires, adresses et leur source. Aucun produit, aucun prix.',
+    venueDescription: `{name} — coffeeshop licencié au {where}, Amsterdam. Horaires, emplacement et avis de visiteurs.`,
+    neighbourhoodDescription: `{count} coffeeshops licenciés à {name}, Amsterdam, avec adresses et horaires.`,
+  },
+  nav: {
+    skip: 'Aller au contenu',
+    neighbourhoods: 'Quartiers',
+    data: 'Données',
+    language: 'Langue',
+    toLight: 'Passer au thème clair',
+    toDark: 'Passer au thème sombre',
+  },
+  ageGate: {
+    title: 'Vous devez avoir 18 ans ou plus',
+    body: 'Ceci est un annuaire informatif des coffeeshops licenciés d’Amsterdam. La loi néerlandaise en réserve l’accès aux adultes de 18 ans et plus. Ce site ne présente ni produits ni prix.',
+    confirm: 'J’ai 18 ans ou plus',
+    leave: 'Quitter ce site',
+    note: 'Votre choix est conservé dans ce navigateur uniquement. Rien n’est envoyé à un serveur.',
+  },
+  home: {
+    heading: `{count} coffeeshops licenciés à Amsterdam`,
+    intro:
+      'Adresses, horaires et la licence derrière chacun, constitués à partir du registre de la ville elle-même.',
+    updated: `Mis à jour le {date}`,
+    noProducts: 'Un annuaire d’établissements — aucun produit, aucun prix.',
+  },
+  search: {
+    label: 'Rechercher un coffeeshop par nom, rue ou quartier',
+    placeholder: 'Rechercher par nom, rue ou quartier',
+  },
+  nearMe: {
+    cta: 'Trouver les établissements près de moi',
+    waiting: 'En attente de votre navigateur…',
+    note: 'Votre position sert à trier la liste dans ce navigateur. Elle ne nous parvient jamais.',
+    sorting: 'Tri par distance depuis votre position',
+    clear: 'Effacer',
+    denied: 'Pas de souci — l’accès à la position est désactivé.',
+    unavailable: 'Ce navigateur ne propose pas d’accès à la position.',
+    pick: 'Choisissez plutôt un quartier :',
+    all: 'Tous les quartiers',
+    neighbourhood: 'Quartier',
+  },
+  filters: {
+    legend: 'Filtres',
+    openNow: 'Ouvert maintenant',
+    openLate: 'Ouvert après 23h00',
+    terrace: 'Terrasse',
+    wheelchair: 'Accès fauteuil roulant',
+    highlyRated: 'Noté 4+',
+    hasReviews: 'Avec avis',
+    neighbourhood: 'Quartier',
+    includeClosed: 'Inclure les fermés',
+  },
+  sort: {
+    label: 'Trier',
+    name: 'Nom',
+    rating: 'Note',
+    distance: 'Distance',
+    updated: 'Récemment mis à jour',
+  },
+  list: {
+    venues: 'Établissements',
+    count: { one: `{count} établissement`, other: `{count} établissements` },
+    inNeighbourhood: `à {name}`,
+    empty: 'Aucun établissement ne satisfait tous ces filtres.',
+    drop: `Retirer « {label} » pour en voir {gain}`,
+    clearAll: 'Effacer tous les filtres',
+    list: 'Liste',
+    map: 'Carte',
+    away: `à {distance}`,
+    details: 'Détails',
+    closePreview: 'Fermer l’aperçu',
+    mapFailed: 'La carte n’a pas pu se charger. La liste à côté contient tous les établissements.',
+  },
+  badge: {
+    openUntil: `Ouvert jusqu’à {time}`,
+    closingSoon: `Ferme bientôt · {time}`,
+    opensAt: `Ouvre à {time}`,
+    closed: 'Fermé',
+    unknown: 'Horaires inconnus',
+    permanentlyClosed: 'Fermé définitivement',
+    renamed: 'Renommé',
+  },
+  venue: {
+    breadcrumb: 'Tous les établissements',
+    where: 'Où',
+    openingHours: 'Horaires d’ouverture',
+    details: 'Détails',
+    reviews: 'Avis',
+    reviewsSoon:
+      'Les avis de visiteurs ne sont pas encore ouverts. Nous hébergeons nos propres avis plutôt que de les copier d’autres sites.',
+    nearby: 'Établissements les plus proches',
+    copyAddress: 'Copier l’adresse',
+    copied: 'Adresse copiée',
+    directionsGoogle: 'Itinéraire (Google)',
+    directionsApple: 'Itinéraire (Apple)',
+    website: 'Site web',
+    phone: 'Téléphone',
+    licence: 'Licence',
+    validTo: `valable jusqu’au {date}`,
+    weeklyCaption: `Horaires hebdomadaires de {name}`,
+    closedNotice:
+      'Cet établissement ne figure plus au registre des licences d’exploitation accordées par la ville. Il reste ici pour que l’adresse demeure trouvable.',
+    renamedNotice: 'Cet établissement a été renommé.',
+    terrace: 'Terrasse',
+    wheelchair: 'Accessible en fauteuil roulant',
+    wifi: 'Wi-Fi',
+  },
+  hours: {
+    community: 'Corrigé par un signalement vérifié',
+    osm: 'Horaires issus d’OpenStreetMap',
+    licence: 'Horaires issus de la licence d’exploitation d’Amsterdam',
+    updated: `, mis à jour le {date}`,
+    qualifier:
+      'Ce sont les horaires que la licence autorise — la fermeture réelle peut être plus tôt.',
+    none: 'Aucun horaire n’est enregistré pour cet établissement.',
+    contribute: 'Vous les connaissez ? Utilisez le lien de signalement ci-dessous.',
+    unknown: 'Horaires inconnus.',
+  },
+  report: {
+    open: 'Signaler une information incorrecte',
+    title: `Signaler une information incorrecte sur {name}`,
+    what: 'Qu’est-ce qui ne va pas ?',
+    wrongHours: 'Les horaires sont faux',
+    closed: 'Cet établissement a fermé',
+    wrongAddress: 'L’adresse est fausse',
+    other: 'Autre chose',
+    details: 'Précisions (facultatif)',
+    send: 'Envoyer le signalement',
+    sent: 'Merci — un modérateur va vérifier.',
+    unavailable:
+      'Les signalements ne sont pas encore collectés. Rien n’a été envoyé ni enregistré.',
+  },
+  neighbourhoods: {
+    title: 'Quartiers',
+    intro:
+      'Les limites proviennent de la couche des quartiers de la ville elle-même : un établissement se trouve donc dans le quartier où la municipalité le place.',
+    heading: `Coffeeshops à {name}`,
+    count: { one: `{count} établissement recensé.`, other: `{count} établissements recensés.` },
+    seeOnMap: `Voir {name} sur la carte`,
+  },
+  aboutData: {
+    title: 'D’où viennent ces données',
+    intro:
+      'Ce site combine deux jeux de données publics et n’y ajoute rien d’autre que de la structure. Chaque champ d’une fiche indique la source dont il provient.',
+    attribution: 'Attribution',
+    licenceTitle: '1. Registre des licences d’exploitation d’Amsterdam',
+    licenceBody:
+      'La ville publie chaque licence d’exploitation accordée sous forme de service WFS ouvert, en CC BY 4.0. Nous retenons les enregistrements dont la catégorie ou la spécification est « Coffeeshop », dont le statut est « accordée » et dont la date de fin n’est pas passée. Ce registre décide quels établissements figurent ici, comment ils s’appellent officiellement et où ils se trouvent.',
+    licenceHours:
+      'La licence porte aussi des horaires. Ce sont ceux que l’autorisation permet — souvent 07h00 à 01h00 — et non ceux où l’établissement ouvre réellement. Nous ne les affichons qu’à défaut de mieux, et toujours assortis de cette réserve.',
+    osmTitle: '2. OpenStreetMap',
+    osmBody:
+      'Les sites web, numéros de téléphone, l’accessibilité, les terrasses et les horaires réels proviennent d’OpenStreetMap, interrogé une fois par nuit. Un enregistrement OSM n’est rattaché à un établissement licencié que s’il est à moins de 40 m avec un nom voisin, s’il partage exactement la même rue et le même numéro, ou s’il porte un nom quasi identique à moins de 150 m. Tout le reste attend dans une file de relecture au lieu d’être publié.',
+    reviewsTitle: '3. Avis et notes',
+    reviewsBody:
+      'Les avis seront écrits ici par les visiteurs et conservés par nous. Nous ne copions aucune note ni aucun avis depuis Google, TripAdvisor ou ailleurs.',
+    cadenceTitle: 'Fréquence de mise à jour et état actuel',
+    cadenceBody:
+      'Le pipeline s’exécute chaque nuit à 03h00, heure d’Amsterdam. Une exécution renvoyant des données invraisemblables est abandonnée et l’instantané précédent est conservé : une réponse cassée en amont ne peut donc jamais vider cet annuaire. Un établissement absent du registre pendant deux exécutions consécutives est marqué fermé — jamais supprimé, car « est-ce que c’est encore ouvert ? » mérite une réponse.',
+    statVenues: 'Établissements référencés',
+    statOpen: 'Actuellement licenciés',
+    statOsm: 'Horaires issus d’OpenStreetMap',
+    statLicence: 'Horaires issus de la licence seule',
+    statUnknown: 'Horaires inconnus',
+    statGenerated: 'Instantané généré le',
+    notTitle: 'Ce que ce site ne fait pas',
+    not1: 'Aucune carte de produits, variété, prix, teneur ou stock.',
+    not2: 'Aucune commande, réservation ni livraison.',
+    not3: 'Aucun placement sponsorisé et aucune publicité.',
+    not4: 'Aucun contenu visant les mineurs.',
+    verify:
+      'Les licences et les horaires changent plus vite que n’importe quelle tâche nocturne. Vérifiez sur place avant de vous déplacer.',
+    seeAlso: 'Voir aussi notre politique de confidentialité',
+  },
+  privacy: {
+    title: 'Confidentialité',
+    locationTitle: 'Votre position',
+    locationBody:
+      'Quand vous touchez « trouver les établissements près de moi », votre navigateur demande l’autorisation et transmet vos coordonnées à la page. Les distances sont calculées sur votre appareil. Vos coordonnées ne nous sont jamais transmises, jamais journalisées, jamais conservées. Refuser ne vous coûte que le tri par distance — tout le reste fonctionne.',
+    storedTitle: 'Ce qui est conservé dans votre navigateur',
+    storedBody:
+      'Trois valeurs, toutes locales à ce navigateur : votre confirmation d’avoir 18 ans ou plus, votre préférence clair/sombre et votre langue. Effacer les données du site les supprime.',
+    analyticsTitle: 'Mesure d’audience',
+    analyticsBody:
+      'Aucune mesure d’audience tierce, aucun cookie publicitaire ou de suivi. Si un comptage est un jour ajouté, il sera sans cookie et auto-hébergé.',
+    reviewsTitle: 'Avis et signalements',
+    reviewsBody:
+      'Les avis ne sont pas encore ouverts. Quand ils le seront, un compte conservera un identifiant, un nom affiché et des horodatages — rien de plus. Vous pourrez exporter et supprimer vos données, et la base légale sera le consentement donné à l’inscription. Les adresses IP brutes ne sont pas conservées ; la limitation de débit utilise une clé hachée éphémère, non réversible.',
+    contactTitle: 'Contact',
+    contactBody:
+      'Pour une demande ou une correction, utilisez le lien de signalement présent sur chaque fiche. Cette politique sera relue par un juriste néerlandais avant l’ouverture des avis.',
+  },
+  notFound: {
+    title: 'Page introuvable',
+    body: 'Vous cherchiez un établissement autrefois référencé ici ? Cherchez-le par son nom — les établissements fermés restent sur le site.',
+    cta: 'Retour à l’annuaire',
+  },
+  footer: {
+    sources: 'Sources des données',
+    howCollected: 'Comment ces données sont collectées',
+    health: 'Santé et sécurité',
+    about: 'À propos',
+    privacy: 'Confidentialité',
+    adults: 'Strictement 18+. Informatif uniquement.',
+    verify:
+      'Les licences et les horaires changent. Vérifiez sur place avant de vous déplacer.',
+  },
+};

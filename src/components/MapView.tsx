@@ -4,18 +4,30 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { badgeLabel, openState } from '@/lib/hours/core';
+import { badgeDescriptor, openState } from '@/lib/hours/core';
 import { formatDistance, haversine } from '@/lib/geo';
+import { format, type Locale } from '@/i18n/config';
+import type { Dictionary } from '@/i18n';
 import type { VenueIndexEntry } from '@/lib/venues';
 import type { Coordinates } from '@/components/NearMe';
+import { OpenBadge } from '@/components/OpenBadge';
 
 /** OpenFreeMap: no API key, no usage cap, no billing account (§5.4). */
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty';
 const AMSTERDAM_CENTRE: [number, number] = [4.895, 52.371];
 
+/**
+ * Street level rather than city level. At 14 the clusters have already broken
+ * apart into individual pins, which is what someone opening the map on a phone
+ * in the centre actually wants to see.
+ */
+const DEFAULT_ZOOM = 14.2;
+/** Where "near me" drops you: close enough to read the street names. */
+const LOCATED_ZOOM = 15.4;
+
 const STATE_COLOURS: Record<string, string> = {
-  open: '#3fbf8f',
-  soon: '#e8b64c',
+  open: '#45c98f',
+  soon: '#edb84a',
   closed: '#8b939c',
   unknown: '#6f7780',
 };
@@ -26,15 +38,20 @@ export function MapView({
   selected,
   onSelect,
   now,
+  locale,
+  dict,
 }: {
   venues: VenueIndexEntry[];
   position: Coordinates | null;
   selected: string | null;
   onSelect: (slug: string | null) => void;
   now: Date;
+  locale: Locale;
+  dict: Dictionary;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
+  const youAreHere = useRef<maplibregl.Marker | null>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -50,7 +67,7 @@ export function MapView({
       container: container.current,
       style: STYLE_URL,
       center: Number.isFinite(lat) && Number.isFinite(lng) && lat && lng ? [lng, lat] : AMSTERDAM_CENTRE,
-      zoom: Number.isFinite(zoom) && zoom ? zoom : 12.5,
+      zoom: Number.isFinite(zoom) && zoom ? zoom : DEFAULT_ZOOM,
       attributionControl: false,
     });
     map.current = instance;
@@ -67,16 +84,23 @@ export function MapView({
       }),
     );
 
-    instance.on('error', (event) => {
-      if (String(event.error?.message ?? '').includes('style')) setFailed(true);
+    // Any error before the style has loaded means no basemap will appear. The
+    // list is the answer in that case, so say so rather than showing an empty
+    // grey rectangle — §12 requires a real error state, not a blank one.
+    let loaded = false;
+    instance.on('error', () => {
+      if (!loaded) setFailed(true);
     });
+    const styleTimeout = setTimeout(() => {
+      if (!loaded) setFailed(true);
+    }, 15_000);
 
     instance.on('load', () => {
       instance.addSource('venues', {
         type: 'geojson',
         data: { type: 'FeatureCollection', features: [] },
         cluster: true,
-        clusterRadius: 48,
+        clusterRadius: 44,
         // §F1: clustering below zoom 14, individual pins above it.
         clusterMaxZoom: 13,
       });
@@ -87,10 +111,11 @@ export function MapView({
         source: 'venues',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': '#1e2227',
-          'circle-stroke-color': '#ff5a3c',
+          'circle-color': '#14171c',
+          'circle-opacity': 0.92,
+          'circle-stroke-color': '#ff6a45',
           'circle-stroke-width': 1.5,
-          'circle-radius': ['step', ['get', 'point_count'], 16, 10, 22, 30, 28],
+          'circle-radius': ['step', ['get', 'point_count'], 15, 10, 20, 30, 26],
         },
       });
       instance.addLayer({
@@ -99,7 +124,20 @@ export function MapView({
         source: 'venues',
         filter: ['has', 'point_count'],
         layout: { 'text-field': ['get', 'point_count_abbreviated'], 'text-size': 12 },
-        paint: { 'text-color': '#e9ecef' },
+        paint: { 'text-color': '#eef1f5' },
+      });
+
+      // A soft halo under the selected pin, so the map echoes the list.
+      instance.addLayer({
+        id: 'venue-halo',
+        type: 'circle',
+        source: 'venues',
+        filter: ['all', ['!', ['has', 'point_count']], ['==', ['get', 'isSelected'], true]],
+        paint: {
+          'circle-radius': 17,
+          'circle-color': '#ff6a45',
+          'circle-opacity': 0.22,
+        },
       });
       instance.addLayer({
         id: 'venue-pins',
@@ -107,9 +145,9 @@ export function MapView({
         source: 'venues',
         filter: ['!', ['has', 'point_count']],
         paint: {
-          'circle-radius': ['case', ['boolean', ['get', 'isSelected'], false], 10, 7],
+          'circle-radius': ['case', ['boolean', ['get', 'isSelected'], false], 9, 6.5],
           'circle-color': ['get', 'colour'],
-          'circle-stroke-color': '#0d0f11',
+          'circle-stroke-color': '#0b0d10',
           'circle-stroke-width': 2,
         },
       });
@@ -140,6 +178,8 @@ export function MapView({
         });
       }
 
+      loaded = true;
+      clearTimeout(styleTimeout);
       setReady(true);
     });
 
@@ -154,6 +194,7 @@ export function MapView({
     });
 
     return () => {
+      clearTimeout(styleTimeout);
       instance.remove();
       map.current = null;
     };
@@ -163,7 +204,6 @@ export function MapView({
     if (!ready || !map.current) return;
     const source = map.current.getSource('venues') as maplibregl.GeoJSONSource | undefined;
     if (!source) return;
-    const clock = now;
     source.setData({
       type: 'FeatureCollection',
       features: venues.map((venue) => ({
@@ -175,19 +215,57 @@ export function MapView({
           isSelected: venue.slug === selected,
           colour:
             venue.status !== 'open'
-              ? '#8b939c'
-              : STATE_COLOURS[badgeLabel(openState(venue, clock)).tone] ?? '#8b939c',
+              ? STATE_COLOURS.closed
+              : STATE_COLOURS[badgeDescriptor(openState(venue, now)).tone] ?? STATE_COLOURS.closed,
         },
       })),
     });
   }, [venues, selected, ready, now]);
 
+  // L6: the marker is drawn from state the browser already holds; the position
+  // is never sent anywhere.
+  useEffect(() => {
+    if (!ready || !map.current) return;
+    youAreHere.current?.remove();
+    youAreHere.current = null;
+    if (!position) return;
+
+    const dot = document.createElement('div');
+    dot.style.cssText =
+      'width:14px;height:14px;border-radius:999px;background:#3b82f6;box-shadow:0 0 0 4px rgb(59 130 246 / 0.25),0 0 0 1.5px #fff';
+    youAreHere.current = new maplibregl.Marker({ element: dot })
+      .setLngLat([position.lng, position.lat])
+      .addTo(map.current);
+    map.current.easeTo({ center: [position.lng, position.lat], zoom: LOCATED_ZOOM });
+  }, [position, ready]);
+
+  // Keep the map on the venue the list is pointing at.
+  useEffect(() => {
+    if (!ready || !map.current || !selected) return;
+    const venue = venues.find((entry) => entry.slug === selected);
+    if (!venue) return;
+    const bounds = map.current.getBounds();
+    if (!bounds.contains([venue.lng, venue.lat])) {
+      map.current.easeTo({ center: [venue.lng, venue.lat], duration: 400 });
+    }
+  }, [selected, ready, venues]);
+
   const preview = selected ? venues.find((venue) => venue.slug === selected) : null;
 
   if (failed) {
     return (
-      <div className="flex h-full items-center justify-center p-6 text-center text-sm text-[var(--color-muted)]">
-        The map could not load. The list beside it has every venue.
+      <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden focusable="false" className="text-[var(--color-muted)]">
+          <path
+            d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20Z"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinejoin="round"
+          />
+          <path d="M9 4v13.5M15 6.5V20" fill="none" stroke="currentColor" strokeWidth="1.4" />
+        </svg>
+        <p className="max-w-xs text-sm text-[var(--color-muted)]">{dict.list.mapFailed}</p>
       </div>
     );
   }
@@ -198,23 +276,26 @@ export function MapView({
       {!ready && <div className="skeleton absolute inset-0" aria-hidden />}
 
       {preview && (
-        <div className="absolute inset-x-2 bottom-2 rounded-lg border border-[var(--color-line)] bg-[var(--color-surface)] p-3 shadow-lg sm:inset-x-auto sm:left-2 sm:w-80">
+        <div className="panel absolute inset-x-3 bottom-3 p-3.5 shadow-[var(--shadow-lift)] sm:inset-x-auto sm:left-3 sm:w-80">
           <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="font-medium">{preview.name}</p>
-              <p className="text-sm text-[var(--color-muted)]">{preview.address}</p>
+            <div className="min-w-0">
+              <p className="truncate font-semibold">{preview.name}</p>
+              <p className="truncate text-sm text-[var(--color-muted)]">{preview.address}</p>
             </div>
             <button
               type="button"
-              aria-label="Close preview"
+              aria-label={dict.list.closePreview}
               onClick={() => onSelect(null)}
-              className="text-[var(--color-muted)]"
+              className="-mr-1 -mt-1 rounded-lg p-1 text-[var(--color-muted)] hover:bg-[var(--color-surface-2)]"
             >
-              ✕
+              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden focusable="false">
+                <path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
             </button>
           </div>
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[var(--color-muted)]">
-            {position && <span>{formatDistance(haversine(position, preview))} away</span>}
+          <div className="mt-2.5 flex flex-wrap items-center gap-2 text-xs text-[var(--color-muted)]">
+            <OpenBadge venue={preview} dict={dict.badge} now={now} />
+            {position && <span>{format(dict.list.away, { distance: formatDistance(haversine(position, preview)) })}</span>}
             {preview.rating_count > 0 && (
               <span>
                 {preview.rating_avg?.toFixed(1)} ★ ({preview.rating_count})
@@ -222,10 +303,10 @@ export function MapView({
             )}
           </div>
           <Link
-            href={`/coffeeshop/${preview.slug}`}
-            className="mt-3 block rounded-md bg-[var(--color-accent)] px-3 py-2 text-center text-sm font-medium text-[var(--color-on-accent)]"
+            href={`/${locale}/coffeeshop/${preview.slug}`}
+            className="btn-accent mt-3 w-full px-3 py-2 text-sm"
           >
-            Details
+            {dict.list.details}
           </Link>
         </div>
       )}

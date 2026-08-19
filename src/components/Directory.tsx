@@ -2,10 +2,12 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Fuse from 'fuse.js';
 import { formatDistance, haversine } from '@/lib/geo';
 import { amsterdamToday, openState, openStateAtLocal } from '@/lib/hours/core';
+import { format, plural, type Locale } from '@/i18n/config';
+import type { Dictionary } from '@/i18n';
 import type { VenueIndexEntry } from '@/lib/venues';
 import { OpenBadge } from '@/components/OpenBadge';
 import { NearMe } from '@/components/NearMe';
@@ -45,16 +47,15 @@ const EMPTY_FILTERS: FilterState = {
   includeClosed: false,
 };
 
-const FILTER_LABELS: Record<keyof FilterState, string> = {
-  openNow: 'Open now',
-  openLate: 'Open after 23:00',
-  terrace: 'Terrace',
-  wheelchair: 'Wheelchair access',
-  highlyRated: 'Rated 4+',
-  hasReviews: 'Has reviews',
-  neighbourhood: 'Neighbourhood',
-  includeClosed: 'Include closed',
-};
+const TOGGLES = [
+  'openNow',
+  'openLate',
+  'terrace',
+  'wheelchair',
+  'highlyRated',
+  'hasReviews',
+  'includeClosed',
+] as const;
 
 function matchesFilters(venue: VenueIndexEntry, filters: FilterState, clock: Date): boolean {
   if (!filters.includeClosed && venue.status !== 'open') return false;
@@ -74,11 +75,15 @@ export function Directory({
   venues,
   neighbourhoods,
   renderedAt,
+  locale,
+  dict,
 }: {
   venues: VenueIndexEntry[];
   neighbourhoods: { slug: string; name: string; count: number }[];
   /** The instant the server rendered, so badges hydrate without a mismatch. */
   renderedAt: number;
+  locale: Locale;
+  dict: Dictionary;
 }) {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
@@ -86,10 +91,10 @@ export function Directory({
   const [position, setPosition] = useState<Coordinates | null>(null);
   const [pane, setPane] = useState<'list' | 'map'>('list');
   const [selected, setSelected] = useState<string | null>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+
   // Starts at the server's clock so hydration matches the delivered HTML, then
-  // corrects to the visitor's own clock and ticks every minute. The page is
-  // revalidated hourly, so the delivered badge can be up to an hour stale — the
-  // effect below fixes that on the first frame after hydration.
+  // corrects to the visitor's own clock and ticks every minute.
   const [now, setNow] = useState<Date>(() => new Date(renderedAt));
 
   useEffect(() => {
@@ -98,32 +103,35 @@ export function Directory({
     return () => clearInterval(timer);
   }, []);
 
-  // Restore shared state from the URL without pulling in the router on mount.
+  // Restore shared state from the URL so a filtered view can be sent to someone.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const next = { ...EMPTY_FILTERS };
-    for (const key of Object.keys(EMPTY_FILTERS) as (keyof FilterState)[]) {
-      if (key === 'neighbourhood') continue;
-      if (params.get(key) === '1') (next[key] as boolean) = true;
-    }
+    for (const key of TOGGLES) if (params.get(key) === '1') next[key] = true;
     next.neighbourhood = params.get('neighbourhood');
     setFilters(next);
     const q = params.get('q');
     if (q) setQuery(q);
     const sortParam = params.get('sort');
-    if (sortParam === 'rating' || sortParam === 'name' || sortParam === 'distance') setSort(sortParam);
+    if (['rating', 'name', 'distance', 'updated'].includes(sortParam ?? '')) {
+      setSort(sortParam as SortKey);
+    }
   }, []);
 
   const syncUrl = useCallback((next: FilterState, nextQuery: string, nextSort: SortKey) => {
-    const params = new URLSearchParams();
-    for (const [key, value] of Object.entries(next)) {
-      if (value === true) params.set(key, '1');
-      else if (typeof value === 'string' && value) params.set(key, value);
+    const params = new URLSearchParams(window.location.search);
+    for (const key of TOGGLES) {
+      if (next[key]) params.set(key, '1');
+      else params.delete(key);
     }
+    if (next.neighbourhood) params.set('neighbourhood', next.neighbourhood);
+    else params.delete('neighbourhood');
     if (nextQuery) params.set('q', nextQuery);
+    else params.delete('q');
     if (nextSort !== 'name') params.set('sort', nextSort);
-    const url = params.toString() ? `?${params}` : window.location.pathname;
-    window.history.replaceState(null, '', url);
+    else params.delete('sort');
+    const search = params.toString();
+    window.history.replaceState(null, '', search ? `?${search}` : window.location.pathname);
   }, []);
 
   const fuse = useMemo(
@@ -141,15 +149,15 @@ export function Directory({
     [venues],
   );
 
-  const results = useMemo(() => {
-    const searched = query.trim() ? fuse.search(query.trim()).map((hit) => hit.item) : venues;
-    const clock = now;
-    const filtered = searched.filter((venue) => matchesFilters(venue, filters, clock));
+  const searched = useMemo(
+    () => (query.trim() ? fuse.search(query.trim()).map((hit) => hit.item) : venues),
+    [query, fuse, venues],
+  );
 
-    const withDistance = filtered.map((venue) => ({
-      venue,
-      distance: position ? haversine(position, venue) : null,
-    }));
+  const results = useMemo(() => {
+    const withDistance = searched
+      .filter((venue) => matchesFilters(venue, filters, now))
+      .map((venue) => ({ venue, distance: position ? haversine(position, venue) : null }));
 
     withDistance.sort((a, b) => {
       if (sort === 'distance' && a.distance != null && b.distance != null) return a.distance - b.distance;
@@ -157,10 +165,10 @@ export function Directory({
       if (sort === 'updated') {
         return (b.venue.hours_updated_at ?? '').localeCompare(a.venue.hours_updated_at ?? '');
       }
-      return a.venue.name.localeCompare(b.venue.name, 'nl');
+      return a.venue.name.localeCompare(b.venue.name, locale);
     });
     return withDistance;
-  }, [venues, query, filters, sort, position, now, fuse]);
+  }, [searched, filters, sort, position, now, locale]);
 
   const activeFilterKeys = (Object.keys(filters) as (keyof FilterState)[]).filter((key) =>
     key === 'neighbourhood' ? filters.neighbourhood != null : filters[key] === true,
@@ -172,8 +180,6 @@ export function Directory({
    */
   const narrowestFilter = useMemo(() => {
     if (results.length > 0 || activeFilterKeys.length === 0) return null;
-    const searched = query.trim() ? fuse.search(query.trim()).map((hit) => hit.item) : venues;
-
     let best: { key: keyof FilterState; gain: number } | null = null;
     for (const key of activeFilterKeys) {
       const relaxed: FilterState = { ...filters, [key]: key === 'neighbourhood' ? null : false };
@@ -181,7 +187,7 @@ export function Directory({
       if (gain > 0 && (!best || gain > best.gain)) best = { key, gain };
     }
     return best;
-  }, [results.length, activeFilterKeys, filters, query, venues, fuse, now]);
+  }, [results.length, activeFilterKeys, filters, searched, now]);
 
   const update = (patch: Partial<FilterState>) => {
     const next = { ...filters, ...patch };
@@ -189,26 +195,48 @@ export function Directory({
     syncUrl(next, query, sort);
   };
 
+  const selectFromMap = (slug: string | null) => {
+    setSelected(slug);
+    if (!slug) return;
+    listRef.current
+      ?.querySelector(`[data-slug="${slug}"]`)
+      ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  };
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-4 lg:h-[calc(100dvh-8rem)] lg:py-6">
-      <div className="lg:grid lg:h-full lg:grid-cols-[minmax(360px,420px)_1fr] lg:gap-6">
+    <div className="mx-auto w-full max-w-7xl px-4 pb-6 lg:h-[calc(100dvh-8.5rem)] lg:pb-8">
+      <div className="lg:grid lg:h-full lg:grid-cols-[minmax(370px,26rem)_1fr] lg:gap-5">
         <div className="flex min-h-0 flex-col">
-          <label htmlFor="venue-search" className="sr-only">
-            Search coffeeshops by name, street or neighbourhood
-          </label>
-          <input
-            id="venue-search"
-            type="search"
-            value={query}
-            placeholder="Search by name, street or neighbourhood"
-            onChange={(event) => {
-              setQuery(event.target.value);
-              syncUrl(filters, event.target.value, sort);
-            }}
-            className="w-full rounded-md border border-[var(--color-line)] bg-[var(--color-surface)] px-3 py-3 text-base"
-          />
+          <div className="relative">
+            <label htmlFor="venue-search" className="sr-only">
+              {dict.search.label}
+            </label>
+            <svg
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-muted)]"
+              width="17"
+              height="17"
+              viewBox="0 0 18 18"
+              aria-hidden
+              focusable="false"
+            >
+              <circle cx="7.6" cy="7.6" r="5.2" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <path d="m11.6 11.6 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <input
+              id="venue-search"
+              type="search"
+              value={query}
+              placeholder={dict.search.placeholder}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                syncUrl(filters, event.target.value, sort);
+              }}
+              className="panel w-full py-3 pl-10 pr-3 text-base outline-none placeholder:text-[var(--color-muted)]"
+            />
+          </div>
 
           <NearMe
+            dict={dict.nearMe}
             position={position}
             onPosition={(coords) => {
               setPosition(coords);
@@ -221,33 +249,37 @@ export function Directory({
             onNeighbourhood={(name) => update({ neighbourhood: name })}
           />
 
-          <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Filters">
-            {(['openNow', 'openLate', 'terrace', 'wheelchair', 'highlyRated', 'hasReviews', 'includeClosed'] as const).map(
-              (key) => (
-                <button
-                  key={key}
-                  type="button"
-                  aria-pressed={filters[key]}
-                  onClick={() => update({ [key]: !filters[key] } as Partial<FilterState>)}
-                  className={`rounded-full border px-3 py-1.5 text-sm ${
-                    filters[key]
-                      ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/15 text-[var(--color-text)]'
-                      : 'border-[var(--color-line)] text-[var(--color-muted)]'
-                  }`}
-                >
-                  {FILTER_LABELS[key]}
-                </button>
-              ),
+          <div className="mt-3 flex flex-wrap gap-1.5" role="group" aria-label={dict.filters.legend}>
+            {TOGGLES.map((key) => (
+              <button
+                key={key}
+                type="button"
+                aria-pressed={filters[key]}
+                onClick={() => update({ [key]: !filters[key] } as Partial<FilterState>)}
+                className={`chip ${filters[key] ? 'chip-on' : ''}`}
+              >
+                {dict.filters[key]}
+              </button>
+            ))}
+            {filters.neighbourhood && (
+              <button type="button" className="chip chip-on" onClick={() => update({ neighbourhood: null })}>
+                {filters.neighbourhood}
+                <span aria-hidden>×</span>
+              </button>
             )}
           </div>
 
           <div className="mt-3 flex items-center justify-between gap-3 text-sm text-[var(--color-muted)]">
             <p aria-live="polite">
-              {results.length} {results.length === 1 ? 'venue' : 'venues'}
-              {filters.neighbourhood ? ` in ${filters.neighbourhood}` : ''}
+              <span className="font-medium text-[var(--color-text)]">
+                {plural(dict.list.count, results.length, locale)}
+              </span>
+              {filters.neighbourhood
+                ? ` ${format(dict.list.inNeighbourhood, { name: filters.neighbourhood })}`
+                : ''}
             </p>
             <label className="flex items-center gap-2">
-              <span>Sort</span>
+              <span className="sr-only sm:not-sr-only">{dict.sort.label}</span>
               <select
                 value={sort}
                 onChange={(event) => {
@@ -255,45 +287,53 @@ export function Directory({
                   setSort(next);
                   syncUrl(filters, query, next);
                 }}
-                className="rounded border border-[var(--color-line)] bg-[var(--color-surface)] px-2 py-1"
+                className="rounded-lg border border-[var(--color-line)] bg-[var(--color-surface)] px-2 py-1.5 text-[var(--color-text)]"
               >
-                <option value="name">Name</option>
-                <option value="rating">Rating</option>
+                <option value="name">{dict.sort.name}</option>
+                <option value="rating">{dict.sort.rating}</option>
                 <option value="distance" disabled={!position}>
-                  Distance
+                  {dict.sort.distance}
                 </option>
-                <option value="updated">Recently updated</option>
+                <option value="updated">{dict.sort.updated}</option>
               </select>
             </label>
           </div>
 
-          <div className="mt-2 flex gap-2 lg:hidden">
+          <div
+            className="mt-3 grid grid-cols-2 gap-1 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface)] p-1 lg:hidden"
+            role="group"
+          >
             {(['list', 'map'] as const).map((value) => (
               <button
                 key={value}
                 type="button"
                 aria-pressed={pane === value}
                 onClick={() => setPane(value)}
-                className={`flex-1 rounded-md border px-3 py-2 text-sm capitalize ${
-                  pane === value ? 'border-[var(--color-accent)]' : 'border-[var(--color-line)] text-[var(--color-muted)]'
+                className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  pane === value
+                    ? 'bg-[var(--color-surface-3)] text-[var(--color-text)]'
+                    : 'text-[var(--color-muted)]'
                 }`}
               >
-                {value}
+                {dict.list[value]}
               </button>
             ))}
           </div>
 
           <ul
-            aria-label="Venues"
-            className={`mt-3 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 ${pane === 'map' ? 'hidden lg:block' : ''}`}
+            ref={listRef}
+            aria-label={dict.list.venues}
+            className={`scroll-slim mt-3 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1 ${
+              pane === 'map' ? 'hidden lg:block' : ''
+            }`}
           >
             {results.length === 0 && (
-              <li className="rounded-md border border-dashed border-[var(--color-line)] p-6 text-center text-sm text-[var(--color-muted)]">
-                <p>No venues match all of these filters.</p>
+              <li className="rounded-xl border border-dashed border-[var(--color-line-strong)] p-8 text-center text-sm text-[var(--color-muted)]">
+                <p>{dict.list.empty}</p>
                 {narrowestFilter ? (
                   <button
                     type="button"
-                    className="mt-3 rounded border border-[var(--color-line)] px-3 py-1.5 text-[var(--color-text)]"
+                    className="btn-quiet mt-4 px-3 py-2 text-[var(--color-text)]"
                     onClick={() =>
                       update(
                         narrowestFilter.key === 'neighbourhood'
@@ -302,16 +342,19 @@ export function Directory({
                       )
                     }
                   >
-                    Drop “{FILTER_LABELS[narrowestFilter.key]}” to see {narrowestFilter.gain}
+                    {format(dict.list.drop, {
+                      label: dict.filters[narrowestFilter.key],
+                      gain: narrowestFilter.gain,
+                    })}
                   </button>
                 ) : (
                   activeFilterKeys.length > 0 && (
                     <button
                       type="button"
-                      className="mt-3 rounded border border-[var(--color-line)] px-3 py-1.5 text-[var(--color-text)]"
+                      className="btn-quiet mt-4 px-3 py-2 text-[var(--color-text)]"
                       onClick={() => update(EMPTY_FILTERS)}
                     >
-                      Clear all filters
+                      {dict.list.clearAll}
                     </button>
                   )
                 )}
@@ -319,31 +362,27 @@ export function Directory({
             )}
 
             {results.map(({ venue, distance }) => (
-              <li key={venue.slug}>
+              <li key={venue.slug} data-slug={venue.slug}>
                 <Link
-                  href={`/coffeeshop/${venue.slug}`}
+                  href={`/${locale}/coffeeshop/${venue.slug}`}
                   onMouseEnter={() => setSelected(venue.slug)}
                   onFocus={() => setSelected(venue.slug)}
-                  className={`block rounded-md border p-3 transition-colors ${
-                    selected === venue.slug
-                      ? 'border-[var(--color-accent)] bg-[var(--color-surface-2)]'
-                      : 'border-[var(--color-line)] bg-[var(--color-surface)]'
-                  }`}
+                  className={`card p-3.5 ${selected === venue.slug ? 'card-active' : ''}`}
                 >
                   <div className="flex items-baseline justify-between gap-3">
-                    <span className="font-medium">{venue.name}</span>
+                    <span className="font-semibold">{venue.name}</span>
                     {distance != null && (
-                      <span className="shrink-0 text-xs text-[var(--color-muted)]">
+                      <span className="shrink-0 text-xs tabular-nums text-[var(--color-muted)]">
                         {formatDistance(distance)}
                       </span>
                     )}
                   </div>
-                  <p className="mt-0.5 text-sm text-[var(--color-muted)]">
+                  <p className="mt-0.5 truncate text-sm text-[var(--color-muted)]">
                     {venue.address}
                     {venue.neighbourhood ? ` · ${venue.neighbourhood}` : ''}
                   </p>
-                  <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <OpenBadge venue={venue} now={now} />
+                  <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                    <OpenBadge venue={venue} dict={dict.badge} now={now} />
                     {venue.rating_count > 0 && (
                       <span className="text-xs text-[var(--color-muted)]">
                         {venue.rating_avg?.toFixed(1)} ★ ({venue.rating_count})
@@ -357,7 +396,7 @@ export function Directory({
         </div>
 
         <div
-          className={`mt-4 h-[60dvh] overflow-hidden rounded-lg border border-[var(--color-line)] lg:mt-0 lg:h-full ${
+          className={`panel mt-4 h-[62dvh] overflow-hidden lg:mt-0 lg:h-full ${
             pane === 'list' ? 'hidden lg:block' : ''
           }`}
         >
@@ -365,8 +404,10 @@ export function Directory({
             venues={results.map((entry) => entry.venue)}
             position={position}
             selected={selected}
-            onSelect={setSelected}
+            onSelect={selectFromMap}
             now={now}
+            locale={locale}
+            dict={dict}
           />
         </div>
       </div>

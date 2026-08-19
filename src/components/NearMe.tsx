@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import type { Dictionary } from '@/i18n';
 
 export interface Coordinates {
   lat: number;
@@ -15,11 +16,13 @@ type Phase = 'idle' | 'asking' | 'granted' | 'denied' | 'unavailable';
  * or stored on a server. Denial falls back to picking a neighbourhood (§F7).
  */
 export function NearMe({
+  dict,
   position,
   onPosition,
   neighbourhoods,
   onNeighbourhood,
 }: {
+  dict: Dictionary['nearMe'];
   position: Coordinates | null;
   onPosition: (coords: Coordinates | null) => void;
   neighbourhoods: { slug: string; name: string; count: number }[];
@@ -44,19 +47,19 @@ export function NearMe({
   };
 
   return (
-    <div className="mt-3">
+    <div className="mt-2.5">
       {position ? (
-        <div className="flex items-center justify-between rounded-md border border-[var(--color-line)] bg-[var(--color-surface)] px-3 py-2 text-sm">
-          <span className="text-[var(--color-muted)]">Sorting by distance from your location</span>
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-[color-mix(in_srgb,var(--color-accent)_40%,transparent)] bg-[var(--color-accent-soft)] px-3.5 py-2.5 text-sm">
+          <span className="text-[var(--color-text)]">{dict.sorting}</span>
           <button
             type="button"
-            className="underline"
+            className="shrink-0 text-[var(--color-muted)] underline underline-offset-4"
             onClick={() => {
               onPosition(null);
               setPhase('idle');
             }}
           >
-            Clear
+            {dict.clear}
           </button>
         </div>
       ) : (
@@ -64,36 +67,36 @@ export function NearMe({
           type="button"
           onClick={request}
           disabled={phase === 'asking'}
-          className="w-full rounded-md border border-[var(--color-line)] bg-[var(--color-surface)] px-3 py-3 text-sm font-medium disabled:opacity-60"
+          className="btn-quiet w-full px-3 py-3 text-sm font-medium disabled:opacity-60"
         >
-          {phase === 'asking' ? 'Waiting for your browser…' : 'Find venues near me'}
+          <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden focusable="false">
+            <circle cx="9" cy="9" r="2.4" fill="currentColor" />
+            <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" strokeWidth="1.4" />
+            <path d="M9 .8v2.4M9 14.8v2.4M.8 9h2.4M14.8 9h2.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+          </svg>
+          {phase === 'asking' ? dict.waiting : dict.cta}
         </button>
       )}
 
       {phase === 'idle' && !position && (
-        <p className="mt-1.5 text-xs text-[var(--color-muted)]">
-          Your location is used in this browser to sort the list. It is never sent to us.
-        </p>
+        <p className="mt-1.5 px-1 text-xs leading-relaxed text-[var(--color-muted)]">{dict.note}</p>
       )}
 
       {(phase === 'denied' || phase === 'unavailable') && (
-        <div className="mt-2 rounded-md border border-[var(--color-line)] bg-[var(--color-surface)] p-3">
+        <div className="panel mt-2 p-3.5">
           <p className="text-sm text-[var(--color-muted)]">
-            {phase === 'denied'
-              ? 'No problem — location access is off.'
-              : 'This browser does not offer location access.'}{' '}
-            Pick a neighbourhood instead:
+            {phase === 'denied' ? dict.denied : dict.unavailable} {dict.pick}
           </p>
           <label className="sr-only" htmlFor="neighbourhood-picker">
-            Neighbourhood
+            {dict.neighbourhood}
           </label>
           <select
             id="neighbourhood-picker"
-            className="mt-2 w-full rounded border border-[var(--color-line)] bg-[var(--color-surface-2)] px-2 py-2 text-sm"
+            className="mt-2 w-full rounded-lg border border-[var(--color-line)] bg-[var(--color-surface-2)] px-2.5 py-2 text-sm"
             defaultValue=""
             onChange={(event) => onNeighbourhood(event.target.value || null)}
           >
-            <option value="">All neighbourhoods</option>
+            <option value="">{dict.all}</option>
             {neighbourhoods.map((entry) => (
               <option key={entry.slug} value={entry.name}>
                 {entry.name} ({entry.count})

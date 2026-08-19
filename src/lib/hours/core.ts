@@ -166,20 +166,31 @@ export function weeklyTable(venue: HoursFields): { day: number; intervals: Hours
   return resolved.weekly.map((intervals, day) => ({ day, intervals }));
 }
 
-export const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+export type BadgeTone = 'open' | 'soon' | 'closed' | 'unknown';
 
-/** Badge copy for §F4. `Hours unknown` is a legitimate state, never a guess. */
-export function badgeLabel(state: OpenState): { text: string; tone: 'open' | 'soon' | 'closed' | 'unknown' } {
+/**
+ * The badge as data rather than as a sentence, so each locale renders it in its
+ * own words. `unknown` is a legitimate state and never collapses into
+ * `closed` — §F4 forbids guessing.
+ */
+export type BadgeDescriptor =
+  | { key: 'openUntil'; time: string; tone: 'open' }
+  | { key: 'closingSoon'; time: string; tone: 'soon' }
+  | { key: 'opensAt'; time: string; tone: 'closed' }
+  | { key: 'closed'; tone: 'closed' }
+  | { key: 'unknown'; tone: 'unknown' };
+
+export function badgeDescriptor(state: OpenState): BadgeDescriptor {
   switch (state.kind) {
     case 'open':
       return state.closingSoon
-        ? { text: `Closing soon · ${state.until}`, tone: 'soon' }
-        : { text: `Open until ${state.until}`, tone: 'open' };
+        ? { key: 'closingSoon', time: state.until, tone: 'soon' }
+        : { key: 'openUntil', time: state.until, tone: 'open' };
     case 'closed':
       return state.opensAt
-        ? { text: `Opens at ${state.opensAt}`, tone: 'closed' }
-        : { text: 'Closed', tone: 'closed' };
+        ? { key: 'opensAt', time: state.opensAt, tone: 'closed' }
+        : { key: 'closed', tone: 'closed' };
     default:
-      return { text: 'Hours unknown', tone: 'unknown' };
+      return { key: 'unknown', tone: 'unknown' };
   }
 }
