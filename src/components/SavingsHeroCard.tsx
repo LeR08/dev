@@ -3,11 +3,23 @@ import React, { useRef } from 'react';
 import { Animated, Platform, Pressable, View, type ViewStyle } from 'react-native';
 
 import { Text } from '@/components/ui/Text';
+import { sizeForLength } from './ui/autoSize';
 import { formatMoney } from '@/domain/format';
 import { savingsHeadline } from '@/domain/savings';
 import { useTranslation } from '@/i18n/I18nProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 import { USE_NATIVE_DRIVER } from './ui/animation';
+
+/**
+ * The biggest number in the app has to stay on one line — a wrapped currency
+ * amount looks broken — so it steps down as it lengthens instead.
+ */
+const HERO_SIZES = [
+  { upTo: 9, fontSize: 46, lineHeight: 50 },
+  { upTo: 12, fontSize: 38, lineHeight: 43 },
+  { upTo: 15, fontSize: 31, lineHeight: 36 },
+  { upTo: Infinity, fontSize: 26, lineHeight: 31 },
+];
 
 export type SavingsHeroCardProps = {
   /** Null when there's no spending baseline to compare against yet. */
@@ -76,7 +88,11 @@ export function SavingsHeroCard({ saved, currency, onPress }: SavingsHeroCardPro
 
           {hasBaseline ? (
             <>
-              <Text variant="hero" style={{ color: theme.money.onBase }} numberOfLines={1} adjustsFontSizeToFit>
+              <Text
+                variant="hero"
+                style={{ color: theme.money.onBase, ...sizeForLength(formatMoney(Math.abs(saved), currency), HERO_SIZES) }}
+                numberOfLines={1}
+              >
                 {formatMoney(Math.abs(saved), currency)}
               </Text>
               <Text variant="body" style={{ color: theme.money.onBase, opacity: 0.85 }}>
