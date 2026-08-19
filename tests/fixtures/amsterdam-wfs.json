@@ -1,0 +1,239 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "exploitatievergunning.266501091",
+   "geometry_name": 2874,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.895861857138864,
+     52.375907946055015
+    ]
+   },
+   "properties": {
+    "name": 2874,
+    "id": 266501091,
+    "zaaknummer": 2874,
+    "zaaknaam": "420CAFE",
+    "adres": "Oudebrugsteeg 27-H",
+    "zaak_categorie": "Onbekend",
+    "zaak_specificatie": "Coffeeshop",
+    "begindatum": "2023-07-01",
+    "einddatum": "2026-07-01",
+    "openingstijden_zo_do_van": "07.00",
+    "openingstijden_zo_do_tot": "01.00",
+    "openingstijden_vr_za_van": "07.00",
+    "openingstijden_vr_za_tot": "01.00",
+    "o_tijden_terras_zo_do_van": null,
+    "o_tijden_terras_zo_do_tot": null,
+    "o_tijden_terras_vr_za_van": null,
+    "o_tijden_terras_vr_za_tot": null,
+    "postcode": "1012JN",
+    "status_vergunning": "Verleend",
+    "status_tijdelijk_terras": null,
+    "toestemming_tijdelijk_terras": null,
+    "publ_besluit_tijdelijk_terras": null,
+    "tijdelijk_terras_details": null,
+    "status_verlenging_tijdelijk_terras": null,
+    "verlenging_tijdelijk_terras_details": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "exploitatievergunning.266500697",
+   "geometry_name": 12730,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.859516111442317,
+     52.36595492393666
+    ]
+   },
+   "properties": {
+    "name": 12730,
+    "id": 266500697,
+    "zaaknummer": 12730,
+    "zaaknaam": "Coffeeshop The Dream",
+    "adres": "Witte de Withstraat 30A-H",
+    "zaak_categorie": "Coffeeshop",
+    "zaak_specificatie": "Coffeeshop",
+    "begindatum": "2024-06-01",
+    "einddatum": "2027-06-01",
+    "openingstijden_zo_do_van": "07.00",
+    "openingstijden_zo_do_tot": "01.00",
+    "openingstijden_vr_za_van": "07.00",
+    "openingstijden_vr_za_tot": "01.00",
+    "o_tijden_terras_zo_do_van": null,
+    "o_tijden_terras_zo_do_tot": null,
+    "o_tijden_terras_vr_za_van": null,
+    "o_tijden_terras_vr_za_tot": null,
+    "postcode": "1057XZ",
+    "status_vergunning": "Verleend",
+    "status_tijdelijk_terras": null,
+    "toestemming_tijdelijk_terras": null,
+    "publ_besluit_tijdelijk_terras": null,
+    "tijdelijk_terras_details": null,
+    "status_verlenging_tijdelijk_terras": null,
+    "verlenging_tijdelijk_terras_details": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "exploitatievergunning.266500627",
+   "geometry_name": 1115,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.919830202521983,
+     52.353454814964415
+    ]
+   },
+   "properties": {
+    "name": 1115,
+    "id": 266500627,
+    "zaaknummer": 1115,
+    "zaaknaam": "Café Oost",
+    "adres": "Krugerplein 40",
+    "zaak_categorie": "Café",
+    "zaak_specificatie": "Café",
+    "begindatum": "2025-12-01",
+    "einddatum": "2028-12-01",
+    "openingstijden_zo_do_van": "07.00",
+    "openingstijden_zo_do_tot": "01.00",
+    "openingstijden_vr_za_van": "07.00",
+    "openingstijden_vr_za_tot": "03.00",
+    "o_tijden_terras_zo_do_van": "07.00",
+    "o_tijden_terras_zo_do_tot": "01.00",
+    "o_tijden_terras_vr_za_van": "07.00",
+    "o_tijden_terras_vr_za_tot": "02.00",
+    "postcode": "1091LA",
+    "status_vergunning": "Verleend",
+    "status_tijdelijk_terras": null,
+    "toestemming_tijdelijk_terras": null,
+    "publ_besluit_tijdelijk_terras": null,
+    "tijdelijk_terras_details": null,
+    "status_verlenging_tijdelijk_terras": null,
+    "verlenging_tijdelijk_terras_details": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "exploitatievergunning.44760239943",
+   "geometry_name": 14821,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.911232400321927,
+     52.34659470925374
+    ]
+   },
+   "properties": {
+    "name": 14821,
+    "id": 44760239943,
+    "zaaknummer": 14821,
+    "zaaknaam": "Koffieshop Happy Days",
+    "adres": "Amsteldijk 139-H",
+    "zaak_categorie": "Onbekend",
+    "zaak_specificatie": "Coffeeshop",
+    "begindatum": "2024-12-04",
+    "einddatum": "2027-11-01",
+    "openingstijden_zo_do_van": null,
+    "openingstijden_zo_do_tot": null,
+    "openingstijden_vr_za_van": null,
+    "openingstijden_vr_za_tot": null,
+    "o_tijden_terras_zo_do_van": null,
+    "o_tijden_terras_zo_do_tot": null,
+    "o_tijden_terras_vr_za_van": null,
+    "o_tijden_terras_vr_za_tot": null,
+    "postcode": "1079LE",
+    "status_vergunning": "Verleend",
+    "status_tijdelijk_terras": null,
+    "toestemming_tijdelijk_terras": null,
+    "publ_besluit_tijdelijk_terras": null,
+    "tijdelijk_terras_details": null,
+    "status_verlenging_tijdelijk_terras": null,
+    "verlenging_tijdelijk_terras_details": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "exploitatievergunning.999001",
+   "geometry_name": 12730,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.859516111442317,
+     52.36595492393666
+    ]
+   },
+   "properties": {
+    "name": 12730,
+    "id": 999001,
+    "zaaknummer": 99001,
+    "zaaknaam": "Coffeeshop Junk Hours",
+    "adres": "Nieuwmarkt 12-A",
+    "zaak_categorie": "Coffeeshop",
+    "zaak_specificatie": "Coffeeshop",
+    "begindatum": "2024-06-01",
+    "einddatum": null,
+    "openingstijden_zo_do_van": "_kies",
+    "openingstijden_zo_do_tot": "-",
+    "openingstijden_vr_za_van": "1 uur voor eerste activiteit",
+    "openingstijden_vr_za_tot": "0700",
+    "o_tijden_terras_zo_do_van": null,
+    "o_tijden_terras_zo_do_tot": null,
+    "o_tijden_terras_vr_za_van": null,
+    "o_tijden_terras_vr_za_tot": null,
+    "postcode": "1011JR",
+    "status_vergunning": "Verleend",
+    "status_tijdelijk_terras": null,
+    "toestemming_tijdelijk_terras": null,
+    "publ_besluit_tijdelijk_terras": null,
+    "tijdelijk_terras_details": null,
+    "status_verlenging_tijdelijk_terras": null,
+    "verlenging_tijdelijk_terras_details": null
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "exploitatievergunning.999002",
+   "geometry_name": 12730,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.859516111442317,
+     52.36595492393666
+    ]
+   },
+   "properties": {
+    "name": 12730,
+    "id": 999002,
+    "zaaknummer": 99002,
+    "zaaknaam": "Coffeeshop Ingetrokken",
+    "adres": "Zeedijk 5",
+    "zaak_categorie": "Coffeeshop",
+    "zaak_specificatie": "Coffeeshop",
+    "begindatum": "2024-06-01",
+    "einddatum": null,
+    "openingstijden_zo_do_van": "07.00",
+    "openingstijden_zo_do_tot": "01.00",
+    "openingstijden_vr_za_van": "07.00",
+    "openingstijden_vr_za_tot": "01.00",
+    "o_tijden_terras_zo_do_van": null,
+    "o_tijden_terras_zo_do_tot": null,
+    "o_tijden_terras_vr_za_van": null,
+    "o_tijden_terras_vr_za_tot": null,
+    "postcode": "1057XZ",
+    "status_vergunning": "Ingetrokken",
+    "status_tijdelijk_terras": null,
+    "toestemming_tijdelijk_terras": null,
+    "publ_besluit_tijdelijk_terras": null,
+    "tijdelijk_terras_details": null,
+    "status_verlenging_tijdelijk_terras": null,
+    "verlenging_tijdelijk_terras_details": null
+   }
+  }
+ ]
+}
