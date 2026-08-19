@@ -1,0 +1,106 @@
+[
+  {
+    "id": "5c7ed529-5217-450a-96c7-0f658b02770b",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T15:18:06.859Z",
+    "finished_at": "2026-08-19T15:20:31.149Z",
+    "inserted": 0,
+    "updated": 145,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 26,
+    "errors": []
+  },
+  {
+    "id": "2cc766c3-5818-490b-b5eb-930665b3be2a",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T15:13:27.041Z",
+    "finished_at": "2026-08-19T15:14:17.635Z",
+    "inserted": 0,
+    "updated": 145,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues"
+    ]
+  },
+  {
+    "id": "9fe018bf-2430-436a-8bab-788f74b96a8c",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T15:08:49.691Z",
+    "finished_at": "2026-08-19T15:13:06.166Z",
+    "inserted": 0,
+    "updated": 145,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass: every mirror failed: Error: overpass overpass.private.coffee: all 2 attempts failed: Error: overpass overpass.private.coffee: HTTP 504"
+    ]
+  },
+  {
+    "id": "a093be44-2192-499e-92e0-a3c82a52be50",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T15:07:34.260Z",
+    "finished_at": "2026-08-19T15:08:28.843Z",
+    "inserted": 0,
+    "updated": 145,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues"
+    ]
+  },
+  {
+    "id": "6b653544-e403-4884-b8a2-4ec5584e0a38",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T15:04:25.236Z",
+    "finished_at": "2026-08-19T15:06:03.931Z",
+    "inserted": 0,
+    "updated": 145,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": []
+  },
+  {
+    "id": "40d14c7e-fe60-4b2c-88e5-b44790fb92d6",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T14:57:21.610Z",
+    "finished_at": "2026-08-19T14:58:28.900Z",
+    "inserted": 0,
+    "updated": 145,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 26,
+    "errors": []
+  },
+  {
+    "id": "d451a197-4d32-492c-8bde-6016622b955b",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T14:46:33.391Z",
+    "finished_at": "2026-08-19T14:47:01.706Z",
+    "inserted": 0,
+    "updated": 145,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 26,
+    "errors": []
+  },
+  {
+    "id": "f06ff6ac-7987-4565-806c-dd0ff58b7d21",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T14:34:01.868Z",
+    "finished_at": "2026-08-19T14:40:08.462Z",
+    "inserted": 145,
+    "updated": 0,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass: every mirror failed: Error: overpass overpass.private.coffee: all 2 attempts failed: AbortError: This operation was aborted"
+    ]
+  }
+]
