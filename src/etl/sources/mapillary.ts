@@ -39,6 +39,9 @@ interface GraphImage {
   is_pano?: boolean;
 }
 
+/** Ten years. Old enough to still be the same street, young enough to still be the same shop. */
+export const MAX_PHOTO_AGE_MS = 10 * 365.25 * 24 * 60 * 60 * 1000;
+
 /** Metres per degree of latitude; longitude is scaled by the parallel. */
 const LAT_DEGREE_M = 111_320;
 
@@ -116,12 +119,34 @@ export function pickFacingImage(
       return { image, offBy, metres: distance(from, venue) };
     })
     .filter((entry): entry is { image: GraphImage; offBy: number; metres: number } => entry != null)
-    .filter((entry) => entry.offBy <= maxAngle && entry.metres >= 3);
+    .filter((entry) => entry.offBy <= maxAngle && entry.metres >= 3)
+    // Beyond this, the shopfront in the frame is more likely a former tenant
+    // than the venue named beside it.
+    .filter(
+      (entry) =>
+        entry.image.captured_at == null ||
+        entry.image.captured_at >= Date.now() - MAX_PHOTO_AGE_MS,
+    );
 
   if (scored.length === 0) return null;
-  // Prefer well-aimed over merely close; among the well-aimed, prefer recent.
+
+  // Aim and age are both costs, priced in the same currency, so the trade-off
+  // between them is stated rather than left to whichever sort key came first.
+  // Every 15 degrees off aim costs a band; so does every four years of age.
+  // This directory already holds seven addresses whose coffeeshop became a
+  // café, so an old photograph of a shopfront is a claim about a business that
+  // may well be gone — worth more than a few degrees of framing.
+  const YEAR_MS = 365.25 * 24 * 60 * 60 * 1000;
+  const cost = (entry: { offBy: number; image: GraphImage }) => {
+    const ageYears = entry.image.captured_at
+      ? (Date.now() - entry.image.captured_at) / YEAR_MS
+      : 0;
+    return Math.floor(entry.offBy / 15) + Math.floor(ageYears / 4);
+  };
+
   scored.sort(
     (a, b) =>
+      cost(a) - cost(b) ||
       a.offBy - b.offBy ||
       (b.image.captured_at ?? 0) - (a.image.captured_at ?? 0) ||
       a.metres - b.metres,

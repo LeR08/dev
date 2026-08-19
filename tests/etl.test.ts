@@ -768,3 +768,38 @@ describe('rejecting panoramic captures', () => {
     expect(pickFacingImage([{ ...base, id: 'p', is_pano: true }], venue)).toBeNull();
   });
 });
+
+describe('photo age', () => {
+  const venue = { lat: 52.37, lng: 4.89 };
+  const at = (yearsAgo: number) => Date.now() - yearsAgo * 365.25 * 24 * 3600 * 1000;
+  const image = (id: string, offsetDeg: number, captured: number) => ({
+    id,
+    thumb_1024_url: 'https://example.org/i.jpg',
+    camera_type: 'perspective',
+    computed_compass_angle: offsetDeg,
+    computed_geometry: { coordinates: [4.89, 52.3698] as [number, number] },
+    captured_at: captured,
+  });
+
+  it('discards a capture older than the cutoff', () => {
+    expect(pickFacingImage([image('ancient', 0, at(14))], venue)).toBeNull();
+  });
+
+  it('prefers a recent photo slightly off-aim to a decade-old one dead-on', () => {
+    // 5 degrees of aim is not worth eight years of change on a shopfront.
+    const old = image('old', 0, at(9));
+    const recent = image('recent', 20, at(1));
+    expect(pickFacingImage([old, recent], venue)?.id).toBe('recent');
+  });
+
+  it('still prefers the better aim within the same band', () => {
+    const wide = image('wide', 13, at(2));
+    const tight = image('tight', 2, at(1));
+    expect(pickFacingImage([wide, tight], venue)?.id).toBe('tight');
+  });
+
+  it('keeps a capture with no date rather than discarding it', () => {
+    const undated = { ...image('undated', 0, 0), captured_at: undefined };
+    expect(pickFacingImage([undated], venue)?.id).toBe('undated');
+  });
+});
