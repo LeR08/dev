@@ -116,6 +116,7 @@ async function main(): Promise<void> {
     overrides,
     now: startedAt,
     osmAvailable,
+    resetEnrichment: args.has('--reset-enrichment'),
   });
 
   if (directory.length > 0) {

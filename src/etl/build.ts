@@ -27,6 +27,13 @@ export interface BuildInput {
    * enrichment is carried forward untouched (§8, "keep last good data").
    */
   osmAvailable: boolean;
+  /**
+   * Drops carried enrichment instead of reusing it, so every field is rebuilt
+   * from a live source. Needed once after a provenance bug, since a wrong
+   * source label is otherwise self-perpetuating: each carry trusts the label
+   * the previous carry wrote.
+   */
+  resetEnrichment?: boolean;
 }
 
 /**
@@ -35,7 +42,10 @@ export interface BuildInput {
  * anything an admin has overridden owns itself.
  */
 export function buildVenues(input: BuildInput): Venue[] {
-  const { adapter, licences, matches, neighbourhoods, previous, overrides, now, osmAvailable } = input;
+  const {
+    adapter, licences, matches, neighbourhoods, previous, overrides, now, osmAvailable,
+    resetEnrichment = false,
+  } = input;
   const osmByLicence = new Map<string, OsmRecord>(
     matches.map((match) => [match.licence.sourceId, match.osm]),
   );
@@ -70,20 +80,27 @@ export function buildVenues(input: BuildInput): Venue[] {
           hoursWeekly: osm.openingHours
             ? expandOsmHours(osm.openingHours, licence.lat, licence.lng, weekStartFor(now))
             : null,
+          /** Everything in this branch genuinely came from OpenStreetMap. */
+          sources: { website: 'osm', phone: 'osm', amenities: 'osm' } as Record<string, string>,
         }
-      : !osmAvailable && existing?.osm_id
+      : !osmAvailable && !resetEnrichment && existing?.osm_id
         ? {
             name: existing.name,
-            // Carry only what OpenStreetMap itself gave us last time. A phone
-            // number the directory supplied must not be re-credited to OSM on
-            // the way through — and it does not need carrying, because the
-            // directory pass runs on every run and will fill it again.
-            website: existing.sources.website === 'osm' ? existing.website : null,
-            phone: existing.sources.phone === 'osm' ? existing.phone : null,
+            website: existing.website,
+            phone: existing.phone,
             osmId: existing.osm_id,
-            amenities: existing.sources.amenities === 'osm' ? existing.amenities : {},
+            amenities: existing.amenities,
             hoursActual: existing.hours_actual,
             hoursWeekly: existing.hours_source === 'osm' ? existing.hours_weekly : null,
+            // Carry the labels with the values. Re-asserting 'osm' over a
+            // carried field is how a directory phone number ends up credited to
+            // OpenStreetMap, and how that lie then survives every later run:
+            // the next carry trusts the label it wrote itself.
+            sources: {
+              ...(existing.sources.website ? { website: existing.sources.website } : {}),
+              ...(existing.sources.phone ? { phone: existing.sources.phone } : {}),
+              ...(existing.sources.amenities ? { amenities: existing.sources.amenities } : {}),
+            } as Record<string, string>,
           }
         : null;
 
@@ -138,7 +155,7 @@ export function buildVenues(input: BuildInput): Venue[] {
         name: enrichment && enrichment.name !== displayName(licence.name) ? 'osm' : 'amsterdam',
         address: 'amsterdam',
         status: 'amsterdam',
-        ...(enrichment ? { website: 'osm', phone: 'osm', amenities: 'osm' } : {}),
+        ...(enrichment?.sources ?? {}),
         ...(hoursSource ? { hours: hoursSource === 'osm' ? 'osm' : 'amsterdam' } : {}),
       },
       fetched_at: timestamp,

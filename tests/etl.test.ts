@@ -567,10 +567,21 @@ describe('provenance survives an Overpass outage', () => {
     expect(venue.sources.phone).toBe('osm');
   });
 
-  it('does not re-credit a directory phone to OpenStreetMap', () => {
-    // The directory pass runs every run and will fill it again, correctly.
+  it('carries a directory phone under its own name, not under OpenStreetMap', () => {
     const venue = rebuild([enriched({ phone: 'directory', website: 'directory' })]);
+    expect(venue.phone).toBe('020 000 0000');
+    // The value survives the outage; the credit stays truthful.
+    expect(venue.sources.phone).toBe('directory');
+    expect(venue.sources.website).toBe('directory');
+  });
+
+  it('drops carried enrichment entirely when asked to reset', () => {
+    const venue = buildVenues({
+      adapter: amsterdamAdapter, licences: [licence], matches: [], neighbourhoods: [],
+      overrides: {}, now: TODAY, previous: [enriched({ phone: 'osm' })],
+      osmAvailable: false, resetEnrichment: true,
+    })[0];
     expect(venue.phone).toBeNull();
-    expect(venue.website).toBeNull();
+    expect(venue.osm_id).toBeNull();
   });
 });
