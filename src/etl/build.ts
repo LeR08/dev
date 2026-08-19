@@ -80,8 +80,14 @@ export function buildVenues(input: BuildInput): Venue[] {
           hoursWeekly: osm.openingHours
             ? expandOsmHours(osm.openingHours, licence.lat, licence.lng, weekStartFor(now))
             : null,
-          /** Everything in this branch genuinely came from OpenStreetMap. */
-          sources: { website: 'osm', phone: 'osm', amenities: 'osm' } as Record<string, string>,
+          // Only claim a source for a field that actually carries a value:
+          // "phone from OpenStreetMap" on a venue with no phone is a claim
+          // about nothing, and it inflates every count taken from this map.
+          sources: {
+            ...(osm.website ? { website: 'osm' } : {}),
+            ...(osm.phone ? { phone: 'osm' } : {}),
+            ...(Object.keys(amenitiesFromTags(osm.tags)).length ? { amenities: 'osm' } : {}),
+          } as Record<string, string>,
         }
       : !osmAvailable && !resetEnrichment && existing?.osm_id
         ? {
@@ -97,9 +103,13 @@ export function buildVenues(input: BuildInput): Venue[] {
             // OpenStreetMap, and how that lie then survives every later run:
             // the next carry trusts the label it wrote itself.
             sources: {
-              ...(existing.sources.website ? { website: existing.sources.website } : {}),
-              ...(existing.sources.phone ? { phone: existing.sources.phone } : {}),
-              ...(existing.sources.amenities ? { amenities: existing.sources.amenities } : {}),
+              ...(existing.website && existing.sources.website
+                ? { website: existing.sources.website }
+                : {}),
+              ...(existing.phone && existing.sources.phone ? { phone: existing.sources.phone } : {}),
+              ...(Object.keys(existing.amenities).length && existing.sources.amenities
+                ? { amenities: existing.sources.amenities }
+                : {}),
             } as Record<string, string>,
           }
         : null;

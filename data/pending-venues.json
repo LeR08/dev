@@ -10,7 +10,7 @@
       "name": "Coffeeshop 158",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/717804018",
@@ -30,31 +30,7 @@
       "shop": "cannabis",
       "website": "https://www.amsterdamseedcenter.com"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
-  },
-  {
-    "osm_id": "node/1310911708",
-    "name": "The Bulldog Ex-Police Station",
-    "lat": 52.3639986,
-    "lng": 4.8833781,
-    "address": "Leidseplein 17",
-    "tags": {
-      "addr:city": "Amsterdam",
-      "addr:country": "NL",
-      "addr:housenumber": "17",
-      "addr:postcode": "1017PS",
-      "addr:street": "Leidseplein",
-      "brand": "The Bulldog",
-      "brand:wikidata": "Q2466162",
-      "brand:wikipedia": "nl:The Bulldog",
-      "check_date": "2025-03-16",
-      "name": "The Bulldog Ex-Police Station",
-      "phone": "+31 20 422 3444",
-      "shop": "cannabis",
-      "website": "https://thebulldog.com/locations/coffeeshops/the-bulldog-ex-police-station/",
-      "wheelchair": "no"
-    },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/2364940130",
@@ -71,7 +47,7 @@
       "softdrugs": "yes",
       "wheelchair": "limited"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/2506067316",
@@ -99,7 +75,7 @@
       "website": "https://www.coffeeshopclubmedia.nl/",
       "wheelchair": "limited"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/2721522174",
@@ -118,45 +94,7 @@
       "source": "BAG",
       "source:date": "2014-02-11"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
-  },
-  {
-    "osm_id": "node/2721523070",
-    "name": "Resin Coffeeshop",
-    "lat": 52.3777753,
-    "lng": 4.8953565,
-    "address": "Hekelveld 7A",
-    "tags": {
-      "addr:city": "Amsterdam",
-      "addr:housenumber": "7A",
-      "addr:postcode": "1012SN",
-      "addr:street": "Hekelveld",
-      "name": "Resin Coffeeshop",
-      "shop": "cannabis",
-      "source": "BAG",
-      "source:date": "2014-02-11",
-      "website": "https://www.coffeeshopmenus.org/",
-      "wheelchair": "yes"
-    },
-    "first_seen": "2026-08-19T15:18:06.859Z"
-  },
-  {
-    "osm_id": "node/2721771822",
-    "name": "De Kroon",
-    "lat": 52.3759804,
-    "lng": 4.8959932,
-    "address": "Oudebrugsteeg 26",
-    "tags": {
-      "addr:city": "Amsterdam",
-      "addr:housenumber": "26",
-      "addr:postcode": "1012JP",
-      "addr:street": "Oudebrugsteeg",
-      "name": "De Kroon",
-      "shop": "cannabis",
-      "source": "BAG",
-      "source:date": "2014-02-11"
-    },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/2729937432",
@@ -177,7 +115,7 @@
       "source:date": "2014-02-11",
       "website": "https://azarius.nl/pages/azarius_kerkstraat/"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/2737805640",
@@ -198,30 +136,7 @@
       "source:date": "2014-02-11",
       "wheelchair": "no"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
-  },
-  {
-    "osm_id": "node/2817536258",
-    "name": "Coffeeshop Yo-Yo",
-    "lat": 52.3563362,
-    "lng": 4.9031109,
-    "address": "Tweede Jan van der Heijdenstraat 79-H",
-    "tags": {
-      "addr:city": "Amsterdam",
-      "addr:housenumber": "79-H",
-      "addr:postcode": "1074XS",
-      "addr:street": "Tweede Jan van der Heijdenstraat",
-      "check_date": "2026-01-19",
-      "cuisine": "cannabis_coffee_shop",
-      "name": "Coffeeshop Yo-Yo",
-      "opening_hours": "Mo-Su 12:00-19:00",
-      "shop": "cannabis",
-      "source": "BAG",
-      "source:date": "2014-03-24",
-      "toilets:wheelchair": "no",
-      "wheelchair": "yes"
-    },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/2848698196",
@@ -243,7 +158,7 @@
       "source:date": "2014-05-07",
       "website": "https://www.coffeeshopnoord.com"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/3939447657",
@@ -260,7 +175,7 @@
       "shop": "cannabis",
       "wheelchair": "limited"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/4089931981",
@@ -274,7 +189,7 @@
       "name": "Bulldog Cafe Mack",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/4135906815",
@@ -290,22 +205,7 @@
       "shop": "cannabis",
       "wheelchair": "yes"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
-  },
-  {
-    "osm_id": "node/4135965001",
-    "name": "Coffee Shop Green Place",
-    "lat": 52.3720943,
-    "lng": 4.899319,
-    "address": "Kloveniersburgwal",
-    "tags": {
-      "addr:city": "Amsterdam",
-      "addr:street": "Kloveniersburgwal",
-      "name": "Coffee Shop Green Place",
-      "shop": "cannabis",
-      "wheelchair": "no"
-    },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/4194051856",
@@ -323,7 +223,7 @@
       "shop": "cannabis",
       "website": "https://www.somaseeds.nl"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/4212536376",
@@ -336,43 +236,7 @@
       "name:zh": "大麻店",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
-  },
-  {
-    "osm_id": "node/4212544089",
-    "name": "420 Cafe",
-    "lat": 52.3759282,
-    "lng": 4.8958867,
-    "address": "Oudebrugsteeg 27",
-    "tags": {
-      "addr:city": "Amsterdam",
-      "addr:housenumber": "27",
-      "addr:street": "Oudebrugsteeg",
-      "amenity": "cafe",
-      "name": "420 Cafe",
-      "shop": "cannabis"
-    },
-    "first_seen": "2026-08-19T15:18:06.859Z"
-  },
-  {
-    "osm_id": "node/4866551353",
-    "name": "The Bulldog Energy",
-    "lat": 52.3725137,
-    "lng": 4.8962514,
-    "address": "Oudezijds Voorburgwal 218",
-    "tags": {
-      "addr:city": "Amsterdam",
-      "addr:housenumber": "218",
-      "addr:postcode": "1012GJ",
-      "addr:street": "Oudezijds Voorburgwal",
-      "brand": "The Bulldog",
-      "brand:wikidata": "Q2466162",
-      "brand:wikipedia": "nl:The Bulldog",
-      "name": "The Bulldog Energy",
-      "shop": "cannabis",
-      "website": "https://www.thebulldog.com/the-bulldog-energy/"
-    },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/8932661547",
@@ -393,7 +257,7 @@
       "website": "https://kashmirlounge.nl",
       "wheelchair": "limited"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/11189859237",
@@ -405,7 +269,7 @@
       "name": "Mr K Coffeeshop",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/11237949044",
@@ -418,31 +282,7 @@
       "shop": "cannabis",
       "wheelchair": "no"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
-  },
-  {
-    "osm_id": "node/11271449631",
-    "name": "De Republiek",
-    "lat": 52.3821157,
-    "lng": 4.8786571,
-    "address": null,
-    "tags": {
-      "name": "De Republiek",
-      "shop": "cannabis"
-    },
-    "first_seen": "2026-08-19T15:18:06.859Z"
-  },
-  {
-    "osm_id": "node/12055399788",
-    "name": "Coffeeshop de Supermarkt",
-    "lat": 52.3758029,
-    "lng": 4.8737627,
-    "address": null,
-    "tags": {
-      "name": "Coffeeshop de Supermarkt",
-      "shop": "cannabis"
-    },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   },
   {
     "osm_id": "node/12085611883",
@@ -454,6 +294,6 @@
       "name": "S.W.E.D.",
       "shop": "cannabis"
     },
-    "first_seen": "2026-08-19T15:18:06.859Z"
+    "first_seen": "2026-08-19T18:21:43.481Z"
   }
 ]

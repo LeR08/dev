@@ -1,5 +1,109 @@
 [
   {
+    "id": "d5b93c37-d2de-422b-87f0-c8b9c5b515c7",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T18:28:55.524Z",
+    "finished_at": "2026-08-19T18:36:50.043Z",
+    "inserted": 0,
+    "updated": 157,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues",
+      "socials: 1 sites unreachable"
+    ]
+  },
+  {
+    "id": "9cb77a99-f00e-4535-a067-b6f329e298d4",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T18:21:43.481Z",
+    "finished_at": "2026-08-19T18:27:05.117Z",
+    "inserted": 0,
+    "updated": 157,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 17,
+    "errors": [
+      "socials: 2 sites unreachable"
+    ]
+  },
+  {
+    "id": "3659dcab-6c6d-4c2c-8227-58afd6aeb8e7",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T18:12:00.853Z",
+    "finished_at": "2026-08-19T18:18:27.581Z",
+    "inserted": 0,
+    "updated": 157,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues",
+      "socials: 1 sites unreachable"
+    ]
+  },
+  {
+    "id": "24e1ccb5-42a4-4916-87c5-c3ef48540ccf",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T18:01:05.576Z",
+    "finished_at": "2026-08-19T18:09:13.484Z",
+    "inserted": 0,
+    "updated": 157,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues",
+      "socials: 1 sites unreachable"
+    ]
+  },
+  {
+    "id": "61efbf19-62cd-4004-ac52-9e8864ca179d",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T17:51:26.915Z",
+    "finished_at": "2026-08-19T18:00:22.073Z",
+    "inserted": 0,
+    "updated": 157,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues",
+      "socials: 1 sites unreachable"
+    ]
+  },
+  {
+    "id": "f79cf1bb-d56a-4fb0-9022-9ec822f42072",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T17:44:15.502Z",
+    "finished_at": "2026-08-19T17:51:54.099Z",
+    "inserted": 0,
+    "updated": 157,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues",
+      "socials: 1 sites unreachable"
+    ]
+  },
+  {
+    "id": "8f71157d-a686-40c1-9814-80ba19dacb72",
+    "source": "amsterdam",
+    "started_at": "2026-08-19T17:35:15.722Z",
+    "finished_at": "2026-08-19T17:41:27.185Z",
+    "inserted": 0,
+    "updated": 157,
+    "unchanged": 0,
+    "closed": 0,
+    "pending": 0,
+    "errors": [
+      "overpass: Error: overpass returned no venues",
+      "socials: 1 sites unreachable"
+    ]
+  },
+  {
     "id": "897b1a15-0633-439b-b55e-0a93f2f8cb9a",
     "source": "amsterdam",
     "started_at": "2026-08-19T17:14:07.759Z",

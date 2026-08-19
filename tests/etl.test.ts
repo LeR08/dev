@@ -585,3 +585,37 @@ describe('provenance survives an Overpass outage', () => {
     expect(venue.osm_id).toBeNull();
   });
 });
+
+describe('the sources map only claims fields that have a value', () => {
+  it('does not credit a phone number that does not exist', () => {
+    const licence = {
+      sourceId: 'a1', name: 'Shop', legalName: 'Shop', address: 'Damrak 1', postcode: null,
+      lat: 52.375, lng: 4.895, licenceNumber: null, licenceValidTo: null,
+      licenceRenewalPending: false, hoursLicensed: null, hasTerrace: false,
+    };
+    const venue = buildVenues({
+      adapter: amsterdamAdapter,
+      licences: [licence],
+      // Matched in OSM, but OSM holds a website and no phone.
+      matches: [
+        {
+          licence,
+          osm: {
+            osmId: 'node/1', name: 'Shop', lat: 52.375, lng: 4.895, address: null,
+            postcode: null, website: 'https://example.org', phone: null, openingHours: null,
+            tags: {},
+          },
+          rule: 'address' as const,
+          distance: 0,
+          similarity: 1,
+        },
+      ],
+      neighbourhoods: [], previous: [], overrides: {}, now: TODAY, osmAvailable: true,
+    })[0];
+
+    expect(venue.website).toBe('https://example.org');
+    expect(venue.sources.website).toBe('osm');
+    expect(venue.phone).toBeNull();
+    expect(venue.sources.phone).toBeUndefined();
+  });
+});
