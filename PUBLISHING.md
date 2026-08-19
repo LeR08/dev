@@ -13,12 +13,17 @@ Nothing here is legal advice, and none of it has been reviewed by a lawyer. See
 |---|---|
 | Play Console account (one-off 25 USD) | you have to create it |
 | Privacy policy at a public URL | **ready** — `npm run build:legal`, host `docs/`, give Play `<host>/privacy.html` |
-| App icon 512×512 | `assets-tya/icon.png` is 1024×1024, downscale it |
-| Feature graphic 1024×500 | not made yet |
-| Phone screenshots (2–8) | not made yet |
+| App icon 512×512 | **ready** — `store/icon-512.png` |
+| Feature graphic 1024×500 | **ready** — `store/feature-graphic.png` |
+| Phone screenshots (2–8) | **ready** — `store/screenshots/*.png`, 1080×2400 |
 | Short description (80 chars) + full description (4000) | drafts below |
 | Data safety form | answers below |
 | Content rating questionnaire | notes below |
+
+Regenerate the two graphics with `python scripts/build-store-graphics.py` after any change
+to the artwork. The screenshots are captured from the running web build with a seeded history;
+the script for that lives outside the repo, so retaking them means running the app and
+capturing again.
 
 ## Data safety form
 
