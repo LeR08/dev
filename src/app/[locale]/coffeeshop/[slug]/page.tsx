@@ -101,7 +101,12 @@ export default async function VenuePage({
             loading="lazy"
             className="aspect-[16/9] w-full object-cover"
           />
+          {/* Street-level imagery here is captured from a bike moving along the
+              road, so it shows the street rather than the shopfront. The caption
+              says so: a picture of a road is not a picture of a venue. */}
           <figcaption className="border-t border-[var(--color-line)] bg-[var(--color-surface)] px-3.5 py-2 text-xs text-[var(--color-muted)]">
+            <span className="text-[var(--color-text)]">{dict.venue.photoCaption}</span>
+            {' · '}
             {format(dict.venue.photoCredit, {
               credit: venue.photo.credit,
               license: venue.photo.license,
