@@ -87,6 +87,8 @@ export interface VenueIndexEntry {
   hours_source: Venue['hours_source'];
   hours_updated_at: string | null;
   amenities: Venue['amenities'];
+  website: string | null;
+  website_live: boolean | null;
   rating_avg: number | null;
   rating_count: number;
 }
@@ -106,6 +108,8 @@ export function toIndexEntry(venue: Venue): VenueIndexEntry {
     hours_source: venue.hours_source,
     hours_updated_at: venue.hours_updated_at,
     amenities: venue.amenities,
+    website: venue.website,
+    website_live: venue.website_live,
     rating_avg: venue.rating_avg,
     rating_count: venue.rating_count,
   };

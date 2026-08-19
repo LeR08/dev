@@ -57,6 +57,9 @@ export const fr: Dictionary = {
     hasReviews: 'Avec avis',
     neighbourhood: 'Quartier',
     includeClosed: 'Inclure les fermés',
+    food: `Boissons & snacks`,
+    wifi: `Wi-Fi`,
+    hasWebsite: `Avec site web`,
   },
   sort: {
     label: 'Trier',

@@ -57,6 +57,9 @@ export const nl: Dictionary = {
     hasReviews: 'Met beoordelingen',
     neighbourhood: 'Wijk',
     includeClosed: 'Gesloten tonen',
+    food: `Drankjes & snacks`,
+    wifi: `Wifi`,
+    hasWebsite: `Heeft een website`,
   },
   sort: {
     label: 'Sorteren',

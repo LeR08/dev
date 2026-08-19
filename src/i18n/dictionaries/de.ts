@@ -57,6 +57,9 @@ export const de: Dictionary = {
     hasReviews: 'Mit Bewertungen',
     neighbourhood: 'Stadtteil',
     includeClosed: 'Geschlossene anzeigen',
+    food: `Getränke & Snacks`,
+    wifi: `WLAN`,
+    hasWebsite: `Hat eine Website`,
   },
   sort: {
     label: 'Sortieren',

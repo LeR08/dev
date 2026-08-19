@@ -30,6 +30,9 @@ export interface FilterState {
   openLate: boolean;
   terrace: boolean;
   wheelchair: boolean;
+  food: boolean;
+  wifi: boolean;
+  hasWebsite: boolean;
   highlyRated: boolean;
   hasReviews: boolean;
   neighbourhood: string | null;
@@ -41,6 +44,9 @@ const EMPTY_FILTERS: FilterState = {
   openLate: false,
   terrace: false,
   wheelchair: false,
+  food: false,
+  wifi: false,
+  hasWebsite: false,
   highlyRated: false,
   hasReviews: false,
   neighbourhood: null,
@@ -51,7 +57,10 @@ const TOGGLES = [
   'openNow',
   'openLate',
   'terrace',
+  'food',
+  'wifi',
   'wheelchair',
+  'hasWebsite',
   'highlyRated',
   'hasReviews',
   'includeClosed',
@@ -62,6 +71,10 @@ function matchesFilters(venue: VenueIndexEntry, filters: FilterState, clock: Dat
   if (filters.neighbourhood && venue.neighbourhood !== filters.neighbourhood) return false;
   if (filters.terrace && venue.amenities.terrace !== true) return false;
   if (filters.wheelchair && venue.amenities.wheelchair !== true) return false;
+  if (filters.food && venue.amenities.drinks_snacks !== true) return false;
+  if (filters.wifi && venue.amenities.wifi !== true) return false;
+  // A dead site is no use to anyone, so this asks for one that answered.
+  if (filters.hasWebsite && !(venue.website && venue.website_live !== false)) return false;
   if (filters.highlyRated && (venue.rating_avg ?? 0) < 4) return false;
   if (filters.hasReviews && venue.rating_count < 1) return false;
   if (filters.openNow && openState(venue, clock).kind !== 'open') return false;

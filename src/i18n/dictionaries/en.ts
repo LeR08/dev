@@ -59,6 +59,9 @@ export const en = {
     hasReviews: 'Has reviews',
     neighbourhood: 'Neighbourhood',
     includeClosed: 'Include closed',
+    food: `Drinks & snacks`,
+    wifi: `Wi-Fi`,
+    hasWebsite: `Has a website`,
   },
   sort: {
     label: 'Sort',

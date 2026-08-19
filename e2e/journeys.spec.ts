@@ -91,6 +91,25 @@ test('filters narrow the list, live in the URL, and offer a way out of an empty 
   await expect(page.getByText('No venues match all of these filters.')).toBeHidden();
 });
 
+test('the amenity filters narrow the list and survive a reload', async ({ page }) => {
+  await page.goto('/en');
+  const results = page.getByRole('list', { name: 'Venues' }).getByRole('listitem');
+  const before = await results.count();
+
+  await page.getByRole('button', { name: 'Drinks & snacks' }).click();
+  await expect(page).toHaveURL(/food=1/);
+  await expect.poll(() => results.count()).toBeLessThan(before);
+
+  await page.getByRole('button', { name: 'Has a website' }).click();
+  await expect(page).toHaveURL(/hasWebsite=1/);
+  const narrowed = await results.count();
+
+  // The URL is the state, so the filtered view is shareable.
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Drinks & snacks' })).toHaveAttribute('aria-pressed', 'true');
+  await expect.poll(() => results.count()).toBe(narrowed);
+});
+
 test('near me falls back to a neighbourhood picker when permission is refused', async ({ page }) => {
   // Stub the refusal rather than relying on the headless permission default,
   // which differs between browsers and can simply never call back.
