@@ -136,6 +136,8 @@ export function buildVenues(input: BuildInput): Venue[] {
       // carried: a name matched in error must not outlive the rule that let it in.
       aliases: [],
       override_fields: [],
+      // Filled by the Mapillary pass, or pinned by hand.
+      photo: existing?.photo ?? null,
       address: licence.address,
       postcode: licence.postcode,
       neighbourhood,

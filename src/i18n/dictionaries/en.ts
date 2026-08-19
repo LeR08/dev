@@ -62,6 +62,7 @@ export const en = {
     food: `Drinks & snacks`,
     wifi: `Wi-Fi`,
     hasWebsite: `Has a website`,
+    hasPhoto: `Has a photo`,
   },
   sort: {
     label: 'Sort',
@@ -124,6 +125,9 @@ export const en = {
     alsoKnownAs: `Also trades as`,
     registeredAs: `Registered as`,
     sourceNote: `Source: {source}`,
+    photoAlt: `Street-level view of {name}`,
+    photoCredit: `Photo by {credit} · Mapillary, {license}`,
+    photoDate: `taken {date}`,
   },
   hours: {
     community: 'Corrected by a verified community report',

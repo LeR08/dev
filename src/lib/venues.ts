@@ -89,6 +89,7 @@ export interface VenueIndexEntry {
   amenities: Venue['amenities'];
   website: string | null;
   website_live: boolean | null;
+  photo: Venue['photo'];
   rating_avg: number | null;
   rating_count: number;
 }
@@ -110,6 +111,7 @@ export function toIndexEntry(venue: Venue): VenueIndexEntry {
     amenities: venue.amenities,
     website: venue.website,
     website_live: venue.website_live,
+    photo: venue.photo,
     rating_avg: venue.rating_avg,
     rating_count: venue.rating_count,
   };

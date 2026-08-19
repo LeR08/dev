@@ -60,6 +60,7 @@ export const nl: Dictionary = {
     food: `Drankjes & snacks`,
     wifi: `Wifi`,
     hasWebsite: `Heeft een website`,
+    hasPhoto: `Met foto`,
   },
   sort: {
     label: 'Sorteren',
@@ -122,6 +123,9 @@ export const nl: Dictionary = {
     alsoKnownAs: `Ook bekend als`,
     registeredAs: `Geregistreerd als`,
     sourceNote: `Bron: {source}`,
+    photoAlt: `Straatbeeld van {name}`,
+    photoCredit: `Foto van {credit} · Mapillary, {license}`,
+    photoDate: `gemaakt op {date}`,
   },
   hours: {
     community: 'Gecorrigeerd via een geverifieerde melding',

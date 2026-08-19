@@ -60,6 +60,7 @@ export const fr: Dictionary = {
     food: `Boissons & snacks`,
     wifi: `Wi-Fi`,
     hasWebsite: `Avec site web`,
+    hasPhoto: `Avec photo`,
   },
   sort: {
     label: 'Trier',
@@ -122,6 +123,9 @@ export const fr: Dictionary = {
     alsoKnownAs: `Aussi connu sous`,
     registeredAs: `Enregistré sous`,
     sourceNote: `Source : {source}`,
+    photoAlt: `Vue depuis la rue de {name}`,
+    photoCredit: `Photo de {credit} · Mapillary, {license}`,
+    photoDate: `prise le {date}`,
   },
   hours: {
     community: 'Corrigé par un signalement vérifié',

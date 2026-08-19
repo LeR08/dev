@@ -82,6 +82,22 @@ export const Venue = z.object({
   hours_source: HoursSource.nullable().default(null),
   hours_updated_at: z.string().nullable().default(null),
   /**
+   * A storefront photograph. Either street-level imagery under a licence that
+   * permits re-serving, or one pinned by hand in overrides.json. Always carries
+   * the credit its licence requires.
+   */
+  photo: z
+    .object({
+      source: z.string(),
+      id: z.string().optional(),
+      path: z.string(),
+      credit: z.string(),
+      captured_at: z.string().nullable().default(null),
+      license: z.string(),
+    })
+    .nullable()
+    .default(null),
+  /**
    * Fields pinned by hand in data/overrides.json. No automated pass may write
    * these — §10 requires a manual correction to survive every later run.
    */

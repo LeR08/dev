@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { resolve } from 'node:path';
+import path, { resolve } from 'node:path';
 import { amsterdamAdapter } from '@/etl/adapters/amsterdam';
 import type { CityAdapter, NeighbourhoodPolygon } from '@/etl/adapters/types';
 import { matchSources } from '@/etl/match';
@@ -9,6 +9,7 @@ import type { OsmRecord } from '@/etl/sources/overpass';
 import { applyDirectory, buildVenues, carryForwardClosed, diffCounts } from '@/etl/build';
 import { checkSite, markSharedHandles } from '@/etl/sources/socials';
 import { DIRECTORY_ATTRIBUTION, fetchDirectory } from '@/etl/sources/directory';
+import { fetchVenuePhoto, MAPILLARY_ATTRIBUTION } from '@/etl/sources/mapillary';
 import type { DirectoryRecord } from '@/etl/sources/directory';
 import type { SocialProfile } from '@/etl/sources/socials';
 import {
@@ -132,6 +133,9 @@ async function main(): Promise<void> {
   const socialErrors = await attachSocials(built);
   if (socialErrors > 0) errors.push(`socials: ${socialErrors} sites unreachable`);
 
+  // 3c. Street-level photography, when a token is configured.
+  const photos = await attachPhotos(built);
+
   const { venues, missingRuns, closed } = carryForwardClosed(built, previous, state.missingRuns, startedAt);
   const counts = diffCounts(built, previous);
   console.log(
@@ -157,6 +161,7 @@ async function main(): Promise<void> {
       ...adapter.attribution,
       OSM_ATTRIBUTION,
       ...(directory.length > 0 ? [DIRECTORY_ATTRIBUTION] : []),
+      ...(photos > 0 ? [MAPILLARY_ATTRIBUTION] : []),
     ],
     venues: sortVenues(venues),
   };
@@ -189,6 +194,44 @@ async function main(): Promise<void> {
   };
   await appendRun(run);
   console.log(`ETL finished — ${snapshot.venues.length} venues in the snapshot`);
+}
+
+/**
+ * Looks for a storefront photograph of each venue that does not already have
+ * one. Needs MAPILLARY_TOKEN; without it the pass is skipped entirely and every
+ * venue simply has no photo, which the pages handle.
+ *
+ * A venue keeps a photo once found: re-fetching an image that has not changed
+ * costs Mapillary bandwidth and gains nothing. Delete the photo field in the
+ * snapshot to force a refresh.
+ */
+async function attachPhotos(venues: Venue[]): Promise<number> {
+  const token = process.env.MAPILLARY_TOKEN;
+  if (!token) {
+    console.log('  photos: skipped (MAPILLARY_TOKEN not set)');
+    return 0;
+  }
+
+  const publicDir = path.join(process.cwd(), 'public');
+  const wanted = venues.filter(
+    (venue) => !venue.photo && !venue.override_fields.includes('photo') && venue.status === 'open',
+  );
+
+  let found = 0;
+  for (const venue of wanted) {
+    const photo = await fetchVenuePhoto(venue, token, publicDir);
+    if (photo) {
+      venue.photo = photo;
+      venue.sources = { ...venue.sources, photo: 'mapillary' };
+      found += 1;
+    }
+    // Mapillary is free to use and worth not hammering.
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+
+  const total = venues.filter((venue) => venue.photo).length;
+  console.log(`  photos: +${found} new, ${total} venues with a photo`);
+  return total;
 }
 
 /**

@@ -86,6 +86,33 @@ export default async function VenuePage({
         )}
       </nav>
 
+      {venue.photo && (
+        <figure className="mt-5 overflow-hidden rounded-xl border border-[var(--color-line)]">
+          {/* Served from our own origin, so the visitor makes no third-party
+              request, and already stored at the width it is displayed at. Running
+              it through next/image would meter an optimisation quota to re-encode
+              a file that needs no re-encoding. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={venue.photo.path}
+            alt={format(dict.venue.photoAlt, { name: venue.name })}
+            width={1024}
+            height={576}
+            loading="lazy"
+            className="aspect-[16/9] w-full object-cover"
+          />
+          <figcaption className="border-t border-[var(--color-line)] bg-[var(--color-surface)] px-3.5 py-2 text-xs text-[var(--color-muted)]">
+            {format(dict.venue.photoCredit, {
+              credit: venue.photo.credit,
+              license: venue.photo.license,
+            })}
+            {venue.photo.captured_at
+              ? ` · ${format(dict.venue.photoDate, { date: formatDate(venue.photo.captured_at, locale) })}`
+              : ''}
+          </figcaption>
+        </figure>
+      )}
+
       <header className="mt-4">
         <h1 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">{venue.name}</h1>
         {venue.aliases.length > 0 && (

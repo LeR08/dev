@@ -5,6 +5,7 @@ import { applyDirectory, buildVenues, carryForwardClosed, diffCounts, displayNam
 import type { DirectoryRecord } from '@/etl/sources/directory';
 import { assertOsmCountPlausible, assertRowCountPlausible, EtlAbort } from '@/etl/run';
 import { markSharedHandles } from '@/etl/sources/socials';
+import { angleBetween, bearing, pickFacingImage } from '@/etl/sources/mapillary';
 import { amsterdamAdapter } from '@/etl/adapters/amsterdam';
 import { inBBox } from '@/lib/geo';
 import { parseAddress } from '@/lib/text';
@@ -677,5 +678,62 @@ describe('manual overrides are untouchable', () => {
     const venue = build({ a1: { override_fields: ['phone', 'website'], phone: '020 111 1111' } });
     expect(venue.override_fields).toEqual(['phone']);
     expect(venue.website).toBeNull();
+  });
+});
+
+describe('choosing a street-level photo', () => {
+  // A venue on the north side of a street running east-west.
+  const venue = { lat: 52.3700, lng: 4.8900 };
+  const south = { lat: 52.3698, lng: 4.8900 }; // ~22 m south of the venue
+  const image = (over: Record<string, unknown>) => ({
+    id: 'i1',
+    thumb_1024_url: 'https://example.org/i1.jpg',
+    computed_geometry: { coordinates: [south.lng, south.lat] as [number, number] },
+    ...over,
+  });
+
+  it('measures the bearing between two points', () => {
+    expect(Math.round(bearing(south, venue))).toBe(0); // due north
+    expect(Math.round(bearing(venue, south))).toBe(180);
+  });
+
+  it('treats compass angles as a circle', () => {
+    expect(angleBetween(350, 10)).toBe(20);
+    expect(angleBetween(10, 350)).toBe(20);
+    expect(angleBetween(0, 180)).toBe(180);
+  });
+
+  it('prefers a camera aimed at the venue over one merely closer', () => {
+    const facing = image({ id: 'facing', computed_compass_angle: 0 });
+    const closerButLookingAway = image({
+      id: 'away',
+      computed_compass_angle: 90,
+      computed_geometry: { coordinates: [4.8900, 52.36995] as [number, number] },
+    });
+    expect(pickFacingImage([closerButLookingAway, facing], venue)?.id).toBe('facing');
+  });
+
+  it('returns nothing when every camera faced elsewhere', () => {
+    expect(pickFacingImage([image({ computed_compass_angle: 180 })], venue)).toBeNull();
+  });
+
+  it('ignores a photo taken from the doorstep', () => {
+    // Standing on the venue itself shows the street, not the shopfront.
+    const onTop = image({
+      computed_compass_angle: 0,
+      computed_geometry: { coordinates: [4.8900, 52.36999] as [number, number] },
+    });
+    expect(pickFacingImage([onTop], venue)).toBeNull();
+  });
+
+  it('ignores an image with no thumbnail or no heading', () => {
+    expect(pickFacingImage([image({ thumb_1024_url: undefined, computed_compass_angle: 0 })], venue)).toBeNull();
+    expect(pickFacingImage([image({ computed_compass_angle: undefined })], venue)).toBeNull();
+  });
+
+  it('breaks a tie on recency', () => {
+    const older = image({ id: 'older', computed_compass_angle: 0, captured_at: 1_600_000_000_000 });
+    const newer = image({ id: 'newer', computed_compass_angle: 0, captured_at: 1_700_000_000_000 });
+    expect(pickFacingImage([older, newer], venue)?.id).toBe('newer');
   });
 });

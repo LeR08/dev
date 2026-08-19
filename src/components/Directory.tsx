@@ -33,6 +33,7 @@ export interface FilterState {
   food: boolean;
   wifi: boolean;
   hasWebsite: boolean;
+  hasPhoto: boolean;
   highlyRated: boolean;
   hasReviews: boolean;
   neighbourhood: string | null;
@@ -47,6 +48,7 @@ const EMPTY_FILTERS: FilterState = {
   food: false,
   wifi: false,
   hasWebsite: false,
+  hasPhoto: false,
   highlyRated: false,
   hasReviews: false,
   neighbourhood: null,
@@ -61,6 +63,7 @@ const TOGGLES = [
   'wifi',
   'wheelchair',
   'hasWebsite',
+  'hasPhoto',
   'highlyRated',
   'hasReviews',
   'includeClosed',
@@ -75,6 +78,7 @@ function matchesFilters(venue: VenueIndexEntry, filters: FilterState, clock: Dat
   if (filters.wifi && venue.amenities.wifi !== true) return false;
   // A dead site is no use to anyone, so this asks for one that answered.
   if (filters.hasWebsite && !(venue.website && venue.website_live !== false)) return false;
+  if (filters.hasPhoto && !venue.photo) return false;
   if (filters.highlyRated && (venue.rating_avg ?? 0) < 4) return false;
   if (filters.hasReviews && venue.rating_count < 1) return false;
   if (filters.openNow && openState(venue, clock).kind !== 'open') return false;

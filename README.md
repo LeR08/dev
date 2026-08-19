@@ -76,6 +76,33 @@ products, and never its images.
 > are not protected and this takes a small subset of one city, but have the
 > lawyer confirm it along with L1, L2 and the review feature.
 
+### Photographs
+
+Storefront photos come from **Mapillary**: free, no billing account, and CC BY-SA
+4.0 so the images may be stored and re-served as long as the contributor is
+named. Set `MAPILLARY_TOKEN` and the nightly run fills in what it can; leave it
+unset and venues simply have no photo.
+
+The ETL downloads each thumbnail into `public/photos/` and serves it from our own
+origin, so a visitor's browser never contacts a third party — the same reason the
+map avoids Google. The page prints the contributor and the licence under every
+image.
+
+Not Google Street View or Google Places: both require a billing account, and
+their terms forbid storing the images at all.
+
+A photo is fetched once and then kept. To force a refresh, delete the venue's
+`photo` field from `data/venues.json`, or pin your own:
+
+```json
+{ "the-bulldog": { "photo": {
+    "source": "manual", "path": "/photos/my-shot.jpg",
+    "credit": "Romain", "license": "All rights reserved", "captured_at": null
+} } }
+```
+
+Drop the file in `public/photos/` and the pipeline will leave it alone.
+
 ### Correcting something by hand
 
 `data/overrides.json` is the escape hatch, and it outranks every source. Copy
