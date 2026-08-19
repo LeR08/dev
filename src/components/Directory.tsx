@@ -56,6 +56,20 @@ const FILTER_LABELS: Record<keyof FilterState, string> = {
   includeClosed: 'Include closed',
 };
 
+function matchesFilters(venue: VenueIndexEntry, filters: FilterState, clock: Date): boolean {
+  if (!filters.includeClosed && venue.status !== 'open') return false;
+  if (filters.neighbourhood && venue.neighbourhood !== filters.neighbourhood) return false;
+  if (filters.terrace && venue.amenities.terrace !== true) return false;
+  if (filters.wheelchair && venue.amenities.wheelchair !== true) return false;
+  if (filters.highlyRated && (venue.rating_avg ?? 0) < 4) return false;
+  if (filters.hasReviews && venue.rating_count < 1) return false;
+  if (filters.openNow && openState(venue, clock).kind !== 'open') return false;
+  if (filters.openLate && openStateAtLocal(venue, amsterdamToday(23, 0, clock)).kind !== 'open') {
+    return false;
+  }
+  return true;
+}
+
 export function Directory({
   venues,
   neighbourhoods,
@@ -130,21 +144,7 @@ export function Directory({
   const results = useMemo(() => {
     const searched = query.trim() ? fuse.search(query.trim()).map((hit) => hit.item) : venues;
     const clock = now;
-    const lateClock = amsterdamToday(23, 0, clock);
-
-    const filtered = searched.filter((venue) => {
-      if (!filters.includeClosed && venue.status !== 'open') return false;
-      if (filters.neighbourhood && venue.neighbourhood !== filters.neighbourhood) return false;
-      if (filters.terrace && venue.amenities.terrace !== true) return false;
-      if (filters.wheelchair && venue.amenities.wheelchair !== true) return false;
-      if (filters.highlyRated && (venue.rating_avg ?? 0) < 4) return false;
-      if (filters.hasReviews && venue.rating_count < 1) return false;
-      if (filters.openNow && openState(venue, clock).kind !== 'open') return false;
-      if (filters.openLate && openStateAtLocal(venue, lateClock).kind !== 'open') {
-        return false;
-      }
-      return true;
-    });
+    const filtered = searched.filter((venue) => matchesFilters(venue, filters, clock));
 
     const withDistance = filtered.map((venue) => ({
       venue,
@@ -165,6 +165,23 @@ export function Directory({
   const activeFilterKeys = (Object.keys(filters) as (keyof FilterState)[]).filter((key) =>
     key === 'neighbourhood' ? filters.neighbourhood != null : filters[key] === true,
   );
+
+  /**
+   * §F2: an empty result proposes relaxing the *narrowest* filter — the one
+   * whose removal brings back the most venues, measured rather than guessed.
+   */
+  const narrowestFilter = useMemo(() => {
+    if (results.length > 0 || activeFilterKeys.length === 0) return null;
+    const searched = query.trim() ? fuse.search(query.trim()).map((hit) => hit.item) : venues;
+
+    let best: { key: keyof FilterState; gain: number } | null = null;
+    for (const key of activeFilterKeys) {
+      const relaxed: FilterState = { ...filters, [key]: key === 'neighbourhood' ? null : false };
+      const gain = searched.filter((venue) => matchesFilters(venue, relaxed, now)).length;
+      if (gain > 0 && (!best || gain > best.gain)) best = { key, gain };
+    }
+    return best;
+  }, [results.length, activeFilterKeys, filters, query, venues, fuse, now]);
 
   const update = (patch: Partial<FilterState>) => {
     const next = { ...filters, ...patch };
@@ -273,21 +290,30 @@ export function Directory({
             {results.length === 0 && (
               <li className="rounded-md border border-dashed border-[var(--color-line)] p-6 text-center text-sm text-[var(--color-muted)]">
                 <p>No venues match all of these filters.</p>
-                {activeFilterKeys.length > 0 && (
+                {narrowestFilter ? (
                   <button
                     type="button"
                     className="mt-3 rounded border border-[var(--color-line)] px-3 py-1.5 text-[var(--color-text)]"
-                    onClick={() => {
-                      const narrowest = activeFilterKeys[activeFilterKeys.length - 1];
+                    onClick={() =>
                       update(
-                        narrowest === 'neighbourhood'
+                        narrowestFilter.key === 'neighbourhood'
                           ? { neighbourhood: null }
-                          : ({ [narrowest]: false } as Partial<FilterState>),
-                      );
-                    }}
+                          : ({ [narrowestFilter.key]: false } as Partial<FilterState>),
+                      )
+                    }
                   >
-                    Drop “{FILTER_LABELS[activeFilterKeys[activeFilterKeys.length - 1]]}”
+                    Drop “{FILTER_LABELS[narrowestFilter.key]}” to see {narrowestFilter.gain}
                   </button>
+                ) : (
+                  activeFilterKeys.length > 0 && (
+                    <button
+                      type="button"
+                      className="mt-3 rounded border border-[var(--color-line)] px-3 py-1.5 text-[var(--color-text)]"
+                      onClick={() => update(EMPTY_FILTERS)}
+                    >
+                      Clear all filters
+                    </button>
+                  )
                 )}
               </li>
             )}

@@ -73,14 +73,20 @@ test('filters narrow the list, live in the URL, and offer a way out of an empty 
   const results = page.getByRole('list', { name: 'Venues' }).getByRole('listitem');
   const before = await results.count();
 
-  await page.getByRole('button', { name: 'Wheelchair access' }).click();
-  await expect(page).toHaveURL(/wheelchair=1/);
+  // Terrace comes from the licence itself, so this holds even when the OSM
+  // enrichment is missing from the snapshot.
+  await page.getByRole('button', { name: 'Terrace' }).click();
+  await expect(page).toHaveURL(/terrace=1/);
   await expect.poll(() => results.count()).toBeLessThan(before);
 
   await page.getByRole('button', { name: 'Rated 4+' }).click();
   // No venue has a rating yet, so this is the guaranteed empty state.
   await expect(page.getByText('No venues match all of these filters.')).toBeVisible();
-  await page.getByRole('button', { name: /^Drop/ }).click();
+
+  // The suggestion names the filter whose removal brings back the most venues.
+  const relax = page.getByRole('button', { name: /^Drop “Rated 4\+”/ });
+  await expect(relax).toBeVisible();
+  await relax.click();
   await expect(page.getByText('No venues match all of these filters.')).toBeHidden();
 });
 
