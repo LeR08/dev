@@ -74,10 +74,14 @@ export function buildVenues(input: BuildInput): Venue[] {
       : !osmAvailable && existing?.osm_id
         ? {
             name: existing.name,
-            website: existing.website,
-            phone: existing.phone,
+            // Carry only what OpenStreetMap itself gave us last time. A phone
+            // number the directory supplied must not be re-credited to OSM on
+            // the way through — and it does not need carrying, because the
+            // directory pass runs on every run and will fill it again.
+            website: existing.sources.website === 'osm' ? existing.website : null,
+            phone: existing.sources.phone === 'osm' ? existing.phone : null,
             osmId: existing.osm_id,
-            amenities: existing.amenities,
+            amenities: existing.sources.amenities === 'osm' ? existing.amenities : {},
             hoursActual: existing.hours_actual,
             hoursWeekly: existing.hours_source === 'osm' ? existing.hours_weekly : null,
           }

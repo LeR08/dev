@@ -192,6 +192,9 @@ describe('a failed Overpass fetch', () => {
       hours_actual: 'Mo-Su 10:00-22:00',
       hours_source: 'osm' as const,
       hours_weekly: Array.from({ length: 7 }, () => [{ from: '10:00', to: '22:00' }]),
+      // As a real OSM-enriched venue would be stamped — which is what decides
+      // whether these fields are carried through an outage.
+      sources: { ...venue.sources, website: 'osm', phone: 'osm', amenities: 'osm' },
     }));
   };
 
@@ -530,5 +533,44 @@ describe('premises-level address matching', () => {
 
     expect(andalucia.phone).toBeNull();
     expect(andalucia.aliases).toEqual([]);
+  });
+});
+
+describe('provenance survives an Overpass outage', () => {
+  const enriched = (sources: Record<string, string>) =>
+    ({
+      id: 'v1', slug: 's', city: 'amsterdam', name: 'Shop', legal_name: null, aliases: [],
+      address: 'Damrak 1', postcode: null, neighbourhood: null, lat: 52.375, lng: 4.895,
+      status: 'open', renamed_to: null, licence_number: null, licence_valid_to: null,
+      licence_renewal_pending: false, website: 'https://example.org', phone: '020 000 0000',
+      amenities: { wifi: true }, hours_licensed: null, hours_weekly: null, hours_actual: null,
+      hours_source: null, hours_updated_at: null, socials: {}, socials_shared: [],
+      website_live: null, osm_id: 'node/1', amsterdam_id: 'a1', rating_avg: null,
+      rating_count: 0, sources, fetched_at: '2026-08-19T00:00:00.000Z',
+    }) as unknown as Venue;
+
+  const licence = {
+    sourceId: 'a1', name: 'Shop', legalName: 'Shop', address: 'Damrak 1', postcode: null,
+    lat: 52.375, lng: 4.895, licenceNumber: null, licenceValidTo: null,
+    licenceRenewalPending: false, hoursLicensed: null, hasTerrace: false,
+  };
+
+  const rebuild = (previous: Venue[]) =>
+    buildVenues({
+      adapter: amsterdamAdapter, licences: [licence], matches: [], neighbourhoods: [],
+      overrides: {}, now: TODAY, previous, osmAvailable: false,
+    })[0];
+
+  it('carries a phone OpenStreetMap gave us', () => {
+    const venue = rebuild([enriched({ phone: 'osm', website: 'osm' })]);
+    expect(venue.phone).toBe('020 000 0000');
+    expect(venue.sources.phone).toBe('osm');
+  });
+
+  it('does not re-credit a directory phone to OpenStreetMap', () => {
+    // The directory pass runs every run and will fill it again, correctly.
+    const venue = rebuild([enriched({ phone: 'directory', website: 'directory' })]);
+    expect(venue.phone).toBeNull();
+    expect(venue.website).toBeNull();
   });
 });
