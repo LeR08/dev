@@ -5,7 +5,7 @@ import { applyDirectory, buildVenues, carryForwardClosed, diffCounts, displayNam
 import type { DirectoryRecord } from '@/etl/sources/directory';
 import { assertOsmCountPlausible, assertRowCountPlausible, EtlAbort } from '@/etl/run';
 import { markSharedHandles } from '@/etl/sources/socials';
-import { angleBetween, bearing, pickFacingImage } from '@/etl/sources/mapillary';
+import { angleBetween, bearing, isUsableCamera, pickFacingImage } from '@/etl/sources/mapillary';
 import { amsterdamAdapter } from '@/etl/adapters/amsterdam';
 import { inBBox } from '@/lib/geo';
 import { parseAddress } from '@/lib/text';
@@ -735,5 +735,36 @@ describe('choosing a street-level photo', () => {
     const older = image({ id: 'older', computed_compass_angle: 0, captured_at: 1_600_000_000_000 });
     const newer = image({ id: 'newer', computed_compass_angle: 0, captured_at: 1_700_000_000_000 });
     expect(pickFacingImage([older, newer], venue)?.id).toBe('newer');
+  });
+});
+
+describe('rejecting panoramic captures', () => {
+  const venue = { lat: 52.37, lng: 4.89 };
+  const base = {
+    thumb_1024_url: 'https://example.org/i.jpg',
+    computed_compass_angle: 0,
+    computed_geometry: { coordinates: [4.89, 52.3698] as [number, number] },
+  };
+
+  it('keeps a perspective or fisheye capture', () => {
+    expect(isUsableCamera({ id: 'a', camera_type: 'perspective' })).toBe(true);
+    expect(isUsableCamera({ id: 'b', camera_type: 'fisheye', is_pano: false })).toBe(true);
+  });
+
+  it('rejects a 360 capture however it is labelled', () => {
+    expect(isUsableCamera({ id: 'c', camera_type: 'spherical', is_pano: true })).toBe(false);
+    expect(isUsableCamera({ id: 'd', camera_type: 'equirectangular', is_pano: true })).toBe(false);
+    // is_pano alone is enough, whatever the camera_type says.
+    expect(isUsableCamera({ id: 'e', camera_type: 'perspective', is_pano: true })).toBe(false);
+  });
+
+  it('skips a well-aimed panorama in favour of a perspective shot', () => {
+    const pano = { ...base, id: 'pano', is_pano: true, captured_at: 1_800_000_000_000 };
+    const flat = { ...base, id: 'flat', camera_type: 'perspective', captured_at: 1_500_000_000_000 };
+    expect(pickFacingImage([pano, flat], venue)?.id).toBe('flat');
+  });
+
+  it('returns nothing when every candidate is panoramic', () => {
+    expect(pickFacingImage([{ ...base, id: 'p', is_pano: true }], venue)).toBeNull();
   });
 });

@@ -34,6 +34,9 @@ interface GraphImage {
   computed_geometry?: { coordinates: [number, number] };
   creator?: { username?: string };
   thumb_1024_url?: string;
+  /** 'perspective', 'fisheye', 'spherical' or 'equirectangular'. */
+  camera_type?: string;
+  is_pano?: boolean;
 }
 
 /** Metres per degree of latitude; longitude is scaled by the parallel. */
@@ -79,12 +82,31 @@ const distance = (a: { lat: number; lng: number }, b: { lat: number; lng: number
  * facade shows the shopfront; one standing on the doorstep facing down the
  * street shows the road.
  */
+/**
+ * A 360-degree capture is useless here. Its thumbnail is the whole sphere
+ * flattened — a warped strip of everything at once, usually with the
+ * photographer's handlebars across the bottom — and its compass angle says
+ * nothing, since the image already contains every direction. Two thirds of the
+ * imagery around these addresses turned out to be panoramic, so filtering them
+ * costs coverage and is still the only honest choice: a caption reading
+ * "street-level view of X" has to actually show X.
+ *
+ * Fisheye captures are kept. They are wide and a little bent at the edges, but
+ * they point somewhere.
+ */
+export function isUsableCamera(image: GraphImage): boolean {
+  if (image.is_pano === true) return false;
+  const type = (image.camera_type ?? '').toLowerCase();
+  return type !== 'spherical' && type !== 'equirectangular';
+}
+
 export function pickFacingImage(
   images: GraphImage[],
   venue: { lat: number; lng: number },
   maxAngle = 55,
 ): GraphImage | null {
   const scored = images
+    .filter(isUsableCamera)
     .map((image) => {
       const point = image.computed_geometry?.coordinates ?? image.geometry?.coordinates;
       const heading = image.computed_compass_angle ?? image.compass_angle;
@@ -114,7 +136,8 @@ export async function fetchVenuePhoto(
   radiusMetres = 35,
 ): Promise<MapillaryPhoto | null> {
   const params = new URLSearchParams({
-    fields: 'id,captured_at,compass_angle,computed_compass_angle,geometry,computed_geometry,creator,thumb_1024_url',
+    fields:
+      'id,captured_at,compass_angle,computed_compass_angle,geometry,computed_geometry,creator,thumb_1024_url,camera_type,is_pano',
     bbox: bboxAround(venue.lat, venue.lng, radiusMetres),
     limit: '50',
   });
