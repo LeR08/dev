@@ -1,5 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { slugify } from '@/lib/text';
+import { jaroWinkler, normalizeName, parseAddress, slugify } from '@/lib/text';
+import { haversine } from '@/lib/geo';
+import { DIRECTORY_AMENITIES } from '@/etl/sources/directory';
+import type { DirectoryRecord } from '@/etl/sources/directory';
 import type { CityAdapter, LicenceRecord, NeighbourhoodPolygon } from '@/etl/adapters/types';
 import type { Match } from '@/etl/match';
 import { amenitiesFromTags } from '@/etl/sources/overpass';
@@ -98,6 +101,7 @@ export function buildVenues(input: BuildInput): Venue[] {
       city: adapter.city,
       name: enrichment?.name ?? displayName(licence.name),
       legal_name: licence.legalName,
+      aliases: existing?.aliases ?? [],
       address: licence.address,
       postcode: licence.postcode,
       neighbourhood,
@@ -226,6 +230,101 @@ export function carryForwardClosed(
   }
 
   return { venues: [...current, ...carried], missingRuns: nextMissing, closed };
+}
+
+/**
+ * Fills gaps from the third-party directory: a field is only written when we
+ * have nothing there, so the city's own record of name, address and status
+ * always wins. Each field written records where it came from, and the name they
+ * use becomes a search alias rather than replacing ours.
+ */
+export function applyDirectory(venues: Venue[], records: DirectoryRecord[]): {
+  phones: number;
+  websites: number;
+  aliases: number;
+  amenities: number;
+} {
+  const counts = { phones: 0, websites: 0, aliases: 0, amenities: 0 };
+  const claimed = new Set<string>();
+
+  for (const venue of venues) {
+    const match = bestDirectoryMatch(venue, records, claimed);
+    if (!match) continue;
+    claimed.add(match.slug);
+
+    if (!venue.phone && match.phone) {
+      venue.phone = match.phone;
+      venue.sources = { ...venue.sources, phone: 'directory' };
+      counts.phones += 1;
+    }
+    if (!venue.website && match.website) {
+      venue.website = match.website;
+      venue.sources = { ...venue.sources, website: 'directory' };
+      counts.websites += 1;
+    }
+
+    const theirName = match.name.trim();
+    const known = [venue.name, venue.legal_name, ...venue.aliases]
+      .filter((value): value is string => typeof value === 'string')
+      .map(normalizeName);
+    if (theirName && !known.includes(normalizeName(theirName))) {
+      venue.aliases = [...venue.aliases, theirName];
+      venue.sources = { ...venue.sources, aliases: 'directory' };
+      counts.aliases += 1;
+    }
+
+    const added: Record<string, boolean> = {};
+    for (const key of match.amenities) {
+      const mapped = DIRECTORY_AMENITIES[key];
+      if (mapped && !(mapped in venue.amenities)) added[mapped] = true;
+    }
+    if (Object.keys(added).length > 0) {
+      venue.amenities = { ...venue.amenities, ...added };
+      venue.sources = { ...venue.sources, amenities_extra: 'directory' };
+      counts.amenities += 1;
+    }
+  }
+
+  return counts;
+}
+
+/** Same three rules as §5.6, applied against the directory's own coordinates. */
+function bestDirectoryMatch(
+  venue: Venue,
+  records: DirectoryRecord[],
+  claimed: Set<string>,
+): DirectoryRecord | null {
+  const mine = parseAddress(venue.address);
+  let best: { record: DirectoryRecord; score: number; distance: number } | null = null;
+
+  for (const record of records) {
+    if (claimed.has(record.slug)) continue;
+    const theirs = record.address ? parseAddress(record.address) : null;
+    // Premises-level, not building-level: El Guapo at Nieuwe Nieuwstraat 32 and
+    // Terps Army at 32C are neighbours, not the same shop.
+    const sameAddress =
+      theirs != null &&
+      theirs.unit != null &&
+      mine.unit != null &&
+      theirs.street === mine.street &&
+      theirs.unit === mine.unit;
+
+    const distance =
+      record.lat != null && record.lng != null
+        ? haversine(venue, { lat: record.lat, lng: record.lng })
+        : Number.POSITIVE_INFINITY;
+    const similarity = jaroWinkler(normalizeName(venue.name), normalizeName(record.name));
+
+    // Deliberately stricter than the OSM matcher: a wrong phone number is worse
+    // than a missing one, so proximity alone is not enough here — the address
+    // must agree, or the name must be near-identical and close by.
+    const score = sameAddress ? 3 : similarity >= 0.9 && distance <= 150 ? 2 : 0;
+    if (score === 0) continue;
+    if (!best || score > best.score || (score === best.score && distance < best.distance)) {
+      best = { record, score, distance };
+    }
+  }
+  return best?.record ?? null;
 }
 
 export function diffCounts(current: Venue[], previous: Venue[]) {

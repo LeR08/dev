@@ -76,6 +76,7 @@ export interface VenueIndexEntry {
   slug: string;
   name: string;
   legal_name: string | null;
+  aliases: string[];
   address: string;
   neighbourhood: string | null;
   lat: number;
@@ -95,6 +96,7 @@ export function toIndexEntry(venue: Venue): VenueIndexEntry {
     slug: venue.slug,
     name: venue.name,
     legal_name: venue.legal_name,
+    aliases: venue.aliases,
     address: venue.address,
     neighbourhood: venue.neighbourhood,
     lat: venue.lat,

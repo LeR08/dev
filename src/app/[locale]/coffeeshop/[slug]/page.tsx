@@ -88,6 +88,16 @@ export default async function VenuePage({
 
       <header className="mt-4">
         <h1 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">{venue.name}</h1>
+        {venue.aliases.length > 0 && (
+          <p className="mt-1.5 text-sm text-[var(--color-muted)]">
+            {dict.venue.alsoKnownAs} <span className="text-[var(--color-text)]">{venue.aliases.join(' · ')}</span>
+          </p>
+        )}
+        {venue.legal_name && venue.legal_name !== venue.name && (
+          <p className="text-sm text-[var(--color-muted)]">
+            {dict.venue.registeredAs} <span className="text-[var(--color-text)]">{venue.legal_name}</span>
+          </p>
+        )}
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <OpenBadge venue={venue} dict={dict.badge} />
           {venue.rating_count > 0 && (
@@ -197,6 +207,7 @@ export default async function VenuePage({
                 {venue.website_live === false && (
                   <span className="block text-xs text-[var(--color-muted)]">{dict.venue.websiteDown}</span>
                 )}
+                <SourceNote source={venue.sources.website} template={dict.venue.sourceNote} />
               </Row>
             )}
             {venue.phone && (
@@ -204,6 +215,7 @@ export default async function VenuePage({
                 <a className="underline underline-offset-4" href={`tel:${venue.phone.replace(/\s/g, '')}`}>
                   {venue.phone}
                 </a>
+                <SourceNote source={venue.sources.phone} template={dict.venue.sourceNote} />
               </Row>
             )}
             {venue.licence_number && (
@@ -310,6 +322,29 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       </h2>
       {children}
     </section>
+  );
+}
+
+/** Human-readable names for the source keys stamped by the ETL. */
+const SOURCE_LABELS: Record<string, string> = {
+  amsterdam: 'Gemeente Amsterdam',
+  osm: 'OpenStreetMap',
+  directory: 'coffeeshopfinder.nl',
+  'venue-website': "the venue's own website",
+  community: 'a verified community report',
+  manual: 'a manual correction',
+};
+
+/**
+ * L4 in spirit as well as letter: a field taken from somebody else says so on
+ * the page, not only in a footer.
+ */
+function SourceNote({ source, template }: { source: string | undefined; template: string }) {
+  if (!source || source === 'amsterdam') return null;
+  const label = SOURCE_LABELS[source];
+  if (!label) return null;
+  return (
+    <span className="block text-xs text-[var(--color-muted)]">{format(template, { source: label })}</span>
   );
 }
 

@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import fixture from './fixtures/amsterdam-wfs.json';
 import { coordinatesOf, daysExpired, isCoffeeshop, RENEWAL_GRACE_DAYS, toLicenceRecord } from '@/etl/adapters/amsterdam';
-import { buildVenues, carryForwardClosed, diffCounts, displayName } from '@/etl/build';
+import { applyDirectory, buildVenues, carryForwardClosed, diffCounts, displayName } from '@/etl/build';
+import type { DirectoryRecord } from '@/etl/sources/directory';
 import { assertOsmCountPlausible, assertRowCountPlausible, EtlAbort } from '@/etl/run';
 import { markSharedHandles } from '@/etl/sources/socials';
 import { amsterdamAdapter } from '@/etl/adapters/amsterdam';
 import { inBBox } from '@/lib/geo';
+import { parseAddress } from '@/lib/text';
 import type { Venue } from '@/lib/types';
 
 type Feature = (typeof fixture)['features'][number];
@@ -333,5 +335,148 @@ describe('social handles', () => {
 
   it('reports nothing when every handle is unique', () => {
     expect(markSharedHandles({ a: { instagram: 'one' }, b: { instagram: 'two' } })).toEqual({});
+  });
+});
+
+describe('third-party directory, as a gap filler', () => {
+  const venue = (over: Partial<Venue>): Venue =>
+    ({
+      id: 'v1',
+      slug: 'superskunk',
+      city: 'amsterdam',
+      name: 'Superskunk',
+      legal_name: 'Coffeeshop Superskunk',
+      aliases: [],
+      address: 'Prinsengracht 480-H',
+      postcode: null,
+      neighbourhood: null,
+      lat: 52.365,
+      lng: 4.883,
+      status: 'open',
+      renamed_to: null,
+      licence_number: null,
+      licence_valid_to: null,
+      licence_renewal_pending: false,
+      website: null,
+      phone: null,
+      amenities: {},
+      hours_licensed: null,
+      hours_weekly: null,
+      hours_actual: null,
+      hours_source: null,
+      hours_updated_at: null,
+      socials: {},
+      socials_shared: [],
+      website_live: null,
+      osm_id: null,
+      amsterdam_id: 'a1',
+      rating_avg: null,
+      rating_count: 0,
+      sources: { name: 'amsterdam' },
+      fetched_at: '2026-08-19T00:00:00.000Z',
+      ...over,
+    }) as Venue;
+
+  const record = (over: Partial<DirectoryRecord>): DirectoryRecord => ({
+    slug: 'tops-amsterdam',
+    name: 'Tops',
+    address: 'Prinsengracht 480',
+    postcode: null,
+    lat: 52.365,
+    lng: 4.883,
+    phone: '020 123 4567',
+    website: 'https://example.org',
+    amenities: ['toilet', 'pin_payment', 'menu_photos'],
+    url: 'https://example.org/tops',
+    ...over,
+  });
+
+  it('fills an empty phone and credits the source', () => {
+    const venues = [venue({})];
+    const counts = applyDirectory(venues, [record({})]);
+    expect(counts.phones).toBe(1);
+    expect(venues[0].phone).toBe('020 123 4567');
+    expect(venues[0].sources.phone).toBe('directory');
+  });
+
+  it('never overwrites a value the city or OpenStreetMap already gave us', () => {
+    const venues = [venue({ phone: '020 999 0000', sources: { phone: 'osm' } })];
+    applyDirectory(venues, [record({})]);
+    expect(venues[0].phone).toBe('020 999 0000');
+    expect(venues[0].sources.phone).toBe('osm');
+  });
+
+  it('keeps a different trading name as a search alias, not as the name', () => {
+    const venues = [venue({})];
+    applyDirectory(venues, [record({})]);
+    expect(venues[0].name).toBe('Superskunk');
+    expect(venues[0].aliases).toEqual(['Tops']);
+  });
+
+  it('does not record an alias that merely restates the name we have', () => {
+    const venues = [venue({})];
+    applyDirectory(venues, [record({ name: 'Coffeeshop Superskunk' })]);
+    expect(venues[0].aliases).toEqual([]);
+  });
+
+  it('maps only the amenity keys we recognise', () => {
+    const venues = [venue({})];
+    applyDirectory(venues, [record({})]);
+    expect(venues[0].amenities).toEqual({ toilet: true, card_payment: true });
+  });
+
+  it('leaves a venue alone when nothing matches it', () => {
+    const venues = [venue({})];
+    const counts = applyDirectory(venues, [
+      record({ address: 'Damrak 1', lat: 52.377, lng: 4.897, name: 'Somewhere Else' }),
+    ]);
+    expect(counts.phones).toBe(0);
+    expect(venues[0].phone).toBeNull();
+  });
+
+  it('gives one directory record to at most one venue', () => {
+    const venues = [venue({}), venue({ id: 'v2', slug: 'other', amsterdam_id: 'a2' })];
+    applyDirectory(venues, [record({})]);
+    expect([venues[0].phone, venues[1].phone].filter(Boolean)).toHaveLength(1);
+  });
+});
+
+describe('premises-level address matching', () => {
+  it('treats a ground-floor suffix as the same premises', () => {
+    expect(parseAddress('Brouwersgracht 137-H').unit).toBe(parseAddress('Brouwersgracht 137').unit);
+    expect(parseAddress('Amsteldijk 139-HS').unit).toBe(parseAddress('Amsteldijk 139').unit);
+  });
+
+  it('keeps a lettered unit distinct from the bare number', () => {
+    // El Guapo at Nieuwe Nieuwstraat 32 and Terps Army at 32C are neighbours.
+    expect(parseAddress('Nieuwe Nieuwstraat 32C').unit).not.toBe(
+      parseAddress('Nieuwe Nieuwstraat 32').unit,
+    );
+    expect(parseAddress('Rozengracht 1A').unit).toBe(parseAddress('Rozengracht 1A').unit);
+  });
+
+  it('refuses a directory record at a different house number', () => {
+    // Andalucia is at Halvemaansteeg 1; Balou is at number 5, 30 m away.
+    const andalucia = {
+      id: 'v1', slug: 'andalucia', city: 'amsterdam', name: 'Andalucia', legal_name: null,
+      aliases: [], address: 'Halvemaansteeg 1', postcode: null, neighbourhood: null,
+      lat: 52.3665, lng: 4.8952, status: 'open', renamed_to: null, licence_number: null,
+      licence_valid_to: null, licence_renewal_pending: false, website: null, phone: null,
+      amenities: {}, hours_licensed: null, hours_weekly: null, hours_actual: null,
+      hours_source: null, hours_updated_at: null, socials: {}, socials_shared: [],
+      website_live: null, osm_id: null, amsterdam_id: 'a1', rating_avg: null, rating_count: 0,
+      sources: {}, fetched_at: '2026-08-19T00:00:00.000Z',
+    } as unknown as Venue;
+
+    applyDirectory([andalucia], [
+      {
+        slug: 'balou', name: 'Balou', address: 'Halvemaansteeg 5', postcode: null,
+        lat: 52.36653, lng: 4.89525, phone: '020 000 0000', website: null,
+        amenities: [], url: 'https://example.org/balou',
+      },
+    ]);
+
+    expect(andalucia.phone).toBeNull();
+    expect(andalucia.aliases).toEqual([]);
   });
 });

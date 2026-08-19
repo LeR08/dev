@@ -118,6 +118,9 @@ export const en = {
     chainAccount: `Chain account, shared with other branches`,
     renewalPending: `The licence for this venue passed its end date on {date} and the city has not yet published a renewal. In this register that normally means a renewal in progress rather than a closure — but check before travelling.`,
     websiteDown: `This website did not respond on the last check.`,
+    alsoKnownAs: `Also trades as`,
+    registeredAs: `Registered as`,
+    sourceNote: `Source: {source}`,
   },
   hours: {
     community: 'Corrected by a verified community report',
@@ -184,6 +187,8 @@ export const en = {
     verify:
       'Licences and opening hours change faster than any nightly job. Verify locally before travelling to a venue.',
     seeAlso: 'See also our privacy notice',
+    directoryTitle: `4. A third-party directory, for gaps only`,
+    directoryBody: `Phone numbers and trading names that neither the city nor OpenStreetMap holds are read from coffeeshopfinder.nl, whose robots.txt permits it, one page at a time. Only facts are taken — never their written descriptions, which are promotional copy about products, and never their images. A field from that source is written only where we had nothing, never over the city or OpenStreetMap, and every page that shows one says so beside the value.`,
   },
   privacy: {
     title: 'Privacy',

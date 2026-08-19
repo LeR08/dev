@@ -48,6 +48,9 @@ OpenStreetMap/Overpass ─┘                        ▲
 
 * **Amsterdam** decides which venues exist, their official name, address and licence status.
 * **OpenStreetMap** supplies websites, phone numbers, amenities and real opening hours.
+* **The venues' own websites** supply social accounts, and answer whether the site is still up.
+* **A third-party directory** fills what is still missing — chiefly phone numbers and the name a
+  venue trades under, which the register often does not carry.
 * Unmatched OSM records land in `data/pending-venues.json` for human review; they are never
   published automatically.
 * Manual corrections go in `data/overrides.json` keyed by `amsterdam_id` or `slug`, with an
@@ -56,6 +59,32 @@ OpenStreetMap/Overpass ─┘                        ▲
 The nightly GitHub Action refreshes the snapshot and commits it. A run whose row count moves more
 than 25% aborts and keeps the previous data, so a broken upstream response can never empty the
 directory.
+
+### Source precedence, and crediting it
+
+A field is written by the highest-precedence source that has it, and never
+overwritten by a lower one. The order is: manual correction, then the city, then
+OpenStreetMap, then the venue's own website, then the third-party directory.
+
+Every venue carries a `sources` map recording which source each field came from,
+and a page that shows a field taken from somebody else says so beside the value
+rather than burying it in a footer. Only facts are taken from the third-party
+directory — never its written descriptions, which are promotional copy about
+products, and never its images.
+
+> Attribution is not the whole legal question. The Dutch *Databankenwet* protects
+> substantial extraction from a database regardless of credit. Individual facts
+> are not protected and this takes a small subset of one city, but have the
+> lawyer confirm it along with L1, L2 and the review feature.
+
+### The licence end date is a renewal calendar
+
+152 of 158 coffeeshop licences end on the first of a month, and no licence in the
+dataset has been expired for more than four months. A lapsed date with the status
+still `Verleend` means a renewal the city has not published yet, not a closure —
+filtering it out deletes operating venues. A granted licence therefore stays live
+for `RENEWAL_GRACE_DAYS` (180) past its end date, flagged in the UI; beyond that
+it becomes `closed`.
 
 ### Opening hours
 

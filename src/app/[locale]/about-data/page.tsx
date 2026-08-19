@@ -72,6 +72,10 @@ export default async function AboutDataPage({ params }: { params: Promise<{ loca
         <p>{dict.aboutData.reviewsBody}</p>
       </Prose>
 
+      <Prose title={dict.aboutData.directoryTitle}>
+        <p>{dict.aboutData.directoryBody}</p>
+      </Prose>
+
       <Prose title={dict.aboutData.cadenceTitle}>
         <p>{dict.aboutData.cadenceBody}</p>
       </Prose>

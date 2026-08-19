@@ -116,6 +116,9 @@ export const de: Dictionary = {
     chainAccount: `Ketten-Konto, geteilt mit anderen Filialen`,
     renewalPending: `Die Konzession dieses Betriebs ist am {date} abgelaufen und die Stadt hat noch keine Verlängerung veröffentlicht. In diesem Register bedeutet das meist eine laufende Verlängerung und keine Schließung — prüfen Sie es dennoch vor dem Besuch.`,
     websiteDown: `Diese Website hat bei der letzten Prüfung nicht geantwortet.`,
+    alsoKnownAs: `Firmiert auch als`,
+    registeredAs: `Eingetragen als`,
+    sourceNote: `Quelle: {source}`,
   },
   hours: {
     community: 'Durch eine geprüfte Meldung korrigiert',
@@ -183,6 +186,8 @@ export const de: Dictionary = {
     verify:
       'Konzessionen und Öffnungszeiten ändern sich schneller als jeder nächtliche Lauf. Prüfen Sie vor Ort, bevor Sie zu einem Betrieb fahren.',
     seeAlso: 'Siehe auch unsere Datenschutzerklärung',
+    directoryTitle: `4. Ein fremdes Verzeichnis, nur für Lücken`,
+    directoryBody: `Telefonnummern und Handelsnamen, die weder die Stadt noch OpenStreetMap führt, lesen wir von coffeeshopfinder.nl, deren robots.txt das erlaubt, Seite für Seite. Übernommen werden nur Fakten — nie ihre Texte, denn das ist Produktwerbung, und nie ihre Bilder. Ein Feld aus dieser Quelle wird nur dort gesetzt, wo wir nichts hatten, nie über die Stadt oder OpenStreetMap hinweg, und jede Seite, die eines zeigt, sagt es neben dem Wert.`,
   },
   privacy: {
     title: 'Datenschutz',

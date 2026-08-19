@@ -116,6 +116,9 @@ export const nl: Dictionary = {
     chainAccount: `Ketenaccount, gedeeld met andere vestigingen`,
     renewalPending: `De vergunning van deze zaak is op {date} verlopen en de gemeente heeft nog geen verlenging gepubliceerd. In dit register betekent dat meestal een lopende verlenging en geen sluiting — controleer het toch voordat je langsgaat.`,
     websiteDown: `Deze website reageerde niet bij de laatste controle.`,
+    alsoKnownAs: `Ook bekend als`,
+    registeredAs: `Geregistreerd als`,
+    sourceNote: `Bron: {source}`,
   },
   hours: {
     community: 'Gecorrigeerd via een geverifieerde melding',
@@ -183,6 +186,8 @@ export const nl: Dictionary = {
     verify:
       'Vergunningen en openingstijden veranderen sneller dan welke nachtelijke run dan ook. Controleer ter plaatse voordat je naar een zaak reist.',
     seeAlso: 'Zie ook onze privacyverklaring',
+    directoryTitle: `4. Een externe gids, alleen voor gaten`,
+    directoryBody: `Telefoonnummers en handelsnamen die noch de gemeente noch OpenStreetMap heeft, lezen we van coffeeshopfinder.nl, waarvan de robots.txt dat toestaat, pagina voor pagina. Alleen feiten worden overgenomen — nooit hun teksten, want dat is reclame voor producten, en nooit hun afbeeldingen. Een veld uit die bron wordt alleen ingevuld waar wij niets hadden, nooit over de gemeente of OpenStreetMap heen, en elke pagina die er een toont vermeldt dat naast de waarde.`,
   },
   privacy: {
     title: 'Privacy',

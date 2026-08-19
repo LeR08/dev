@@ -6,8 +6,10 @@ import type { CityAdapter, NeighbourhoodPolygon } from '@/etl/adapters/types';
 import { matchSources } from '@/etl/match';
 import { fetchOsmVenues } from '@/etl/sources/overpass';
 import type { OsmRecord } from '@/etl/sources/overpass';
-import { buildVenues, carryForwardClosed, diffCounts } from '@/etl/build';
+import { applyDirectory, buildVenues, carryForwardClosed, diffCounts } from '@/etl/build';
 import { checkSite, markSharedHandles } from '@/etl/sources/socials';
+import { DIRECTORY_ATTRIBUTION, fetchDirectory } from '@/etl/sources/directory';
+import type { DirectoryRecord } from '@/etl/sources/directory';
 import type { SocialProfile } from '@/etl/sources/socials';
 import {
   appendRun,
@@ -80,6 +82,19 @@ async function main(): Promise<void> {
     console.warn(`  osm: not trusted, carrying the previous enrichment forward (${String(error)})`);
   }
 
+  // 2b. A third-party directory, read only to fill gaps the open sources leave.
+  //     Never overrides the city or OSM, and every field it fills is credited.
+  let directory: DirectoryRecord[] = [];
+  if (!args.has('--no-directory')) {
+    try {
+      directory = await fetchDirectory(adapter.city, adapter.bbox);
+      console.log(`  directory: ${directory.length} pages read`);
+    } catch (error) {
+      errors.push(`directory: ${String(error)}`);
+      console.warn(`  directory: skipped (${String(error)})`);
+    }
+  }
+
   let neighbourhoods: NeighbourhoodPolygon[] = [];
   try {
     neighbourhoods = (await adapter.fetchNeighbourhoods?.()) ?? [];
@@ -102,6 +117,14 @@ async function main(): Promise<void> {
     now: startedAt,
     osmAvailable,
   });
+
+  if (directory.length > 0) {
+    const filled = applyDirectory(built, directory);
+    console.log(
+      `  directory fills: +${filled.phones} phones, +${filled.websites} websites, ` +
+        `+${filled.aliases} trading names, +${filled.amenities} venues with extra amenities`,
+    );
+  }
 
   // 3b. Read each venue's own website for its social accounts and to see
   //     whether it still answers. Failures keep the previous values.
@@ -129,7 +152,11 @@ async function main(): Promise<void> {
   const snapshot: VenueSnapshot = {
     generated_at: startedAt.toISOString(),
     city: adapter.city,
-    attribution: [...adapter.attribution, OSM_ATTRIBUTION],
+    attribution: [
+      ...adapter.attribution,
+      OSM_ATTRIBUTION,
+      ...(directory.length > 0 ? [DIRECTORY_ATTRIBUTION] : []),
+    ],
     venues: sortVenues(venues),
   };
 

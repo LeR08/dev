@@ -28,6 +28,12 @@ export const Amenities = z.object({
   terrace: z.boolean().optional(),
   wheelchair: z.boolean().optional(),
   wifi: z.boolean().optional(),
+  card_payment: z.boolean().optional(),
+  toilet: z.boolean().optional(),
+  air_conditioning: z.boolean().optional(),
+  lounge: z.boolean().optional(),
+  parking: z.boolean().optional(),
+  drinks_snacks: z.boolean().optional(),
   /** OSM's `smoking` tag, stored verbatim; not shown as a chip. */
   smoking: z.string().optional(),
 });
@@ -39,6 +45,12 @@ export const Venue = z.object({
   city: z.string().default('amsterdam'),
   name: z.string(),
   legal_name: z.string().nullable().default(null),
+  /**
+   * Other names this venue trades under. The register records the licence
+   * holder, which is often not the name on the door: Prinsengracht 480 is
+   * registered as Superskunk and signed as Tops. Search matches all of them.
+   */
+  aliases: z.array(z.string()).default([]),
   address: z.string(),
   postcode: z.string().nullable().default(null),
   neighbourhood: z.string().nullable().default(null),

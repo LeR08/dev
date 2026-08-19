@@ -139,6 +139,9 @@ export function Directory({
       new Fuse(venues, {
         keys: [
           { name: 'name', weight: 3 },
+          // The name on the door is what a visitor types, and it is often not
+          // the name the licence is held under.
+          { name: 'aliases', weight: 3 },
           { name: 'legal_name', weight: 2 },
           { name: 'address', weight: 1 },
           { name: 'neighbourhood', weight: 1 },

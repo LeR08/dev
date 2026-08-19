@@ -29,15 +29,24 @@ export function slugify(input: string): string {
 export function parseAddress(address: string): {
   street: string;
   number: string | null;
+  /** Digits only. Two different units in one building share this. */
   base: string | null;
+  /** The premises: digits, plus any suffix that is not the ground floor. */
+  unit: string | null;
 } {
   const match = /^(.*?)[\s,]+(\d+[a-zA-Z]?(?:[-\s]?[a-zA-Z0-9]+)?)\s*$/.exec(address.trim());
-  if (!match) return { street: normalizeName(address), number: null, base: null };
+  if (!match) return { street: normalizeName(address), number: null, base: null, unit: null };
   const number = match[2].toLowerCase().replace(/[\s-]/g, '');
+  const digits = /^\d+/.exec(number)?.[0] ?? null;
+  const suffix = number.slice(digits?.length ?? 0);
   return {
     street: normalizeName(match[1]),
     number,
-    base: /^\d+/.exec(number)?.[0] ?? null,
+    base: digits,
+    // 'h' and 'hs' are huis and huis+souterrain — the ground-floor premises
+    // itself, so "137-H" and "137" are the same address. Any other letter is a
+    // separate unit in the same building: 32C is not 32.
+    unit: suffix === '' || suffix === 'h' || suffix === 'hs' ? digits : number,
   };
 }
 

@@ -87,12 +87,22 @@ export function MapView({
     // Any error before the style has loaded means no basemap will appear. The
     // list is the answer in that case, so say so rather than showing an empty
     // grey rectangle — §12 requires a real error state, not a blank one.
+    //
+    // Aborts are the exception: tearing the map down cancels its in-flight tile
+    // requests, and in development React mounts every effect twice, so a healthy
+    // map reports a handful of them on the way out. They say nothing about
+    // whether the basemap works.
     let loaded = false;
-    instance.on('error', () => {
+    let disposed = false;
+    const isAbort = (error: unknown) =>
+      error instanceof Error && (error.name === 'AbortError' || /abort/i.test(error.message));
+
+    instance.on('error', (event) => {
+      if (disposed || isAbort(event.error)) return;
       if (!loaded) setFailed(true);
     });
     const styleTimeout = setTimeout(() => {
-      if (!loaded) setFailed(true);
+      if (!loaded && !disposed) setFailed(true);
     }, 15_000);
 
     instance.on('load', () => {
@@ -194,8 +204,14 @@ export function MapView({
     });
 
     return () => {
+      disposed = true;
       clearTimeout(styleTimeout);
-      instance.remove();
+      try {
+        instance.remove();
+      } catch {
+        // Removing a map mid-request throws once the aborted fetches settle.
+        // The instance is gone either way; there is nothing to recover.
+      }
       map.current = null;
     };
   }, [onSelect]);

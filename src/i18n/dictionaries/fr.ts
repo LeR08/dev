@@ -116,6 +116,9 @@ export const fr: Dictionary = {
     chainAccount: `Compte d’enseigne, partagé avec d’autres établissements`,
     renewalPending: `La licence de cet établissement a dépassé sa date de fin le {date} et la ville n’a pas encore publié de renouvellement. Dans ce registre cela signifie en général un renouvellement en cours et non une fermeture — vérifiez tout de même avant de vous déplacer.`,
     websiteDown: `Ce site web n’a pas répondu lors du dernier contrôle.`,
+    alsoKnownAs: `Aussi connu sous`,
+    registeredAs: `Enregistré sous`,
+    sourceNote: `Source : {source}`,
   },
   hours: {
     community: 'Corrigé par un signalement vérifié',
@@ -183,6 +186,8 @@ export const fr: Dictionary = {
     verify:
       'Les licences et les horaires changent plus vite que n’importe quelle tâche nocturne. Vérifiez sur place avant de vous déplacer.',
     seeAlso: 'Voir aussi notre politique de confidentialité',
+    directoryTitle: `4. Un annuaire tiers, uniquement pour les manques`,
+    directoryBody: `Les numéros de téléphone et noms d’enseigne que ni la ville ni OpenStreetMap ne possèdent sont lus sur coffeeshopfinder.nl, dont le robots.txt l’autorise, une page à la fois. Seuls des faits sont repris — jamais leurs textes, qui sont de la promotion de produits, ni leurs images. Un champ issu de cette source n’est écrit que là où nous n’avions rien, jamais par-dessus la ville ou OpenStreetMap, et chaque page qui en affiche un l’indique à côté de la valeur.`,
   },
   privacy: {
     title: 'Confidentialité',
