@@ -298,31 +298,18 @@ Every feature described above — logging, history, charts, insights, export, ev
 free, full-stop, for every user. Nothing about tracking, insights or safety-relevant content
 is ever paywalled.
 
-**Payment is PayPal, opened in the browser.** Settings → Subscription offers a supporter
-subscription and a free-amount donation, both hosted PayPal pages reached through
-`WebBrowser.openBrowserAsync`. No SDK, no card field in the app, no secret key in this repo —
-the app never sees a payment detail. The two links come from
-`EXPO_PUBLIC_PAYPAL_SUBSCRIBE_URL` and `EXPO_PUBLIC_PAYPAL_DONATE_URL`; leave either blank and
-that option is hidden rather than broken.
+**Removing the banner will go through Google Play Billing.** It is the only compliant route:
+Play's Payments policy requires Play Billing for digital content unlocked inside an app, and
+that is what hiding the launch message and the banner is. Nothing flips
+`settings.subscription.status` today — the screen says the offer is not open rather than
+routing round the policy — and the field is what Billing will set once wired. The steps, and
+the sequencing trap that Billing cannot be tested until the app is already on Play, are in
+[PUBLISHING.md](PUBLISHING.md).
 
-Two things to be clear-eyed about:
-
-- **The unlock is on the person's word.** With no backend receiving PayPal's webhooks, the app
-  cannot check whether a subscription is live. After the browser closes it asks "did that go
-  through?", and takes yes for an answer, on that device only. Anyone willing to tap the
-  button gets the same result as a subscriber. The copy says so plainly rather than implying a
-  verified purchase. The shape to move to, if that stops being acceptable, is a Firebase Cloud
-  Function on PayPal's webhooks writing the entitlement to the user's Firestore document — at
-  which point the client reads it like any other synced field.
-- **Google Play's Payments policy requires Play Billing for digital content unlocked inside an
-  app**, which is what a subscription hiding the banner is. A donation that unlocks nothing is
-  fine; this subscription is the case the policy names, and the sanction is removal rather
-  than a rejected update. There is an EEA carve-out following the DMA — verify the terms in
-  force for your account before publishing, because this is the one item here that can cost
-  the listing.
-
-`settings.subscription.status` is what gates the launch interstitial and the banner; the
-supporter flow is the only thing that flips it.
+**Donations stay on PayPal.** A donation unlocks nothing, so it sits outside that policy. It
+is a hosted PayPal page opened with `WebBrowser.openBrowserAsync` — no SDK, no card field in
+the app, no secret key in this repo. The link comes from `EXPO_PUBLIC_PAYPAL_DONATE_URL`;
+leave it blank and the card is hidden rather than broken.
 
 **Ads — kept deliberately narrow and on-theme.** The literal ask was Google Ads on every
 launch for free users; what's built instead, to keep this ethical for an app about drinking

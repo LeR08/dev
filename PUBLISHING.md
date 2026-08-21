@@ -122,48 +122,92 @@ whether to drive.
 
 ## What is still waiting on you
 
-Three things need an account created outside this repo. Each is written so the app works
-without it — nothing is broken while a value is blank, the feature is simply hidden.
+Each of these needs an account or a product created outside this repo. The app is written so
+that a blank value hides its feature rather than breaking, so none of them blocks a build.
 
-### PayPal links
+### Google Play Billing — removing the banner
 
-1. **paypal.com → Pay & Get Paid → Subscriptions → Create plan.** Set the amount (5 EUR/month
-   to match the copy) and billing cycle. Publish the plan, then copy its **share link** — it
-   looks like `https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-XXXXXXXX`.
-2. For the donation, either a **PayPal.me** link (`paypal.me/yourname`) or a Donate button link.
-3. Put both into `eas.json`, in all three profiles:
-   `EXPO_PUBLIC_PAYPAL_SUBSCRIBE_URL` and `EXPO_PUBLIC_PAYPAL_DONATE_URL`. Copy them into your
-   local `.env` too if you want them in `npm start`.
+This is the only compliant way to sell the ad-free unlock, and it has a sequencing trap:
+**you cannot test Billing until the app is already on Play.** The library talks to the Play
+Store app, which only recognises a package that exists on the account, signed with the key
+Play expects. So the order is fixed:
 
-### AdMob app id
+**Step 1 — get a build onto Play first, with no billing code in it.**
 
-The banner is disabled and the dependency is out of `package.json` — see the ads section of
-the README for why. To turn it back on:
+```bash
+set EAS_NO_VCS=1
+npx eas build --profile production --platform android
+```
 
-1. **admob.google.com** → sign in with the same Google account → **Apps → Add app**. Answer
-   "no" to "is your app listed on a store?" until it is, then add it again afterwards to link
-   the real listing.
-2. Platform Android, name it TYA. AdMob issues an **App ID** shaped
-   `ca-app-pub-################~##########` — note the tilde; the *ad unit* id uses a slash and
-   is a different value.
-3. **Ad units → Add ad unit → Banner.** That gives the unit id
+Upload that AAB to **Testing → Internal testing** in Play Console and roll it out. It does not
+need to be public, or reviewed, or complete. It needs to exist.
+
+**Step 2 — create the subscription product.**
+
+Play Console → **Monetise → Products → Subscriptions → Create subscription**.
+
+- **Product ID**: `tya_supporter_monthly`. Choose carefully — it is permanent and cannot be
+  reused even after deletion. Send it to me; the code has to match it exactly.
+- **Name / description**: what the subscriber gets. Keep it to hiding the launch message and
+  the banner, since that is all it does.
+- Then add a **base plan**: `monthly`, auto-renewing, billing period P1M, and set the price for
+  each region you sell in. A subscription with no active base plan is invisible to the app,
+  which is the usual reason a product "does not exist" at runtime.
+- Activate both the subscription and the base plan.
+
+**Step 3 — make yourself a tester who is not charged.**
+
+Play Console → **Setup → License testing** → add your Google account. License testers get test
+purchases: real flow, real dialogs, no money, and renewals compressed to minutes so you can
+watch a cycle. Your account must also be on the internal testing track's tester list, and you
+must install the app *from Play* — a sideloaded APK will not see the products.
+
+**Step 4 — send me the product ID and I wire it.** That is `react-native-iap` plus its config
+plugin, a purchase flow, and — importantly — a **restore** path, because Play requires a way to
+recover an existing subscription on a new device. The entitlement will set
+`subscription.status`, the field that already gates the interstitial and the banner.
+
+One warning worth taking seriously: `react-native-iap` is a native dependency, so it can only
+be proven on a real Android build. It goes into a `preview` build and is verified there before
+it is allowed near `production`.
+
+### AdMob — the banner
+
+The banner is disabled and the dependency is out of `package.json`; the README's ads section
+explains why. To turn it back on:
+
+1. **admob.google.com**, same Google account → **Apps → Add app**. Answer "no" to "is your app
+   listed on a store?" until it is, then add it again afterwards to link the real listing.
+2. Platform Android, name TYA. AdMob issues an **App ID** shaped
+   `ca-app-pub-################~##########`. Note the **tilde** — the ad unit id uses a slash
+   and is a different value. Mixing them up gives an app that builds and never shows anything.
+3. **Ad units → Add ad unit → Banner** → that is the unit id
    `ca-app-pub-################/##########`.
-4. Send both ids over and the wiring is a small change: add
-   `react-native-google-mobile-ads`, its config plugin entry with `androidAppId` in
-   `app.config.js`, and make `src/ads/AdBanner.tsx` render a real `BannerAd` instead of `null`.
+4. In AdMob, **Blocking controls**: block alcohol and gambling categories. An auction serves
+   whatever wins, and this is an app about drinking less.
+5. Send both ids over. The wiring is: add `react-native-google-mobile-ads`, its plugin entry
+   with `androidAppId` in `app.config.js`, and make `src/ads/AdBanner.tsx` render a real
+   `BannerAd` instead of `null`.
 
-Two cautions worth taking seriously before spending that effort. The dependency was removed
-because `play-services-ads` shipped Kotlin metadata newer than this project's toolchain
-compiles against, failing the Android build; the library has moved on since, but that has not
-been re-tested here, so **prove it on a `preview` build before it goes anywhere near
-`production`**. And an ad network serves whatever the auction returns — in an app about
-reducing drinking, that can be alcohol or gambling creative. AdMob's blocked-categories
-controls exist; set them.
+Same caution as Billing, and a specific one: this dependency was removed because
+`play-services-ads` shipped Kotlin metadata newer than this project's toolchain compiles
+against, which **failed the Android build**. The library has moved on, but that has not been
+re-tested here. Prove it on `preview` before `production`.
+
+Declaring the advertising ID in the Data safety form becomes mandatory once AdMob is in.
+
+### PayPal donation link
+
+Donations unlock nothing, so they sit outside Play's Payments policy and can stay on PayPal.
+
+1. A **PayPal.me** link (`paypal.me/yourname`), or a Donate button link.
+2. Put it in `eas.json`, in all three profiles, as `EXPO_PUBLIC_PAYPAL_DONATE_URL`, and in your
+   local `.env` if you want it during `npm start`.
 
 ### Google Sign-In on Android
 
-The client id in this repo's history belongs to the earlier build, keyed to a different
-package and keystore — it cannot work here, which is why every profile now carries an empty
+The client id in this repo's history belongs to the earlier build, keyed to a different package
+and keystore — it cannot work here, which is why every profile carries an empty
 `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID`.
 
 1. `set EAS_NO_VCS=1`, then `npx eas credentials` → Android → the `production` profile → read
@@ -176,11 +220,12 @@ Until then the Google button stays hidden and email/password sign-in works norma
 
 ## Notes on things that will trip you up
 
-- **Play Billing vs PayPal.** Play's Payments policy requires Google Play Billing for digital
-  content unlocked inside an app, which is what the supporter subscription does when it hides
-  the banner. A donation that unlocks nothing is fine. There is an EEA carve-out following the
-  DMA; check the terms in force for your account, because the sanction here is removal of the
-  listing rather than a rejected update.
+- **Billing cannot be tested before the app is on Play.** The library talks to the Play Store
+  app, which only knows packages that exist on the account. Budget for an internal-testing
+  upload *before* any purchase code can be exercised — see the Billing steps above.
+- **A subscription product ID is permanent.** It cannot be reused after deletion, so pick it
+  once. Same for the base plan: a subscription without an active base plan is invisible at
+  runtime, and looks exactly like a missing product.
 - **Firebase pricing.** Spark (free) has hard daily Firestore quotas. A public launch on Spark
   will start failing reads once you are past a small number of users; Blaze is pay-as-you-go
   and needs a billing account. Decide before launch, not after users hit a broken sync.
