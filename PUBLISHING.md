@@ -7,24 +7,80 @@ change the data layer, re-check this file against it.
 Nothing here is legal advice, and none of it has been reviewed by a lawyer. See
 [Open items](README.md#open-items-before-any-public-release).
 
-## Before you start
+## The order to do this in
+
+Most of what is left depends on something else being done first. This is the sequence that
+avoids dead ends; the detail for each step is further down this file.
+
+### Phase 1 — get *something* onto Play
+
+Nothing about billing can be tested until the app exists on your Play account, so this phase
+unblocks the rest.
+
+| # | Step | Who | Blocks |
+|---|---|---|---|
+| 1 | **Create the Play Console account** (25 USD, identity check takes ~48 h) | you | everything |
+| 2 | **Google Sign-In**: `eas credentials` → SHA-1 → Firebase → Android client id → send it over | you, then me | nothing, but do it now so step 4 ships with it |
+| 3 | **Firestore region + Spark/Blaze decision** | you | permanent, see below |
+| 4 | **Build the AAB**: `npx eas build --profile production --platform android` | you | 5 |
+| 5 | **Create the app in Play Console**, fill the listing, upload the AAB to **Internal testing**, roll out | you | Billing, AdMob |
+
+Step 1 is the only unavoidable wait, so start it before anything else. Step 2 fits neatly
+inside that wait.
+
+Everything the listing needs is already in the repo: the store text drafts below, `store/` for
+the graphics, and `https://ler08.github.io/dev/privacy.html` for the privacy policy. The Data
+safety and content-rating answers are further down.
+
+### Phase 2 — Billing
+
+| # | Step | Who |
+|---|---|---|
+| 6 | Create the subscription **and its base plan**, both activated | you |
+| 7 | Add yourself under **Setup → License testing** | you |
+| 8 | Send the product ID; wiring `react-native-iap`, the purchase flow and restore | me |
+| 9 | Verify on a `preview` build, install **from Play**, then ship in `production` | both |
+
+### Phase 3 — AdMob
+
+| # | Step | Who |
+|---|---|---|
+| 10 | AdMob account → App ID + banner unit id → block alcohol/gambling categories | you |
+| 11 | Re-add the dependency and render a real banner | me |
+| 12 | Prove it on `preview` — this is the one that broke the Android build before | both |
+| 13 | Update the Data safety form: the advertising ID becomes declarable | you |
+
+### Phase 4 — before opening to the public
+
+None of these block a closed test, all of them block a public listing.
+
+| # | Step | Who |
+|---|---|---|
+| 14 | Translate the store listing into the other seven languages | you |
+| 15 | **Legal review** of the Terms, Notice and Privacy Policy | a lawyer |
+| 16 | **Clinical review** of the BAC formula and the help content | a physician |
+| 17 | Re-verify the helpline numbers | you |
+
+## Where each piece stands
 
 | Item | Status |
 |---|---|
-| Play Console account (one-off 25 USD) | you have to create it |
-| AAB build | `npx eas build --profile production --platform android` |
-| Privacy policy at a public URL | **ready** — `npm run build:legal`, host `docs/`, give Play `<host>/privacy.html` |
-| App icon 512×512 | **ready** — `store/icon-512.png` |
-| Feature graphic 1024×500 | **ready** — `store/feature-graphic.png` |
-| Phone screenshots (2–8) | **ready** — `store/screenshots/*.png`, 1080×2400 |
-| Short description (80 chars) + full description (4000) | drafts below |
-| Data safety form | answers below |
-| Content rating questionnaire | notes below |
+| Play Console account | not created |
+| Privacy policy at a public URL | **done** — https://ler08.github.io/dev/privacy.html |
+| App icon 512×512 | **done** — `store/icon-512.png` |
+| Feature graphic 1024×500 | **done** — `store/feature-graphic.png` |
+| Phone screenshots | **done** — `store/screenshots/*.png`, 1080×2400 |
+| Store listing text | English drafted below; seven translations to do |
+| Data safety answers | worked out below; to enter in the console |
+| Content rating | notes below; questionnaire to fill |
+| AAB build | profile ready, never run |
+| Google Sign-In (Android) | `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` empty — button hidden |
+| Play Billing | not started; nothing sets `subscription.status` |
+| AdMob | dependency absent, `AdBanner` renders `null` |
+| PayPal donation | `EXPO_PUBLIC_PAYPAL_DONATE_URL` empty — card hidden |
 
-Regenerate the two graphics with `python scripts/build-store-graphics.py` after any change
-to the artwork. The screenshots are captured from the running web build with a seeded history;
-the script for that lives outside the repo, so retaking them means running the app and
-capturing again.
+Regenerate the two graphics with `python scripts/build-store-graphics.py` after any change to
+the artwork. The screenshots come from the running web build with a seeded history.
 
 ## Data safety form
 
