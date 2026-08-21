@@ -1,8 +1,7 @@
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Platform, View } from 'react-native';
 
+import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Field } from '@/components/ui/Field';
@@ -15,7 +14,6 @@ import {
   deleteAccount,
   sendPasswordReset,
   signInWithEmail,
-  signInWithGoogleIdToken,
   signInWithGooglePopup,
   signOut,
   signUpWithEmail,
@@ -27,13 +25,7 @@ import { useTheme } from '@/theme/ThemeProvider';
 
 const DELETE_CONFIRM_WORD = 'DELETE';
 
-// Needed once per app so the native browser tab used for the Google OAuth
-// redirect actually closes and hands control back to the app afterwards.
-WebBrowser.maybeCompleteAuthSession();
-
-const GOOGLE_WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || undefined;
-const GOOGLE_IOS_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || undefined;
-const GOOGLE_ANDROID_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || undefined;
+const GOOGLE_WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '';
 
 // A corrupted local persistence layer (e.g. from an earlier native-module
 // mismatch — see git history) can make Firebase's own signOut() hang rather
@@ -71,52 +63,6 @@ function describeAuthError(cause: unknown, t: ReturnType<typeof useTranslation>[
   }
 }
 
-/**
- * Native has no popup API, so Google sign-in goes through expo-auth-session's
- * own browser-based OAuth flow instead of Firebase's `signInWithPopup`. This
- * is its own component (not inlined in AccountScreen) because its Google
- * client id is only known once `isGoogleSignInAvailable()` is true on native
- * — and that's static for the lifetime of the app (it comes from a build-time
- * env var), so only ever mounting this when configured keeps the
- * id-token-request hook itself unconditional, per the rules of hooks.
- */
-function GoogleSignInNativeButton({ label, onError }: { label: string; onError: (message: string) => void }) {
-  const { t } = useTranslation();
-  const { clearSignOutSuppression } = useApp();
-  const [busy, setBusy] = useState(false);
-  const [, response, promptAsync] = Google.useIdTokenAuthRequest({
-    webClientId: GOOGLE_WEB_CLIENT_ID,
-    iosClientId: GOOGLE_IOS_CLIENT_ID,
-    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-  });
-
-  useEffect(() => {
-    if (response?.type === 'success' && response.params.id_token) {
-      setBusy(true);
-      void signInWithGoogleIdToken(response.params.id_token)
-        .catch((cause) => onError(describeAuthError(cause, t)))
-        .finally(() => setBusy(false));
-    } else if (response?.type === 'error') {
-      onError(t('account.errorGeneric'));
-    }
-    // Only the response identity matters here — re-running for every render
-    // would re-fire this on unrelated state changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response]);
-
-  return (
-    <Button
-      label={label}
-      variant="secondary"
-      loading={busy}
-      onPress={() => {
-        onError('');
-        clearSignOutSuppression();
-        void promptAsync();
-      }}
-    />
-  );
-}
 
 /**
  * Firebase Auth is the real source of truth for sign-in state; this screen
@@ -438,7 +384,13 @@ export default function AccountScreen() {
                 onPress={() => void submitGoogleWeb()}
               />
             ) : (
-              <GoogleSignInNativeButton label={t('account.continueWithGoogle')} onError={setErrorMessage} />
+              <GoogleSignInButton
+                label={t('account.continueWithGoogle')}
+                webClientId={GOOGLE_WEB_CLIENT_ID}
+                genericErrorMessage={t('account.errorGeneric')}
+                onError={setErrorMessage}
+                onBeforeSignIn={clearSignOutSuppression}
+              />
             )}
           </View>
         ) : null}

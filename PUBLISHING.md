@@ -75,7 +75,7 @@ None of these block a closed test, all of them block a public listing.
 | Data safety answers | worked out below; to enter in the console |
 | Content rating | notes below; questionnaire to fill |
 | AAB build | **done** — first build produced, versionCode 2 |
-| Google Sign-In (Android) | **wired** for the EAS keystore; still needs the Play App Signing SHA-1 after the first upload |
+| Google Sign-In (Android) | migrated to Google's native SDK; both SHA-1s registered in Firebase — needs a fresh build to test |
 | Play Billing | not started; nothing sets `subscription.status` |
 | AdMob | dependency absent, `AdBanner` renders `null` |
 | PayPal donation | `EXPO_PUBLIC_PAYPAL_DONATE_URL` empty — card hidden |

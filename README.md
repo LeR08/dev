@@ -89,8 +89,8 @@ npm run web        # browser preview — handy for a quick look, not the target
 
 ### On a phone: the development-build workflow
 
-**Expo Go doesn't work for this app** — native Google Sign-In needs an OAuth client tied to
-the build's own signing fingerprint, which Expo Go can't provide. Use a *development build*
+**Expo Go doesn't work for this app** — Google sign-in runs through Google's native SDK, which
+Expo Go does not bundle. Use a *development build*
 instead: one APK, installed once, that then loads JavaScript from your machine, so day-to-day
 edits show up in seconds without rebuilding.
 

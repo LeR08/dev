@@ -89,6 +89,12 @@ module.exports = {
       ],
       'expo-localization',
       'expo-web-browser',
+      // Google's native sign-in SDK. It replaced an expo-auth-session browser
+      // flow that Google's own policy changes broke; see
+      // src/components/GoogleSignInButton.tsx for the full account. Being
+      // native, adding it means the next build has to be a real one — this
+      // cannot be picked up by a JS reload.
+      '@react-native-google-signin/google-signin',
     ],
     experiments: {
       typedRoutes: true,

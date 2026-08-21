@@ -24,20 +24,18 @@ export function isFirebaseConfigured(): boolean {
 
 /**
  * On web, Google sign-in goes through `signInWithPopup` straight against the
- * Firebase project above — no separate OAuth client id needed. On native
- * there's no popup API, so it goes through expo-auth-session instead (see
- * app/settings/account.tsx), whose `useIdTokenAuthRequest` throws synchronously
- * (crashing the screen that renders it) unless it's given a client id for the
- * *current* platform specifically — the web client id alone isn't enough on
- * Android or iOS. Until the platform-specific one is set, the native Google
- * button shows a clear "not set up" state rather than a broken one.
+ * Firebase project above. On native it goes through Google's own SDK (see
+ * src/components/GoogleSignInButton.tsx), which needs the *web* client id —
+ * that is what makes it return the `idToken` Firebase expects. The Android
+ * OAuth client still has to exist, with the right SHA-1 fingerprints, but its
+ * id is never read by this app, so checking for it here would test the wrong
+ * thing. Until the web client id is set, the native Google button is hidden
+ * rather than shown broken.
  */
 export function isGoogleSignInAvailable(): boolean {
   if (!isFirebaseConfigured()) return false;
   if (Platform.OS === 'web') return true;
-  if (Platform.OS === 'android') return Boolean(process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID);
-  if (Platform.OS === 'ios') return Boolean(process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID);
-  return false;
+  return Boolean(process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID);
 }
 
 let app: FirebaseApp | null = null;

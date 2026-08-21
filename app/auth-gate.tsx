@@ -1,8 +1,7 @@
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Platform, Pressable, View } from 'react-native';
 
+import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Field } from '@/components/ui/Field';
@@ -16,7 +15,6 @@ import { useTranslation } from '@/i18n/I18nProvider';
 import {
   sendPasswordReset,
   signInWithEmail,
-  signInWithGoogleIdToken,
   signInWithGooglePopup,
   signUpWithEmail,
 } from '@/sync/auth';
@@ -24,11 +22,7 @@ import { isGoogleSignInAvailable } from '@/sync/firebaseApp';
 import { useApp } from '@/state/AppProvider';
 import { useTheme } from '@/theme/ThemeProvider';
 
-WebBrowser.maybeCompleteAuthSession();
-
-const GOOGLE_WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || undefined;
-const GOOGLE_IOS_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || undefined;
-const GOOGLE_ANDROID_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || undefined;
+const GOOGLE_WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '';
 
 function describeAuthError(cause: unknown, t: ReturnType<typeof useTranslation>['t']): string {
   const code = cause && typeof cause === 'object' && 'code' in cause ? String((cause as { code?: unknown }).code) : '';
@@ -49,46 +43,6 @@ function describeAuthError(cause: unknown, t: ReturnType<typeof useTranslation>[
     default:
       return t('account.errorGeneric');
   }
-}
-
-/**
- * Native-only Google sign-in via expo-auth-session (Expo Go compatible,
- * unlike @react-native-google-signin) — see app/settings/account.tsx's
- * GoogleSignInNativeButton for the full rationale, duplicated here since
- * this screen has no back-navigation to share a component through cleanly.
- */
-function GoogleSignInNativeButton({ label, onError }: { label: string; onError: (message: string) => void }) {
-  const { t } = useTranslation();
-  const [busy, setBusy] = useState(false);
-  const [, response, promptAsync] = Google.useIdTokenAuthRequest({
-    webClientId: GOOGLE_WEB_CLIENT_ID,
-    iosClientId: GOOGLE_IOS_CLIENT_ID,
-    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-  });
-
-  useEffect(() => {
-    if (response?.type === 'success' && response.params.id_token) {
-      setBusy(true);
-      void signInWithGoogleIdToken(response.params.id_token)
-        .catch((cause) => onError(describeAuthError(cause, t)))
-        .finally(() => setBusy(false));
-    } else if (response?.type === 'error') {
-      onError(t('account.errorGeneric'));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response]);
-
-  return (
-    <Button
-      label={label}
-      variant="secondary"
-      loading={busy}
-      onPress={() => {
-        onError('');
-        void promptAsync();
-      }}
-    />
-  );
 }
 
 /**
@@ -282,7 +236,12 @@ export default function AuthGateScreen() {
                 onPress={() => void submitGoogleWeb()}
               />
             ) : (
-              <GoogleSignInNativeButton label={t('account.continueWithGoogle')} onError={setErrorMessage} />
+              <GoogleSignInButton
+                label={t('account.continueWithGoogle')}
+                webClientId={GOOGLE_WEB_CLIENT_ID}
+                genericErrorMessage={t('account.errorGeneric')}
+                onError={setErrorMessage}
+              />
             )}
           </View>
         ) : null}
