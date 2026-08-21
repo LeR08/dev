@@ -25,8 +25,11 @@ module.exports = {
     },
     android: {
       package: 'com.tya.tracker',
-      // Play requires a monotonically increasing versionCode per upload; it
-      // does not read the version string above.
+      // Only the seed for EAS's first build. eas.json sets
+      // appVersionSource: "remote", so from then on EAS holds the counter and
+      // raises it per build — autoIncrement cannot work the other way round
+      // here, because it would have to write the new value back into this
+      // file, and EAS cannot edit a dynamic .js config.
       versionCode: 1,
       adaptiveIcon: {
         // Matches the illustration's own background, so the adaptive-icon mask

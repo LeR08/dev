@@ -125,8 +125,12 @@ Play rejects an APK for a new app:
 npx eas build --profile production --platform android
 ```
 
-That profile sets `autoIncrement`, so each build raises the Android `versionCode` on its own;
-Play refuses an upload that reuses one.
+That profile sets `autoIncrement`, so each build raises the Android `versionCode` on its own —
+Play refuses an upload that reuses one. It works because `eas.json` sets
+`appVersionSource: "remote"`, which keeps the counter on EAS's side. The `local` setting cannot
+work here: it makes EAS write the new value back into the config, and it cannot edit a dynamic
+`app.config.js` — the same limitation that stops it writing `projectId` there. The
+`versionCode` in `app.config.js` is only the seed for the first build.
 
 > On a machine with no `git` installed — or with a broken one, which reports as
 > `git found, but git --help exited with status undefined` — set `EAS_NO_VCS=1` before the
