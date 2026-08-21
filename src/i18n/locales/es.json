@@ -551,7 +551,19 @@
     "freeTierBody": "Todo funciona en la versión gratuita. Los usuarios gratuitos también ven un mensaje breve, que se puede omitir, al abrir la app — sobre apoyo y recursos frente a la adicción, nunca un anuncio real — y un pequeño banner aquí mismo.",
     "previewNotice": "Vista previa de la oferta. Los pagos aún no están abiertos: no se cobra nada y nunca se piden datos bancarios.",
     "subscribeAction": "Suscribirse",
-    "notAvailableToast": "Las suscripciones aún no están abiertas."
+    "openFailedToast": "No se ha podido abrir la página.",
+    "confirmTitle": "¿Se ha completado la suscripción?",
+    "confirmBody": "La aplicación no puede comprobarlo con PayPal, así que es declarativo, y solo se aplica a este dispositivo.",
+    "confirmAction": "Sí, activar",
+    "activatedToast": "Modo colaborador activado. Gracias.",
+    "deactivatedToast": "Modo colaborador desactivado.",
+    "activeTitle": "Modo colaborador activado",
+    "activeBody": "El mensaje de inicio y el banner de apoyo están ocultos. La cancelación de la suscripción de PayPal se hace desde tu cuenta de PayPal: desactivarlo aquí solo cambia lo que muestra este dispositivo.",
+    "deactivateAction": "Desactivar en este dispositivo",
+    "honourNotice": "El pago se realiza en PayPal, en tu navegador. La aplicación nunca ve tus datos bancarios —ni puede verificar la suscripción—, así que se fía de tu palabra, en este dispositivo.",
+    "donateTitle": "O da lo que quieras",
+    "donateBody": "Un importe único, lo que te parezca justo. No desbloquea nada: todo en la aplicación ya es gratuito.",
+    "donateAction": "Hacer una donación"
   },
   "adminScreen": {
     "banner": "Esta es una vista previa local de lo que un futuro panel de administración podría mostrar — el lado del usuario (los datos de este dispositivo) y el lado del administrador (tickets, estado de la suscripción, ajustes del catálogo). El estado de la suscripción ahora depende del backend real en server/; todo lo demás aquí sigue siendo local de este dispositivo.",

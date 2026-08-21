@@ -120,8 +120,67 @@ diagnosis, and not a substitute for professional care. Never use the estimate to
 whether to drive.
 ```
 
+## What is still waiting on you
+
+Three things need an account created outside this repo. Each is written so the app works
+without it — nothing is broken while a value is blank, the feature is simply hidden.
+
+### PayPal links
+
+1. **paypal.com → Pay & Get Paid → Subscriptions → Create plan.** Set the amount (5 EUR/month
+   to match the copy) and billing cycle. Publish the plan, then copy its **share link** — it
+   looks like `https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-XXXXXXXX`.
+2. For the donation, either a **PayPal.me** link (`paypal.me/yourname`) or a Donate button link.
+3. Put both into `eas.json`, in all three profiles:
+   `EXPO_PUBLIC_PAYPAL_SUBSCRIBE_URL` and `EXPO_PUBLIC_PAYPAL_DONATE_URL`. Copy them into your
+   local `.env` too if you want them in `npm start`.
+
+### AdMob app id
+
+The banner is disabled and the dependency is out of `package.json` — see the ads section of
+the README for why. To turn it back on:
+
+1. **admob.google.com** → sign in with the same Google account → **Apps → Add app**. Answer
+   "no" to "is your app listed on a store?" until it is, then add it again afterwards to link
+   the real listing.
+2. Platform Android, name it TYA. AdMob issues an **App ID** shaped
+   `ca-app-pub-################~##########` — note the tilde; the *ad unit* id uses a slash and
+   is a different value.
+3. **Ad units → Add ad unit → Banner.** That gives the unit id
+   `ca-app-pub-################/##########`.
+4. Send both ids over and the wiring is a small change: add
+   `react-native-google-mobile-ads`, its config plugin entry with `androidAppId` in
+   `app.config.js`, and make `src/ads/AdBanner.tsx` render a real `BannerAd` instead of `null`.
+
+Two cautions worth taking seriously before spending that effort. The dependency was removed
+because `play-services-ads` shipped Kotlin metadata newer than this project's toolchain
+compiles against, failing the Android build; the library has moved on since, but that has not
+been re-tested here, so **prove it on a `preview` build before it goes anywhere near
+`production`**. And an ad network serves whatever the auction returns — in an app about
+reducing drinking, that can be alcohol or gambling creative. AdMob's blocked-categories
+controls exist; set them.
+
+### Google Sign-In on Android
+
+The client id in this repo's history belongs to the earlier build, keyed to a different
+package and keystore — it cannot work here, which is why every profile now carries an empty
+`EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID`.
+
+1. `set EAS_NO_VCS=1`, then `npx eas credentials` → Android → the `production` profile → read
+   off the **SHA-1** of the keystore EAS holds.
+2. Firebase console → Project settings → **Add app** → Android → package `com.tya.tracker`,
+   paste that SHA-1.
+3. Firebase generates an **Android OAuth client id**. Put it in all three `eas.json` profiles.
+
+Until then the Google button stays hidden and email/password sign-in works normally.
+
 ## Notes on things that will trip you up
 
+- **Play Billing vs PayPal.** Play's Payments policy requires Google Play Billing for digital
+  content unlocked inside an app, which is what the supporter subscription does when it hides
+  the banner. A donation that unlocks nothing is fine. There is an EEA carve-out following the
+  DMA; check the terms in force for your account, because the sanction here is removal of the
+  listing rather than a rejected update.
 - **Firebase pricing.** Spark (free) has hard daily Firestore quotas. A public launch on Spark
   will start failing reads once you are past a small number of users; Blaze is pay-as-you-go
   and needs a billing account. Decide before launch, not after users hit a broken sync.

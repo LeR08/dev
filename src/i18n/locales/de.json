@@ -551,7 +551,19 @@
     "freeTierBody": "In der kostenlosen Version funktioniert alles. Kostenlose Nutzer sehen beim Öffnen der App außerdem eine kurze, überspringbare Meldung — zu Unterstützung und Hilfe bei Sucht, nie eine echte Werbeanzeige — sowie ein kleines Banner genau hier.",
     "previewNotice": "Vorschau des Angebots. Zahlungen sind noch nicht freigeschaltet: Es wird nichts berechnet und es werden keine Zahlungsdaten abgefragt.",
     "subscribeAction": "Abonnieren",
-    "notAvailableToast": "Abonnements sind noch nicht verfügbar."
+    "openFailedToast": "Die Seite konnte nicht geöffnet werden.",
+    "confirmTitle": "Ist das Abo zustande gekommen?",
+    "confirmBody": "Die App kann das bei PayPal nicht prüfen — es zählt deine Angabe, und sie gilt nur auf diesem Gerät.",
+    "confirmAction": "Ja, aktivieren",
+    "activatedToast": "Unterstützer-Modus aktiv. Danke.",
+    "deactivatedToast": "Unterstützer-Modus deaktiviert.",
+    "activeTitle": "Unterstützer-Modus aktiv",
+    "activeBody": "Die Startnachricht und das Unterstützer-Banner sind ausgeblendet. Das PayPal-Abo selbst kündigst du in deinem PayPal-Konto — hier auszuschalten ändert nur die Anzeige auf diesem Gerät.",
+    "deactivateAction": "Auf diesem Gerät ausschalten",
+    "honourNotice": "Die Zahlung läuft über PayPal in deinem Browser. Die App sieht deine Zahlungsdaten nie — und kann das Abo auch nicht prüfen, sie verlässt sich auf deine Angabe, auf diesem Gerät.",
+    "donateTitle": "Oder gib, was du möchtest",
+    "donateBody": "Ein einmaliger Betrag, so viel du für richtig hältst. Es schaltet nichts frei — in der App ist bereits alles kostenlos.",
+    "donateAction": "Spenden"
   },
   "adminScreen": {
     "banner": "Dies ist eine lokale Vorschau dessen, was ein zukünftiges Admin-Panel zeigen könnte — die Nutzerseite (die Daten dieses Geräts) und die Admin-Seite (Tickets, Abo-Status, Katalog-Anpassungen). Der Abo-Status stützt sich jetzt auf das echte Backend in server/; alles andere hier ist weiterhin lokal auf diesem Gerät.",

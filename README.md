@@ -298,16 +298,31 @@ Every feature described above — logging, history, charts, insights, export, ev
 free, full-stop, for every user. Nothing about tracking, insights or safety-relevant content
 is ever paywalled.
 
-**There is no payment processing.** Stripe and PayPal checkout, and the backend in `server/`
-that held their secret keys, were all removed deliberately — see commit history if they ever
-need to come back. What's left is `app/settings/subscription.tsx`, a **preview** of what an
-offer might look like: real cards, real copy, real layout, and a subscribe button that says
-the offer isn't open rather than starting a checkout that doesn't exist. Nothing charges
-anyone, and no payment details are ever collected.
+**Payment is PayPal, opened in the browser.** Settings → Subscription offers a supporter
+subscription and a free-amount donation, both hosted PayPal pages reached through
+`WebBrowser.openBrowserAsync`. No SDK, no card field in the app, no secret key in this repo —
+the app never sees a payment detail. The two links come from
+`EXPO_PUBLIC_PAYPAL_SUBSCRIBE_URL` and `EXPO_PUBLIC_PAYPAL_DONATE_URL`; leave either blank and
+that option is hidden rather than broken.
 
-`settings.subscription.status` still exists in the data model and still gates the launch
-interstitial, but nothing flips it to `active` today. That's the seam to reuse if a real
-purchase flow is added later — see `src/domain/types.ts`.
+Two things to be clear-eyed about:
+
+- **The unlock is on the person's word.** With no backend receiving PayPal's webhooks, the app
+  cannot check whether a subscription is live. After the browser closes it asks "did that go
+  through?", and takes yes for an answer, on that device only. Anyone willing to tap the
+  button gets the same result as a subscriber. The copy says so plainly rather than implying a
+  verified purchase. The shape to move to, if that stops being acceptable, is a Firebase Cloud
+  Function on PayPal's webhooks writing the entitlement to the user's Firestore document — at
+  which point the client reads it like any other synced field.
+- **Google Play's Payments policy requires Play Billing for digital content unlocked inside an
+  app**, which is what a subscription hiding the banner is. A donation that unlocks nothing is
+  fine; this subscription is the case the policy names, and the sanction is removal rather
+  than a rejected update. There is an EEA carve-out following the DMA — verify the terms in
+  force for your account before publishing, because this is the one item here that can cost
+  the listing.
+
+`settings.subscription.status` is what gates the launch interstitial and the banner; the
+supporter flow is the only thing that flips it.
 
 **Ads — kept deliberately narrow and on-theme.** The literal ask was Google Ads on every
 launch for free users; what's built instead, to keep this ethical for an app about drinking
