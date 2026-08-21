@@ -25,12 +25,12 @@ module.exports = {
     },
     android: {
       package: 'com.tya.tracker',
-      // Only the seed for EAS's first build. eas.json sets
-      // appVersionSource: "remote", so from then on EAS holds the counter and
-      // raises it per build — autoIncrement cannot work the other way round
-      // here, because it would have to write the new value back into this
-      // file, and EAS cannot edit a dynamic .js config.
-      versionCode: 1,
+      // No versionCode here on purpose: eas.json sets appVersionSource to
+      // "remote", so EAS owns the counter and raises it per production build.
+      // A value in this file would be ignored while still reading as though it
+      // were authoritative. (Remote is also the only mode that works with a
+      // dynamic config — "local" would need EAS to write the new value back
+      // into this .js file, which it cannot do.)
       adaptiveIcon: {
         // Matches the illustration's own background, so the adaptive-icon mask
         // never shows a mismatched sliver behind the mark.

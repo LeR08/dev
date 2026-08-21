@@ -19,11 +19,12 @@ unblocks the rest.
 
 | # | Step | Who | Blocks |
 |---|---|---|---|
-| 1 | **Create the Play Console account** (25 USD, identity check takes ~48 h) | you | everything |
-| 2 | **Google Sign-In**: `eas credentials` → SHA-1 → Firebase → Android client id → send it over | you, then me | nothing, but do it now so step 4 ships with it |
+| 1 | ~~Create the Play Console account~~ | you | **done** |
+| 2 | ~~Google Sign-In: SHA-1 → Firebase → Android client id~~ | you, then me | **done** for the EAS keystore |
 | 3 | **Firestore region + Spark/Blaze decision** | you | permanent, see below |
-| 4 | **Build the AAB**: `npx eas build --profile production --platform android` | you | 5 |
+| 4 | ~~Build the AAB~~ | you | **done**, versionCode 2 |
 | 5 | **Create the app in Play Console**, fill the listing, upload the AAB to **Internal testing**, roll out | you | Billing, AdMob |
+| 5b | **After that upload**: copy the Play App Signing SHA-1 into the same Firebase Android app | you | Google Sign-In for Store installs |
 
 Step 1 is the only unavoidable wait, so start it before anything else. Step 2 fits neatly
 inside that wait.
@@ -65,7 +66,7 @@ None of these block a closed test, all of them block a public listing.
 
 | Item | Status |
 |---|---|
-| Play Console account | not created |
+| Play Console account | **done** — organisation account, verified |
 | Privacy policy at a public URL | **done** — https://ler08.github.io/dev/privacy.html |
 | App icon 512×512 | **done** — `store/icon-512.png` |
 | Feature graphic 1024×500 | **done** — `store/feature-graphic.png` |
@@ -73,8 +74,8 @@ None of these block a closed test, all of them block a public listing.
 | Store listing text | English drafted below; seven translations to do |
 | Data safety answers | worked out below; to enter in the console |
 | Content rating | notes below; questionnaire to fill |
-| AAB build | profile ready, never run |
-| Google Sign-In (Android) | `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` empty — button hidden |
+| AAB build | **done** — first build produced, versionCode 2 |
+| Google Sign-In (Android) | **wired** for the EAS keystore; still needs the Play App Signing SHA-1 after the first upload |
 | Play Billing | not started; nothing sets `subscription.status` |
 | AdMob | dependency absent, `AdBanner` renders `null` |
 | PayPal donation | `EXPO_PUBLIC_PAYPAL_DONATE_URL` empty — card hidden |
