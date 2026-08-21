@@ -1,17 +1,20 @@
-# Tally
+# TYA
 
-A personal alcohol tracking app. Log what you drink, see what that adds up to over time,
-and keep every byte of it on your own device.
+An alcohol tracking app. Log what you drink, see what that adds up to over time, and keep
+control of every byte of it.
 
-Built as a personal test build: free, no analytics, everything free for everyone. There is
-**no payment processing anywhere in the app** — Settings → Subscription is a mock-up of what
-an offer might look like, with inert buttons, kept only so the layout can be judged (see
-[Freemium & ads](#freemium--ads)). Currently **v1.4**, still explicitly in test mode — see
-[Open items](#open-items-before-any-public-release) before this goes anywhere near a public
-store listing.
+Everything in the app is free for everyone: no analytics, no ad-network advertising, and
+**no payment processing** — Settings → Subscription shows what an offer could look like, with
+inert buttons, so the layout can be judged (see [Freemium & ads](#freemium--ads)). Currently
+**v1.0**. Read [Open items](#open-items-before-any-public-release) before a public store
+listing: some of what remains there needs a professional, not a commit.
 
-The target is **Android on a real phone**. Web still builds and runs, but it's no longer what
+The target is **Android on a real phone**. Web still builds and runs, but it is no longer what
 the app is designed or tested against.
+
+> Tally was this project's first identity, kept as a personal build. It is no longer built
+> from this repo — an installed copy keeps working and keeps its data, but everything here is
+> TYA now.
 
 ## What it does
 
@@ -38,10 +41,11 @@ the app is designed or tested against.
   same-day read on it too, not just a week-end one.
 - **Alcohol-free streaks**, counted forwards and celebrated. Nothing in the app is coloured
   red, and no copy tells you a number is too high.
-- **A quick local sign-in on first launch** (name, optional email — never sent anywhere, just
-  how the app greets you) followed straight by the profile screen (sex, age, weight, height,
-  spending baseline, why you're using the app), so the whole "who are you" ask happens once,
-  at the start, rather than being spread across the app. Every field but "why" can be left
+- **Sign-in on first launch**, then the profile screen (sex, age, weight, height, spending
+  baseline, why you're using the app), so the whole "who are you" ask happens once, at the
+  start, rather than being spread across the app. The account is a real one — Firebase
+  Authentication, email/password or Google — and it is required; see
+  [Accounts & cloud sync](#accounts--cloud-sync). Every profile field but "why" can be left
   blank, and all of it is editable any time in Settings → Profile.
 - **A rough blood-alcohol estimate**, shown on the home screen only while it's actually
   informative (something logged recently, sex and weight on file), always with a plain-text
@@ -114,6 +118,16 @@ someone — build the `preview` profile instead:
 npx eas build --profile preview --platform android
 ```
 
+And for the Play Store, the `production` profile, which emits an **AAB** rather than an APK —
+Play rejects an APK for a new app:
+
+```bash
+npx eas build --profile production --platform android
+```
+
+That profile sets `autoIncrement`, so each build raises the Android `versionCode` on its own;
+Play refuses an upload that reuses one.
+
 > On a machine with no `git` installed — or with a broken one, which reports as
 > `git found, but git --help exited with status undefined` — set `EAS_NO_VCS=1` before the
 > EAS command (`set EAS_NO_VCS=1` on Windows, `EAS_NO_VCS=1` inline on macOS/Linux),
@@ -121,50 +135,6 @@ npx eas build --profile preview --platform android
 > from git, so with no VCS that job falls to `.easignore` — it is what keeps `node_modules`,
 > build output and the local `.env` off the build server. Anything that must not be uploaded
 > belongs in `.easignore`, not only in `.gitignore`.
-
-### Two apps, one codebase: Tally and TYA
-
-`app.config.js` (not a static `app.json`) reads `APP_VARIANT` and switches everything that
-makes an app a distinct *installable* thing — name, Android package / iOS bundle id, icon set,
-OAuth redirect scheme — between two identities:
-
-| | Tally | TYA |
-|---|---|---|
-| `APP_VARIANT` | unset / `tally` | `tya` |
-| package/bundle id | `com.tally.tracker` | `com.tya.tracker` |
-| icons | `assets/` | `assets-tya/` |
-| EAS profiles | `development`, `preview`, `production` | `tya-development`, `tya-preview` |
-
-The application code itself never branches on this — same screens, same logic, same Firebase
-project. Signing in with the same email/Google account on both shows the same data on both;
-they're two doors into the same house, not two separate apps.
-
-TYA's mark is `assets-tya/source-logo.png` — the artwork as supplied, treated as the master
-and never edited in the repo. Every other PNG in `assets-tya/` is derived from it by
-`python assets-tya/make-icons.py`; to change the icon, replace that one file and re-run.
-
-The script makes exactly one layout decision, in `android-icon-foreground.png`: Android masks
-adaptive icons to a circle and only guarantees the middle ~66% is visible, so the artwork is
-scaled into that safe zone rather than pasted at full bleed, which would cut off the speech
-bubble and the shoulder. The flat background layer behind it is the artwork's own white, so
-the mask never shows a mismatched sliver. `icon.png` is byte-identical to the source.
-
-Build TYA exactly like Tally, just with its own profile:
-
-```bash
-npx eas build --profile tya-development --platform android   # once, to get the dev client
-npx eas build --profile tya-preview --platform android       # standalone APK
-```
-
-**Google Sign-In on TYA's native button isn't wired up yet.** It needs its own Android OAuth
-client — same steps as Tally originally did (see [Accounts & cloud
-sync](#accounts--cloud-sync)'s setup notes): run `eas credentials` for the `tya-development` (or
-`tya-preview`) profile to get TYA's own keystore SHA-1, register a **new Android app** for
-`com.tya.tracker` in the *same* Firebase project (Project settings → Add app), paste that SHA-1
-in, then copy the Android OAuth client id Firebase generates and add it as
-`EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` to both `tya-*` profiles in `eas.json`. Until then, the
-Google button on TYA just stays hidden — email/password sign-in already works on the first
-build, same as Tally's did before that step.
 
 ## How it is put together
 
@@ -219,18 +189,17 @@ set. Metro picks `src/db/index.ts` or `src/db/index.web.ts`; both satisfy the sa
 interface, and nothing above that layer knows which one is running. v1.2 added `Profile` and
 `Ticket` to that same contract, so both backends implement them identically.
 
-**The profile is local-only, on purpose.** Per the v1.2 spec, the profile is *identified* data
-by product decision — it's treated as belonging to a real person, not anonymised — but it
-still never leaves the device: no account, no server, no sync. A future account/sync system
-(out of scope here) is expected to reuse the same `Profile` shape.
+**The profile is identified data, on purpose.** Per the v1.2 spec the profile is treated as
+belonging to a real person rather than anonymised. It used to be local-only too; since cloud
+sync landed it is pushed to Firestore whole, name and email included — see
+[Accounts & cloud sync](#accounts--cloud-sync) and the Data safety notes in
+[PUBLISHING.md](PUBLISHING.md).
 
-**"Sign in" is a greeting, not an account system.** The first-run flow now opens with a name
-(and optional email) step before the profile screen — this reads like a sign-in, which is
-what was asked for a test build, but nothing is created, verified, or sent anywhere. The
-name/email are just two more fields on the same local-only `Profile` row, and skipping them
-entirely leaves the app exactly as anonymous as before. If a real account system is ever
-wanted, this screen is where it would plug in — right now it deliberately does nothing more
-than it says on the tin.
+**Sign-in is real, and mandatory.** It began as a greeting — a name and optional email written
+to the local `Profile` row, nothing created or verified. It is now Firebase Authentication,
+and `app/_layout.tsx` gates the entire app behind it whenever a Firebase project is
+configured. The local-only fallback survives for an unconfigured build, which is a development
+convenience rather than a shipping mode.
 
 **The BAC estimate is the plain textbook Widmark formula** (sex + weight, standard `r` factors,
 a flat elimination rate) — not an age-adjusted refinement. The more accurate age-aware formulas
@@ -284,7 +253,7 @@ to avoid two copies of the same value that could quietly drift apart.
   (`src/components/ui/LanguagePill.tsx`) in the Today screen's header for a one-tap switch
   without leaving the home screen.
 - **Why these eight**: European languages plus Chinese and Arabic, as asked — not "every
-  language Tally could plausibly support," which would have meant either machine-translating
+  language the app could plausibly support," which would have meant either machine-translating
   (reintroducing the exact placeholder problem being fixed) or fabricating help-resource
   contacts for countries nobody verified. Scoping to eight kept every string and every
   helpline number genuinely checked.
@@ -298,11 +267,11 @@ to avoid two copies of the same value that could quietly drift apart.
   This under-serves Arabic in particular, which has six grammatical plural forms — a known,
   disclosed simplification rather than an oversight.
 - On first launch, language, the Help tab's country, and now currency all default from the
-  device's own locale when it's one Tally recognises, else fall back to English / general /
+  device's own locale when it is one the app recognises, else fall back to English / general /
   EUR (`src/i18n/detectLocale.ts`). All three stay changeable any time in Settings.
 - **Known gap: calendar dates still follow the device's system locale, not the in-app
   language.** `formatDate`/`formatLongDate`/`formatMonth`/`formatWeekdayShort` call
-  `Intl.DateTimeFormat(undefined, …)`, which reads the OS locale rather than Tally's own
+  `Intl.DateTimeFormat(undefined, …)`, which reads the OS locale rather than the app's own
   language setting — so a phone set to English showing the app in French will still see
   "Wed, Aug 5" instead of "mer. 5 août" in a few places (e.g. the custom start-date picker).
   Fixing it means threading the app's `language` through every date-formatting call site, the

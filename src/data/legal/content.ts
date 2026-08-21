@@ -1,9 +1,8 @@
 /**
  * Legal document content (spec v1.2 §10).
  *
- * Editable templates, not legal advice — the spec is explicit that a legal
- * professional should review them before the app leaves test mode or reaches
- * a public store listing. The identity/contact fields (publisher, SIRET,
+ * Editable templates, not legal advice — a legal professional should review
+ * them before a public store listing. The identity/contact fields (publisher, SIRET,
  * address, director of publication) are filled in with the site owner's own
  * details; update them directly here if that information ever changes.
  *
@@ -50,7 +49,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Description of the service',
           body: [
-            'This is a test / beta build. Features may change or be removed without notice. There is no guarantee of availability, accuracy, or fitness for any particular purpose.',
+            'The app is under active development. Features may change or be removed without notice, and there is no guarantee of availability, accuracy, or fitness for any particular purpose.',
           ],
         },
         {
@@ -210,7 +209,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Description du service',
           body: [
-            "Il s'agit d'une version de test / bêta. Les fonctionnalités peuvent changer ou disparaître sans préavis. Aucune garantie de disponibilité, d'exactitude ou d'adéquation à un usage particulier n'est fournie.",
+            "L'application évolue en permanence. Les fonctionnalités peuvent changer ou disparaître sans préavis, et aucune garantie de disponibilité, d'exactitude ou d'adéquation à un usage particulier n'est fournie.",
           ],
         },
         {
@@ -370,7 +369,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Descripción del servicio',
           body: [
-            'Se trata de una versión de prueba / beta. Las funciones pueden cambiar o eliminarse sin previo aviso. No se garantiza disponibilidad, exactitud ni idoneidad para un fin particular.',
+            'La aplicación está en desarrollo activo. Las funciones pueden cambiar o eliminarse sin previo aviso, y no se garantiza disponibilidad, exactitud ni idoneidad para un fin particular.',
           ],
         },
         {
@@ -530,7 +529,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Beschreibung des Dienstes',
           body: [
-            'Dies ist eine Test-/Beta-Version. Funktionen können sich ohne Vorankündigung ändern oder entfernt werden. Es besteht keine Gewähr für Verfügbarkeit, Richtigkeit oder Eignung für einen bestimmten Zweck.',
+            'Die App wird laufend weiterentwickelt. Funktionen können sich ohne Vorankündigung ändern oder entfernt werden, und es besteht keine Gewähr für Verfügbarkeit, Richtigkeit oder Eignung für einen bestimmten Zweck.',
           ],
         },
         {
@@ -690,7 +689,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Descrizione del servizio',
           body: [
-            "Si tratta di una versione di test / beta. Le funzionalità possono cambiare o essere rimosse senza preavviso. Non è fornita alcuna garanzia di disponibilità, accuratezza o idoneità a un uso particolare.",
+            'App in continuo sviluppo. Le funzionalità possono cambiare o essere rimosse senza preavviso e non è fornita alcuna garanzia di disponibilità, accuratezza o idoneità a un uso particolare.',
           ],
         },
         {
@@ -850,7 +849,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Descrição do serviço',
           body: [
-            'Trata-se de uma versão de teste / beta. As funcionalidades podem mudar ou ser removidas sem aviso prévio. Não existe qualquer garantia de disponibilidade, exatidão ou adequação a um propósito específico.',
+            'A aplicação está em desenvolvimento contínuo. As funcionalidades podem mudar ou ser removidas sem aviso prévio e não existe qualquer garantia de disponibilidade, exatidão ou adequação a um propósito específico.',
           ],
         },
         {
@@ -1010,7 +1009,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: '服务说明',
           body: [
-            '这是一个测试版/测试内测版本。功能可能会随时变更或移除，恕不另行通知。本应用不对可用性、准确性或适用于特定用途作任何保证。',
+            '本应用仍在持续开发中。功能可能会随时变更或移除，恕不另行通知，且不对可用性、准确性或适用于特定用途作任何保证。',
           ],
         },
         {
@@ -1162,7 +1161,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'وصف الخدمة',
           body: [
-            'هذه نسخة اختبار / تجريبية. قد تتغير الميزات أو تُزال دون إشعار مسبق. لا يوجد أي ضمان للتوافر أو الدقة أو الملاءمة لغرض معين.',
+            'التطبيق قيد التطوير المستمر. قد تتغير الميزات أو تُزال دون إشعار مسبق، ولا يوجد أي ضمان للتوافر أو الدقة أو الملاءمة لغرض معين.',
           ],
         },
         {

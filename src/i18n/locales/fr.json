@@ -44,8 +44,7 @@
     "emailLabel": "E-mail (optionnel)",
     "emailPlaceholder": "vous@exemple.com",
     "emailHint": "Jamais envoyé nulle part — stocké uniquement sur cet appareil, au cas où vous en ayez besoin plus tard.",
-    "continueAction": "Continuer",
-    "testModeNotice": "Version de test — aucun compte n'est créé, rien ne quitte cet appareil."
+    "continueAction": "Continuer"
   },
   "onboarding": {
     "startTracking": "Commencer le suivi",
@@ -215,7 +214,7 @@
     "noneSet": "Aucun défini",
     "goalPerWeek": "{{count}}/semaine",
     "goalFreeDays": "{{count}} jours sans alcool",
-    "subscriptionRowSubtitle": "Une idée en mode test, aucun vrai paiement",
+    "subscriptionRowSubtitle": "Premium — pas encore ouvert",
     "accountRow": "Compte et synchronisation",
     "accountRowSubtitle": "Optionnel — protégez votre historique sur plusieurs appareils",
     "accountSynced": "Synchronisé",
@@ -280,7 +279,6 @@
     "autoCaptured": "La version de l'application et la plateforme sont ajoutées automatiquement."
   },
   "legal": {
-    "notFinalNotice": "Texte provisoire type — non relu par un juriste. Complétez vos propres informations avant que l'application ne sorte du mode test.",
     "termsTitle": "Conditions générales d'utilisation",
     "legalNoticeTitle": "Mentions légales",
     "privacyTitle": "Politique de confidentialité"
@@ -331,7 +329,7 @@
     "appearance": "Apparence",
     "defaultPrices": "Prix par défaut",
     "dataPrivacy": "Données et confidentialité",
-    "subscription": "Abonnement (test)"
+    "subscription": "Abonnement"
   },
   "unitsScreen": {
     "volumeTitle": "Volume",

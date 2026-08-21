@@ -12,6 +12,7 @@ Nothing here is legal advice, and none of it has been reviewed by a lawyer. See
 | Item | Status |
 |---|---|
 | Play Console account (one-off 25 USD) | you have to create it |
+| AAB build | `npx eas build --profile production --platform android` |
 | Privacy policy at a public URL | **ready** — `npm run build:legal`, host `docs/`, give Play `<host>/privacy.html` |
 | App icon 512×512 | **ready** — `store/icon-512.png` |
 | Feature graphic 1024×500 | **ready** — `store/feature-graphic.png` |
@@ -127,6 +128,11 @@ whether to drive.
 - **Data residency.** Whichever region the Firestore database was created in is where the data
   lives, permanently — it cannot be moved afterwards. Check it matches what the privacy policy
   claims before anyone but you has an account.
-- **The two apps share one backend.** Tally and TYA sign into the same Firebase project, so an
-  account works on both and shows the same data. If they are ever published as two separate
-  store listings, that relationship has to be disclosed, or separated first.
+- **Tally shares this Firebase project.** The earlier build is no longer produced from this
+  repo, but any copy still installed signs into the same project and reads the same data. That
+  only matters if it is ever distributed to anyone else; for a personal install it is
+  invisible.
+- **Google Sign-In is not wired for TYA yet.** It needs its own Android OAuth client, keyed to
+  TYA's package and keystore — the one in the repo's history belongs to Tally and will not
+  work here. Email/password sign-in works today; the Google button stays hidden until
+  `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID` is filled in for the `production` profile.

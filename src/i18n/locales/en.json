@@ -44,8 +44,7 @@
     "emailLabel": "Email (optional)",
     "emailPlaceholder": "you@example.com",
     "emailHint": "Never sent anywhere — stored only on this device, in case you want it later.",
-    "continueAction": "Continue",
-    "testModeNotice": "Test build — no account is created, nothing leaves this device."
+    "continueAction": "Continue"
   },
   "onboarding": {
     "startTracking": "Start tracking",
@@ -215,7 +214,7 @@
     "noneSet": "None set",
     "goalPerWeek": "{{count}}/week",
     "goalFreeDays": "{{count}} free days",
-    "subscriptionRowSubtitle": "A test-mode idea, not a real charge",
+    "subscriptionRowSubtitle": "Premium — not open yet",
     "accountRow": "Account & cloud sync",
     "accountRowSubtitle": "Optional — keep your history safe across devices",
     "accountSynced": "Synced",
@@ -280,7 +279,6 @@
     "autoCaptured": "App version and platform are attached automatically."
   },
   "legal": {
-    "notFinalNotice": "Draft placeholder text — not reviewed by a lawyer. Fill in your own details before this app leaves test mode.",
     "termsTitle": "Terms of Service",
     "legalNoticeTitle": "Legal Notice",
     "privacyTitle": "Privacy Policy"
@@ -331,7 +329,7 @@
     "appearance": "Appearance",
     "defaultPrices": "Default prices",
     "dataPrivacy": "Data & privacy",
-    "subscription": "Subscription (test)"
+    "subscription": "Subscription"
   },
   "unitsScreen": {
     "volumeTitle": "Volume",

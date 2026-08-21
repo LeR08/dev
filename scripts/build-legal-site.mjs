@@ -105,8 +105,8 @@ function page({ docId, content, updated }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escape(titles[0])} — Tally / TYA</title>
-<meta name="description" content="${escape(titles[0])} for the Tally / TYA alcohol tracking app.">
+<title>${escape(titles[0])} — TYA</title>
+<meta name="description" content="${escape(titles[0])} for the TYA alcohol tracking app.">
 <style>
   :root {
     --bg: #F7F5F2; --surface: #FFFFFF; --text: #1C1A17; --muted: #6E675F;
@@ -154,7 +154,7 @@ function page({ docId, content, updated }) {
 <body>
 <main>
   <div class="masthead">
-    <div class="app-name">Tally / TYA</div>
+    <div class="app-name">TYA</div>
     <div class="updated">Last updated: ${escape(updated)}</div>
   </div>
 
@@ -166,7 +166,7 @@ ${articles}
 </main>
 
 <footer>
-  <p>Tally and TYA are two builds of the same application, published by LaSolutionDigital.
+  <p>TYA is published by LaSolutionDigital.
   Contact: <a href="mailto:romainlambert@lasolutiondigital.com">romainlambert@lasolutiondigital.com</a></p>
   <p><a href="./privacy.html">Privacy Policy</a> · <a href="./terms.html">Terms of Service</a> · <a href="./notice.html">Legal Notice</a></p>
 </footer>
@@ -199,7 +199,7 @@ function indexPage(updated) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Legal — Tally / TYA</title>
+<title>Legal — TYA</title>
 <style>
   :root { --bg:#F7F5F2; --surface:#FFF; --text:#1C1A17; --muted:#6E675F; --border:#E4DFD7; --accent:#4240C7; }
   @media (prefers-color-scheme: dark) {
@@ -218,7 +218,7 @@ function indexPage(updated) {
 </head>
 <body>
 <main>
-  <h1>Tally / TYA — Legal</h1>
+  <h1>TYA — Legal</h1>
   <p class="updated">Last updated: ${escape(updated)}</p>
   <ul>
     <li><a href="./privacy.html">Privacy Policy</a></li>

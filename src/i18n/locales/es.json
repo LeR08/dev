@@ -44,8 +44,7 @@
     "emailLabel": "Correo electrónico (opcional)",
     "emailPlaceholder": "tu@ejemplo.com",
     "emailHint": "Nunca se envía a ningún sitio — se guarda solo en este dispositivo, por si lo necesitas más adelante.",
-    "continueAction": "Continuar",
-    "testModeNotice": "Versión de prueba — no se crea ninguna cuenta, nada sale de este dispositivo."
+    "continueAction": "Continuar"
   },
   "onboarding": {
     "startTracking": "Empezar a registrar",
@@ -215,7 +214,7 @@
     "noneSet": "Ninguno definido",
     "goalPerWeek": "{{count}}/semana",
     "goalFreeDays": "{{count}} días libres",
-    "subscriptionRowSubtitle": "Una idea en modo prueba, sin cobro real",
+    "subscriptionRowSubtitle": "Premium — aún no disponible",
     "accountRow": "Cuenta y sincronización",
     "accountRowSubtitle": "Opcional — protege tu historial en varios dispositivos",
     "accountSynced": "Sincronizado",
@@ -280,7 +279,6 @@
     "autoCaptured": "La versión de la app y la plataforma se adjuntan automáticamente."
   },
   "legal": {
-    "notFinalNotice": "Texto de borrador — no revisado por un abogado. Completa tus propios datos antes de que esta app salga del modo de prueba.",
     "termsTitle": "Términos del servicio",
     "legalNoticeTitle": "Aviso legal",
     "privacyTitle": "Política de privacidad"
@@ -331,7 +329,7 @@
     "appearance": "Apariencia",
     "defaultPrices": "Precios predeterminados",
     "dataPrivacy": "Datos y privacidad",
-    "subscription": "Suscripción (prueba)"
+    "subscription": "Suscripción"
   },
   "unitsScreen": {
     "volumeTitle": "Volumen",

@@ -1,6 +1,6 @@
 {
-  "name": "tally",
-  "version": "1.4.0",
+  "name": "tya",
+  "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
     "@expo-google-fonts/manrope": "^0.4.2",

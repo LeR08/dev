@@ -44,8 +44,7 @@
     "emailLabel": "E-Mail (optional)",
     "emailPlaceholder": "du@beispiel.de",
     "emailHint": "Wird nie irgendwohin gesendet — nur auf diesem Gerät gespeichert, falls du sie später brauchst.",
-    "continueAction": "Weiter",
-    "testModeNotice": "Testversion — es wird kein Konto erstellt, nichts verlässt dieses Gerät."
+    "continueAction": "Weiter"
   },
   "onboarding": {
     "startTracking": "Tracking starten",
@@ -215,7 +214,7 @@
     "noneSet": "Keine festgelegt",
     "goalPerWeek": "{{count}}/Woche",
     "goalFreeDays": "{{count}} freie Tage",
-    "subscriptionRowSubtitle": "Eine Testmodus-Idee, keine echte Abbuchung",
+    "subscriptionRowSubtitle": "Premium — noch nicht verfügbar",
     "accountRow": "Konto & Cloud-Synchronisierung",
     "accountRowSubtitle": "Optional — sichert deinen Verlauf geräteübergreifend",
     "accountSynced": "Synchronisiert",
@@ -280,7 +279,6 @@
     "autoCaptured": "App-Version und Plattform werden automatisch angehängt."
   },
   "legal": {
-    "notFinalNotice": "Vorläufiger Platzhaltertext — nicht anwaltlich geprüft. Trage deine eigenen Angaben ein, bevor diese App den Testmodus verlässt.",
     "termsTitle": "Nutzungsbedingungen",
     "legalNoticeTitle": "Impressum",
     "privacyTitle": "Datenschutzerklärung"
@@ -331,7 +329,7 @@
     "appearance": "Erscheinungsbild",
     "defaultPrices": "Standardpreise",
     "dataPrivacy": "Daten & Datenschutz",
-    "subscription": "Abo (Test)"
+    "subscription": "Abo"
   },
   "unitsScreen": {
     "volumeTitle": "Volumen",

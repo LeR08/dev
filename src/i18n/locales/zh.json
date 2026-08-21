@@ -44,8 +44,7 @@
     "emailLabel": "邮箱（选填）",
     "emailPlaceholder": "you@example.com",
     "emailHint": "不会发送到任何地方——仅保存在本设备上，以备日后需要。",
-    "continueAction": "继续",
-    "testModeNotice": "测试版本——不会创建账户，任何信息都不会离开本设备。"
+    "continueAction": "继续"
   },
   "onboarding": {
     "startTracking": "开始记录",
@@ -215,7 +214,7 @@
     "noneSet": "未设置",
     "goalPerWeek": "每周 {{count}}",
     "goalFreeDays": "{{count}} 天不饮酒",
-    "subscriptionRowSubtitle": "测试模式的构想，不会真实扣费",
+    "subscriptionRowSubtitle": "高级版 — 尚未开放",
     "accountRow": "账户与云同步",
     "accountRowSubtitle": "可选功能——在多台设备间保护你的记录",
     "accountSynced": "已同步",
@@ -280,7 +279,6 @@
     "autoCaptured": "应用版本和平台信息会自动附加。"
   },
   "legal": {
-    "notFinalNotice": "草稿占位文本——未经律师审核。请在本应用退出测试模式前填写你自己的信息。",
     "termsTitle": "服务条款",
     "legalNoticeTitle": "法律声明",
     "privacyTitle": "隐私政策"
@@ -331,7 +329,7 @@
     "appearance": "外观",
     "defaultPrices": "默认价格",
     "dataPrivacy": "数据与隐私",
-    "subscription": "订阅（测试）"
+    "subscription": "订阅"
   },
   "unitsScreen": {
     "volumeTitle": "容量",

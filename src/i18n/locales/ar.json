@@ -44,8 +44,7 @@
     "emailLabel": "البريد الإلكتروني (اختياري)",
     "emailPlaceholder": "you@example.com",
     "emailHint": "لا يُرسل إلى أي جهة أبدًا — يُحفظ فقط على هذا الجهاز، في حال احتجت إليه لاحقًا.",
-    "continueAction": "متابعة",
-    "testModeNotice": "نسخة تجريبية — لا يتم إنشاء أي حساب، ولا يغادر هذا الجهاز أي شيء."
+    "continueAction": "متابعة"
   },
   "onboarding": {
     "startTracking": "بدء التتبع",
@@ -215,7 +214,7 @@
     "noneSet": "لم يُحدَّد شيء",
     "goalPerWeek": "{{count}}/أسبوعيًا",
     "goalFreeDays": "{{count}} أيام خالية",
-    "subscriptionRowSubtitle": "فكرة في وضع الاختبار، بلا خصم حقيقي",
+    "subscriptionRowSubtitle": "Premium — لم يُفتح بعد",
     "accountRow": "الحساب والمزامنة السحابية",
     "accountRowSubtitle": "اختياري — حافظ على سجلك آمنًا عبر عدة أجهزة",
     "accountSynced": "تمت المزامنة",
@@ -280,7 +279,6 @@
     "autoCaptured": "تُرفَق نسخة التطبيق والمنصة تلقائيًا."
   },
   "legal": {
-    "notFinalNotice": "نص مسوّدة نائب — لم تتم مراجعته من قِبل محامٍ. أدخل بياناتك الخاصة قبل أن يغادر هذا التطبيق وضع الاختبار.",
     "termsTitle": "شروط الخدمة",
     "legalNoticeTitle": "الإشعار القانوني",
     "privacyTitle": "سياسة الخصوصية"
@@ -331,7 +329,7 @@
     "appearance": "المظهر",
     "defaultPrices": "الأسعار الافتراضية",
     "dataPrivacy": "البيانات والخصوصية",
-    "subscription": "الاشتراك (تجريبي)"
+    "subscription": "الاشتراك"
   },
   "unitsScreen": {
     "volumeTitle": "الحجم",
