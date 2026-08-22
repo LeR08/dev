@@ -99,11 +99,16 @@ export function GoogleSignInButton({
           ? String((cause as { code?: unknown }).code)
           : '';
       if (code === statusCodes.IN_PROGRESS) return;
-      onError(
-        code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
-          ? playServicesErrorMessage
-          : genericErrorMessage
-      );
+      if (code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        onError(playServicesErrorMessage);
+        return;
+      }
+      // The code goes on screen deliberately. Google's SDK distinguishes a
+      // dozen failures — an unregistered signing certificate, a consent
+      // screen still in testing, a revoked client — and every one of them
+      // reaches the user as the same sentence. Without the code there is
+      // nothing to act on, for them or for whoever reads their bug report.
+      onError(code ? `${genericErrorMessage} (${code})` : genericErrorMessage);
     } finally {
       setBusy(false);
     }
