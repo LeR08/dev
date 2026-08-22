@@ -546,7 +546,7 @@
   },
   "subscriptionScreen": {
     "priceLabel": "5€ / mês",
-    "intro": "A versão gratuita continua gratuita — registo de consumos, estatísticas, tudo o resto. O Premium removeria a mensagem de arranque e o pequeno banner de apoio abaixo, e ajudaria a financiar a aplicação.",
+    "intro": "A versão gratuita continua gratuita — registo de consumos, estatísticas, tudo o resto. O Premium remove a mensagem de arranque e o pequeno banner de apoio abaixo, e ajuda a financiar a aplicação.",
     "freeTierTitle": "Versão gratuita",
     "freeTierBody": "Tudo funciona na versão gratuita. Os utilizadores gratuitos também veem uma mensagem breve, que pode ser saltada, ao abrir a app — sobre apoio e recursos sobre dependências, nunca um anúncio real — e uma pequena faixa aqui mesmo.",
     "previewNotice": "A subscrição não está disponível neste dispositivo ou versão. Tudo funciona sem ela.",
@@ -594,7 +594,7 @@
   "shop": {
     "badge": "Loja",
     "title": "Passar a Premium",
-    "body": "Remove a mensagem ao abrir a app e a pequena faixa de apoio — {{price}}.",
+    "body": "Remove a mensagem ao abrir a app e a pequena faixa de apoio.",
     "action": "Ver a oferta"
   },
   "account": {

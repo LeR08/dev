@@ -546,7 +546,7 @@
   },
   "subscriptionScreen": {
     "priceLabel": "5€ / month",
-    "intro": "The free version stays free — drink logging, statistics, everything else. Premium would remove the launch message and the small support banner below, and help fund the app.",
+    "intro": "The free version stays free — drink logging, statistics, everything else. Premium removes the launch message and the small support banner below, and helps fund the app.",
     "freeTierTitle": "Free tier",
     "freeTierBody": "Everything works on the free tier. Free users also see a short, skippable message when the app opens — about support & addiction resources, never a real ad — and a small banner right here.",
     "previewNotice": "The subscription is not available on this device or build. Everything in the app works without it.",
@@ -594,7 +594,7 @@
   "shop": {
     "badge": "Shop",
     "title": "Go Premium",
-    "body": "Removes the launch message and the small support banner — {{price}}.",
+    "body": "Removes the launch message and the small support banner.",
     "action": "See the offer"
   },
   "account": {

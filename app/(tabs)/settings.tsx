@@ -53,7 +53,7 @@ export default function SettingsScreen() {
               </Text>
               <Text variant="heading">{t('shop.title')}</Text>
               <Text variant="body" tone="muted">
-                {t('shop.body', { price: t('subscriptionScreen.priceLabel') })}
+                {t('shop.body')}
               </Text>
               <Button label={t('shop.action')} onPress={() => router.push('/settings/subscription')} />
             </Card>

@@ -546,7 +546,7 @@
   },
   "subscriptionScreen": {
     "priceLabel": "5€ / Monat",
-    "intro": "Die kostenlose Version bleibt kostenlos — Getränke erfassen, Statistiken, alles andere. Premium würde die Startmeldung und das kleine Unterstützungs-Banner unten entfernen und hilft, die App zu finanzieren.",
+    "intro": "Die kostenlose Version bleibt kostenlos — Getränke erfassen, Statistiken, alles andere. Premium entfernt die Startmeldung und das kleine Unterstützungs-Banner unten und hilft, die App zu finanzieren.",
     "freeTierTitle": "Kostenlose Version",
     "freeTierBody": "In der kostenlosen Version funktioniert alles. Kostenlose Nutzer sehen beim Öffnen der App außerdem eine kurze, überspringbare Meldung — zu Unterstützung und Hilfe bei Sucht, nie eine echte Werbeanzeige — sowie ein kleines Banner genau hier.",
     "previewNotice": "Das Abo ist auf diesem Gerät oder in dieser Version nicht verfügbar. Alles funktioniert auch ohne.",
@@ -594,7 +594,7 @@
   "shop": {
     "badge": "Shop",
     "title": "Zu Premium wechseln",
-    "body": "Entfernt die Startmeldung und das kleine Support-Banner — {{price}}.",
+    "body": "Entfernt die Startmeldung und das kleine Support-Banner.",
     "action": "Angebot ansehen"
   },
   "account": {

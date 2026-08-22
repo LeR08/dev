@@ -546,7 +546,7 @@
   },
   "subscriptionScreen": {
     "priceLabel": "5€ / mois",
-    "intro": "La version gratuite reste gratuite — enregistrement des consommations, statistiques, tout le reste. Premium retirerait le message au lancement et la petite bannière de soutien ci-dessous, et aiderait à financer l'application.",
+    "intro": "La version gratuite reste gratuite — enregistrement des consommations, statistiques, tout le reste. Premium retire le message au lancement et la petite bannière de soutien ci-dessous, et aide à financer l'application.",
     "freeTierTitle": "Version gratuite",
     "freeTierBody": "Tout fonctionne dans la version gratuite. Les utilisateurs gratuits voient aussi un court message, qu'on peut passer, à l'ouverture de l'application — à propos du soutien et des ressources sur l'addiction, jamais une vraie publicité — ainsi qu'une petite bannière ici même.",
     "previewNotice": "L'abonnement n'est pas disponible sur cet appareil ou cette version. Tout fonctionne sans lui.",
@@ -594,7 +594,7 @@
   "shop": {
     "badge": "Boutique",
     "title": "Passer à Premium",
-    "body": "Retire le message au lancement et la petite bannière de soutien — {{price}}.",
+    "body": "Retire le message au lancement et la petite bannière de soutien.",
     "action": "Voir l'offre"
   },
   "account": {
