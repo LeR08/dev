@@ -74,6 +74,16 @@ module.exports = {
         {
           photosPermission:
             'Used only if you attach a screenshot to a bug report or suggestion. Nothing is uploaded — it stays on this device.',
+          // The only call this app makes is launchImageLibraryAsync
+          // (app/settings/report.tsx) — the picker never opens the camera and
+          // never records anything. Left at its default, this plugin adds
+          // RECORD_AUDIO to the manifest anyway, which would put a microphone
+          // permission on an app that cannot record: a sensitive-permission
+          // review at Play, and a bad-faith signal in an app that asks people
+          // to log something private. `false` both skips the permission and
+          // blocks it, so no other dependency can put it back.
+          cameraPermission: false,
+          microphonePermission: false,
         },
       ],
       [
@@ -97,6 +107,12 @@ module.exports = {
       '@react-native-google-signin/google-signin',
       // AdMob. The app id below is public by design — it ships inside the
       // APK's manifest and identifies the publisher, not an account secret.
+      //
+      // There is deliberately no iosAppId, and `expo config` warns that the
+      // native SDK crashes on iOS without one. That is accurate and currently
+      // harmless: this app ships to Play only, and no iOS build is produced.
+      // Anyone adding one has to create an iOS app in AdMob first and put its
+      // id here, or the crash is real.
       [
         'react-native-google-mobile-ads',
         {

@@ -129,8 +129,10 @@ in the EEA and the UK decline, but everywhere else `gatherConsent` resolves with
 choice, and "optional" in this form means optional for everyone.
 
 **Do not** declare: precise location (the `Entry.location` field is a free-text label the user
-types, not a device location reading — there is no location permission in `app.config.js`), or
-analytics (there is none).
+types, not a device location reading — there is no location permission in `app.config.js`),
+audio or photos (the picker only ever calls `launchImageLibraryAsync`, and `app.config.js`
+blocks RECORD_AUDIO and CAMERA outright, so the merged manifest carries neither), or analytics
+(there is none).
 
 ### The security questions
 
