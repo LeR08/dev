@@ -130,10 +130,15 @@ module.exports = {
         'expo-build-properties',
         {
           android: {
+            // Kept at 2.3.0 because the failed build proved it works for every
+            // other module — reanimated, worklets, google-signin and nitro all
+            // compiled under it. It does NOT reach the AdMob module, which is
+            // what './plugins/withAdMobKotlinMetadata' is for.
             kotlinVersion: '2.3.0',
           },
         },
       ],
+      './plugins/withAdMobKotlinMetadata',
     ],
     experiments: {
       typedRoutes: true,
