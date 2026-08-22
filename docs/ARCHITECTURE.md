@@ -3,6 +3,11 @@
 > Document de conception validé **avant** tout développement.
 > Statut : en attente de validation. Aucun code applicatif n'est encore écrit.
 
+**Produit** : académie business en ligne — création de produit digital, media buying,
+marketing digital, vente et conversion. Formation payante vendue en dehors de la plateforme,
+accès débloqué par **code d'activation**. Catalogue détaillé dans [`CONTENT.md`](CONTENT.md),
+schéma dans [`DATABASE.md`](DATABASE.md).
+
 ---
 
 ## 1. Stack technique
@@ -93,6 +98,7 @@ Règle stricte, vérifiable en revue de code : **une dépendance ne remonte jama
 | Type de page | Rendu | Raison |
 |---|---|---|
 | Landing, pages légales | Statique | SEO, gratuit à servir |
+| Programme d'une formation | Server Component, public | visible **avant** activation : c'est l'argument de vente |
 | Catalogue `/explore` | Server Component + `searchParams` | filtrable, indexable, pagination serveur |
 | Fiche cours `/courses/[slug]` | Server Component + `generateMetadata` | SEO + Open Graph |
 | Lecteur `/learn/[lessonId]` | Server shell + îlot client | le player doit être client, le reste non |
@@ -160,6 +166,7 @@ edulearn/
 │   │   │   │   ├── page.tsx            # player + onglets (notes, ressources, quiz)
 │   │   │   │   └── layout.tsx          # rail de navigation entre leçons
 │   │   │   ├── quiz/[quizId]/page.tsx
+│   │   │   ├── activate/page.tsx       # saisie du code d'activation
 │   │   │   ├── my-courses/page.tsx
 │   │   │   ├── progress/page.tsx
 │   │   │   ├── favorites/page.tsx
@@ -177,6 +184,8 @@ edulearn/
 │   │   │       ├── page.tsx            # tableau de bord admin
 │   │   │       ├── tree/page.tsx       # arborescence drag & drop (§20 du cahier)
 │   │   │       ├── users/[[...id]]/page.tsx
+│   │   │       ├── access-codes/page.tsx      # générer, exporter en CSV, révoquer
+│   │   │       ├── enrollments/page.tsx       # accès accordés, expirations
 │   │   │       ├── levels/…  subjects/…
 │   │   │       ├── courses/[[...id]]/page.tsx
 │   │   │       ├── lessons/[id]/page.tsx      # éditeur leçon : vidéos, ressources, quiz
@@ -195,6 +204,7 @@ edulearn/
 │   │   │                      # resume-prompt, lesson-nav, complete-button
 │   │   ├── quiz/              # quiz-runner, question-*, result-summary, explanation
 │   │   ├── notes/             # note-editor, note-list, timestamp-chip
+│   │   ├── access/            # locked-lesson, activate-code-form, upsell-card
 │   │   ├── gamification/      # xp-bar, badge-card, streak-flame, goal-ring
 │   │   ├── admin/             # entity-table, tree-editor, sortable-list, media-picker
 │   │   └── shared/            # empty-state, error-state, loading-state, pagination,
@@ -208,6 +218,7 @@ edulearn/
 │   │   ├── services/
 │   │   │   ├── progress.service.ts
 │   │   │   ├── gamification.service.ts   # XP, badges, séries
+│   │   │   ├── access.service.ts         # droits d'accès, codes, inscriptions
 │   │   │   ├── recommendation.service.ts
 │   │   │   ├── quiz.service.ts           # correction serveur
 │   │   │   ├── notification.service.ts
@@ -246,9 +257,9 @@ edulearn/
 
 | Rôle | Périmètre |
 |---|---|
-| `student` | Consulte le contenu **publié**. Possède sa progression, ses notes, favoris, objectifs, tentatives de quiz. Aucun accès à `/admin`. |
+| `student` (**membre**) | Voit le catalogue et le programme de toutes les formations publiées. Accède au **contenu** (vidéos, ressources, quiz) uniquement sur les formations couvertes par une inscription active, plus les leçons en accès libre. Possède sa progression, ses notes, favoris, objectifs, tentatives. Aucun accès à `/admin`. |
 | `teacher` | Tout ce qui précède + création/édition du contenu (cours → vidéos, quiz, ressources). **Ne gère pas les utilisateurs.** |
-| `admin` | Tout, y compris la gestion des utilisateurs, des niveaux, des matières et des badges. |
+| `admin` | Tout, y compris la gestion des membres, des parcours, des domaines, des badges et des **codes d'activation**. |
 
 Le rôle est stocké dans `profiles.role` (enum `user_role`), jamais dans le client.
 
@@ -260,6 +271,10 @@ Une seule barrière ne suffit pas : le cahier des charges exige qu'« un étudia
 2. **Garde de layout serveur** — `(admin)/layout.tsx` appelle `requireRole(['admin','teacher'])`, qui lit le rôle **côté serveur** depuis la base et fait `notFound()` sinon. Impossible à contourner depuis le client.
 3. **Garde de server action** — chaque action mutative revérifie le rôle avant d'agir. Une server action est un endpoint HTTP public : le layout ne la protège pas.
 4. **RLS PostgreSQL** — la barrière finale. Même avec un jeton valide et une requête forgée, Postgres refuse. C'est la seule qui compte vraiment.
+
+La même logique s'applique au **contenu payant** : le verrouillage n'est pas un `if` dans un composant
+React (contournable en 10 secondes via l'onglet réseau) mais une policy RLS appelant
+`has_course_access(course_id)`. Voir `DATABASE.md` §6 bis et §10.1.
 
 ### 4.3 RLS — principes
 
@@ -408,7 +423,8 @@ Chaque étape se termine par : `tsc --noEmit` propre, `eslint` propre, build ré
 |---|---|---|
 | **2** | Init Next 16 + TS strict + Tailwind v4 + tokens + système de design (`components/ui/`) + clients Supabase + middleware + CI | `npm run build` OK, page d'accueil stylée, thème clair/sombre |
 | **3** | Auth complète : inscription, connexion, déconnexion, mot de passe oublié/changé, onboarding niveau+matières, gardes 4 barrières, migrations `0001`+`0002` | Un compte peut être créé et `/admin` est inaccessible à un `student` |
-| **4** | Hiérarchie Niveau→Matière→Cours→Module→Chapitre→Leçon, migrations `0003`, seed de démonstration, `/explore` (filtres+recherche), fiche cours LMS | Catalogue navigable avec vraies données |
+| **4** | Hiérarchie Parcours→Domaine→Formation→Module→Chapitre→Leçon, migrations `0003`, seed du catalogue (`CONTENT.md`), `/explore` (filtres+recherche), page formation | Catalogue navigable avec les 18 formations |
+| **4 bis** | Accès et codes d'activation : `enrollments`, `access_codes`, `redeem_access_code()`, RLS de verrouillage, page `/activate`, leçons cadenassées, admin des codes | Un membre sans code voit le programme mais aucune vidéo ; avec code, tout se débloque |
 | **5** | Lecteur vidéo (abstraction §5), reprise, progression leçon/chapitre/module/cours, migrations `0005`, triggers d'agrégation | Une vidéo reprend là où on s'est arrêté |
 | **6** | Quiz (4 types) + correction serveur sécurisée + exercices, migrations `0004` | Score, explications, tentatives enregistrées |
 | **7** | Notes (avec timestamp), favoris, objectifs, gamification (XP, badges, séries), migrations `0006` | Pages « Mes notes », « Mes favoris », badges attribués |
@@ -426,4 +442,7 @@ Chaque étape se termine par : `tsc --noEmit` propre, `eslint` propre, build ré
 2. **Cloudflare R2 + YouTube non répertorié** comme fournisseurs vidéo principaux, **Google Drive supporté mais en mode dégradé assumé** (pas de reprise ni de vitesse) — §5.3.
 3. **Matières globales** réutilisées entre niveaux, un cours portant `(level_id, subject_id)`, plutôt qu'une matière dupliquée par niveau — voir `DATABASE.md` §2.
 4. **Correction des quiz côté serveur** via fonction `SECURITY DEFINER` + révocation de `SELECT` sur `answers.is_correct` — §4.4.
-5. **Rôle `teacher`** = édition du contenu sans gestion des utilisateurs — §4.1.
+5. **Rôle `teacher`** = édition du contenu sans gestion des membres — §4.1.
+6. **Monétisation hors plateforme, accès par code d'activation** : aucune intégration de paiement,
+   aucune commission, aucune contrainte PCI. Le programme reste public, seul le contenu est
+   verrouillé — `DATABASE.md` §6 bis.

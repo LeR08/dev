@@ -7,7 +7,7 @@ Ce document est la **spécification** ; il devient les migrations `supabase/migr
 
 ## 1. Vue d'ensemble
 
-23 tables + 2 vues, réparties en 5 domaines :
+26 tables + 2 vues, réparties en 6 domaines :
 
 | Domaine | Tables |
 |---|---|
@@ -16,6 +16,7 @@ Ce document est la **spécification** ; il devient les migrations `supabase/migr
 | Évaluation | `quizzes`, `questions`, `answers`, `quiz_attempts`, `quiz_attempt_answers`, `exercises`, `exercise_attempts` |
 | Progression | `video_progress`, `lesson_progress`, `course_progress`, `study_sessions` (+ vues `v_chapter_progress`, `v_module_progress`) |
 | Engagement | `notes`, `favorites`, `badges`, `user_badges`, `xp_events`, `goals`, `goal_periods`, `notifications`, `notification_preferences` |
+| Accès | `enrollments`, `access_codes`, `code_redemptions` |
 
 ```mermaid
 erDiagram
@@ -49,6 +50,10 @@ erDiagram
   profiles ||--o{ goals : ""
   profiles ||--o{ notifications : ""
   profiles ||--o{ study_sessions : ""
+  profiles ||--o{ enrollments : ""
+  courses ||--o{ enrollments : ""
+  access_codes ||--o{ code_redemptions : ""
+  profiles ||--o{ code_redemptions : ""
 ```
 
 ---
@@ -62,7 +67,7 @@ La hiérarchie demandée est `NIVEAU → MATIÈRE → COURS`. Deux modélisation
 - **(A)** `subjects.level_id` → « Mathématiques » existe en 4 exemplaires (Seconde, Première, Terminale…), avec 4 icônes, 4 couleurs, 4 descriptions à maintenir en cohérence.
 - **(B) retenue** : `subjects` global, et `courses(level_id, subject_id)`. La table de liaison `level_subjects` définit quelles matières sont proposées pour un niveau et dans quel ordre.
 
-(B) donne exactement la navigation demandée (`Terminale → Mathématiques → Analyse`) sans duplication, permet à un élève de suivre « Mathématiques » à travers plusieurs niveaux, et rend possible le filtre `/explore?subject=maths` tous niveaux confondus.
+(B) donne exactement la navigation demandée (`Débutant → Media Buying → Meta Ads`) sans duplication, permet de suivre un domaine à travers plusieurs parcours, et rend possible le filtre `/explore?subject=media-buying` tous parcours confondus.
 
 ### 2.2 `course_id` dénormalisé sur `chapters`, `lessons`, `quizzes`
 
@@ -95,6 +100,12 @@ create type xp_reason        as enum ('lesson_completed','quiz_passed','course_c
 ```
 
 Toutes les tables portent `created_at timestamptz not null default now()` et, sauf mention contraire, `updated_at timestamptz not null default now()` alimenté par le trigger `set_updated_at()`.
+
+**Ordre des migrations.** Ce document présente les tables par domaine fonctionnel, ce qui crée deux
+références croisées en avant : `profiles.level_id → levels` (§4 avant §5) et
+`enrollments.code_id → access_codes` (§6 bis). Dans les migrations réelles, ces deux clés étrangères
+sont ajoutées par `alter table … add constraint` à la fin de la migration qui crée la table cible —
+`0003_content_hierarchy.sql` et `0006bis_access.sql` respectivement.
 
 ---
 
@@ -419,6 +430,125 @@ create index exercise_attempts_user_idx on exercise_attempts(user_id, exercise_i
 
 ---
 
+## 6 bis. Accès et codes d'activation
+
+La plateforme est une formation **payante vendue en dehors de l'application** (Stripe Payment Link,
+Systeme.io, vente directe…). L'accès se débloque par **code d'activation**, généré par l'admin et
+saisi par le membre. Aucun paiement ne transite par la plateforme : zéro intégration, zéro
+commission, zéro obligation de conformité PCI.
+
+### 6 bis.1 Modèle
+
+```sql
+create type access_scope as enum ('all', 'subject', 'course');
+
+create table enrollments (
+  id         uuid primary key default gen_random_uuid(),
+  user_id    uuid not null references profiles(id) on delete cascade,
+  scope      access_scope not null,
+  course_id  uuid references courses(id)  on delete cascade,
+  subject_id uuid references subjects(id) on delete cascade,
+  source     text not null default 'code',   -- 'code' | 'admin' | 'gift'
+  granted_by uuid references profiles(id) on delete set null,
+  code_id    uuid,   -- FK vers access_codes ajoutée en fin de migration (voir §3)
+  granted_at timestamptz not null default now(),
+  expires_at timestamptz,                    -- null = accès à vie
+  revoked_at timestamptz,
+  constraint enrollments_scope_target check (
+    (scope = 'all'     and course_id is null and subject_id is null) or
+    (scope = 'subject' and subject_id is not null and course_id is null) or
+    (scope = 'course'  and course_id is not null and subject_id is null)
+  )
+);
+create index enrollments_user_idx on enrollments(user_id) where revoked_at is null;
+create unique index enrollments_all_uidx     on enrollments(user_id)             where scope = 'all'     and revoked_at is null;
+create unique index enrollments_course_uidx  on enrollments(user_id, course_id)  where scope = 'course'  and revoked_at is null;
+create unique index enrollments_subject_uidx on enrollments(user_id, subject_id) where scope = 'subject' and revoked_at is null;
+
+create table access_codes (
+  id             uuid primary key default gen_random_uuid(),
+  code           text not null unique,          -- 'MEDIA-7K2P-QX48', normalisé en majuscules
+  label          text,                          -- 'Lancement janvier', 'Client Stripe #1042'
+  scope          access_scope not null default 'all',
+  course_id      uuid references courses(id)  on delete cascade,
+  subject_id     uuid references subjects(id) on delete cascade,
+  max_uses       integer not null default 1 check (max_uses > 0),
+  uses_count     integer not null default 0 check (uses_count >= 0),
+  access_days    integer,                       -- null = accès à vie
+  expires_at     timestamptz,                   -- date limite d'utilisation du code
+  is_active      boolean not null default true,
+  created_by     uuid references profiles(id) on delete set null,
+  created_at     timestamptz not null default now(),
+  constraint access_codes_uses check (uses_count <= max_uses),
+  constraint access_codes_scope_target check (
+    (scope = 'all'     and course_id is null and subject_id is null) or
+    (scope = 'subject' and subject_id is not null and course_id is null) or
+    (scope = 'course'  and course_id is not null and subject_id is null)
+  )
+);
+create index access_codes_active_idx on access_codes(is_active, expires_at);
+
+create table code_redemptions (
+  id          uuid primary key default gen_random_uuid(),
+  code_id     uuid not null references access_codes(id) on delete cascade,
+  user_id     uuid not null references profiles(id)     on delete cascade,
+  redeemed_at timestamptz not null default now(),
+  unique (code_id, user_id)      -- un même code n'est utilisable qu'une fois par membre
+);
+create index code_redemptions_user_idx on code_redemptions(user_id);
+```
+
+`max_uses` couvre les deux usages réels : **code nominatif** (`max_uses = 1`, généré par vente) et
+**code de campagne** (`max_uses = 50`, distribué à une promotion ou un partenaire).
+
+### 6 bis.2 Fonctions
+
+```sql
+create function has_course_access(p_course_id uuid) returns boolean
+  language sql security definer stable set search_path = public;
+```
+Vrai si `is_staff()`, ou s'il existe une inscription non révoquée et non expirée couvrant ce cours —
+`scope = 'all'`, `scope = 'subject'` correspondant au domaine du cours, ou `scope = 'course'`.
+Marquée `stable` : Postgres l'évalue une fois par requête, pas une fois par ligne.
+
+```sql
+create function redeem_access_code(p_code text) returns jsonb
+  language plpgsql security definer set search_path = public;
+```
+Dans une transaction, avec `select … for update` sur la ligne du code :
+1. Normalise (`upper(trim())`), vérifie l'existence, `is_active`, `expires_at`, `uses_count < max_uses`.
+2. Vérifie que le membre ne l'a pas déjà utilisé (`code_redemptions`).
+3. Crée l'`enrollments` correspondante (`expires_at = now() + access_days`, ou `null`).
+4. Incrémente `uses_count`, insère la `code_redemptions`, crée une notification.
+5. Retourne `{ ok, scope, course_id, message }` — messages d'erreur explicites et distincts
+   (code inconnu / expiré / épuisé / déjà utilisé), jamais un échec silencieux.
+
+```sql
+create function generate_access_codes(p_count int, p_scope access_scope, p_course_id uuid,
+                                      p_subject_id uuid, p_max_uses int, p_access_days int,
+                                      p_label text) returns setof access_codes
+  language plpgsql security definer;
+```
+Réservée à `is_admin()`. Génère des codes lisibles (alphabet sans caractères ambigus : pas de
+`O/0`, `I/1`), exportables en CSV depuis l'admin pour être collés dans un e-mail de livraison.
+
+### 6 bis.3 Ce qui est gratuit, ce qui est verrouillé
+
+| Élément | Non connecté | Membre sans accès | Membre avec accès |
+|---|---|---|---|
+| Fiche formation (titre, description, miniature) | ✅ | ✅ | ✅ |
+| Programme détaillé (modules, chapitres, titres et durées des leçons) | ✅ | ✅ | ✅ |
+| Leçons `is_free_preview = true` (vidéo comprise) | ✅ | ✅ | ✅ |
+| Contenu des leçons (`content_md`), vidéos, ressources | ❌ | 🔒 | ✅ |
+| Quiz, questions, exercices | ❌ | 🔒 | ✅ |
+| Progression, notes, favoris | ❌ | ✅ (sur le gratuit) | ✅ |
+
+Le **programme reste visible sans accès** : c'est l'argument de vente. Les leçons verrouillées
+s'affichent avec un cadenas et un CTA « Activer mon code ». Les leçons `is_free_preview`
+servent d'échantillon gratuit.
+
+---
+
 ## 7. Progression
 
 ```sql
@@ -695,16 +825,16 @@ Le client envoie la liste complète des identifiants dans le nouvel ordre ; la f
 
 RLS activée sur **toutes** les tables (`alter table … enable row level security`). Aucune n'est laissée ouverte.
 
-### 10.1 Contenu — modèle commun
+### 10.1 Contenu — deux niveaux
 
-Appliqué à `levels`, `subjects`, `level_subjects`, `courses`, `modules`, `chapters`, `lessons`, `videos`, `resources`, `quizzes`, `questions`, `answers`, `exercises` :
+**Niveau 1 — structure publique.** `levels`, `subjects`, `level_subjects`, `courses`, `modules`,
+`chapters` et les **métadonnées** de `lessons` sont lisibles dès qu'ils sont publiés, y compris par
+`anon` (SEO + programme visible avant achat) :
 
 ```sql
--- Lecture : contenu publié pour tout le monde (y compris anon, pour le SEO)
 create policy "content_read_published" on courses
   for select using (status = 'published');
 
--- Le staff voit et modifie tout, brouillons compris
 create policy "content_staff_all" on courses
   for all using (is_staff()) with check (is_staff());
 ```
@@ -712,14 +842,37 @@ create policy "content_staff_all" on courses
 Pour les tables enfants, la condition de publication remonte au parent :
 
 ```sql
-create policy "videos_read_published" on videos
+create policy "chapters_read_published" on chapters
   for select using (exists (
-    select 1 from lessons l join courses c on c.id = l.course_id
-    where l.id = videos.lesson_id and l.status = 'published' and c.status = 'published'
+    select 1 from courses c where c.id = chapters.course_id and c.status = 'published'
   ));
 ```
 
-`answers` conserve en plus la révocation de privilège colonne sur `is_correct` (§6) : la RLS filtre les **lignes**, les GRANT filtrent les **colonnes** — les deux sont nécessaires.
+**Niveau 2 — contenu réservé.** `videos`, `resources`, `exercises`, `quizzes`, `questions`,
+`answers` exigent en plus un accès valide :
+
+```sql
+create policy "videos_read_entitled" on videos
+  for select using (exists (
+    select 1 from lessons l
+    where l.id = videos.lesson_id
+      and l.status = 'published'
+      and (l.is_free_preview or has_course_access(l.course_id))
+  ));
+```
+
+`lessons.content_md` est un cas particulier : la **ligne** doit rester lisible (pour afficher le
+programme) mais pas la **colonne**. Même technique que pour les réponses de quiz :
+
+```sql
+revoke select (content_md) on lessons from authenticated, anon;
+```
+
+Le contenu est alors servi par `get_lesson_content(p_lesson_id)` (`SECURITY DEFINER`), qui vérifie
+`is_free_preview or has_course_access(...)` et renvoie une erreur explicite sinon.
+
+`answers` conserve en plus la révocation de `is_correct` (§6) : la RLS filtre les **lignes**, les
+`GRANT` filtrent les **colonnes** — les deux sont nécessaires.
 
 ### 10.2 Données personnelles — modèle commun
 
@@ -756,6 +909,21 @@ create policy "profiles_admin_all"   on profiles for all    using (is_admin())
 `badges` : lecture par tous les authentifiés, écriture `is_admin()`.
 `notification_preferences` : lecture/écriture par le propriétaire uniquement.
 
+### 10.5 `enrollments`, `access_codes`, `code_redemptions`
+
+```sql
+create policy "enrollments_read_own" on enrollments for select using (user_id = auth.uid());
+create policy "enrollments_admin"    on enrollments for all    using (is_admin()) with check (is_admin());
+create policy "codes_admin_only"     on access_codes for all   using (is_admin()) with check (is_admin());
+create policy "redemptions_read_own" on code_redemptions for select using (user_id = auth.uid());
+create policy "redemptions_admin"    on code_redemptions for all using (is_admin()) with check (is_admin());
+```
+
+Point essentiel : **aucune policy `INSERT` sur `enrollments` pour l'utilisateur.** Un membre ne peut
+pas s'auto-inscrire ; le seul chemin est `redeem_access_code()` en `SECURITY DEFINER`. Et
+`access_codes` est totalement invisible aux non-admins — impossible d'énumérer ou de deviner les
+codes valides, y compris via l'API REST.
+
 ---
 
 ## 11. Storage (migration `0009`)
@@ -772,15 +940,22 @@ Limite de taille par fichier : 20 Mo (les vidéos ne passent jamais par là).
 
 ## 12. Données de démonstration (`seed.sql`, étape 4)
 
-- **4 niveaux** : Seconde, Première, Terminale, Prépa.
-- **6 matières** : Mathématiques, Physique-Chimie, SVT, Français, Histoire-Géographie, NSI.
-- **Terminale → Mathématiques** : cours *Analyse* (modules Limites, Dérivation, Intégration), *Algèbre*, *Probabilités*.
-- **Terminale → Physique** : *Mécanique*, *Électricité*, *Ondes*.
-- ≈ 12 cours, 30 modules, 70 chapitres, 150 leçons, 150 vidéos, 25 quiz (≈ 150 questions), 40 exercices, 30 ressources, 12 badges.
-- 3 comptes de test : `admin@demo.test`, `prof@demo.test`, `eleve@demo.test`, ce dernier avec une progression réaliste (cours en cours, série de 5 jours, quiz passés) pour que le dashboard soit peuplé dès le premier lancement.
-- Les vidéos utilisent des URL **explicitement fictives** (`provider = 'native'`, domaine `https://demo.invalid/...` ou fichiers libres de droits), signalées comme telles dans le seed.
+Détail complet du catalogue dans [`CONTENT.md`](CONTENT.md). En volume :
 
----
+- **3 parcours** : Débutant, Intermédiaire, Avancé.
+- **5 domaines** : Produit digital, Media Buying, Marketing digital, Vente & Conversion, Business & Ops.
+- **18 formations**, ≈ 70 modules, ≈ 160 chapitres, ≈ 280 leçons, ≈ 280 vidéos.
+- ≈ 40 quiz (≈ 240 questions), ≈ 60 exercices, ≈ 50 ressources téléchargeables, 12 badges.
+- **2 leçons gratuites par formation** (`is_free_preview = true`) comme échantillon public.
+- 4 comptes de test : `admin@demo.test`, `prof@demo.test`, `membre@demo.test` (accès complet + progression
+  réaliste : 3 formations en cours, série de 5 jours, 8 quiz passés) et `visiteur@demo.test` (inscrit,
+  **sans** code activé — pour vérifier tout le parcours verrouillé).
+- 10 codes d'activation de démonstration, dont un `scope = 'all'` et un `scope = 'subject'` limité au
+  Media Buying.
+- Les vidéos utilisent des URL **explicitement fictives** (`provider = 'native'`, domaine
+  `https://demo.invalid/...`), signalées comme telles dans le seed.
+- Les statistiques de la landing page sont **fictives et marquées comme telles**. Aucune promesse
+  de revenus, aucun témoignage inventé.
 
 ## 13. Conformité au cahier des charges (§27)
 
@@ -791,4 +966,4 @@ Limite de taille par fichier : 20 Mo (les vidéos ne passent jamais par là).
 | lesson_progress, course_progress | ✅ (+ `video_progress`, indispensable à la reprise : une leçon peut contenir plusieurs vidéos) |
 | notes, favorites, badges, user_badges, notifications, study_sessions, goals | ✅ |
 
-Ajouts par rapport à la liste : `level_subjects`, `exercises`, `exercise_attempts`, `xp_events`, `goal_periods`, `notification_preferences`, `user_subject_interests`, `quiz_attempt_answers`, `video_progress` — chacun justifié ci-dessus.
+Ajouts par rapport à la liste : `level_subjects`, `exercises`, `exercise_attempts`, `xp_events`, `goal_periods`, `notification_preferences`, `user_subject_interests`, `quiz_attempt_answers`, `video_progress`, `enrollments`, `access_codes`, `code_redemptions` — chacun justifié ci-dessus.
