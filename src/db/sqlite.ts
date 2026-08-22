@@ -269,8 +269,10 @@ export class SqliteStore implements Store {
     }
 
     if (current < 3) {
-      // Mock sign-in step added post-launch: name/email collected up front,
-      // local-only, never sent anywhere. Existing profiles just get NULLs.
+      // Sign-in step added post-launch: name and email collected up front.
+      // Both sync to the account now — the comment here used to say
+      // "local-only, never sent anywhere", which stopped being true when
+      // cloud sync landed. Existing profiles just get NULLs.
       await db.execAsync(`
         ALTER TABLE profile ADD COLUMN name TEXT;
         ALTER TABLE profile ADD COLUMN email TEXT;

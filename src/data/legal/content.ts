@@ -116,7 +116,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Hosting provider',
           body: [
-            'No hosting provider by default — the app has no server and stores everything locally on your device. If you create an account and turn on cloud sync (Settings → Account & cloud sync), your data is also processed by Firebase, a Google Cloud service, acting as a data processor for that feature only.',
+            'The app stores your data on your device and, because an account is required to use it, also in our Firebase project — Firebase Authentication for sign-in and Cloud Firestore for storage, both Google Cloud services acting as data processors on our behalf. Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland.',
           ],
         },
         { heading: 'Director of publication', body: ['Romain Lambert'] },
@@ -316,7 +316,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Hébergeur',
           body: [
-            "Aucun hébergeur par défaut — l'application n'a pas de serveur et stocke tout localement sur votre appareil. Si vous créez un compte et activez la synchronisation cloud (Réglages → Compte et synchronisation), vos données sont alors également traitées par Firebase, un service Google Cloud, agissant comme sous-traitant pour cette seule fonctionnalité.",
+            "L'application stocke vos données sur votre appareil et, un compte étant nécessaire pour l'utiliser, également dans notre projet Firebase — Firebase Authentication pour la connexion et Cloud Firestore pour le stockage, deux services Google Cloud agissant comme sous-traitants pour notre compte. Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irlande.",
           ],
         },
         { heading: 'Directeur de la publication', body: ['Romain Lambert'] },
@@ -516,7 +516,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Proveedor de alojamiento',
           body: [
-            'Ningún proveedor de alojamiento de forma predeterminada — la aplicación no tiene servidor y almacena todo localmente en tu dispositivo. Si creas una cuenta y activas la sincronización en la nube (Ajustes → Cuenta y sincronización), tus datos también son tratados por Firebase, un servicio de Google Cloud, que actúa como encargado del tratamiento únicamente para esa función.',
+            'La aplicación almacena tus datos en tu dispositivo y, dado que se necesita una cuenta para usarla, también en nuestro proyecto de Firebase: Firebase Authentication para el inicio de sesión y Cloud Firestore para el almacenamiento, ambos servicios de Google Cloud que actúan como encargados del tratamiento por cuenta nuestra. Google Ireland Limited, Gordon House, Barrow Street, Dublín 4, Irlanda.',
           ],
         },
         { heading: 'Director de publicación', body: ['Romain Lambert'] },
@@ -716,7 +716,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Hosting-Anbieter',
           body: [
-            'Standardmäßig kein Hosting-Anbieter — die App hat keinen Server und speichert alles lokal auf deinem Gerät. Wenn du ein Konto erstellst und die Cloud-Synchronisierung aktivierst (Einstellungen → Konto & Cloud-Synchronisierung), werden deine Daten zusätzlich von Firebase verarbeitet, einem Google-Cloud-Dienst, der dabei als Auftragsverarbeiter tätig ist.',
+            'Die App speichert deine Daten auf deinem Gerät und — da für die Nutzung ein Konto erforderlich ist — zusätzlich in unserem Firebase-Projekt: Firebase Authentication für die Anmeldung und Cloud Firestore für die Speicherung, beides Google-Cloud-Dienste, die in unserem Auftrag als Auftragsverarbeiter tätig sind. Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland.',
           ],
         },
         { heading: 'Verantwortlich für den Inhalt (Direktor der Veröffentlichung)', body: ['Romain Lambert'] },
@@ -916,7 +916,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Fornitore di hosting',
           body: [
-            "Nessun fornitore di hosting per impostazione predefinita — l'app non ha un server e memorizza tutto localmente sul tuo dispositivo. Se crei un account e attivi la sincronizzazione cloud (Impostazioni → Account e sincronizzazione), i tuoi dati vengono anche trattati da Firebase, un servizio Google Cloud, che agisce come responsabile del trattamento solo per questa funzione.",
+            "L'app memorizza i tuoi dati sul tuo dispositivo e, poiché per usarla serve un account, anche nel nostro progetto Firebase: Firebase Authentication per l'accesso e Cloud Firestore per l'archiviazione, entrambi servizi Google Cloud che agiscono come responsabili del trattamento per nostro conto. Google Ireland Limited, Gordon House, Barrow Street, Dublino 4, Irlanda.",
           ],
         },
         { heading: 'Direttore della pubblicazione', body: ['Romain Lambert'] },
@@ -1116,7 +1116,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         {
           heading: 'Fornecedor de alojamento',
           body: [
-            'Nenhum fornecedor de alojamento por predefinição — a aplicação não tem servidor e guarda tudo localmente no teu dispositivo. Se criares uma conta e ativares a sincronização na nuvem (Definições → Conta e sincronização), os teus dados passam também a ser tratados pela Firebase, um serviço da Google Cloud, que atua como subcontratante apenas para essa funcionalidade.',
+            'A aplicação guarda os teus dados no teu dispositivo e, uma vez que é necessária uma conta para a usar, também no nosso projeto Firebase: Firebase Authentication para o início de sessão e Cloud Firestore para o armazenamento, ambos serviços da Google Cloud que atuam como subcontratantes por nossa conta. Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irlanda.',
           ],
         },
         { heading: 'Diretor de publicação', body: ['Romain Lambert'] },
@@ -1313,7 +1313,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: '托管服务商',
-          body: ['默认没有托管服务商——本应用没有服务器，所有内容都存储在你的设备本地。如果你创建账户并开启云同步（设置 → 账户与云同步），你的数据也会由 Firebase（Google Cloud 旗下服务）处理，仅就该功能作为数据处理者。'],
+          body: ['本应用将你的数据保存在你的设备上；由于使用本应用必须登录账户，数据同时保存在我们的 Firebase 项目中——登录使用 Firebase Authentication，存储使用 Cloud Firestore，两者均为 Google Cloud 服务，代表我们作为数据处理者。Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland。'],
         },
         { heading: '出版负责人', body: ['Romain Lambert'] },
         {
@@ -1505,7 +1505,7 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'مزوّد الاستضافة',
-          body: ['لا يوجد مزوّد استضافة بشكل افتراضي — لا يملك التطبيق خادمًا ويخزّن كل شيء محليًا على جهازك. إذا أنشأت حسابًا وفعّلت المزامنة السحابية (الإعدادات ← الحساب والمزامنة السحابية)، تُعالَج بياناتك أيضًا بواسطة Firebase، وهي خدمة تابعة لـ Google Cloud، بصفتها معالِج بيانات لهذه الميزة فقط.'],
+          body: ['يخزّن التطبيق بياناتك على جهازك، ولأن استخدامه يتطلب حسابًا فهو يخزّنها أيضًا في مشروع Firebase الخاص بنا — Firebase Authentication لتسجيل الدخول وCloud Firestore للتخزين، وكلاهما خدمتان من Google Cloud تعملان بصفتهما معالِجَي بيانات نيابةً عنا. Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland.'],
         },
         { heading: 'مدير النشر', body: ['Romain Lambert'] },
         {

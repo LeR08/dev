@@ -151,7 +151,7 @@ app/                    Screens and routing (expo-router, file-based)
   entry/[id]            Edit or delete a logged entry
   drinks/               Custom drink presets
   settings/             Units, goals, appearance, profile, language, legal, tickets, data,
-                        subscription (pricing mock-up, no payments)
+                        subscription (Play Billing)
   savings.tsx            Savings deep-dive
   onboarding.tsx          First run (after the mandatory auth-gate): profile → done
   tutorial.tsx            Interactive four-slide walkthrough, once after onboarding
@@ -574,8 +574,8 @@ when one isn't. Email and Google sign-in both work; Apple doesn't yet. Still out
 social/sharing features between
 accounts, real-time multi-device push updates (sync happens on foreground/refresh, not a live
 subscription), push notifications, real ticket transmission (tickets are local-only; export is
-the only way they leave the device), and public store submission. Payments are gone entirely —
-Settings → Subscription is a visual preview with no checkout behind it (see
-[Freemium & ads](#freemium--ads)). The code is layered so everything else can be added later
+the only way they leave the device), and a public store listing — the app is in internal
+testing, not published. Payments are real: Settings → Subscription sells a monthly supporter
+subscription through Google Play Billing (see [Freemium & ads](#freemium--ads)). The code is layered so everything else can be added later
 without a rewrite: storage sits behind one interface, and the domain logic has no idea a UI
 exists.
