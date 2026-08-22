@@ -129,7 +129,11 @@ export function VideoManager({
         />
       )}
 
+      {/* `key` force un remontage à chaque ouverture : l'état du formulaire
+          repart des props sans effet de synchronisation, qui provoquerait un
+          rendu en cascade et un affichage transitoirement périmé. */}
       <VideoDialog
+        key={editing?.id ?? (creating ? 'new' : 'closed')}
         open={creating || editing !== null}
         onOpenChange={(open) => {
           if (!open) {
@@ -171,29 +175,20 @@ function VideoDialog({
   onSaved: () => void;
 }) {
   const { toast } = useToast();
-  const [title, setTitle] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [provider, setProvider] = React.useState<Enums<'video_provider'>>('native');
-  const [externalId, setExternalId] = React.useState('');
-  const [url, setUrl] = React.useState('');
-  const [thumbnailUrl, setThumbnailUrl] = React.useState('');
-  const [minutes, setMinutes] = React.useState('0');
-  const [seconds, setSeconds] = React.useState('0');
+  const [title, setTitle] = React.useState(video?.title ?? '');
+  const [description, setDescription] = React.useState(video?.description ?? '');
+  const [provider, setProvider] = React.useState<Enums<'video_provider'>>(
+    video?.provider ?? 'native',
+  );
+  const [externalId, setExternalId] = React.useState(video?.external_id ?? '');
+  const [url, setUrl] = React.useState(video?.url ?? '');
+  const [thumbnailUrl, setThumbnailUrl] = React.useState(video?.thumbnail_url ?? '');
+  const [minutes, setMinutes] = React.useState(
+    String(Math.floor((video?.duration_seconds ?? 0) / 60)),
+  );
+  const [seconds, setSeconds] = React.useState(String((video?.duration_seconds ?? 0) % 60));
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (!open) return;
-    setTitle(video?.title ?? '');
-    setDescription(video?.description ?? '');
-    setProvider(video?.provider ?? 'native');
-    setExternalId(video?.external_id ?? '');
-    setUrl(video?.url ?? '');
-    setThumbnailUrl(video?.thumbnail_url ?? '');
-    setMinutes(String(Math.floor((video?.duration_seconds ?? 0) / 60)));
-    setSeconds(String((video?.duration_seconds ?? 0) % 60));
-    setError(null);
-  }, [open, video]);
 
   const definition = providerOptions.find((option) => option.value === provider);
   const isNative = provider === 'native';

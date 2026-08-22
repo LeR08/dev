@@ -222,7 +222,11 @@ export function UserManager({
         </ul>
       )}
 
+      {/* `key` force un remontage à chaque ouverture : l'état du formulaire
+          repart des props sans effet de synchronisation, qui provoquerait un
+          rendu en cascade et un affichage transitoirement périmé. */}
       <GrantDialog
+        key={granting?.id ?? 'closed'}
         user={granting}
         courses={courses}
         subjects={subjects}
@@ -263,13 +267,6 @@ function GrantDialog({
   const [targetId, setTargetId] = React.useState('');
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (!user) return;
-    setScope('all');
-    setTargetId('');
-    setError(null);
-  }, [user]);
 
   async function submit() {
     if (!user) return;

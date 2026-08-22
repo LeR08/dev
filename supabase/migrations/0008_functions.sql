@@ -164,6 +164,7 @@ begin
 end;
 $$;
 
+drop trigger if exists lesson_progress_recalc on public.lesson_progress;
 create trigger lesson_progress_recalc
   after insert or update or delete on public.lesson_progress
   for each row execute function public.trg_recalc_course_progress();
@@ -485,8 +486,11 @@ begin
   values (v_user, v_video.lesson_id, v_video.course_id, 'in_progress', now())
   on conflict (user_id, lesson_id) do update set
     last_viewed_at = now(),
+    -- Le CASE doit être explicitement typé : sans cast, les littéraux sont
+    -- résolus en text et Postgres refuse l'affectation à une colonne enum.
     status = case when lesson_progress.status = 'completed'
-                  then 'completed' else 'in_progress' end;
+                  then 'completed'::progress_status
+                  else 'in_progress'::progress_status end;
 
   -- Une leçon se termine automatiquement quand toutes ses vidéos sont vues.
   if v_complete then
@@ -781,5 +785,134 @@ begin
   end;
 
   return abs(v_given - v_expected) <= coalesce(v_exercise.tolerance, 0);
+end;
+$$;
+
+-- ---------------------------------------------------------------------------
+-- Lecture des colonnes sensibles par le staff.
+--
+-- Le rôle `authenticated` couvre aussi bien les membres que les formateurs et
+-- les administrateurs : les privilèges de colonne (0009) s'appliquent donc à
+-- tout le monde. Ces fonctions rétablissent l'accès pour le staff uniquement,
+-- de façon explicite et auditable — plutôt que d'ouvrir la colonne à tous.
+-- ---------------------------------------------------------------------------
+create or replace function public.staff_get_answers(p_question_ids uuid[])
+returns table (
+  id            uuid,
+  question_id   uuid,
+  label         text,
+  is_correct    boolean,
+  match_pattern text,
+  sort_order    integer
+)
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_staff() then
+    raise exception 'Réservé au staff' using errcode = 'insufficient_privilege';
+  end if;
+
+  return query
+    select a.id, a.question_id, a.label, a.is_correct, a.match_pattern, a.sort_order
+    from public.answers a
+    where a.question_id = any(p_question_ids)
+    order by a.sort_order;
+end;
+$$;
+
+create or replace function public.staff_get_exercise_solution(p_exercise_id uuid)
+returns jsonb
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+declare
+  v_row record;
+begin
+  if not public.is_staff() then
+    raise exception 'Réservé au staff' using errcode = 'insufficient_privilege';
+  end if;
+
+  select expected_answer, tolerance, solution_md into v_row
+  from public.exercises where id = p_exercise_id;
+
+  return jsonb_build_object(
+    'expected_answer', v_row.expected_answer,
+    'tolerance', v_row.tolerance,
+    'solution_md', v_row.solution_md
+  );
+end;
+$$;
+
+-- ---------------------------------------------------------------------------
+-- Soumission d'un exercice.
+--
+-- Même principe que les quiz : le corrigé n'est pas lisible avant d'avoir
+-- répondu. La colonne solution_md est révoquée (0009) et n'est renvoyée qu'ici,
+-- après enregistrement de la tentative.
+-- ---------------------------------------------------------------------------
+create or replace function public.submit_exercise_attempt(
+  p_exercise_id     uuid,
+  p_response        text default null,
+  p_self_assessment smallint default null
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_user     uuid := auth.uid();
+  v_exercise record;
+  v_correct  boolean := null;
+  v_expected numeric;
+  v_given    numeric;
+begin
+  if v_user is null then
+    raise exception 'Non authentifié' using errcode = 'insufficient_privilege';
+  end if;
+
+  select e.kind, e.expected_answer, e.tolerance, e.solution_md, e.explanation_md,
+         e.status, l.course_id, l.is_free_preview
+    into v_exercise
+  from public.exercises e
+  join public.lessons l on l.id = e.lesson_id
+  where e.id = p_exercise_id;
+
+  if not found or v_exercise.status <> 'published' then
+    raise exception 'Exercice introuvable' using errcode = 'no_data_found';
+  end if;
+
+  if not (v_exercise.is_free_preview or public.has_course_access(v_exercise.course_id)) then
+    raise exception 'Accès non autorisé' using errcode = 'insufficient_privilege';
+  end if;
+
+  -- Correction automatique uniquement pour les réponses numériques.
+  if v_exercise.kind = 'numeric' and v_exercise.expected_answer is not null then
+    begin
+      v_expected := replace(trim(v_exercise.expected_answer), ',', '.')::numeric;
+      v_given    := replace(trim(coalesce(p_response, '')), ',', '.')::numeric;
+      v_correct  := abs(v_given - v_expected) <= coalesce(v_exercise.tolerance, 0);
+    exception when others then
+      v_correct := false;   -- réponse non numérique
+    end;
+  end if;
+
+  insert into public.exercise_attempts
+    (user_id, exercise_id, response_text, is_correct, self_assessment)
+  values (v_user, p_exercise_id, p_response, v_correct, p_self_assessment);
+
+  perform public.touch_streak(v_user);
+
+  return jsonb_build_object(
+    'ok', true,
+    'is_correct', v_correct,
+    'solution_md', v_exercise.solution_md,
+    'explanation_md', v_exercise.explanation_md
+  );
 end;
 $$;

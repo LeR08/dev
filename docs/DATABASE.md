@@ -7,7 +7,9 @@ Ce document est la **spécification** ; il devient les migrations `supabase/migr
 
 ## 1. Vue d'ensemble
 
-26 tables + 2 vues, réparties en 6 domaines :
+**34 tables + 2 vues**, réparties en 6 domaines. Ces chiffres sont vérifiés :
+les migrations sont exécutées et testées contre un PostgreSQL 16 réel à chaque
+intégration continue (`.github/workflows/ci.yml`, job *database*).
 
 | Domaine | Tables |
 |---|---|

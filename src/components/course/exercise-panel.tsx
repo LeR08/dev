@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronDown, Lightbulb, PencilRuler } from 'lucide-react';
+import { ChevronDown, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -9,8 +9,7 @@ import { useToast } from '@/components/ui/toast';
 import { Markdown } from '@/lib/utils/markdown';
 import { submitExerciseAttempt } from '@/server/actions/assessment.actions';
 import { cn } from '@/lib/utils';
-import { DIFFICULTY_LABELS } from '@/types/domain';
-import type { Tables } from '@/types/database.types';
+import { DIFFICULTY_LABELS, type PublicExercise } from '@/types/domain';
 
 /**
  * Exercices — indépendants des quiz.
@@ -20,7 +19,7 @@ import type { Tables } from '@/types/database.types';
  * honnête et cela laisse la place à une correction assistée plus tard, sans
  * changer ni le schéma ni cette interface.
  */
-export function ExercisePanel({ exercises }: { exercises: Tables<'exercises'>[] }) {
+export function ExercisePanel({ exercises }: { exercises: PublicExercise[] }) {
   return (
     <ul className="space-y-3">
       {exercises.map((exercise, index) => (
@@ -32,11 +31,13 @@ export function ExercisePanel({ exercises }: { exercises: Tables<'exercises'>[] 
   );
 }
 
-function ExerciseCard({ exercise, index }: { exercise: Tables<'exercises'>; index: number }) {
+function ExerciseCard({ exercise, index }: { exercise: PublicExercise; index: number }) {
   const { toast } = useToast();
   const [answer, setAnswer] = React.useState('');
   const [showSolution, setShowSolution] = React.useState(false);
   const [submitted, setSubmitted] = React.useState<{ correct: boolean | null } | null>(null);
+  const [solution, setSolution] = React.useState<string | null>(null);
+  const [explanation, setExplanation] = React.useState<string | null>(null);
   const [pending, setPending] = React.useState(false);
 
   async function handleSubmit(selfAssessment?: number) {
@@ -54,6 +55,8 @@ function ExerciseCard({ exercise, index }: { exercise: Tables<'exercises'>; inde
     }
 
     setSubmitted({ correct: result.data.isCorrect });
+    setSolution(result.data.solutionMd);
+    setExplanation(result.data.explanationMd);
     setShowSolution(true);
 
     if (result.data.isCorrect === true) {
@@ -94,16 +97,22 @@ function ExerciseCard({ exercise, index }: { exercise: Tables<'exercises'>; inde
           rows={exercise.kind === 'numeric' ? 2 : 4}
         />
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowSolution((value) => !value)}
-            aria-expanded={showSolution}
-          >
-            <Lightbulb />
-            {showSolution ? 'Masquer le corrigé' : 'Voir le corrigé'}
-            <ChevronDown className={cn('transition-transform', showSolution && 'rotate-180')} />
-          </Button>
+          {submitted ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowSolution((value) => !value)}
+              aria-expanded={showSolution}
+            >
+              <Lightbulb />
+              {showSolution ? 'Masquer le corrigé' : 'Revoir le corrigé'}
+              <ChevronDown className={cn('transition-transform', showSolution && 'rotate-180')} />
+            </Button>
+          ) : (
+            <Button variant="ghost" size="sm" onClick={() => handleSubmit(1)} disabled={pending}>
+              <Lightbulb /> Je passe, montrer le corrigé
+            </Button>
+          )}
           <Button
             size="sm"
             loading={pending}
@@ -128,19 +137,21 @@ function ExerciseCard({ exercise, index }: { exercise: Tables<'exercises'>; inde
 
       {showSolution && (
         <div className="bg-muted animate-fade-in space-y-3 rounded-lg p-4 text-sm">
-          {exercise.solution_md ? (
+          {solution ? (
             <div>
               <p className="mb-1.5 text-xs font-semibold tracking-wide uppercase">Corrigé</p>
-              <Markdown content={exercise.solution_md} />
+              <Markdown content={solution} />
             </div>
           ) : (
-            <p className="text-muted-foreground">Aucun corrigé fourni pour cet exercice.</p>
+            <p className="text-muted-foreground">
+              Validez votre réponse pour afficher le corrigé.
+            </p>
           )}
 
-          {exercise.explanation_md && (
+          {explanation && (
             <div className="border-t pt-3">
               <p className="mb-1.5 text-xs font-semibold tracking-wide uppercase">Explication</p>
-              <Markdown content={exercise.explanation_md} />
+              <Markdown content={explanation} />
             </div>
           )}
 

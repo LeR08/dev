@@ -8,7 +8,7 @@ import { BadgeGrid } from '@/components/gamification/badge-grid';
 import { StudyChart } from '@/components/gamification/study-chart';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { getDashboardStats } from '@/server/db/dashboard';
+import { getDashboardStats, getStudySeries } from '@/server/db/dashboard';
 import { createClient } from '@/lib/supabase/server';
 import { requireUser } from '@/server/auth/guards';
 import { routes } from '@/lib/constants/routes';
@@ -23,11 +23,10 @@ export default async function ProgressPage() {
   const user = await requireUser();
   const supabase = await createClient();
 
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 3600 * 1000);
-
-  const [stats, { data: courseProgress }, { data: badges }, { data: userBadges }, { data: sessions }] =
+  const [stats, chartData, { data: courseProgress }, { data: badges }, { data: userBadges }] =
     await Promise.all([
       getDashboardStats(),
+      getStudySeries(30),
       supabase
         .from('course_progress')
         .select(
@@ -41,29 +40,9 @@ export default async function ProgressPage() {
         .order('percent', { ascending: false }),
       supabase.from('badges').select('*').eq('is_active', true).order('sort_order'),
       supabase.from('user_badges').select('badge_id, earned_at').eq('user_id', user.id),
-      supabase
-        .from('study_sessions')
-        .select('started_at, duration_seconds')
-        .eq('user_id', user.id)
-        .gte('started_at', thirtyDaysAgo.toISOString()),
     ]);
 
   const earned = new Map((userBadges ?? []).map((row) => [row.badge_id, row.earned_at]));
-
-  // Agrégation par jour sur 30 jours, y compris les jours sans activité.
-  const byDay = new Map<string, number>();
-  for (let i = 29; i >= 0; i -= 1) {
-    const date = new Date(Date.now() - i * 24 * 3600 * 1000);
-    byDay.set(date.toISOString().slice(0, 10), 0);
-  }
-  for (const session of sessions ?? []) {
-    const key = session.started_at.slice(0, 10);
-    if (byDay.has(key)) byDay.set(key, (byDay.get(key) ?? 0) + session.duration_seconds / 60);
-  }
-  const chartData = [...byDay.entries()].map(([date, minutes]) => ({
-    date,
-    minutes: Math.round(minutes),
-  }));
 
   const withProgress = (courseProgress ?? []).filter((row) => row.course);
 

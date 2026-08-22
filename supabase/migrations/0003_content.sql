@@ -158,14 +158,30 @@ create index resources_lesson_idx on public.resources (lesson_id, sort_order);
 create index resources_course_idx on public.resources (course_id, sort_order);
 
 -- --- Horodatage ---------------------------------------------------------
-create trigger levels_set_updated_at    before update on public.levels    for each row execute function public.set_updated_at();
-create trigger subjects_set_updated_at  before update on public.subjects  for each row execute function public.set_updated_at();
-create trigger courses_set_updated_at   before update on public.courses   for each row execute function public.set_updated_at();
-create trigger modules_set_updated_at   before update on public.modules   for each row execute function public.set_updated_at();
-create trigger chapters_set_updated_at  before update on public.chapters  for each row execute function public.set_updated_at();
-create trigger lessons_set_updated_at   before update on public.lessons   for each row execute function public.set_updated_at();
-create trigger videos_set_updated_at    before update on public.videos    for each row execute function public.set_updated_at();
-create trigger resources_set_updated_at before update on public.resources for each row execute function public.set_updated_at();
+drop trigger if exists levels_set_updated_at on public.levels;
+create trigger levels_set_updated_at
+  before update on public.levels    for each row execute function public.set_updated_at();
+drop trigger if exists subjects_set_updated_at on public.subjects;
+create trigger subjects_set_updated_at
+  before update on public.subjects  for each row execute function public.set_updated_at();
+drop trigger if exists courses_set_updated_at on public.courses;
+create trigger courses_set_updated_at
+  before update on public.courses   for each row execute function public.set_updated_at();
+drop trigger if exists modules_set_updated_at on public.modules;
+create trigger modules_set_updated_at
+  before update on public.modules   for each row execute function public.set_updated_at();
+drop trigger if exists chapters_set_updated_at on public.chapters;
+create trigger chapters_set_updated_at
+  before update on public.chapters  for each row execute function public.set_updated_at();
+drop trigger if exists lessons_set_updated_at on public.lessons;
+create trigger lessons_set_updated_at
+  before update on public.lessons   for each row execute function public.set_updated_at();
+drop trigger if exists videos_set_updated_at on public.videos;
+create trigger videos_set_updated_at
+  before update on public.videos    for each row execute function public.set_updated_at();
+drop trigger if exists resources_set_updated_at on public.resources;
+create trigger resources_set_updated_at
+  before update on public.resources for each row execute function public.set_updated_at();
 
 -- --- Dénormalisation pilotée par la base --------------------------------
 -- course_id / module_id sont déduits du parent : l'application ne les fournit
@@ -182,6 +198,7 @@ begin
 end;
 $$;
 
+drop trigger if exists chapters_sync_denorm on public.chapters;
 create trigger chapters_sync_denorm
   before insert or update of module_id on public.chapters
   for each row execute function public.sync_chapter_denorm();
@@ -197,6 +214,7 @@ begin
 end;
 $$;
 
+drop trigger if exists lessons_sync_denorm on public.lessons;
 create trigger lessons_sync_denorm
   before insert or update of chapter_id on public.lessons
   for each row execute function public.sync_lesson_denorm();
@@ -215,6 +233,7 @@ begin
 end;
 $$;
 
+drop trigger if exists modules_cascade_course on public.modules;
 create trigger modules_cascade_course
   after update of course_id on public.modules
   for each row execute function public.cascade_module_course();
@@ -271,10 +290,12 @@ begin
 end;
 $$;
 
+drop trigger if exists lessons_refresh_counters on public.lessons;
 create trigger lessons_refresh_counters
   after insert or update or delete on public.lessons
   for each row execute function public.trg_refresh_course_counters();
 
+drop trigger if exists videos_refresh_counters on public.videos;
 create trigger videos_refresh_counters
   after insert or update or delete on public.videos
   for each row execute function public.trg_refresh_course_counters();

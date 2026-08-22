@@ -57,7 +57,6 @@ export function QuizRunner({
   quizId,
   title,
   description,
-  passingScore,
   timeLimitSeconds,
   shuffleQuestions,
   questions: rawQuestions,

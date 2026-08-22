@@ -234,14 +234,20 @@ export function QuizManager({
         </div>
       )}
 
+      {/* `key` force un remontage à chaque ouverture : l'état du formulaire
+          repart des props sans effet de synchronisation. */}
       <QuizDialog
+        key={quizDialog && quizDialog !== 'new' ? quizDialog.id : String(quizDialog)}
         state={quizDialog}
         lessonId={lessonId}
         onClose={() => setQuizDialog(null)}
         onSaved={onChanged}
       />
 
+      {/* `key` force un remontage à chaque ouverture : l'état du formulaire
+          repart des props sans effet de synchronisation. */}
       <QuestionDialog
+        key={questionDialog?.question?.id ?? (questionDialog ? 'new' : 'closed')}
         state={questionDialog}
         answers={questionDialog?.question ? (answersByQuestion.get(questionDialog.question.id) ?? []) : []}
         onClose={() => setQuestionDialog(null)}
@@ -275,27 +281,19 @@ function QuizDialog({
   const { toast } = useToast();
   const quiz = state === 'new' || state === null ? null : state;
 
-  const [title, setTitle] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [passingScore, setPassingScore] = React.useState('60');
-  const [maxAttempts, setMaxAttempts] = React.useState('');
-  const [timeLimit, setTimeLimit] = React.useState('');
-  const [shuffle, setShuffle] = React.useState(false);
-  const [showExplanations, setShowExplanations] = React.useState(true);
+  const [title, setTitle] = React.useState(quiz?.title ?? '');
+  const [description, setDescription] = React.useState(quiz?.description ?? '');
+  const [passingScore, setPassingScore] = React.useState(String(quiz?.passing_score ?? 60));
+  const [maxAttempts, setMaxAttempts] = React.useState(
+    quiz?.max_attempts ? String(quiz.max_attempts) : '',
+  );
+  const [timeLimit, setTimeLimit] = React.useState(
+    quiz?.time_limit_seconds ? String(Math.round(quiz.time_limit_seconds / 60)) : '',
+  );
+  const [shuffle, setShuffle] = React.useState(quiz?.shuffle_questions ?? false);
+  const [showExplanations, setShowExplanations] = React.useState(quiz?.show_explanations ?? true);
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (state === null) return;
-    setTitle(quiz?.title ?? '');
-    setDescription(quiz?.description ?? '');
-    setPassingScore(String(quiz?.passing_score ?? 60));
-    setMaxAttempts(quiz?.max_attempts ? String(quiz.max_attempts) : '');
-    setTimeLimit(quiz?.time_limit_seconds ? String(Math.round(quiz.time_limit_seconds / 60)) : '');
-    setShuffle(quiz?.shuffle_questions ?? false);
-    setShowExplanations(quiz?.show_explanations ?? true);
-    setError(null);
-  }, [state, quiz]);
 
   async function submit() {
     setPending(true);
@@ -429,36 +427,25 @@ function QuestionDialog({
   onSaved: () => void;
 }) {
   const { toast } = useToast();
-  const [type, setType] = React.useState<Enums<'question_type'>>('single_choice');
-  const [prompt, setPrompt] = React.useState('');
-  const [explanation, setExplanation] = React.useState('');
-  const [points, setPoints] = React.useState('1');
-  const [draftAnswers, setDraftAnswers] = React.useState<DraftAnswer[]>([]);
-  const [pending, setPending] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const question = state?.question ?? null;
 
-  React.useEffect(() => {
-    if (!state) return;
-    const question = state.question;
-    const nextType = question?.type ?? 'single_choice';
-    setType(nextType);
-    setPrompt(question?.prompt ?? '');
-    setExplanation(question?.explanation ?? '');
-    setPoints(String(question?.points ?? 1));
-
-    if (answers.length > 0) {
-      setDraftAnswers(
-        answers.map((answer) => ({
+  const [type, setType] = React.useState<Enums<'question_type'>>(
+    question?.type ?? 'single_choice',
+  );
+  const [prompt, setPrompt] = React.useState(question?.prompt ?? '');
+  const [explanation, setExplanation] = React.useState(question?.explanation ?? '');
+  const [points, setPoints] = React.useState(String(question?.points ?? 1));
+  const [draftAnswers, setDraftAnswers] = React.useState<DraftAnswer[]>(() =>
+    answers.length > 0
+      ? answers.map((answer) => ({
           label: answer.label,
           isCorrect: answer.is_correct,
           matchPattern: answer.match_pattern ?? '',
-        })),
-      );
-    } else {
-      setDraftAnswers(defaultAnswers(nextType));
-    }
-    setError(null);
-  }, [state, answers]);
+        }))
+      : defaultAnswers(question?.type ?? 'single_choice'),
+  );
+  const [pending, setPending] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   function changeType(next: Enums<'question_type'>) {
     setType(next);

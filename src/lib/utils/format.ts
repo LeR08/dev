@@ -23,9 +23,16 @@ export function formatTimecode(totalSeconds: number): string {
   return hours > 0 ? `${hours}:${mm}:${ss}` : `${mm}:${ss}`;
 }
 
-/** 78.4 → "78 %". Espace insécable avant le %, typographie française. */
+/**
+ * 78.4 → « 78 % ».
+ *
+ * Espace insécable (U+00A0) avant le signe %, comme l'exige la typographie
+ * française. L'échappement explicite garantit que la valeur ne sera pas
+ * remplacée par une espace ordinaire au fil des éditions — une différence
+ * invisible à l'œil mais bien réelle à l'affichage.
+ */
 export function formatPercent(value: number): string {
-  return `${Math.round(value)} %`;
+  return `${Math.round(value)}\u00a0%`;
 }
 
 export function formatNumber(value: number): string {

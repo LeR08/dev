@@ -43,7 +43,8 @@ export function TreeEditor({ levels }: { levels: TreeLevel[] }) {
   async function toggleCourse(courseId: string) {
     setOpenCourses((current) => {
       const next = new Set(current);
-      next.has(courseId) ? next.delete(courseId) : next.add(courseId);
+      if (next.has(courseId)) next.delete(courseId);
+      else next.add(courseId);
       return next;
     });
 
@@ -88,7 +89,8 @@ export function TreeEditor({ levels }: { levels: TreeLevel[] }) {
               onClick={() =>
                 setOpenLevels((current) => {
                   const next = new Set(current);
-                  next.has(level.id) ? next.delete(level.id) : next.add(level.id);
+                  if (next.has(level.id)) next.delete(level.id);
+                  else next.add(level.id);
                   return next;
                 })
               }

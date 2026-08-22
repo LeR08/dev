@@ -42,51 +42,70 @@ alter table public.code_redemptions         enable row level security;
 -- PROFILS
 -- is_staff() est SECURITY DEFINER : aucune récursion de policy sur profiles.
 -- ===========================================================================
+drop policy if exists profiles_select_own   on public.profiles;
 create policy profiles_select_own   on public.profiles for select using (id = auth.uid());
+drop policy if exists profiles_select_staff on public.profiles;
 create policy profiles_select_staff on public.profiles for select using (public.is_staff());
+drop policy if exists profiles_update_own   on public.profiles;
 create policy profiles_update_own   on public.profiles for update
   using (id = auth.uid()) with check (id = auth.uid());
+drop policy if exists profiles_admin_all    on public.profiles;
 create policy profiles_admin_all    on public.profiles for all
   using (public.is_admin()) with check (public.is_admin());
 
 -- ===========================================================================
 -- CONTENU — NIVEAU 1 : structure publique (catalogue, programme, SEO)
 -- ===========================================================================
+drop policy if exists levels_select   on public.levels;
 create policy levels_select   on public.levels   for select using (status = 'published');
+drop policy if exists levels_staff    on public.levels;
 create policy levels_staff    on public.levels   for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists subjects_select on public.subjects;
 create policy subjects_select on public.subjects for select using (status = 'published');
+drop policy if exists subjects_staff  on public.subjects;
 create policy subjects_staff  on public.subjects for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists level_subjects_select on public.level_subjects;
 create policy level_subjects_select on public.level_subjects for select using (true);
+drop policy if exists level_subjects_staff  on public.level_subjects;
 create policy level_subjects_staff  on public.level_subjects for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists courses_select on public.courses;
 create policy courses_select on public.courses for select using (status = 'published');
+drop policy if exists courses_staff  on public.courses;
 create policy courses_staff  on public.courses for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists modules_select on public.modules;
 create policy modules_select on public.modules for select using (
   status = 'published'
   and exists (select 1 from public.courses c where c.id = modules.course_id and c.status = 'published')
 );
+drop policy if exists modules_staff on public.modules;
 create policy modules_staff on public.modules for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists chapters_select on public.chapters;
 create policy chapters_select on public.chapters for select using (
   status = 'published'
   and exists (select 1 from public.courses c where c.id = chapters.course_id and c.status = 'published')
 );
+drop policy if exists chapters_staff on public.chapters;
 create policy chapters_staff on public.chapters for all using (public.is_staff()) with check (public.is_staff());
 
 -- La LIGNE d'une leçon reste lisible : c'est le programme, l'argument de vente.
 -- La COLONNE content_md est révoquée plus bas et passe par get_lesson_content().
+drop policy if exists lessons_select on public.lessons;
 create policy lessons_select on public.lessons for select using (
   status = 'published'
   and exists (select 1 from public.courses c where c.id = lessons.course_id and c.status = 'published')
 );
+drop policy if exists lessons_staff on public.lessons;
 create policy lessons_staff on public.lessons for all using (public.is_staff()) with check (public.is_staff());
 
 -- ===========================================================================
 -- CONTENU — NIVEAU 2 : réservé aux membres ayant un accès valide
 -- ===========================================================================
+drop policy if exists videos_select on public.videos;
 create policy videos_select on public.videos for select using (
   exists (
     select 1 from public.lessons l
@@ -95,8 +114,10 @@ create policy videos_select on public.videos for select using (
       and (l.is_free_preview or public.has_course_access(l.course_id))
   )
 );
+drop policy if exists videos_staff on public.videos;
 create policy videos_staff on public.videos for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists resources_select on public.resources;
 create policy resources_select on public.resources for select using (
   (resources.course_id is not null and public.has_course_access(resources.course_id))
   or exists (
@@ -106,13 +127,17 @@ create policy resources_select on public.resources for select using (
       and (l.is_free_preview or public.has_course_access(l.course_id))
   )
 );
+drop policy if exists resources_staff on public.resources;
 create policy resources_staff on public.resources for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists quizzes_select on public.quizzes;
 create policy quizzes_select on public.quizzes for select using (
   status = 'published' and public.has_course_access(quizzes.course_id)
 );
+drop policy if exists quizzes_staff on public.quizzes;
 create policy quizzes_staff on public.quizzes for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists questions_select on public.questions;
 create policy questions_select on public.questions for select using (
   exists (
     select 1 from public.quizzes q
@@ -121,8 +146,10 @@ create policy questions_select on public.questions for select using (
       and public.has_course_access(q.course_id)
   )
 );
+drop policy if exists questions_staff on public.questions;
 create policy questions_staff on public.questions for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists answers_select on public.answers;
 create policy answers_select on public.answers for select using (
   exists (
     select 1 from public.questions qu
@@ -132,8 +159,10 @@ create policy answers_select on public.answers for select using (
       and public.has_course_access(q.course_id)
   )
 );
+drop policy if exists answers_staff on public.answers;
 create policy answers_staff on public.answers for all using (public.is_staff()) with check (public.is_staff());
 
+drop policy if exists exercises_select on public.exercises;
 create policy exercises_select on public.exercises for select using (
   status = 'published'
   and exists (
@@ -143,18 +172,47 @@ create policy exercises_select on public.exercises for select using (
       and (l.is_free_preview or public.has_course_access(l.course_id))
   )
 );
+drop policy if exists exercises_staff on public.exercises;
 create policy exercises_staff on public.exercises for all using (public.is_staff()) with check (public.is_staff());
 
 -- ===========================================================================
 -- PRIVILÈGES DE COLONNE
+--
 -- La RLS filtre les LIGNES ; seuls les GRANT filtrent les COLONNES.
--- Sans ces révocations, n'importe quel membre lit les bonnes réponses et le
--- contenu payant depuis l'onglet réseau du navigateur.
+--
+-- POINT CRITIQUE : en PostgreSQL, révoquer une colonne alors qu'un privilège
+-- existe AU NIVEAU TABLE ne produit aucun effet — le privilège de table
+-- l'emporte. Or Supabase accorde `ALL` sur toutes les tables de `public` aux
+-- rôles anon et authenticated. Un simple
+--     revoke select (content_md) on lessons from authenticated
+-- serait donc silencieusement inopérant.
+--
+-- La seule méthode qui fonctionne : révoquer SELECT au niveau table, puis
+-- ré-accorder explicitement les colonnes autorisées.
 -- ===========================================================================
-revoke select (is_correct, match_pattern) on public.answers   from anon, authenticated;
-revoke select (content_md)                on public.lessons   from anon, authenticated;
-revoke select (expected_answer, tolerance, solution_md)
-                                          on public.exercises from anon, authenticated;
+
+-- --- lessons : tout sauf content_md ---------------------------------------
+revoke select on public.lessons from anon, authenticated;
+grant select (
+  id, chapter_id, module_id, course_id, slug, title, description,
+  duration_seconds, sort_order, is_free_preview, status, created_at, updated_at
+) on public.lessons to anon, authenticated;
+
+-- --- answers : tout sauf is_correct et match_pattern -----------------------
+revoke select on public.answers from anon, authenticated;
+grant select (id, question_id, label, sort_order, created_at)
+  on public.answers to anon, authenticated;
+
+-- --- exercises : tout sauf la solution -------------------------------------
+revoke select on public.exercises from anon, authenticated;
+grant select (
+  id, lesson_id, kind, title, statement_md, media_url, attachment_path,
+  explanation_md, difficulty, sort_order, status, metadata, created_at, updated_at
+) on public.exercises to anon, authenticated;
+
+-- Le staff passe par des fonctions SECURITY DEFINER dédiées (0008) pour lire
+-- ces colonnes : get_lesson_content(), staff_get_answers(),
+-- staff_get_exercise_solution(). service_role conserve l'accès complet.
 
 -- ===========================================================================
 -- DONNÉES PERSONNELLES
@@ -162,48 +220,66 @@ revoke select (expected_answer, tolerance, solution_md)
 
 -- Progression vidéo et leçon : écriture directe autorisée (aucun enjeu de
 -- triche exploitable), mais toujours restreinte à sa propre ligne.
+drop policy if exists video_progress_own on public.video_progress;
 create policy video_progress_own on public.video_progress for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
+drop policy if exists video_progress_staff on public.video_progress;
 create policy video_progress_staff on public.video_progress for select using (public.is_staff());
 
+drop policy if exists lesson_progress_own on public.lesson_progress;
 create policy lesson_progress_own on public.lesson_progress for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
+drop policy if exists lesson_progress_staff on public.lesson_progress;
 create policy lesson_progress_staff on public.lesson_progress for select using (public.is_staff());
 
 -- course_progress est un cache maintenu par trigger : lecture seule côté client.
+drop policy if exists course_progress_select on public.course_progress;
 create policy course_progress_select on public.course_progress for select
   using (user_id = auth.uid() or public.is_staff());
 
+drop policy if exists study_sessions_select on public.study_sessions;
 create policy study_sessions_select on public.study_sessions for select
   using (user_id = auth.uid() or public.is_staff());
 
+drop policy if exists notes_own on public.notes;
 create policy notes_own on public.notes for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
 
+drop policy if exists favorites_own on public.favorites;
 create policy favorites_own on public.favorites for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
 
+drop policy if exists goals_own on public.goals;
 create policy goals_own on public.goals for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
 
+drop policy if exists goal_periods_select on public.goal_periods;
 create policy goal_periods_select on public.goal_periods for select
   using (user_id = auth.uid() or public.is_staff());
 
+drop policy if exists notifications_select on public.notifications;
 create policy notifications_select on public.notifications for select using (user_id = auth.uid());
+drop policy if exists notifications_update on public.notifications;
 create policy notifications_update on public.notifications for update
   using (user_id = auth.uid()) with check (user_id = auth.uid());
+drop policy if exists notifications_delete on public.notifications;
 create policy notifications_delete on public.notifications for delete using (user_id = auth.uid());
+drop policy if exists notifications_admin  on public.notifications;
 create policy notifications_admin  on public.notifications for all
   using (public.is_admin()) with check (public.is_admin());
 
+drop policy if exists notif_prefs_own on public.notification_preferences;
 create policy notif_prefs_own on public.notification_preferences for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
 
+drop policy if exists interests_own on public.user_subject_interests;
 create policy interests_own on public.user_subject_interests for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
 
+drop policy if exists exercise_attempts_own on public.exercise_attempts;
 create policy exercise_attempts_own on public.exercise_attempts for all
   using (user_id = auth.uid()) with check (user_id = auth.uid());
+drop policy if exists exercise_attempts_staff on public.exercise_attempts;
 create policy exercise_attempts_staff on public.exercise_attempts for select using (public.is_staff());
 
 -- ===========================================================================
@@ -212,9 +288,11 @@ create policy exercise_attempts_staff on public.exercise_attempts for select usi
 -- créées que par les fonctions SECURITY DEFINER (submit_quiz_attempt, award_xp,
 -- check_badges). Un membre ne peut donc ni s'inventer un score ni de l'XP.
 -- ===========================================================================
+drop policy if exists quiz_attempts_select on public.quiz_attempts;
 create policy quiz_attempts_select on public.quiz_attempts for select
   using (user_id = auth.uid() or public.is_staff());
 
+drop policy if exists quiz_attempt_answers_select on public.quiz_attempt_answers;
 create policy quiz_attempt_answers_select on public.quiz_attempt_answers for select using (
   exists (
     select 1 from public.quiz_attempts a
@@ -223,10 +301,14 @@ create policy quiz_attempt_answers_select on public.quiz_attempt_answers for sel
   )
 );
 
+drop policy if exists xp_events_select   on public.xp_events;
 create policy xp_events_select   on public.xp_events   for select using (user_id = auth.uid() or public.is_staff());
+drop policy if exists user_badges_select on public.user_badges;
 create policy user_badges_select on public.user_badges for select using (user_id = auth.uid() or public.is_staff());
 
+drop policy if exists badges_select on public.badges;
 create policy badges_select on public.badges for select using (is_active or public.is_staff());
+drop policy if exists badges_admin  on public.badges;
 create policy badges_admin  on public.badges for all using (public.is_admin()) with check (public.is_admin());
 
 -- ===========================================================================
@@ -235,13 +317,18 @@ create policy badges_admin  on public.badges for all using (public.is_admin()) w
 -- inscrit pourrait énumérer les codes valides via l'API REST.
 -- Aucune policy INSERT sur enrollments : redeem_access_code() est le seul chemin.
 -- ===========================================================================
+drop policy if exists enrollments_select_own on public.enrollments;
 create policy enrollments_select_own on public.enrollments for select using (user_id = auth.uid());
+drop policy if exists enrollments_admin      on public.enrollments;
 create policy enrollments_admin      on public.enrollments for all
   using (public.is_admin()) with check (public.is_admin());
 
+drop policy if exists access_codes_admin on public.access_codes;
 create policy access_codes_admin on public.access_codes for all
   using (public.is_admin()) with check (public.is_admin());
 
+drop policy if exists code_redemptions_select_own on public.code_redemptions;
 create policy code_redemptions_select_own on public.code_redemptions for select using (user_id = auth.uid());
+drop policy if exists code_redemptions_admin      on public.code_redemptions;
 create policy code_redemptions_admin      on public.code_redemptions for all
   using (public.is_admin()) with check (public.is_admin());

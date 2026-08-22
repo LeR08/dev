@@ -111,7 +111,8 @@ export function CourseStructure({
                     onClick={() =>
                       setOpenModules((current) => {
                         const next = new Set(current);
-                        next.has(module.id) ? next.delete(module.id) : next.add(module.id);
+                        if (next.has(module.id)) next.delete(module.id);
+                        else next.add(module.id);
                         return next;
                       })
                     }
@@ -249,7 +250,14 @@ export function CourseStructure({
         />
       )}
 
-      <StructureDialog state={dialog} onClose={() => setDialog(null)} />
+      {/* `key` force un remontage à chaque ouverture : l'état du formulaire
+          repart des props sans effet de synchronisation, qui provoquerait un
+          rendu en cascade et un affichage transitoirement périmé. */}
+      <StructureDialog
+        key={dialog ? `${dialog.kind}-${dialog.id ?? 'new'}-${dialog.parentId}` : 'closed'}
+        state={dialog}
+        onClose={() => setDialog(null)}
+      />
 
       <ConfirmDialog
         open={toDelete !== null}
@@ -267,17 +275,12 @@ export function CourseStructure({
 function StructureDialog({ state, onClose }: { state: DialogState; onClose: () => void }) {
   const router = useRouter();
   const { toast } = useToast();
-  const [title, setTitle] = React.useState('');
-  const [description, setDescription] = React.useState('');
+  const [title, setTitle] = React.useState(state?.title ?? '');
+  const [description, setDescription] = React.useState(
+    (state && 'description' in state ? state.description : '') ?? '',
+  );
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (!state) return;
-    setTitle(state.title ?? '');
-    setDescription(('description' in state ? state.description : '') ?? '');
-    setError(null);
-  }, [state]);
 
   async function submit() {
     if (!state) return;

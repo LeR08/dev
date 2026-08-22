@@ -21,6 +21,28 @@ export type Badge = Tables<'badges'>;
 export type Notification = Tables<'notifications'>;
 export type Goal = Tables<'goals'>;
 
+/**
+ * Ce qu'un client peut RÉELLEMENT lire.
+ *
+ * Trois colonnes sont révoquées au niveau colonne (migration 0009) parce
+ * qu'elles constituent le contenu payant ou les bonnes réponses :
+ *   - lessons.content_md          → get_lesson_content()
+ *   - answers.is_correct / match_pattern → correction serveur uniquement
+ *   - exercises.expected_answer / tolerance / solution_md → correction serveur
+ *
+ * Ces types empêchent d'écrire du code qui suppose leur présence — l'erreur
+ * serait sinon découverte en production, sous forme d'une requête refusée.
+ */
+export type PublicLesson = Omit<Tables<'lessons'>, 'content_md'>;
+export type PublicExercise = Omit<
+  Tables<'exercises'>,
+  'expected_answer' | 'tolerance' | 'solution_md'
+>;
+export type PublicAnswer = Pick<
+  Tables<'answers'>,
+  'id' | 'question_id' | 'label' | 'sort_order' | 'created_at'
+>;
+
 /** Carte de formation du catalogue : projection minimale, jamais `select *`. */
 export interface CourseCard {
   id: string;

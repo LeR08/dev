@@ -6,10 +6,10 @@ import { getSessionUser, getEntitlements, canAccessCourse } from '@/server/auth/
 import { resolveVideoSource } from '@/lib/video';
 import type { VideoSource } from '@/lib/video';
 import type { Tables } from '@/types/database.types';
-import type { QuizSummary } from '@/types/domain';
+import type { PublicExercise, PublicLesson, QuizSummary } from '@/types/domain';
 
 export interface LessonPlayerData {
-  lesson: Tables<'lessons'>;
+  lesson: PublicLesson;
   course: Pick<Tables<'courses'>, 'id' | 'slug' | 'title' | 'subject_id'>;
   moduleTitle: string;
   chapterTitle: string;
@@ -24,7 +24,7 @@ export interface LessonPlayerData {
     completed: boolean;
   }>;
   resources: Tables<'resources'>[];
-  exercises: Tables<'exercises'>[];
+  exercises: PublicExercise[];
   quizzes: QuizSummary[];
   notes: Tables<'notes'>[];
   status: 'not_started' | 'in_progress' | 'completed';
@@ -37,9 +37,12 @@ export const getLessonPlayerData = cache(
     const user = await getSessionUser();
     const entitlements = await getEntitlements();
 
+    // Jamais `select('*')` sur `lessons` : la colonne content_md est révoquée
+    // au niveau colonne (migration 0009) et une étoile ferait échouer la
+    // requête entière. Le contenu passe par get_lesson_content().
     const { data: lesson } = await supabase
       .from('lessons')
-      .select('*')
+      .select('id, chapter_id, module_id, course_id, slug, title, description, duration_seconds, sort_order, is_free_preview, status, created_at, updated_at')
       .eq('id', lessonId)
       .eq('status', 'published')
       .maybeSingle();
@@ -75,7 +78,7 @@ export const getLessonPlayerData = cache(
         supabase.from('resources').select('*').eq('lesson_id', lessonId).order('sort_order'),
         supabase
           .from('exercises')
-          .select('*')
+          .select('id, lesson_id, kind, title, statement_md, media_url, attachment_path, explanation_md, difficulty, sort_order, status, metadata, created_at, updated_at')
           .eq('lesson_id', lessonId)
           .eq('status', 'published')
           .order('sort_order'),

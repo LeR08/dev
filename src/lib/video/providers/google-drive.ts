@@ -1,4 +1,4 @@
-import type { MountOptions, PlayerAdapter, PlayerCapabilities, ProviderDefinition, VideoSource } from '../types';
+import type { PlayerAdapter, PlayerCapabilities, ProviderDefinition, VideoSource } from '../types';
 import { EventBus } from './base';
 
 /**

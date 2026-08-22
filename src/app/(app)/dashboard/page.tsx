@@ -28,7 +28,7 @@ import {
 import { getRecommendedCourses } from '@/server/services/recommendation.service';
 import { createClient } from '@/lib/supabase/server';
 import { routes } from '@/lib/constants/routes';
-import { formatRelative, pluralize } from '@/lib/utils';
+import { formatRelative } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Tableau de bord',

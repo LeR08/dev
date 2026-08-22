@@ -14,31 +14,38 @@ values
 on conflict (id) do nothing;
 
 -- --- avatars : chaque membre n'écrit que dans son propre dossier ----------
+drop policy if exists "avatars_public_read" on storage.objects;
 create policy "avatars_public_read" on storage.objects for select
   using (bucket_id = 'avatars');
 
+drop policy if exists "avatars_own_write" on storage.objects;
 create policy "avatars_own_write" on storage.objects for insert to authenticated
   with check (
     bucket_id = 'avatars'
     and (storage.foldername(name))[1] = auth.uid()::text
   );
 
+drop policy if exists "avatars_own_update" on storage.objects;
 create policy "avatars_own_update" on storage.objects for update to authenticated
   using (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
 
+drop policy if exists "avatars_own_delete" on storage.objects;
 create policy "avatars_own_delete" on storage.objects for delete to authenticated
   using (bucket_id = 'avatars' and (storage.foldername(name))[1] = auth.uid()::text);
 
 -- --- thumbnails : lecture publique, écriture staff ------------------------
+drop policy if exists "thumbnails_public_read" on storage.objects;
 create policy "thumbnails_public_read" on storage.objects for select
   using (bucket_id = 'thumbnails');
 
+drop policy if exists "thumbnails_staff_write" on storage.objects;
 create policy "thumbnails_staff_write" on storage.objects for all to authenticated
   using (bucket_id = 'thumbnails' and public.is_staff())
   with check (bucket_id = 'thumbnails' and public.is_staff());
 
 -- --- resources : privé. La lecture passe par une URL signée générée côté
 --     serveur après vérification de l'accès à la formation.
+drop policy if exists "resources_staff_all" on storage.objects;
 create policy "resources_staff_all" on storage.objects for all to authenticated
   using (bucket_id = 'resources' and public.is_staff())
   with check (bucket_id = 'resources' and public.is_staff());

@@ -127,7 +127,10 @@ class YouTubeAdapter implements PlayerAdapter {
   getDuration() { return this.player?.getDuration() ?? 0; }
   setPlaybackRate(rate: number) { this.player?.setPlaybackRate(rate); }
   setVolume(volume: number) { this.player?.setVolume(Math.round(volume * 100)); }
-  setMuted(muted: boolean) { muted ? this.player?.mute() : this.player?.unMute(); }
+  setMuted(muted: boolean) {
+    if (muted) this.player?.mute();
+    else this.player?.unMute();
+  }
   isPaused() { return this.paused; }
 
   destroy() {

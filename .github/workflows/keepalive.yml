@@ -1,0 +1,27 @@
+name: Keepalive Supabase
+
+# Un projet Supabase gratuit est mis en pause après 7 jours sans activité.
+# Cette sonde le maintient éveillé. Deux exécutions par semaine suffisent
+# largement et restent bien en dessous des quotas GitHub Actions gratuits.
+on:
+  schedule:
+    - cron: '17 6 * * 1,4' # lundi et jeudi, 6 h 17 UTC
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Interroger /api/health
+        run: |
+          if [ -z "${{ secrets.SITE_URL }}" ]; then
+            echo "Secret SITE_URL absent — définissez-le dans les paramètres du dépôt."
+            exit 0
+          fi
+          status=$(curl -sS -o /tmp/health.json -w '%{http_code}' "${{ secrets.SITE_URL }}/api/health")
+          cat /tmp/health.json
+          echo ""
+          if [ "$status" != "200" ]; then
+            echo "Réponse HTTP $status — la base est peut-être en pause."
+            exit 1
+          fi

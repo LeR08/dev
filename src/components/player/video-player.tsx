@@ -104,7 +104,12 @@ export function VideoPlayer({
     adapterRef.current = adapter;
 
     const unsubscribers: Array<() => void> = [
-      adapter.on('play', () => setPlaying(true)),
+      adapter.on('play', () => {
+        setPlaying(true);
+        // Réaffiche les contrôles à la reprise, sinon ils resteraient masqués
+        // depuis la lecture précédente.
+        setControlsVisible(true);
+      }),
       adapter.on('pause', () => {
         setPlaying(false);
         void flush(true);
@@ -157,11 +162,12 @@ export function VideoPlayer({
   }, []);
 
   // Masquage automatique des contrôles pendant la lecture.
+  //
+  // À l'arrêt, les contrôles restent affichés par le rendu lui-même
+  // (`controlsVisible || !playing`) : aucun état à remettre à jour ici, donc
+  // pas de setState synchrone dans l'effet.
   React.useEffect(() => {
-    if (!playing) {
-      setControlsVisible(true);
-      return;
-    }
+    if (!playing) return;
     const timer = setTimeout(() => setControlsVisible(false), 2800);
     return () => clearTimeout(timer);
   }, [playing, currentTime]);
@@ -169,7 +175,8 @@ export function VideoPlayer({
   const togglePlay = React.useCallback(() => {
     const adapter = adapterRef.current;
     if (!adapter) return;
-    adapter.isPaused() ? adapter.play() : adapter.pause();
+    if (adapter.isPaused()) adapter.play();
+    else adapter.pause();
   }, []);
 
   const seekTo = React.useCallback(

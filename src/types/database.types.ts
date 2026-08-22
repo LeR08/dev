@@ -1839,6 +1839,26 @@ export type Database = {
         Args: { p_exercise_id: string; p_response: string };
         Returns: boolean | null;
       };
+      staff_get_answers: {
+        Args: { p_question_ids: string[] };
+        Returns: Array<{
+          id: string;
+          question_id: string;
+          label: string;
+          is_correct: boolean;
+          match_pattern: string | null;
+          sort_order: number;
+        }>;
+      };
+      staff_get_exercise_solution: { Args: { p_exercise_id: string }; Returns: Json };
+      submit_exercise_attempt: {
+        Args: {
+          p_exercise_id: string;
+          p_response?: string | null;
+          p_self_assessment?: number | null;
+        };
+        Returns: Json;
+      };
       check_badges: { Args: { p_user_id: string }; Returns: number };
       is_staff: { Args: Record<string, never>; Returns: boolean };
       is_admin: { Args: Record<string, never>; Returns: boolean };

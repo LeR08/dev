@@ -44,35 +44,45 @@ export async function submitQuiz(input: unknown): Promise<ActionResult<QuizResul
   });
 }
 
-export async function submitExerciseAttempt(
-  input: unknown,
-): Promise<ActionResult<{ isCorrect: boolean | null }>> {
+export async function submitExerciseAttempt(input: unknown): Promise<
+  ActionResult<{
+    isCorrect: boolean | null;
+    solutionMd: string | null;
+    explanationMd: string | null;
+  }>
+> {
   return guard(async () => {
-    const user = await requireUserOrFail();
+    await requireUserOrFail();
     const parsed = exerciseAttemptSchema.safeParse(input);
     if (!parsed.success) return fail('Réponse invalide');
 
     const supabase = await createClient();
 
-    // La correction automatique n'existe que pour les réponses numériques ;
-    // `expected_answer` étant révoqué en lecture, on passe par une RPC dédiée.
-    const { data: check } = await supabase.rpc('grade_numeric_exercise', {
+    // Le corrigé est révoqué en lecture directe : il ne revient qu'ici, après
+    // enregistrement de la tentative. Même principe que les quiz.
+    const { data, error } = await supabase.rpc('submit_exercise_attempt', {
       p_exercise_id: parsed.data.exerciseId,
-      p_response: parsed.data.responseText ?? '',
+      p_response: parsed.data.responseText ?? null,
+      p_self_assessment: parsed.data.selfAssessment ?? null,
     });
 
-    const isCorrect = typeof check === 'boolean' ? check : null;
+    if (error) {
+      if (error.message.includes('Accès non autorisé')) {
+        return fail("Cette formation n'est pas débloquée sur votre compte.");
+      }
+      return fail("La réponse n'a pas pu être enregistrée.");
+    }
 
-    const { error } = await supabase.from('exercise_attempts').insert({
-      user_id: user.id,
-      exercise_id: parsed.data.exerciseId,
-      response_text: parsed.data.responseText ?? null,
-      is_correct: isCorrect,
-      self_assessment: parsed.data.selfAssessment ?? null,
+    const result = (data ?? {}) as {
+      is_correct?: boolean | null;
+      solution_md?: string | null;
+      explanation_md?: string | null;
+    };
+
+    return ok({
+      isCorrect: result.is_correct ?? null,
+      solutionMd: result.solution_md ?? null,
+      explanationMd: result.explanation_md ?? null,
     });
-
-    if (error) return fail("La réponse n'a pas pu être enregistrée.");
-
-    return ok<{ isCorrect: boolean | null }>({ isCorrect });
   });
 }

@@ -115,9 +115,15 @@ create table public.exercise_attempts (
 );
 create index exercise_attempts_user_idx on public.exercise_attempts (user_id, exercise_id);
 
-create trigger quizzes_set_updated_at   before update on public.quizzes   for each row execute function public.set_updated_at();
-create trigger questions_set_updated_at before update on public.questions for each row execute function public.set_updated_at();
-create trigger exercises_set_updated_at before update on public.exercises for each row execute function public.set_updated_at();
+drop trigger if exists quizzes_set_updated_at on public.quizzes;
+create trigger quizzes_set_updated_at
+  before update on public.quizzes   for each row execute function public.set_updated_at();
+drop trigger if exists questions_set_updated_at on public.questions;
+create trigger questions_set_updated_at
+  before update on public.questions for each row execute function public.set_updated_at();
+drop trigger if exists exercises_set_updated_at on public.exercises;
+create trigger exercises_set_updated_at
+  before update on public.exercises for each row execute function public.set_updated_at();
 
 -- Dénormalisation de course_id sur les quiz, comme pour chapitres et leçons.
 create or replace function public.sync_quiz_denorm()
@@ -134,6 +140,7 @@ begin
 end;
 $$;
 
+drop trigger if exists quizzes_sync_denorm on public.quizzes;
 create trigger quizzes_sync_denorm
   before insert or update of lesson_id, chapter_id, scope on public.quizzes
   for each row execute function public.sync_quiz_denorm();

@@ -127,12 +127,19 @@ create table public.user_subject_interests (
 );
 create index user_subject_interests_subject_idx on public.user_subject_interests (subject_id);
 
-create trigger notes_set_updated_at         before update on public.notes                    for each row execute function public.set_updated_at();
-create trigger goals_set_updated_at         before update on public.goals                    for each row execute function public.set_updated_at();
-create trigger notif_prefs_set_updated_at   before update on public.notification_preferences for each row execute function public.set_updated_at();
+drop trigger if exists notes_set_updated_at on public.notes;
+create trigger notes_set_updated_at
+  before update on public.notes                    for each row execute function public.set_updated_at();
+drop trigger if exists goals_set_updated_at on public.goals;
+create trigger goals_set_updated_at
+  before update on public.goals                    for each row execute function public.set_updated_at();
+drop trigger if exists notif_prefs_set_updated_at on public.notification_preferences;
+create trigger notif_prefs_set_updated_at
+  before update on public.notification_preferences for each row execute function public.set_updated_at();
 
 -- notification_preferences existe désormais : le trigger d'inscription peut
 -- être branché sur auth.users.
+drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();

@@ -16,7 +16,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { EmptyState } from '@/components/shared/states';
 import { useToast } from '@/components/ui/toast';
 import { VideoPlayer } from './video-player';
 import { NotePanel } from '@/components/notes/note-panel';
@@ -29,7 +28,7 @@ import { routes } from '@/lib/constants/routes';
 import { cn, formatDuration, pluralize } from '@/lib/utils';
 import type { VideoSource } from '@/lib/video';
 import type { Tables } from '@/types/database.types';
-import type { QuizSummary } from '@/types/domain';
+import type { PublicExercise, QuizSummary } from '@/types/domain';
 
 interface LessonWorkspaceProps {
   lessonId: string;
@@ -39,7 +38,7 @@ interface LessonWorkspaceProps {
   contentMd: string | null;
   videos: Array<{ source: VideoSource; positionSeconds: number; completed: boolean }>;
   resources: Array<Tables<'resources'> & { href: string }>;
-  exercises: Tables<'exercises'>[];
+  exercises: PublicExercise[];
   quizzes: QuizSummary[];
   notes: Tables<'notes'>[];
   isFavorite: boolean;

@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -10,11 +9,10 @@ import { SidebarNav } from './sidebar-nav';
 
 export function MobileSidebar() {
   const [open, setOpen] = React.useState(false);
-  const pathname = usePathname();
 
-  // Referme le tiroir dès qu'on change de page.
-  React.useEffect(() => setOpen(false), [pathname]);
-
+  // La fermeture au changement de page est déclenchée par SidebarNav
+  // (onNavigate), plutôt que par un effet observant l'URL : le tiroir se ferme
+  // au clic, sans attendre la fin de la navigation.
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>

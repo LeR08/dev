@@ -146,7 +146,11 @@ export function EntityManager({
         />
       )}
 
+      {/* `key` force un remontage à chaque ouverture : l'état du formulaire
+          repart des props sans effet de synchronisation, qui provoquerait un
+          rendu en cascade et un affichage transitoirement périmé. */}
       <EntityDialog
+        key={editing?.id ?? (creating ? 'new' : 'closed')}
         open={creating || editing !== null}
         onOpenChange={(open) => {
           if (!open) {
@@ -192,27 +196,15 @@ function EntityDialog({
 }) {
   const router = useRouter();
   const { toast } = useToast();
-  const [name, setName] = React.useState('');
-  const [slug, setSlug] = React.useState('');
-  const [slugTouched, setSlugTouched] = React.useState(false);
-  const [description, setDescription] = React.useState('');
-  const [icon, setIcon] = React.useState('');
-  const [color, setColor] = React.useState('');
-  const [status, setStatus] = React.useState<'draft' | 'published' | 'archived'>('published');
+  const [name, setName] = React.useState(row?.name ?? '');
+  const [slug, setSlug] = React.useState(row?.slug ?? '');
+  const [slugTouched, setSlugTouched] = React.useState(Boolean(row));
+  const [description, setDescription] = React.useState(row?.description ?? '');
+  const [icon, setIcon] = React.useState(row?.icon ?? '');
+  const [color, setColor] = React.useState(row?.color ?? '');
+  const [status, setStatus] = React.useState(row?.status ?? 'published');
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (!open) return;
-    setName(row?.name ?? '');
-    setSlug(row?.slug ?? '');
-    setSlugTouched(Boolean(row));
-    setDescription(row?.description ?? '');
-    setIcon(row?.icon ?? '');
-    setColor(row?.color ?? '');
-    setStatus(row?.status ?? 'published');
-    setError(null);
-  }, [open, row]);
 
   async function submit() {
     setPending(true);

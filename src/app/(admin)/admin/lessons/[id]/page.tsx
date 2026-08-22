@@ -18,7 +18,13 @@ export default async function AdminLessonPage({ params }: { params: Promise<{ id
   const { id } = await params;
   const supabase = await createClient();
 
-  const { data: lesson } = await supabase.from('lessons').select('*').eq('id', id).maybeSingle();
+  // content_md est révoqué au niveau colonne, y compris pour le staff : il est
+  // servi par get_lesson_content(), qui autorise le staff via has_course_access().
+  const { data: lesson } = await supabase
+    .from('lessons')
+    .select('id, chapter_id, module_id, course_id, slug, title, description, duration_seconds, sort_order, is_free_preview, status, created_at, updated_at')
+    .eq('id', id)
+    .maybeSingle();
   if (!lesson) notFound();
 
   const [{ data: course }, { data: videos }, { data: resources }, { data: quizzes }] =
@@ -35,15 +41,13 @@ export default async function AdminLessonPage({ params }: { params: Promise<{ id
     : { data: [] };
 
   const questionIds = (questions ?? []).map((question) => question.id);
-  // is_correct est révoqué pour `authenticated`, mais le staff y a accès :
-  // la révocation porte sur les rôles, la policy `answers_staff` autorise le reste.
+  // is_correct n'est lisible par personne en direct : la fonction
+  // staff_get_answers() le rétablit pour le staff uniquement.
   const { data: answers } = questionIds.length
-    ? await supabase
-        .from('answers')
-        .select('id, question_id, label, is_correct, match_pattern, sort_order')
-        .in('question_id', questionIds)
-        .order('sort_order')
+    ? await supabase.rpc('staff_get_answers', { p_question_ids: questionIds })
     : { data: [] };
+
+  const { data: content } = await supabase.rpc('get_lesson_content', { p_lesson_id: id });
 
   return (
     <div className="space-y-6">
@@ -63,7 +67,7 @@ export default async function AdminLessonPage({ params }: { params: Promise<{ id
       </div>
 
       <LessonEditor
-        lesson={lesson}
+        lesson={{ ...lesson, content_md: content ?? null }}
         videos={videos ?? []}
         resources={resources ?? []}
         quizzes={quizzes ?? []}

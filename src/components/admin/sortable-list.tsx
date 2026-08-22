@@ -44,9 +44,16 @@ export function SortableList<T extends { id: string }>({
   className?: string;
 }) {
   const [ordered, setOrdered] = React.useState(items);
+  const [lastItems, setLastItems] = React.useState(items);
 
-  // Resynchronise quand la source change (rechargement après enregistrement).
-  React.useEffect(() => setOrdered(items), [items]);
+  // Resynchronisation pendant le rendu quand la source change (rechargement
+  // après enregistrement). C'est le motif recommandé par React pour dériver un
+  // état de props : un effet provoquerait un rendu en cascade et un affichage
+  // transitoirement périmé.
+  if (items !== lastItems) {
+    setLastItems(items);
+    setOrdered(items);
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),

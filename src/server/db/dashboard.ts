@@ -4,7 +4,7 @@ import { cache } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { getSessionUser, getEntitlements, canAccessCourse } from '@/server/auth/session';
 import type { CourseCard } from '@/types/domain';
-import type { Tables } from '@/types/database.types';
+import { computeLevel } from '@/lib/utils/gamification';
 
 export interface ContinueCard {
   courseId: string;
@@ -32,22 +32,6 @@ export interface DashboardStats {
   quizzesPassed: number;
   studyMinutesWeek: number;
   studyMinutesTotal: number;
-}
-
-/**
- * Niveau de gamification : progression quadratique douce.
- * Niveau 1 = 0 XP, niveau 2 = 100 XP, niveau 3 = 300, niveau 4 = 600…
- */
-export function computeLevel(xp: number) {
-  const level = Math.floor((1 + Math.sqrt(1 + (8 * xp) / 100)) / 2);
-  const xpForLevel = (n: number) => (100 * n * (n - 1)) / 2;
-  const current = xpForLevel(level);
-  const next = xpForLevel(level + 1);
-  return {
-    level,
-    xpInLevel: xp - current,
-    xpForNextLevel: next - current,
-  };
 }
 
 export const getDashboardStats = cache(async (): Promise<DashboardStats | null> => {
@@ -252,5 +236,50 @@ export const getRecentQuizAttempts = cache(async (limit = 4) => {
     percentage: row.percentage,
     passed: row.passed,
     at: row.submitted_at!,
+  }));
+});
+
+/**
+ * Temps d'étude quotidien sur une fenêtre glissante, jours vides compris.
+ *
+ * Le calcul vit ici plutôt que dans le composant : une page ne doit pas
+ * fabriquer ses propres séries de données, et `Date.now()` n'a rien à faire
+ * dans un rendu.
+ */
+export const getStudySeries = cache(async (days = 30) => {
+  const supabase = await createClient();
+  const user = await getSessionUser();
+
+  const start = new Date();
+  start.setUTCHours(0, 0, 0, 0);
+  start.setUTCDate(start.getUTCDate() - (days - 1));
+
+  const buckets = new Map<string, number>();
+  for (let index = 0; index < days; index += 1) {
+    const date = new Date(start);
+    date.setUTCDate(start.getUTCDate() + index);
+    buckets.set(date.toISOString().slice(0, 10), 0);
+  }
+
+  if (!user) {
+    return [...buckets.entries()].map(([date, minutes]) => ({ date, minutes }));
+  }
+
+  const { data } = await supabase
+    .from('study_sessions')
+    .select('started_at, duration_seconds')
+    .eq('user_id', user.id)
+    .gte('started_at', start.toISOString());
+
+  for (const session of data ?? []) {
+    const key = session.started_at.slice(0, 10);
+    if (buckets.has(key)) {
+      buckets.set(key, (buckets.get(key) ?? 0) + session.duration_seconds / 60);
+    }
+  }
+
+  return [...buckets.entries()].map(([date, minutes]) => ({
+    date,
+    minutes: Math.round(minutes),
   }));
 });

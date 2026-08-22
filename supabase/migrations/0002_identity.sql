@@ -25,6 +25,7 @@ create table public.profiles (
 create index profiles_role_idx     on public.profiles (role);
 create index profiles_level_id_idx on public.profiles (level_id);
 
+drop trigger if exists profiles_set_updated_at on public.profiles;
 create trigger profiles_set_updated_at
   before update on public.profiles
   for each row execute function public.set_updated_at();
@@ -110,6 +111,19 @@ begin
     return new;
   end if;
 
+  -- Aucun JWT : la requête ne vient pas d'un client PostgREST authentifié mais
+  -- d'une session SQL directe (éditeur SQL Supabase, migration, clé
+  -- service_role). C'est le seul chemin par lequel le PREMIER administrateur
+  -- peut être promu — sans quoi la promotion serait impossible, personne
+  -- n'étant admin au départ.
+  --
+  -- Ce n'est pas une faille : un visiteur anonyme a lui aussi auth.uid() nul,
+  -- mais la policy profiles_update_own exige id = auth.uid(), donc il ne peut
+  -- atteindre aucune ligne. Le trigger n'est jamais joué pour lui.
+  if auth.uid() is null then
+    return new;
+  end if;
+
   if public.is_admin() then
     return new;
   end if;
@@ -124,6 +138,7 @@ begin
 end;
 $$;
 
+drop trigger if exists profiles_guard_privileged on public.profiles;
 create trigger profiles_guard_privileged
   before update on public.profiles
   for each row execute function public.profiles_guard_privileged_columns();

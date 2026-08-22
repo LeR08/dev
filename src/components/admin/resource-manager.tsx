@@ -116,7 +116,11 @@ export function ResourceManager({
         />
       )}
 
+      {/* `key` force un remontage à chaque ouverture : l'état du formulaire
+          repart des props sans effet de synchronisation, qui provoquerait un
+          rendu en cascade et un affichage transitoirement périmé. */}
       <ResourceDialog
+        key={editing?.id ?? (creating ? 'new' : 'closed')}
         open={creating || editing !== null}
         onOpenChange={(open) => {
           if (!open) {
@@ -158,25 +162,16 @@ function ResourceDialog({
   onSaved: () => void;
 }) {
   const { toast } = useToast();
-  const [title, setTitle] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [type, setType] = React.useState<Enums<'resource_type'>>('pdf');
-  const [url, setUrl] = React.useState('');
-  const [storagePath, setStoragePath] = React.useState('');
-  const [mode, setMode] = React.useState<'url' | 'storage'>('url');
+  const [title, setTitle] = React.useState(resource?.title ?? '');
+  const [description, setDescription] = React.useState(resource?.description ?? '');
+  const [type, setType] = React.useState<Enums<'resource_type'>>(resource?.type ?? 'pdf');
+  const [url, setUrl] = React.useState(resource?.url ?? '');
+  const [storagePath, setStoragePath] = React.useState(resource?.storage_path ?? '');
+  const [mode, setMode] = React.useState<'url' | 'storage'>(
+    resource?.storage_path ? 'storage' : 'url',
+  );
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (!open) return;
-    setTitle(resource?.title ?? '');
-    setDescription(resource?.description ?? '');
-    setType(resource?.type ?? 'pdf');
-    setUrl(resource?.url ?? '');
-    setStoragePath(resource?.storage_path ?? '');
-    setMode(resource?.storage_path ? 'storage' : 'url');
-    setError(null);
-  }, [open, resource]);
 
   async function submit() {
     setPending(true);

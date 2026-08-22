@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Types, lint, tests et build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Vérification des types
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tests unitaires
+        run: npm run test
+
+      - name: Build de production
+        run: npm run build
+        env:
+          # Valeurs factices : le build ne contacte pas la base. Les vraies
+          # variables sont définies dans le projet Vercel.
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+          SUPABASE_SERVICE_ROLE_KEY: placeholder-service-key
+          NEXT_PUBLIC_SITE_URL: https://example.com
+
+  database:
+    name: Migrations, seed et tests SQL
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: edulearn_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports: ['5432:5432']
+
+    env:
+      PGPASSWORD: postgres
+      PSQL: psql -h localhost -U postgres -d edulearn_test -v ON_ERROR_STOP=1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Objets fournis par Supabase (auth, storage, rôles)
+        run: $PSQL -f tests/sql/00_supabase_shim.sql
+
+      - name: Appliquer les migrations
+        run: |
+          for file in supabase/migrations/*.sql; do
+            echo "→ $file"
+            $PSQL -f "$file"
+          done
+
+      - name: Charger les données de démonstration
+        run: $PSQL -f supabase/seed.sql
+
+      # Les migrations s'appliquent une seule fois (create table…), c'est leur
+      # rôle. Le SEED, lui, doit rester rejouable : on le vérifie ici, sinon la
+      # moindre correction de contenu imposerait de vider la base.
+      - name: Rejouer le seed (idempotence)
+        run: $PSQL -f supabase/seed.sql
+
+      - name: Vérifier l'absence de doublon après rejeu
+        run: |
+          count=$($PSQL -tAc "select count(*) from public.courses")
+          echo "formations : $count"
+          if [ "$count" -ne 22 ]; then
+            echo "Le rejeu du seed a créé des doublons."
+            exit 1
+          fi
+
+      - name: Tests de logique métier
+        run: $PSQL -f tests/sql/01_business_logic.sql
+
+      - name: Tests de sécurité RLS
+        run: $PSQL -f tests/sql/02_security_rls.sql
