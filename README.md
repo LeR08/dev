@@ -3,10 +3,11 @@
 An alcohol tracking app. Log what you drink, see what that adds up to over time, and keep
 control of every byte of it.
 
-Everything in the app is free for everyone: no analytics, no ad-network advertising, and
-**no payment processing** — Settings → Subscription shows what an offer could look like, with
-inert buttons, so the layout can be judged (see [Freemium & ads](#freemium--ads)). Currently
-**v1.0**. Read [Open items](#open-items-before-any-public-release) before a public store
+Every feature that tracks, charts or explains anything is free for everyone, and there is no
+analytics and no ad-network advertising. The one paid thing is a supporter subscription that
+hides the launch message and the support banner — nothing else — through Google Play Billing,
+alongside a PayPal donation that unlocks nothing at all (see
+[Freemium & ads](#freemium--ads)). Currently **v1.0**. Read [Open items](#open-items-before-any-public-release) before a public store
 listing: some of what remains there needs a professional, not a commit.
 
 The target is **Android on a real phone**. Web still builds and runs, but it is no longer what
@@ -60,8 +61,9 @@ the app is designed or tested against.
   once after onboarding, and replayable any time from Settings → Tutorial. Built to be done
   rather than read: the first slide's `+` button actually works, so the app's core gesture is
   learned by using it. Skippable throughout.
-- **A pricing mock-up** (Settings → Subscription) — visual only. No payments exist; see
-  [Freemium & ads](#freemium--ads).
+- **A supporter subscription** (Settings → Subscription) through Google Play Billing, which
+  hides the launch message and the support banner and changes nothing else, plus a PayPal
+  donation that unlocks nothing; see [Freemium & ads](#freemium--ads).
 - **Eight languages** — the EU's major languages (French, Spanish, German, Italian,
   Portuguese) plus English, Chinese and Arabic — genuinely translated (not machine-filled
   placeholders) and switchable independent of your phone's own language, from a pill/card
