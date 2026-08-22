@@ -7,15 +7,9 @@
   },
   "common": {
     "continue": "继续",
-    "skip": "跳过",
     "save": "保存",
-    "saved": "已保存",
     "cancel": "取消",
     "delete": "删除",
-    "done": "完成",
-    "back": "返回",
-    "edit": "编辑",
-    "add": "添加",
     "close": "关闭",
     "yes": "是",
     "no": "否",
@@ -37,14 +31,11 @@
     "unitGramsShort": "克"
   },
   "signIn": {
-    "title": "欢迎",
-    "subtitle": "本应用完全离线运行，仅在本地存储数据——在此登录不会创建真实账户，也不会向任何地方发送信息，只是应用问候你的方式。",
     "nameLabel": "怎么称呼你？",
     "namePlaceholder": "你的名字",
     "emailLabel": "邮箱（选填）",
     "emailPlaceholder": "you@example.com",
-    "emailHint": "用于在应用中识别你的身份。保存在本设备上，并同步到你的账户。",
-    "continueAction": "继续"
+    "emailHint": "用于在应用中识别你的身份。保存在本设备上，并同步到你的账户。"
   },
   "onboarding": {
     "startTracking": "开始记录",
@@ -60,9 +51,7 @@
       "ageHint": "13 到 120 岁。",
       "ageUnderNotice": "本应用默认使用者已达当地法定饮酒年龄，但无论如何都可以继续使用——不会有任何限制。",
       "weightLabel": "体重",
-      "weightHint": "仅用于血液酒精浓度估算。",
       "heightLabel": "身高",
-      "heightHint": "仅用于统计——从不用于酒精估算。",
       "spendLabel": "开始记录之前，你平均在酒精上花费多少？",
       "spendHint": "大致数字即可。这是「节省」面板的对比基准——跳过此项，该面板会保持关闭，直到你添加数值。",
       "spendPerDay": "每天",
@@ -75,8 +64,6 @@
       "reasonMedical": "遵循专业人士的建议",
       "reasonOther": "其他",
       "reasonOtherPlaceholder": "如果愿意，可以详细说说",
-      "contextTitle": "是什么让你使用这款应用？",
-      "contextSubtitle": "这只会影响首页优先展示的内容——所有功能始终都能从菜单访问。",
       "doneTitle": "设置完成",
       "doneSubtitle": "以上内容随时可以在「设置 → 个人资料」中修改。"
     }
@@ -101,20 +88,6 @@
       "pareto": "大约 20% 的努力就能带来 80% 的收益——无论是经济上的，还是一份无价的健康。"
     }
   },
-  "history": {
-    "title": "历史记录",
-    "searchPlaceholder": "搜索名称、备注、地点…",
-    "period30d": "30 天",
-    "period90d": "3 个月",
-    "period365d": "一年",
-    "periodAll": "全部时间",
-    "allDrinks": "所有饮品",
-    "emptyTitle": "还没有任何记录",
-    "emptyBody": "你记录的一切都只保存在本设备上。随时可以开始。",
-    "emptyAction": "记录一杯",
-    "noMatchTitle": "没有找到匹配结果",
-    "noMatchBody": "试试扩大日期范围，或换一个分类。"
-  },
   "insights": {
     "title": "统计",
     "day": "日",
@@ -122,7 +95,6 @@
     "month": "月",
     "year": "年",
     "todayStats": "今天",
-    "vsYesterday": "与昨天相比",
     "byHour": "全天变化",
     "emptyTodayTitle": "今天还没有记录",
     "emptyTodayBody": "记录任何内容后，今天的详情会显示在这里。",
@@ -134,8 +106,6 @@
     "alcoholFreeDays": "无酒日",
     "outOfTrackedOne": "共 {{count}} 天记录",
     "outOfTrackedOther": "共 {{count}} 天记录",
-    "pureAlcohol": "纯酒精",
-    "standardDrinksLabel": "标准杯",
     "byDay": "按天",
     "byMonth": "按月",
     "moneySpent": "花费金额",
@@ -148,7 +118,6 @@
     "freeSquaresHint": "填满的方格代表无酒日。",
     "thisYear": "今年",
     "last30Days": "过去 30 天",
-    "goalShareLabel": "每周目标的每日份额",
     "monthFreeDaysOne": "本月 {{count}} 天无酒。",
     "monthFreeDaysOther": "本月 {{count}} 天无酒。",
     "periodPrevious7Days": "前 7 天",
@@ -236,7 +205,6 @@
     "countryOTHER": "其他 / 通用",
     "disclaimer": "本应用不是医疗器械，不能替代专业诊断或治疗。如遇紧急危险，请联系当地急救服务。",
     "seekHelpTitle": "什么时候值得找人聊聊",
-    "seekHelpIntro": "以下都不是诊断——只是一些值得认真对待、可以向专业人士咨询的信号。",
     "resourcesTitle": "联系方式",
     "noResourcesForCountry": "目前还没有该国家/地区的具体联系方式——以下是通用信息。",
     "verifyContacts": "联系方式可能会变更。如果某项信息无法使用，请直接搜索该机构名称。"
@@ -258,16 +226,9 @@
     "myTicketsTitle": "我的反馈",
     "myTicketsEmpty": "暂时还没有内容。",
     "myTicketsIntro": "仅保存在本设备上——目前不会自动发送到任何地方。可在「设置 → 数据与隐私」中导出为 CSV，在电脑上查看。",
-    "statusOpen": "进行中",
-    "statusClosed": "已关闭",
     "markClosed": "标记为已关闭",
     "markOpen": "重新打开",
     "autoCaptured": "应用版本和平台信息会自动附加。"
-  },
-  "legal": {
-    "termsTitle": "服务条款",
-    "legalNoticeTitle": "法律声明",
-    "privacyTitle": "隐私政策"
   },
   "bac": {
     "title": "粗略估算",

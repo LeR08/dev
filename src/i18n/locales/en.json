@@ -7,15 +7,9 @@
   },
   "common": {
     "continue": "Continue",
-    "skip": "Skip",
     "save": "Save",
-    "saved": "Saved",
     "cancel": "Cancel",
     "delete": "Delete",
-    "done": "Done",
-    "back": "Back",
-    "edit": "Edit",
-    "add": "Add",
     "close": "Close",
     "yes": "Yes",
     "no": "No",
@@ -37,14 +31,11 @@
     "unitGramsShort": "g"
   },
   "signIn": {
-    "title": "Welcome",
-    "subtitle": "This app is offline and local-only — signing in here doesn't create a real account or send anything anywhere. It's just how the app greets you.",
     "nameLabel": "What should we call you?",
     "namePlaceholder": "Your name",
     "emailLabel": "Email (optional)",
     "emailPlaceholder": "you@example.com",
-    "emailHint": "Used to identify you in the app. Stored on this device and synced to your account.",
-    "continueAction": "Continue"
+    "emailHint": "Used to identify you in the app. Stored on this device and synced to your account."
   },
   "onboarding": {
     "startTracking": "Start tracking",
@@ -60,9 +51,7 @@
       "ageHint": "13 to 120.",
       "ageUnderNotice": "This app assumes a legal drinking age. You can keep using it either way — nothing is blocked.",
       "weightLabel": "Weight",
-      "weightHint": "Used only for the blood alcohol estimate.",
       "heightLabel": "Height",
-      "heightHint": "Stats only — never used for the alcohol estimate.",
       "spendLabel": "What did you spend on alcohol before tracking?",
       "spendHint": "A rough figure is fine. This is the baseline the Savings dashboard compares against — skip it and that dashboard just stays off until you add one.",
       "spendPerDay": "per day",
@@ -75,8 +64,6 @@
       "reasonMedical": "Following a professional's advice",
       "reasonOther": "Other",
       "reasonOtherPlaceholder": "Say more, if you like",
-      "contextTitle": "What brought you here?",
-      "contextSubtitle": "This only changes what's emphasized first — everything stays reachable from the menu either way.",
       "doneTitle": "You're set up",
       "doneSubtitle": "Everything above is editable any time in Settings → Profile."
     }
@@ -101,20 +88,6 @@
       "pareto": "About 20% effort can bring 80% of the benefit — financial, and for a health that has no price tag."
     }
   },
-  "history": {
-    "title": "History",
-    "searchPlaceholder": "Search names, notes, places…",
-    "period30d": "30 days",
-    "period90d": "3 months",
-    "period365d": "Year",
-    "periodAll": "All time",
-    "allDrinks": "All drinks",
-    "emptyTitle": "Your log is empty",
-    "emptyBody": "Whatever you log stays on this device. Start whenever you like.",
-    "emptyAction": "Log a drink",
-    "noMatchTitle": "Nothing matches",
-    "noMatchBody": "Try a wider date range or a different category."
-  },
   "insights": {
     "title": "Insights",
     "day": "Day",
@@ -122,7 +95,6 @@
     "month": "Month",
     "year": "Year",
     "todayStats": "Today",
-    "vsYesterday": "vs yesterday",
     "byHour": "Through the day",
     "emptyTodayTitle": "Nothing logged today",
     "emptyTodayBody": "Once you log something, today's breakdown shows up here.",
@@ -134,8 +106,6 @@
     "alcoholFreeDays": "Alcohol-free days",
     "outOfTrackedOne": "Out of {{count}} tracked day",
     "outOfTrackedOther": "Out of {{count}} tracked days",
-    "pureAlcohol": "Pure alcohol",
-    "standardDrinksLabel": "Standard drinks",
     "byDay": "By day",
     "byMonth": "By month",
     "moneySpent": "Money spent",
@@ -148,7 +118,6 @@
     "freeSquaresHint": "Filled squares are alcohol-free days.",
     "thisYear": "This year",
     "last30Days": "Last 30 days",
-    "goalShareLabel": "daily share of your weekly goal",
     "monthFreeDaysOne": "{{count}} alcohol-free day this month.",
     "monthFreeDaysOther": "{{count}} alcohol-free days this month.",
     "periodPrevious7Days": "previous 7 days",
@@ -236,7 +205,6 @@
     "countryOTHER": "Other / general",
     "disclaimer": "This app is not a medical device and does not replace professional diagnosis or care. If you are in immediate danger, contact local emergency services.",
     "seekHelpTitle": "When it might help to talk to someone",
-    "seekHelpIntro": "None of this is a diagnosis — just signals worth taking seriously enough to ask a professional.",
     "resourcesTitle": "Contacts",
     "noResourcesForCountry": "No specific contacts loaded for this country yet — here is general information instead.",
     "verifyContacts": "Contact details can change. If something here doesn't work, search the service's name directly."
@@ -258,16 +226,9 @@
     "myTicketsTitle": "My tickets",
     "myTicketsEmpty": "Nothing logged yet.",
     "myTicketsIntro": "Stored on this device only — nothing here is sent anywhere automatically yet. Export to CSV from Settings → Data & privacy to review on a computer.",
-    "statusOpen": "Open",
-    "statusClosed": "Closed",
     "markClosed": "Mark closed",
     "markOpen": "Reopen",
     "autoCaptured": "App version and platform are attached automatically."
-  },
-  "legal": {
-    "termsTitle": "Terms of Service",
-    "legalNoticeTitle": "Legal Notice",
-    "privacyTitle": "Privacy Policy"
   },
   "bac": {
     "title": "Rough estimate",

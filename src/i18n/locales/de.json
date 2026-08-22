@@ -7,15 +7,9 @@
   },
   "common": {
     "continue": "Weiter",
-    "skip": "Überspringen",
     "save": "Speichern",
-    "saved": "Gespeichert",
     "cancel": "Abbrechen",
     "delete": "Löschen",
-    "done": "Fertig",
-    "back": "Zurück",
-    "edit": "Bearbeiten",
-    "add": "Hinzufügen",
     "close": "Schließen",
     "yes": "Ja",
     "no": "Nein",
@@ -37,14 +31,11 @@
     "unitGramsShort": "g"
   },
   "signIn": {
-    "title": "Willkommen",
-    "subtitle": "Diese App läuft offline, nur lokal — sich hier anzumelden erstellt kein echtes Konto und sendet nichts irgendwohin. Es ist nur die Art, wie die App dich begrüßt.",
     "nameLabel": "Wie sollen wir dich nennen?",
     "namePlaceholder": "Dein Name",
     "emailLabel": "E-Mail (optional)",
     "emailPlaceholder": "du@beispiel.de",
-    "emailHint": "Dient dazu, dich in der App zu identifizieren. Liegt auf diesem Gerät und wird mit deinem Konto synchronisiert.",
-    "continueAction": "Weiter"
+    "emailHint": "Dient dazu, dich in der App zu identifizieren. Liegt auf diesem Gerät und wird mit deinem Konto synchronisiert."
   },
   "onboarding": {
     "startTracking": "Tracking starten",
@@ -60,9 +51,7 @@
       "ageHint": "13 bis 120 Jahre.",
       "ageUnderNotice": "Diese App geht von einem legalen Trinkalter aus. Du kannst sie trotzdem weiter nutzen — nichts wird gesperrt.",
       "weightLabel": "Gewicht",
-      "weightHint": "Wird nur für die Blutalkohol-Schätzung verwendet.",
       "heightLabel": "Größe",
-      "heightHint": "Nur für Statistiken — nie für die Alkoholschätzung verwendet.",
       "spendLabel": "Was hast du vor dem Tracking für Alkohol ausgegeben?",
       "spendHint": "Ein grober Wert reicht. Das ist die Basis, mit der das Ersparnis-Dashboard vergleicht — überspringst du das, bleibt dieses Dashboard einfach aus, bis du einen Wert hinzufügst.",
       "spendPerDay": "pro Tag",
@@ -75,8 +64,6 @@
       "reasonMedical": "Auf Rat einer Fachperson",
       "reasonOther": "Andere",
       "reasonOtherPlaceholder": "Erzähl mehr, wenn du magst",
-      "contextTitle": "Was führt dich hierher?",
-      "contextSubtitle": "Das ändert nur, was zuerst hervorgehoben wird — alles bleibt über das Menü erreichbar.",
       "doneTitle": "Alles eingerichtet",
       "doneSubtitle": "Alles oben ist jederzeit änderbar unter Einstellungen → Profil."
     }
@@ -101,20 +88,6 @@
       "pareto": "Etwa 20 % Aufwand können 80 % des Nutzens bringen — finanziell, und für eine Gesundheit, die unbezahlbar ist."
     }
   },
-  "history": {
-    "title": "Verlauf",
-    "searchPlaceholder": "Namen, Notizen, Orte suchen…",
-    "period30d": "30 Tage",
-    "period90d": "3 Monate",
-    "period365d": "Jahr",
-    "periodAll": "Gesamter Zeitraum",
-    "allDrinks": "Alle Getränke",
-    "emptyTitle": "Dein Protokoll ist leer",
-    "emptyBody": "Alles, was du einträgst, bleibt auf diesem Gerät. Fang an, wann du willst.",
-    "emptyAction": "Getränk eintragen",
-    "noMatchTitle": "Keine Treffer",
-    "noMatchBody": "Versuch einen größeren Zeitraum oder eine andere Kategorie."
-  },
   "insights": {
     "title": "Statistiken",
     "day": "Tag",
@@ -122,7 +95,6 @@
     "month": "Monat",
     "year": "Jahr",
     "todayStats": "Heute",
-    "vsYesterday": "im Vergleich zu gestern",
     "byHour": "Im Tagesverlauf",
     "emptyTodayTitle": "Heute nichts eingetragen",
     "emptyTodayBody": "Sobald du etwas einträgst, erscheint hier die Aufschlüsselung für heute.",
@@ -134,8 +106,6 @@
     "alcoholFreeDays": "Alkoholfreie Tage",
     "outOfTrackedOne": "Von {{count}} erfasstem Tag",
     "outOfTrackedOther": "Von {{count}} erfassten Tagen",
-    "pureAlcohol": "Reiner Alkohol",
-    "standardDrinksLabel": "Standardgetränke",
     "byDay": "Nach Tag",
     "byMonth": "Nach Monat",
     "moneySpent": "Ausgegebenes Geld",
@@ -148,7 +118,6 @@
     "freeSquaresHint": "Ausgefüllte Kästchen sind alkoholfreie Tage.",
     "thisYear": "Dieses Jahr",
     "last30Days": "Letzte 30 Tage",
-    "goalShareLabel": "täglicher Anteil deines Wochenziels",
     "monthFreeDaysOne": "{{count}} alkoholfreier Tag diesen Monat.",
     "monthFreeDaysOther": "{{count}} alkoholfreie Tage diesen Monat.",
     "periodPrevious7Days": "die vorherigen 7 Tage",
@@ -236,7 +205,6 @@
     "countryOTHER": "Andere / allgemein",
     "disclaimer": "Diese App ist kein Medizinprodukt und ersetzt keine professionelle Diagnose oder Behandlung. Bei unmittelbarer Gefahr wende dich an den lokalen Notruf.",
     "seekHelpTitle": "Wann es helfen könnte, mit jemandem zu sprechen",
-    "seekHelpIntro": "Nichts davon ist eine Diagnose — nur Hinweise, die es wert sind, mit einer Fachperson besprochen zu werden.",
     "resourcesTitle": "Kontakte",
     "noResourcesForCountry": "Für dieses Land sind noch keine spezifischen Kontakte hinterlegt — hier stattdessen allgemeine Informationen.",
     "verifyContacts": "Kontaktdaten können sich ändern. Falls etwas nicht funktioniert, suche direkt nach dem Namen des Dienstes."
@@ -258,16 +226,9 @@
     "myTicketsTitle": "Meine Meldungen",
     "myTicketsEmpty": "Noch nichts vorhanden.",
     "myTicketsIntro": "Nur auf diesem Gerät gespeichert — bisher wird nichts automatisch gesendet. Exportiere als CSV unter Einstellungen → Daten & Datenschutz, um es am Computer durchzusehen.",
-    "statusOpen": "Offen",
-    "statusClosed": "Geschlossen",
     "markClosed": "Als geschlossen markieren",
     "markOpen": "Wieder öffnen",
     "autoCaptured": "App-Version und Plattform werden automatisch angehängt."
-  },
-  "legal": {
-    "termsTitle": "Nutzungsbedingungen",
-    "legalNoticeTitle": "Impressum",
-    "privacyTitle": "Datenschutzerklärung"
   },
   "bac": {
     "title": "Grobe Schätzung",

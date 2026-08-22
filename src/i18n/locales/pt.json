@@ -7,15 +7,9 @@
   },
   "common": {
     "continue": "Continuar",
-    "skip": "Saltar",
     "save": "Guardar",
-    "saved": "Guardado",
     "cancel": "Cancelar",
     "delete": "Eliminar",
-    "done": "Concluído",
-    "back": "Voltar",
-    "edit": "Editar",
-    "add": "Adicionar",
     "close": "Fechar",
     "yes": "Sim",
     "no": "Não",
@@ -37,14 +31,11 @@
     "unitGramsShort": "g"
   },
   "signIn": {
-    "title": "Bem-vindo",
-    "subtitle": "Esta app funciona offline, apenas localmente — iniciar sessão aqui não cria uma conta real nem envia nada para lado nenhum. É apenas a forma como a app te recebe.",
     "nameLabel": "Como te devemos chamar?",
     "namePlaceholder": "O teu nome",
     "emailLabel": "E-mail (opcional)",
     "emailPlaceholder": "tu@exemplo.com",
-    "emailHint": "Serve para te identificar na aplicação. Fica guardado neste dispositivo e é sincronizado com a tua conta.",
-    "continueAction": "Continuar"
+    "emailHint": "Serve para te identificar na aplicação. Fica guardado neste dispositivo e é sincronizado com a tua conta."
   },
   "onboarding": {
     "startTracking": "Começar a registar",
@@ -60,9 +51,7 @@
       "ageHint": "Dos 13 aos 120 anos.",
       "ageUnderNotice": "Esta app assume uma idade legal para consumo de álcool. Podes continuar a usá-la de qualquer forma — nada é bloqueado.",
       "weightLabel": "Peso",
-      "weightHint": "Usado apenas para a estimativa de álcool no sangue.",
       "heightLabel": "Altura",
-      "heightHint": "Apenas para estatísticas — nunca usada para a estimativa de álcool.",
       "spendLabel": "Quanto gastavas em álcool antes de começar a registar?",
       "spendHint": "Um valor aproximado é suficiente. É a base usada pelo painel de Poupança — se saltares isto, esse painel fica simplesmente desativado até adicionares um valor.",
       "spendPerDay": "por dia",
@@ -75,8 +64,6 @@
       "reasonMedical": "A seguir conselho de um profissional",
       "reasonOther": "Outro",
       "reasonOtherPlaceholder": "Conta mais, se quiseres",
-      "contextTitle": "O que te traz aqui?",
-      "contextSubtitle": "Isto só muda o que é destacado primeiro — tudo continua acessível a partir do menu.",
       "doneTitle": "Tudo configurado",
       "doneSubtitle": "Tudo o que está acima pode ser editado a qualquer momento em Definições → Perfil."
     }
@@ -101,20 +88,6 @@
       "pareto": "Cerca de 20% de esforço pode trazer 80% do benefício — financeiro, e para uma saúde que não tem preço."
     }
   },
-  "history": {
-    "title": "Histórico",
-    "searchPlaceholder": "Pesquisar nomes, notas, locais…",
-    "period30d": "30 dias",
-    "period90d": "3 meses",
-    "period365d": "Ano",
-    "periodAll": "Desde o início",
-    "allDrinks": "Todas as bebidas",
-    "emptyTitle": "O teu histórico está vazio",
-    "emptyBody": "Tudo o que registares fica neste dispositivo. Começa quando quiseres.",
-    "emptyAction": "Registar uma bebida",
-    "noMatchTitle": "Sem resultados",
-    "noMatchBody": "Tenta um intervalo de datas mais amplo ou outra categoria."
-  },
   "insights": {
     "title": "Estatísticas",
     "day": "Dia",
@@ -122,7 +95,6 @@
     "month": "Mês",
     "year": "Ano",
     "todayStats": "Hoje",
-    "vsYesterday": "em relação a ontem",
     "byHour": "Ao longo do dia",
     "emptyTodayTitle": "Nada registado hoje",
     "emptyTodayBody": "Assim que registares algo, o detalhe de hoje aparece aqui.",
@@ -134,8 +106,6 @@
     "alcoholFreeDays": "Dias sem álcool",
     "outOfTrackedOne": "De {{count}} dia registado",
     "outOfTrackedOther": "De {{count}} dias registados",
-    "pureAlcohol": "Álcool puro",
-    "standardDrinksLabel": "Bebidas padrão",
     "byDay": "Por dia",
     "byMonth": "Por mês",
     "moneySpent": "Dinheiro gasto",
@@ -148,7 +118,6 @@
     "freeSquaresHint": "Os quadrados preenchidos são dias sem álcool.",
     "thisYear": "Este ano",
     "last30Days": "Últimos 30 dias",
-    "goalShareLabel": "parte diária do teu objetivo semanal",
     "monthFreeDaysOne": "{{count}} dia sem álcool este mês.",
     "monthFreeDaysOther": "{{count}} dias sem álcool este mês.",
     "periodPrevious7Days": "os 7 dias anteriores",
@@ -236,7 +205,6 @@
     "countryOTHER": "Outro / geral",
     "disclaimer": "Esta app não é um dispositivo médico e não substitui um diagnóstico ou acompanhamento profissional. Se estiveres em perigo imediato, contacta os serviços de emergência locais.",
     "seekHelpTitle": "Quando pode ajudar falar com alguém",
-    "seekHelpIntro": "Nada disto é um diagnóstico — apenas sinais que valem a pena levar a sério e falar com um profissional.",
     "resourcesTitle": "Contactos",
     "noResourcesForCountry": "Ainda não há contactos específicos para este país — aqui está informação geral em alternativa.",
     "verifyContacts": "Os contactos podem mudar. Se algo não funcionar, procura diretamente o nome do serviço."
@@ -258,16 +226,9 @@
     "myTicketsTitle": "As minhas participações",
     "myTicketsEmpty": "Ainda nada.",
     "myTicketsIntro": "Guardado apenas neste dispositivo — por agora nada é enviado automaticamente. Exporta para CSV em Definições → Dados e privacidade para rever num computador.",
-    "statusOpen": "Aberto",
-    "statusClosed": "Fechado",
     "markClosed": "Marcar como fechado",
     "markOpen": "Reabrir",
     "autoCaptured": "A versão da app e a plataforma são anexadas automaticamente."
-  },
-  "legal": {
-    "termsTitle": "Termos de Serviço",
-    "legalNoticeTitle": "Aviso Legal",
-    "privacyTitle": "Política de Privacidade"
   },
   "bac": {
     "title": "Estimativa aproximada",

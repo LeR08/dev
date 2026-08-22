@@ -13,6 +13,9 @@ listing: some of what remains there needs a professional, not a commit.
 The target is **Android on a real phone**. Web still builds and runs, but it is no longer what
 the app is designed or tested against.
 
+> **Every console identifier — package name, fingerprints, client ids, public URLs — is in
+> [SETUP.md](SETUP.md).** `PUBLISHING.md` covers what still has to be decided and filled in.
+
 > Tally was this project's first identity, kept as a personal build. It is no longer built
 > from this repo — an installed copy keeps working and keeps its data, but everything here is
 > TYA now.
