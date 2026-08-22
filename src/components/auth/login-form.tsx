@@ -9,7 +9,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert } from '@/components/ui/alert';
-import { Field } from '@/components/shared/field';
+import { Field, fieldAria } from '@/components/shared/field';
 import { signIn } from '@/server/actions/auth.actions';
 import { loginSchema, type LoginInput } from '@/validations/auth.schema';
 import { routes } from '@/lib/constants/routes';
@@ -69,6 +69,7 @@ export function LoginForm() {
             autoComplete="current-password"
             placeholder="••••••••"
             className="pr-10"
+            {...fieldAria('password', { error: errors.password?.message })}
             {...register('password')}
           />
           <button

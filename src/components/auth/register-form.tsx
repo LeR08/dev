@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert } from '@/components/ui/alert';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Field } from '@/components/shared/field';
+import { Field, fieldAria } from '@/components/shared/field';
 import { signUp } from '@/server/actions/auth.actions';
 import { registerSchema, type RegisterInput } from '@/validations/auth.schema';
 import { routes } from '@/lib/constants/routes';
@@ -109,6 +109,7 @@ export function RegisterForm() {
             type={showPassword ? 'text' : 'password'}
             autoComplete="new-password"
             className="pr-10"
+            {...fieldAria('password', { error: errors.password?.message, hint: true })}
             {...register('password')}
           />
           <button

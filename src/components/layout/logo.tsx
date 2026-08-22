@@ -13,7 +13,7 @@ export function Logo({ className, href = '/' }: { className?: string; href?: str
       >
         A
       </span>
-      <span className="text-[0.9375rem]">
+      <span className="truncate text-[0.9375rem]">
         Atelier<span className="text-primary">Digital</span>
       </span>
     </Link>

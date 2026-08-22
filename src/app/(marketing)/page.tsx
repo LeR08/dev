@@ -193,15 +193,20 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Chiffres du catalogue */}
-      <section className="border-y">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-2 divide-x px-5 sm:grid-cols-4 sm:px-8">
-          <Stat value={formatNumber(courseCount ?? 0)} label="formations" />
-          <Stat value={formatNumber(lessonTotal)} label="leçons" />
-          <Stat value={`${formatNumber(hoursTotal)} h`} label="de contenu" />
-          <Stat value={formatNumber(subjects?.length ?? 0)} label="domaines" />
-        </div>
-      </section>
+      {/* Chiffres du catalogue.
+          Masqués tant que le catalogue est vide — ou si la base est
+          momentanément injoignable : afficher « 0 formation » ferait paraître
+          la plateforme abandonnée, ce qui est pire que de ne rien afficher. */}
+      {(courseCount ?? 0) > 0 && (
+        <section className="border-y">
+          <div className="mx-auto grid w-full max-w-6xl grid-cols-2 divide-x px-5 sm:grid-cols-4 sm:px-8">
+            <Stat value={formatNumber(courseCount ?? 0)} label="formations" />
+            <Stat value={formatNumber(lessonTotal)} label="leçons" />
+            <Stat value={`${formatNumber(hoursTotal)} h`} label="de contenu" />
+            <Stat value={formatNumber(subjects?.length ?? 0)} label="domaines" />
+          </div>
+        </section>
+      )}
 
       {/* Le problème */}
       <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8">
