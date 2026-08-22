@@ -163,13 +163,59 @@ rather than after a rejection.
 
 ## Store listing drafts
 
-English, to be translated into the app's other seven languages before publishing. The app
-itself already ships in all eight (`src/i18n/locales/`), so shipping a single-language listing
-would undersell it.
+The default listing is fr-FR; the English below is the master for the other six languages.
+The app ships in all eight (`src/i18n/locales/`), so a single-language listing undersells it.
 
-**Title (30 chars):** `TYA — Track Your Alcohol`
+Both were rewritten once AdMob and Play Billing went in. The earlier draft claimed "no ads
+from an ad network, and no payments of any kind" — true when it was written, false the moment
+either shipped, and the kind of claim Play checks against the AAB.
 
-**Short description (80 chars):**
+### French (default listing)
+
+**Title (20/30):** `TYA — Suivi d'alcool`
+
+**Short description (80/80):**
+`Notez ce que vous buvez, voyez ce que ça représente. Sans jugement, sans alarme.`
+
+**Full description:**
+
+```
+Enregistrez une consommation en un geste. Voyez ce que ça représente sur une semaine, un mois, une année.
+
+TYA note ce que vous buvez et en fait quelque chose de lisible : consommation et dépenses dans le temps, répartition par catégorie, séries de jours sans alcool, et ce que vous avez économisé par rapport à ce que vous dépensiez avant.
+
+CE QUE FAIT L'APPLICATION
+• Enregistrement en un geste de vos boissons habituelles, avec annulation
+• Un catalogue de 115 boissons, plus vos propres préréglages
+• Des graphiques par jour, semaine, mois ou année, avec axes chiffrés
+• Le suivi des jours sans alcool et des séries
+• Un montant d'économies comparant votre budget de référence à ce que vous enregistrez réellement
+• Une estimation approximative d'alcoolémie, affichée seulement quand elle apprend quelque chose
+• L'export de tout en CSV ou JSON, quand vous voulez
+• Aide et ressources : des lignes d'écoute sur l'addiction pour votre pays
+
+CE QU'ELLE NE FAIT PAS
+Rien dans l'application n'est affiché en rouge. Aucun texte ne vous dit qu'un chiffre est trop élevé. Aucun message ne vous culpabilise d'avoir rompu une série. Elle enregistre, elle additionne, et elle vous laisse le jugement.
+
+GRATUIT, ET UN SOUTIEN FACULTATIF
+Toutes les fonctionnalités de suivi sont gratuites, sans exception. La version gratuite affiche un court message que l'on peut passer à l'ouverture, et une bannière publicitaire sur le seul écran de soutien. Un abonnement mensuel facultatif retire les deux. Il ne débloque aucune fonctionnalité supplémentaire.
+
+CONFIDENTIALITÉ
+Un compte est nécessaire : votre historique, vos boissons personnalisées et votre profil sont synchronisés avec votre compte pour que vous les retrouviez si vous perdez votre téléphone. Ils ne sont jamais partagés avec d'autres utilisateurs, ni vendus, ni utilisés à des fins publicitaires.
+
+La bannière publicitaire, elle, transmet à Google des données d'appareil — identifiant publicitaire, position approximative déduite de l'IP. Jamais votre historique de consommation. Là où le consentement est requis, il vous est demandé avant la première annonce, et vous pouvez y revenir depuis les réglages.
+
+Vous pouvez supprimer votre compte et tout ce qu'il contient depuis l'application, à tout moment.
+
+PAS UN DISPOSITIF MÉDICAL
+L'estimation d'alcoolémie et le contenu des ressources ne sont pas un avis médical, ni un diagnostic, ni un substitut à un suivi professionnel. Ne vous servez jamais de l'estimation pour décider de prendre le volant.
+```
+
+### English (master for translation)
+
+**Title (24/30):** `TYA — Track Your Alcohol`
+
+**Short description (74/80):**
 `Log what you drink, see what it adds up to. No judgement, no red warnings.`
 
 **Full description:**
@@ -177,13 +223,11 @@ would undersell it.
 ```
 Log a drink in one tap. See what it adds up to over a week, a month, a year.
 
-TYA records what you drink and turns it into something you can actually read: intake
-and spending over time, a category breakdown, alcohol-free streaks, and what you have
-saved compared to what you used to spend.
+TYA records what you drink and turns it into something you can actually read: intake and spending over time, a category breakdown, alcohol-free streaks, and what you have saved compared to what you used to spend.
 
 WHAT IT DOES
 • One-tap logging for your usual drinks, with undo
-• A catalog of 115 drinks, plus your own presets
+• A catalogue of 115 drinks, plus your own presets
 • Charts by day, week, month or year, with labelled axes
 • Alcohol-free day tracking and streaks
 • A savings figure comparing your old spending baseline to what you actually log
@@ -192,21 +236,20 @@ WHAT IT DOES
 • Help & resources: addiction helplines for your country
 
 WHAT IT DOES NOT DO
-Nothing in the app is coloured red. No copy tells you a number is too high. There are
-no streak-breaking guilt messages. It records, it adds up, and it leaves the judgement
-to you.
+Nothing in the app is coloured red. No copy tells you a number is too high. There are no streak-breaking guilt messages. It records, it adds up, and it leaves the judgement to you.
 
-Every feature is free. There are no ads from an ad network, and no payments of any kind.
+FREE, WITH OPTIONAL SUPPORT
+Every tracking feature is free, without exception. The free version shows a short, skippable message at launch and one ad banner, on the supporter screen only. An optional monthly subscription removes both. It unlocks no additional features.
 
 PRIVACY
-Your data is stored on your device and in your own account, and is never shared with
-other users, sold, or used for advertising. You can delete your account and everything
-in it from inside the app, at any time.
+An account is required: your log, your custom drinks and your profile are synced to your account so you keep them if you lose your phone. They are never shared with other users, sold, or used for advertising.
+
+The ad banner does send device data to Google — an advertising identifier, and an approximate location derived from your IP address. Never your drink log. Where consent is required it is asked for before the first ad, and you can revisit it from Settings.
+
+You can delete your account and everything in it from inside the app, at any time.
 
 NOT A MEDICAL DEVICE
-The blood-alcohol estimate and the resources content are not medical advice, not a
-diagnosis, and not a substitute for professional care. Never use the estimate to decide
-whether to drive.
+The blood-alcohol estimate and the resources content are not medical advice, not a diagnosis, and not a substitute for professional care. Never use the estimate to decide whether to drive.
 ```
 
 ## What is still waiting on you
