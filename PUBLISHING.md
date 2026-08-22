@@ -109,6 +109,7 @@ at the "you can use the app without it" level.
 |---|---|---|---|---|---|---|
 | Personal info | Name | Yes | No | No (can be left blank) | App functionality | `Profile.name`, `src/domain/types.ts` |
 | Personal info | Email address | Yes | No | Yes | App functionality, Account management | Firebase Auth; `Profile.email` pre-filled at onboarding (`app/onboarding.tsx`) |
+| Personal info | User IDs | Yes | No | Yes | App functionality, Account management | the Firebase uid — it is the Firestore document path every record is stored under (`users/{uid}/…`, `src/sync/firestore.ts`) and is held in `settings.account.uid` |
 | Health and fitness | Health info | Yes | No | No | App functionality | `Profile.sex/age/weightKg/heightCm` feed the BAC estimate (`src/domain/bac.ts`); the drink log itself is health-adjacent |
 | App activity | Other user-generated content | Yes | No | Yes | App functionality | `Entry` records — what, when, how much, optional note and location (`src/domain/types.ts`) |
 | App info & performance | — | No | — | — | — | no crash or diagnostics SDK is installed |
@@ -128,6 +129,9 @@ publishers; re-read the current version of that page before submitting, because 
 Declared as **required** rather than optional on purpose. The UMP consent form does let people
 in the EEA and the UK decline, but everywhere else `gatherConsent` resolves with no form and no
 choice, and "optional" in this form means optional for everyone.
+
+Photos are **not** declared despite the picker: a screenshot attached to a bug report goes into a
+`Ticket`, and nothing under `src/sync/` touches tickets — the image never leaves the device.
 
 **Do not** declare: precise location (the `Entry.location` field is a free-text label the user
 types, not a device location reading — there is no location permission in `app.config.js`),
