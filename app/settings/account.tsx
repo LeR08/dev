@@ -296,7 +296,7 @@ export default function AccountScreen() {
       <View style={{ gap: theme.spacing(5), paddingTop: theme.spacing(4) }}>
         <Card tone="muted" style={{ gap: theme.spacing(1) }}>
           <Text variant="body" tone="muted">
-            {t('account.localOnlyIntro')}
+            {t('account.accountRequiredIntro')}
           </Text>
         </Card>
 

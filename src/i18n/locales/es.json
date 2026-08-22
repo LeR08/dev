@@ -43,7 +43,7 @@
     "namePlaceholder": "Tu nombre",
     "emailLabel": "Correo electrónico (opcional)",
     "emailPlaceholder": "tu@ejemplo.com",
-    "emailHint": "Nunca se envía a ningún sitio — se guarda solo en este dispositivo, por si lo necesitas más adelante.",
+    "emailHint": "Sirve para identificarte en la aplicación. Se guarda en este dispositivo y se sincroniza con tu cuenta.",
     "continueAction": "Continuar"
   },
   "onboarding": {
@@ -165,22 +165,6 @@
     "dailyGoalRemaining": "{{remaining}} restante de tu objetivo de {{goal}} hoy",
     "dailyGoalOver": "{{over}} por encima de tu objetivo de {{goal}} de hoy"
   },
-  "settingsHome": {
-    "unitsRow": "Unidades",
-    "unitsRowSubtitle": "Volumen, bebidas estándar, moneda",
-    "currencyRow": "Moneda",
-    "goalsRow": "Objetivos personales",
-    "goalsRowSubtitle": "Opcional, y solo tuyo",
-    "goalsNoneSet": "Ninguno definido",
-    "appearanceRow": "Apariencia",
-    "appearanceRowSubtitle": "Tema y color de acento",
-    "myDrinksRow": "Mis bebidas",
-    "myDrinksRowSubtitle": "Tus propios preajustes",
-    "pricesRow": "Precios predeterminados",
-    "pricesRowSubtitle": "Plantillas de precio por bebida",
-    "dataRow": "Datos y privacidad",
-    "footerNote": "Tally guarda todo localmente. Sin cuenta, sin servidor, sin análisis — nada sale de este dispositivo salvo que lo exportes tú mismo."
-  },
   "settings": {
     "profileRow": "Perfil",
     "profileRowSubtitle": "Sexo, edad, peso, referencia de gasto",
@@ -194,7 +178,7 @@
     "myTicketsRow": "Mis reportes",
     "profile": {
       "title": "Perfil",
-      "intro": "Información identificada y sensible — guardada solo en este dispositivo, nunca enviada a ningún sitio.",
+      "intro": "Información identificada y sensible. Se guarda en este dispositivo y se sincroniza con tu cuenta — consulta la Política de privacidad.",
       "saveConfirm": "Perfil guardado"
     },
     "language": {
@@ -209,8 +193,8 @@
     "appearanceRowSubtitle": "Tema y color de acento",
     "myDrinksRowSubtitle": "Tus propios ajustes predefinidos",
     "defaultPricesRowSubtitle": "Plantillas de precio por bebida",
-    "dataRowSubtitle": "{{count}} registros, guardados solo en este dispositivo",
-    "footerDisclaimer": "Tally guarda todo localmente. Sin cuenta, sin servidor, sin analítica — nada sale de este dispositivo salvo que tú lo exportes.",
+    "dataRowSubtitle": "{{count}} entradas, en este dispositivo y en tu cuenta",
+    "footerDisclaimer": "Tu historial, tus bebidas personalizadas y tu perfil se sincronizan con tu cuenta. Nada se vende, y nada se comparte con otros usuarios.",
     "noneSet": "Ninguno definido",
     "goalPerWeek": "{{count}}/semana",
     "goalFreeDays": "{{count}} días libres",
@@ -317,7 +301,7 @@
     "freeDaysReached": "{{count}} días sin alcohol esta semana — objetivo cumplido.",
     "freeDaysProgress": "{{count}} de {{goal}} días sin alcohol por ahora. Quedan {{remaining}}.",
     "emptyState1": "Nada registrado todavía. Añade una bebida cuando quieras.",
-    "emptyState2": "Tu registro es privado y se queda en este dispositivo.",
+    "emptyState2": "Tu registro es privado y va asociado a tu cuenta.",
     "emptyState3": "Empieza cuando quieras. Aquí no hay ninguna racha que romper."
   },
   "nav": {
@@ -393,7 +377,7 @@
     "noMatchTitle": "Sin coincidencias",
     "noMatchBody": "Prueba con un rango de fechas más amplio o una categoría distinta.",
     "emptyTitle": "Tu registro está vacío",
-    "emptyBody": "Todo lo que registres se queda en este dispositivo. Empieza cuando quieras.",
+    "emptyBody": "Todo lo que registres es privado y va asociado a tu cuenta. Empieza cuando quieras.",
     "periodCustom": "Personalizado",
     "customStartLabel": "Día de inicio",
     "period5y": "5 años"
@@ -471,7 +455,7 @@
   },
   "dataScreen": {
     "whereTitle": "Dónde viven tus datos",
-    "whereBody": "De forma predeterminada, todo se guarda en una base de datos local en este dispositivo. No hay cuenta, ni sincronización, ni analítica, salvo que actives la sincronización en la nube opcional desde Cuenta y sincronización en los ajustes — de lo contrario, nada sale de este dispositivo.",
+    "whereBody": "Todo se guarda en una base de datos local en este dispositivo. Como la cuenta es obligatoria, tu historial, tus bebidas personalizadas y tu perfil también se sincronizan con tu cuenta en Cloud Firestore. Tus ajustes y tus informes se quedan en este dispositivo.",
     "countSummary": "{{entries}} registros · {{drinks}} bebidas personalizadas",
     "exportTitle": "Exportar una copia de seguridad",
     "exportBody": "El CSV se abre en cualquier hoja de cálculo. El JSON conserva todo, incluidas tus bebidas personalizadas y ajustes.",
@@ -561,25 +545,6 @@
     "donateBody": "Un importe único, lo que te parezca justo. No desbloquea nada: todo en la aplicación ya es gratuito.",
     "donateAction": "Hacer una donación"
   },
-  "adminScreen": {
-    "banner": "Esta es una vista previa local de lo que un futuro panel de administración podría mostrar — el lado del usuario (los datos de este dispositivo) y el lado del administrador (tickets, estado de la suscripción, ajustes del catálogo). El estado de la suscripción ahora depende del backend real en server/; todo lo demás aquí sigue siendo local de este dispositivo.",
-    "userSideTitle": "Lado usuario — datos locales",
-    "entriesLabel": "Registros hechos",
-    "customDrinksLabel": "Bebidas personalizadas",
-    "adminSideTitle": "Lado admin — soporte y facturación",
-    "ticketsOpenLabel": "Tickets abiertos",
-    "ticketsClosedLabel": "Tickets cerrados",
-    "manageTicketsAction": "Gestionar tickets",
-    "subscriptionActive": "Premium activo vía {{provider}}",
-    "subscriptionNone": "Ninguna suscripción activa",
-    "manageSubscriptionAction": "Gestionar suscripción",
-    "catalogOverridesTitle": "Traducciones del catálogo",
-    "catalogOverridesBody": "{{count}} bebidas del catálogo tienen un nombre traducido en el idioma actual; el resto conserva su nombre internacional original (Absenta, Baijiu, Prosecco, ...) ya que ya es correcto en la mayoría de idiomas.",
-    "appInfoTitle": "Información de la app",
-    "versionLabel": "Versión",
-    "platformLabel": "Plataforma",
-    "languageLabel": "Idioma actual"
-  },
   "ads": {
     "psa": {
       "badge": "No es un anuncio",
@@ -602,7 +567,7 @@
   "account": {
     "notConfiguredTitle": "La sincronización en la nube no está configurada en esta versión",
     "notConfiguredBody": "Esta app funciona totalmente sin conexión y sin cuenta. La sincronización en la nube necesita antes configurar un proyecto de Firebase — consulta la sección «Cuentas y sincronización en la nube» del README.",
-    "localOnlyIntro": "Todo funciona ya sin ninguna cuenta — esto es totalmente opcional. Crear una cuenta protege tu historial si pierdes este dispositivo y te permite continuar el mismo registro en otro dispositivo.",
+    "accountRequiredIntro": "Se necesita una cuenta para usar la aplicación. Protege tu historial si pierdes este dispositivo y te permite retomar el mismo registro en otro.",
     "whatIsStoredTitle": "Qué se guarda en la nube",
     "whatIsStoredBody": "Tu registro de consumos, tus bebidas personalizadas y tu perfil — los mismos datos que ya hay en este dispositivo, nada más. Consulta la Política de privacidad para más detalles.",
     "signInTab": "Iniciar sesión",
@@ -643,7 +608,7 @@
     "appleNotice": "El inicio de sesión con Apple aún no está disponible en esta versión — el inicio de sesión por correo y con Google ya funcionan."
   },
   "authGate": {
-    "title": "Bienvenido a Tally",
+    "title": "Bienvenido a TYA",
     "subtitle": "Crea una cuenta o inicia sesión para empezar — tu historial se guarda y está disponible en todos tus dispositivos.",
     "dataNotice": "Guardamos tu historial de consumo, tus bebidas personalizadas y tu perfil — los mismos datos que verás en la aplicación, nada más. Consulta la Política de Privacidad para más detalles."
   },

@@ -43,7 +43,7 @@
     "namePlaceholder": "Your name",
     "emailLabel": "Email (optional)",
     "emailPlaceholder": "you@example.com",
-    "emailHint": "Never sent anywhere — stored only on this device, in case you want it later.",
+    "emailHint": "Used to identify you in the app. Stored on this device and synced to your account.",
     "continueAction": "Continue"
   },
   "onboarding": {
@@ -165,22 +165,6 @@
     "dailyGoalRemaining": "{{remaining}} left of your {{goal}} today",
     "dailyGoalOver": "{{over}} above today's {{goal}} target"
   },
-  "settingsHome": {
-    "unitsRow": "Units",
-    "unitsRowSubtitle": "Volume, standard drinks, currency",
-    "currencyRow": "Currency",
-    "goalsRow": "Personal goals",
-    "goalsRowSubtitle": "Optional, and only yours",
-    "goalsNoneSet": "None set",
-    "appearanceRow": "Appearance",
-    "appearanceRowSubtitle": "Theme and accent colour",
-    "myDrinksRow": "My drinks",
-    "myDrinksRowSubtitle": "Your own presets",
-    "pricesRow": "Default prices",
-    "pricesRowSubtitle": "Price templates per drink",
-    "dataRow": "Data & privacy",
-    "footerNote": "Tally keeps everything locally. No account, no server, no analytics — nothing leaves this device unless you export it yourself."
-  },
   "settings": {
     "profileRow": "Profile",
     "profileRowSubtitle": "Sex, age, weight, spending baseline",
@@ -194,7 +178,7 @@
     "myTicketsRow": "My tickets",
     "profile": {
       "title": "Profile",
-      "intro": "Identified, sensitive information — stored only on this device, never sent anywhere.",
+      "intro": "Identified, sensitive information. It is stored on this device and synced to your account — see the Privacy Policy.",
       "saveConfirm": "Profile saved"
     },
     "language": {
@@ -209,8 +193,8 @@
     "appearanceRowSubtitle": "Theme and accent colour",
     "myDrinksRowSubtitle": "Your own presets",
     "defaultPricesRowSubtitle": "Price templates per drink",
-    "dataRowSubtitle": "{{count}} entries, stored on this device only",
-    "footerDisclaimer": "Tally keeps everything locally. No account, no server, no analytics — nothing leaves this device unless you export it yourself.",
+    "dataRowSubtitle": "{{count}} entries, on this device and in your account",
+    "footerDisclaimer": "Your log, custom drinks and profile are synced to your account. Nothing is sold, and nothing is shared with other users.",
     "noneSet": "None set",
     "goalPerWeek": "{{count}}/week",
     "goalFreeDays": "{{count}} free days",
@@ -317,7 +301,7 @@
     "freeDaysReached": "{{count}} alcohol-free days this week — goal reached.",
     "freeDaysProgress": "{{count}} of {{goal}} alcohol-free days so far. {{remaining}} to go.",
     "emptyState1": "Nothing logged yet. Add a drink whenever you like.",
-    "emptyState2": "Your log is private and stays on this device.",
+    "emptyState2": "Your log is private to your account.",
     "emptyState3": "Start whenever. There is no streak to break here."
   },
   "nav": {
@@ -393,7 +377,7 @@
     "noMatchTitle": "Nothing matches",
     "noMatchBody": "Try a wider date range or a different category.",
     "emptyTitle": "Your log is empty",
-    "emptyBody": "Whatever you log stays on this device. Start whenever you like.",
+    "emptyBody": "Whatever you log is private to your account. Start whenever you like.",
     "periodCustom": "Custom",
     "customStartLabel": "Start day",
     "period5y": "5 years"
@@ -471,7 +455,7 @@
   },
   "dataScreen": {
     "whereTitle": "Where your data lives",
-    "whereBody": "Everything is stored in a local database on this device by default. There is no account, no sync and no analytics unless you turn on optional cloud sync from Account & cloud sync in Settings — nothing leaves this device otherwise.",
+    "whereBody": "Everything is stored in a local database on this device. Because an account is required, your log, custom drinks and profile are also synced to your account in Cloud Firestore. Your settings and your reports stay on this device.",
     "countSummary": "{{entries}} entries · {{drinks}} custom drinks",
     "exportTitle": "Export a backup",
     "exportBody": "CSV opens in any spreadsheet. JSON keeps everything, including your custom drinks and settings.",
@@ -561,25 +545,6 @@
     "donateBody": "A one-off amount, whatever you think it is worth. It unlocks nothing — everything in the app is already free.",
     "donateAction": "Make a donation"
   },
-  "adminScreen": {
-    "banner": "This is a local preview of what a future admin panel could show — the user side (this device's own data) and the admin side (tickets, subscription state, catalog overrides). Subscription state is now backed by the real backend in server/; everything else here is still this device's own local data.",
-    "userSideTitle": "User side — local data",
-    "entriesLabel": "Entries logged",
-    "customDrinksLabel": "Custom drinks",
-    "adminSideTitle": "Admin side — support & billing",
-    "ticketsOpenLabel": "Open tickets",
-    "ticketsClosedLabel": "Closed tickets",
-    "manageTicketsAction": "Manage tickets",
-    "subscriptionActive": "Premium active via {{provider}}",
-    "subscriptionNone": "No active subscription",
-    "manageSubscriptionAction": "Manage subscription",
-    "catalogOverridesTitle": "Catalog translations",
-    "catalogOverridesBody": "{{count}} catalog drinks have a translated display name in the current language; the rest keep their original international name (Absinthe, Baijiu, Prosecco, ...) since that's already correct in most languages.",
-    "appInfoTitle": "App info",
-    "versionLabel": "Version",
-    "platformLabel": "Platform",
-    "languageLabel": "Current language"
-  },
   "ads": {
     "psa": {
       "badge": "Not an ad",
@@ -602,7 +567,7 @@
   "account": {
     "notConfiguredTitle": "Cloud sync isn't set up on this build",
     "notConfiguredBody": "This app works fully offline without an account. Cloud sync needs a Firebase project to be configured first — see the README's \"Accounts & cloud sync\" section.",
-    "localOnlyIntro": "Everything already works with no account at all — this is entirely optional. Creating an account keeps your history safe if this device is lost, and lets you pick up the same log on another device.",
+    "accountRequiredIntro": "An account is required to use the app. It keeps your history safe if this device is lost, and lets you pick up the same log on another device.",
     "whatIsStoredTitle": "What gets stored in the cloud",
     "whatIsStoredBody": "Your drink log, custom drinks, and profile — the same fields already on this device, nothing more. See the Privacy Policy for details.",
     "signInTab": "Sign in",
@@ -643,7 +608,7 @@
     "appleNotice": "Apple sign-in isn't set up on this build yet — email and Google sign-in both work today."
   },
   "authGate": {
-    "title": "Welcome to Tally",
+    "title": "Welcome to TYA",
     "subtitle": "Create an account or sign in to get started — your history stays backed up and available on every device.",
     "dataNotice": "We store your drink log, custom drinks and profile — the same fields you'll see in the app, nothing more. See the Privacy Policy for details."
   },

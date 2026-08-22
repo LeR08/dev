@@ -43,7 +43,7 @@
     "namePlaceholder": "你的名字",
     "emailLabel": "邮箱（选填）",
     "emailPlaceholder": "you@example.com",
-    "emailHint": "不会发送到任何地方——仅保存在本设备上，以备日后需要。",
+    "emailHint": "用于在应用中识别你的身份。保存在本设备上，并同步到你的账户。",
     "continueAction": "继续"
   },
   "onboarding": {
@@ -165,22 +165,6 @@
     "dailyGoalRemaining": "距今日目标 {{goal}} 还剩 {{remaining}}",
     "dailyGoalOver": "超出今日目标 {{goal}} 达 {{over}}"
   },
-  "settingsHome": {
-    "unitsRow": "单位",
-    "unitsRowSubtitle": "容量、标准杯、货币",
-    "currencyRow": "货币",
-    "goalsRow": "个人目标",
-    "goalsRowSubtitle": "选填，完全由你决定",
-    "goalsNoneSet": "未设置",
-    "appearanceRow": "外观",
-    "appearanceRowSubtitle": "主题与强调色",
-    "myDrinksRow": "我的饮品",
-    "myDrinksRowSubtitle": "你自定义的预设",
-    "pricesRow": "默认价格",
-    "pricesRowSubtitle": "各饮品的价格模板",
-    "dataRow": "数据与隐私",
-    "footerNote": "Tally 将所有数据保存在本地。没有账户、没有服务器、没有数据分析——除非你自己导出，否则任何信息都不会离开本设备。"
-  },
   "settings": {
     "profileRow": "个人资料",
     "profileRowSubtitle": "性别、年龄、体重、消费基准",
@@ -194,7 +178,7 @@
     "myTicketsRow": "我的反馈",
     "profile": {
       "title": "个人资料",
-      "intro": "已识别的敏感信息——仅保存在本设备，绝不会发送到任何地方。",
+      "intro": "可识别的敏感信息。保存在本设备上，并同步到你的账户——详见隐私政策。",
       "saveConfirm": "个人资料已保存"
     },
     "language": {
@@ -209,8 +193,8 @@
     "appearanceRowSubtitle": "主题与强调色",
     "myDrinksRowSubtitle": "你自己的预设",
     "defaultPricesRowSubtitle": "每种饮品的默认价格",
-    "dataRowSubtitle": "{{count}} 条记录，仅保存在本设备",
-    "footerDisclaimer": "Tally 只把数据留在本机。没有账户、没有服务器、没有数据分析——除非你自己导出，否则任何内容都不会离开这台设备。",
+    "dataRowSubtitle": "{{count}} 条记录，保存在本设备和你的账户中",
+    "footerDisclaimer": "你的记录、自定义饮品和个人资料会同步到你的账户。任何数据都不会被出售，也不会与其他用户共享。",
     "noneSet": "未设置",
     "goalPerWeek": "每周 {{count}}",
     "goalFreeDays": "{{count}} 天不饮酒",
@@ -317,7 +301,7 @@
     "freeDaysReached": "本周已有 {{count}} 天无酒精——目标达成。",
     "freeDaysProgress": "目前已有 {{count}} / {{goal}} 天无酒精，还差 {{remaining}} 天。",
     "emptyState1": "还没有记录。随时可以添加一杯。",
-    "emptyState2": "你的记录是私密的，仅保存在本设备上。",
+    "emptyState2": "你的日志是私密的，仅归属于你的账户。",
     "emptyState3": "随时可以开始，这里没有需要维持的连续记录压力。"
   },
   "nav": {
@@ -393,7 +377,7 @@
     "noMatchTitle": "没有匹配结果",
     "noMatchBody": "试试更宽的日期范围或换一个类别。",
     "emptyTitle": "你的记录还是空的",
-    "emptyBody": "你记录的一切都只留在这台设备上。想开始的时候随时可以开始。",
+    "emptyBody": "你记录的一切都是私密的，仅归属于你的账户。随时可以开始。",
     "periodCustom": "自定义",
     "customStartLabel": "起始日期",
     "period5y": "5 年"
@@ -471,7 +455,7 @@
   },
   "dataScreen": {
     "whereTitle": "你的数据存放在哪里",
-    "whereBody": "默认情况下，所有内容都保存在本设备的本地数据库中。除非你在设置的“账户与云同步”中开启可选的云同步，否则没有账户、没有同步、也没有数据分析——任何信息都不会离开本设备。",
+    "whereBody": "所有数据都保存在本设备的本地数据库中。由于必须登录账户，你的记录、自定义饮品和个人资料还会同步到你在 Cloud Firestore 中的账户。你的设置和反馈仅保留在本设备上。",
     "countSummary": "{{entries}} 条记录 · {{drinks}} 种自定义饮品",
     "exportTitle": "导出备份",
     "exportBody": "CSV 可在任何电子表格软件中打开。JSON 会保留所有内容，包括你的自定义饮品和设置。",
@@ -561,25 +545,6 @@
     "donateBody": "一次性金额，随你觉得合适。它不解锁任何功能——应用中的一切本来就是免费的。",
     "donateAction": "进行捐赠"
   },
-  "adminScreen": {
-    "banner": "这是未来管理面板可能呈现内容的本地预览——包括用户端（本设备自身的数据）和管理端（反馈单、订阅状态、目录调整）。订阅状态现在由 server/ 中真实的后端提供支持；此处其余内容仍然仅来自本设备本地数据。",
-    "userSideTitle": "用户端——本地数据",
-    "entriesLabel": "已记录条目",
-    "customDrinksLabel": "自定义饮品",
-    "adminSideTitle": "管理端——支持与账单",
-    "ticketsOpenLabel": "待处理反馈单",
-    "ticketsClosedLabel": "已关闭反馈单",
-    "manageTicketsAction": "管理反馈单",
-    "subscriptionActive": "通过 {{provider}} 激活高级版",
-    "subscriptionNone": "没有激活的订阅",
-    "manageSubscriptionAction": "管理订阅",
-    "catalogOverridesTitle": "目录翻译",
-    "catalogOverridesBody": "目前语言下有 {{count}} 种目录饮品拥有翻译后的显示名称；其余饮品保留其原始国际通用名称（如 Absinthe、Baijiu、Prosecco 等），因为这些名称在大多数语言中已经是正确的。",
-    "appInfoTitle": "应用信息",
-    "versionLabel": "版本",
-    "platformLabel": "平台",
-    "languageLabel": "当前语言"
-  },
   "ads": {
     "psa": {
       "badge": "不是广告",
@@ -602,7 +567,7 @@
   "account": {
     "notConfiguredTitle": "此版本尚未配置云同步",
     "notConfiguredBody": "本应用无需账户即可完全离线使用。云同步功能需要先配置一个 Firebase 项目——请参阅 README 中的“账户与云同步”部分。",
-    "localOnlyIntro": "不创建账户，一切功能已经可以正常使用——这完全是可选的。创建账户可以在设备丢失时保护你的记录，并让你在另一台设备上继续同一份记录。",
+    "accountRequiredIntro": "使用本应用需要账户。它能在设备丢失时保住你的记录，也让你在另一台设备上继续同一份日志。",
     "whatIsStoredTitle": "云端会保存哪些内容",
     "whatIsStoredBody": "你的饮酒记录、自定义饮品和个人资料——与本设备上已有的字段完全相同，不会更多。详见隐私政策。",
     "signInTab": "登录",
@@ -643,7 +608,7 @@
     "appleNotice": "此版本尚未支持 Apple 登录——邮箱登录和 Google 登录目前均可使用。"
   },
   "authGate": {
-    "title": "欢迎使用 Tally",
+    "title": "欢迎使用 TYA",
     "subtitle": "创建账户或登录以开始使用——你的记录会安全保存，并可在所有设备上使用。",
     "dataNotice": "我们会保存你的饮酒记录、自定义饮品和个人资料——与应用内显示的字段相同，不会更多。详见隐私政策。"
   },
