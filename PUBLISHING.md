@@ -41,10 +41,15 @@ safety and content-rating answers are further down.
 
 | # | Step | Who |
 |---|---|---|
-| 6 | Create the subscription **and its base plan**, both activated | you |
-| 7 | Add yourself under **Setup → License testing** | you |
-| 8 | Send the product ID; wiring `react-native-iap`, the purchase flow and restore | me |
-| 9 | Verify on a `preview` build, install **from Play**, then ship in `production` | both |
+| 6 | ~~Wire react-native-iap, purchase and restore~~ | me | **done** |
+| 7 | **Build `production` and upload to Internal testing** — Play only offers subscription creation once a build declares the billing permission | you |
+| 8 | Create the subscription `tya_supporter_monthly` **and its base plan**, both activated | you |
+| 9 | Add yourself under **Setup → License testing** | you |
+| 10 | Install **from Play** and test the purchase | you |
+
+The order is the reverse of what it looks like: the code ships first, because the Play Console
+subscription screen stays empty until an uploaded build carries the billing permission. The
+product id is fixed in `src/payments/billing.ts` and does not need the product to exist yet.
 
 ### Phase 3 — AdMob
 
@@ -80,7 +85,7 @@ None of these block a closed test, all of them block a public listing.
 | Content rating | notes below; questionnaire to fill |
 | AAB build | **done** — first build produced, versionCode 2 |
 | Google Sign-In (Android) | **done** — native SDK, verified working on a `preview` build |
-| Play Billing | not started; nothing sets `subscription.status` |
+| Play Billing | **wired** (`tya_supporter_monthly`); needs the product created in Play, then a build to test |
 | AdMob | dependency absent, `AdBanner` renders `null` |
 | PayPal donation | `EXPO_PUBLIC_PAYPAL_DONATE_URL` empty — card hidden |
 

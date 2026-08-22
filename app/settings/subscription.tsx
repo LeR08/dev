@@ -1,5 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { AdBanner } from '@/ads/AdBanner';
@@ -8,31 +8,30 @@ import { Card } from '@/components/ui/Card';
 import { Screen } from '@/components/ui/Screen';
 import { Text } from '@/components/ui/Text';
 import { useToast } from '@/components/ui/Toast';
-import { isPremium } from '@/domain/subscription';
 import { useTranslation } from '@/i18n/I18nProvider';
 import { donationUrl, isDonationConfigured } from '@/payments/paypal';
-import { useApp } from '@/state/AppProvider';
+import { useSupporterSubscription } from '@/payments/useSupporterSubscription';
 import { useTheme } from '@/theme/ThemeProvider';
 
 /**
  * The supporter screen.
  *
- * Removing the launch message and the banner is a digital unlock, which Play's
- * Payments policy says must go through Play Billing — so that half is not open
- * yet and says so, rather than routing round the policy. `subscription.status`
- * is the field Billing will set; nothing flips it today.
+ * Removing the launch message and the banner goes through Google Play Billing,
+ * because Play's Payments policy requires it for anything unlocked inside the
+ * app. Donations unlock nothing, so those stay on a hosted PayPal page opened
+ * in the system browser — no SDK, no card field here, no secret in this repo.
  *
- * Donations are outside that policy because they unlock nothing, so they run
- * through a hosted PayPal page in the system browser. No SDK, no card field
- * here, no secret in this repo.
+ * The price shown comes from Play rather than from our own copy, so it is
+ * right in every currency and cannot drift from what is actually charged.
  */
 export default function SubscriptionScreen() {
   const theme = useTheme();
   const { t } = useTranslation();
   const toast = useToast();
-  const { settings } = useApp();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const premium = isPremium(settings.subscription.status);
+  const handleError = (message: string) => setErrorMessage(message || t('account.errorGeneric'));
+  const { ready, priceLabel, busy, premium, purchase } = useSupporterSubscription(handleError);
 
   const openDonation = async () => {
     try {
@@ -46,11 +45,19 @@ export default function SubscriptionScreen() {
     <Screen>
       <View style={{ gap: theme.spacing(4), paddingTop: theme.spacing(4) }}>
         <Card tone="accent" style={{ gap: theme.spacing(2) }}>
-          <Text variant="title">{t('subscriptionScreen.priceLabel')}</Text>
+          <Text variant="title">{priceLabel ?? t('subscriptionScreen.priceLabel')}</Text>
           <Text variant="body" tone="muted">
             {t('subscriptionScreen.intro')}
           </Text>
         </Card>
+
+        {errorMessage ? (
+          <Card tone="muted" style={{ gap: theme.spacing(1) }}>
+            <Text variant="body" tone="muted">
+              {errorMessage}
+            </Text>
+          </Card>
+        ) : null}
 
         {premium ? (
           <Card tone="muted" style={{ gap: theme.spacing(2) }}>
@@ -69,11 +76,25 @@ export default function SubscriptionScreen() {
               <AdBanner />
             </Card>
 
-            <Card tone="muted" style={{ gap: theme.spacing(1) }}>
-              <Text variant="caption" tone="muted">
-                {t('subscriptionScreen.previewNotice')}
-              </Text>
-            </Card>
+            {ready ? (
+              <>
+                <Button
+                  label={t('subscriptionScreen.subscribeAction')}
+                  size="lg"
+                  loading={busy}
+                  onPress={() => void purchase()}
+                />
+                <Text variant="caption" tone="faint">
+                  {t('subscriptionScreen.billingNotice')}
+                </Text>
+              </>
+            ) : (
+              <Card tone="muted" style={{ gap: theme.spacing(1) }}>
+                <Text variant="caption" tone="muted">
+                  {t('subscriptionScreen.previewNotice')}
+                </Text>
+              </Card>
+            )}
           </>
         )}
 

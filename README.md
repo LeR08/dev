@@ -302,13 +302,24 @@ Every feature described above — logging, history, charts, insights, export, ev
 free, full-stop, for every user. Nothing about tracking, insights or safety-relevant content
 is ever paywalled.
 
-**Removing the banner will go through Google Play Billing.** It is the only compliant route:
-Play's Payments policy requires Play Billing for digital content unlocked inside an app, and
-that is what hiding the launch message and the banner is. Nothing flips
-`settings.subscription.status` today — the screen says the offer is not open rather than
-routing round the policy — and the field is what Billing will set once wired. The steps, and
-the sequencing trap that Billing cannot be tested until the app is already on Play, are in
-[PUBLISHING.md](PUBLISHING.md).
+**Removing the banner goes through Google Play Billing** — the only compliant route, since
+Play's Payments policy requires it for digital content unlocked inside an app.
+`src/payments/useSupporterSubscription.ts` drives it, and two choices there are worth knowing:
+
+- **Play is the authority, not the purchase callback.** The entitlement comes from asking Play
+  what subscriptions are active, so a replayed callback cannot grant access and a cancellation
+  made elsewhere is picked up on the next refresh. `settings.subscription.status` follows that
+  answer in both directions.
+- **Restore is automatic, not a button.** Play requires a way to recover a subscription on a new
+  device; running it on connect is a better one than a button nobody finds.
+
+There is no server-side receipt verification, so a tampered device could fake the entitlement.
+For an unlock worth one hidden banner that is an accepted trade — if it ever guards something
+that matters, verification belongs on a backend.
+
+The product id (`tya_supporter_monthly`) must match Play Console exactly and can never be
+reused once created. The price shown in the app comes from Play, not from our own copy, so it
+is correct in every currency and cannot drift from what is charged.
 
 **Donations stay on PayPal.** A donation unlocks nothing, so it sits outside that policy. It
 is a hosted PayPal page opened with `WebBrowser.openBrowserAsync` — no SDK, no card field in
