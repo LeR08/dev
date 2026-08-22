@@ -85,10 +85,10 @@ None of these block a closed test, all of them block a public listing.
 | Store listing text | English drafted below; seven translations to do |
 | Data safety answers | worked out below; to enter in the console |
 | Content rating | notes below; questionnaire to fill |
-| AAB build | **done** — first build produced, versionCode 2 |
+| AAB build | **done** — versionCode 24, the first carrying AdMob and Play Billing together |
 | Google Sign-In (Android) | **done** — native SDK, verified working on a `preview` build |
 | Play Billing | **wired** (`tya_supporter_monthly`); needs the product created in Play, then a build to test |
-| AdMob | **wired** — real banner behind UMP consent; ids in `app.config.js` and `eas.json`; never built yet |
+| AdMob | **built** — real banner behind UMP consent; compiles via `plugins/withAdMobKotlinMetadata`; not yet seen on a device |
 | PayPal donation | `EXPO_PUBLIC_PAYPAL_DONATE_URL` empty — card hidden |
 
 Regenerate the two graphics with `python scripts/build-store-graphics.py` after any change to
