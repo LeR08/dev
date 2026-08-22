@@ -27,6 +27,7 @@ import {
 import { detectCurrency, detectLanguage, detectResourceCountry } from '@/i18n/detectLocale';
 import { onAuthChange, type User } from '@/sync/auth';
 import { isFirebaseConfigured } from '@/sync/firebaseApp';
+import { deleteAllUserData } from '@/sync/firestore';
 import { enqueueOp } from '@/sync/outbox';
 import {
   migrateLocalDataOnSignIn,
@@ -507,6 +508,24 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   );
 
   const clearAllData = useCallback(async () => {
+    // The cloud copy goes first, and anything queued to be pushed is dropped
+    // before it can re-upload what we are about to delete.
+    //
+    // Without this the wipe undid itself: syncNow() pulls entries, drinks and
+    // the profile back from Firestore and merges them into local state, so the
+    // next pull-to-refresh or app foreground silently restored everything
+    // someone had just asked to be erased.
+    //
+    // If the cloud delete fails — offline, most likely — this throws and the
+    // local data is deliberately left alone. Wiping the device while the
+    // server copy survives would tell someone their data is gone at the exact
+    // moment it is about to come back.
+    const uid = settingsRef.current.account?.uid;
+    await resetSyncStateOnSignOut();
+    if (uid && isFirebaseConfigured()) {
+      await deleteAllUserData(uid);
+    }
+
     await store.clearAll();
     setEntries([]);
     setSettings(DEFAULT_SETTINGS);

@@ -45,6 +45,11 @@ const DOCS = [
   { id: 'privacy', file: 'privacy.html' },
   { id: 'terms', file: 'terms.html' },
   { id: 'notice', file: 'notice.html' },
+  // Google Play requires a publicly reachable account-deletion page for any
+  // app that lets people create an account, and it has to be reachable without
+  // installing the app — someone who has already uninstalled it still has a
+  // right to erasure.
+  { id: 'deleteAccount', file: 'delete-account.html' },
 ];
 
 /**
@@ -168,7 +173,7 @@ ${articles}
 <footer>
   <p>TYA is published by LaSolutionDigital.
   Contact: <a href="mailto:romainlambert@lasolutiondigital.com">romainlambert@lasolutiondigital.com</a></p>
-  <p><a href="./privacy.html">Privacy Policy</a> · <a href="./terms.html">Terms of Service</a> · <a href="./notice.html">Legal Notice</a></p>
+  <p><a href="./privacy.html">Privacy Policy</a> · <a href="./terms.html">Terms of Service</a> · <a href="./notice.html">Legal Notice</a> · <a href="./delete-account.html">Delete Your Account</a></p>
 </footer>
 
 <script>
@@ -224,6 +229,7 @@ function indexPage(updated) {
     <li><a href="./privacy.html">Privacy Policy</a></li>
     <li><a href="./terms.html">Terms of Service</a></li>
     <li><a href="./notice.html">Legal Notice</a></li>
+    <li><a href="./delete-account.html">Delete Your Account</a></li>
   </ul>
 </main>
 </body>

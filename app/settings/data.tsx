@@ -94,6 +94,11 @@ export default function DataScreen() {
       await clearAllData();
       setConfirmText('');
       toast.show({ message: t('dataScreen.allDataDeletedToast') });
+    } catch {
+      // clearAllData leaves the device untouched when it cannot reach the
+      // cloud copy, so nothing has been deleted here — say so rather than
+      // letting the screen look as though it worked.
+      toast.show({ message: t('dataScreen.deleteFailedToast') });
     } finally {
       setDeleting(false);
     }

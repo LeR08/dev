@@ -78,6 +78,7 @@ None of these block a closed test, all of them block a public listing.
 |---|---|
 | Play Console account | **done** — organisation account, verified |
 | Privacy policy at a public URL | **done** — https://ler08.github.io/dev/privacy.html |
+| Account deletion URL | **done** — https://ler08.github.io/dev/delete-account.html |
 | App icon 512×512 | **done** — `store/icon-512.png` |
 | Feature graphic 1024×500 | **done** — `store/feature-graphic.png` |
 | Phone screenshots | **done** — `store/screenshots/*.png`, 1080×2400 |

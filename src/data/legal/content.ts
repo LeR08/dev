@@ -17,7 +17,7 @@
  * language the reader has chosen, same as the rest of the app.
  */
 
-export type LegalDocId = 'terms' | 'notice' | 'privacy';
+export type LegalDocId = 'terms' | 'notice' | 'privacy' | 'deleteAccount';
 export type LegalSection = { heading: string; body: string[] };
 export type LegalDoc = { title: string; intro: string; sections: LegalSection[] };
 
@@ -132,6 +132,38 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
           heading: 'Cookies & local storage (web build only)',
           body: [
             'The web build stores your log, profile and settings in your browser\'s local storage so the app works without a server. No tracking or advertising cookies are used.',
+          ],
+        },
+      ],
+    },
+    deleteAccount: {
+      title: 'Deleting Your Account',
+      intro:
+        'How to delete your TYA account and the data attached to it. TYA is published by LaSolutionDigital.',
+      sections: [
+        {
+          heading: 'From inside the app',
+          body: [
+            'Open TYA, go to Settings → Account & cloud sync, and choose "Delete my account". You will be asked to confirm with your password. The account and everything stored in the cloud under it are removed immediately and permanently.',
+          ],
+        },
+        {
+          heading: 'By email',
+          body: [
+            'If you cannot sign in — or you signed in with Google and the in-app option asks for a password you never set — write to romainlambert@lasolutiondigital.com from the address the account uses, and ask for it to be deleted. Requests are handled within 30 days.',
+          ],
+        },
+        {
+          heading: 'What is deleted',
+          body: [
+            'The sign-in account itself, your drink log, your custom drinks and your profile — that is your name, your email address, and whichever of sex, age, weight, height, spending baseline and reasons for using the app you chose to fill in.',
+          ],
+        },
+        {
+          heading: 'What is kept, and for how long',
+          body: [
+            'Nothing is kept once the deletion runs: the account and its documents are removed outright, not flagged as inactive.',
+            'Deleting the account does not touch the copy still on your phone. To erase that as well, use Settings → Data & privacy → "Delete all my data", which clears the device and the cloud together.',
           ],
         },
       ],
@@ -304,6 +336,38 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
       ],
     },
+    deleteAccount: {
+      title: 'Supprimer votre compte',
+      intro:
+        'Comment supprimer votre compte TYA et les données qui y sont rattachées. TYA est édité par LaSolutionDigital.',
+      sections: [
+        {
+          heading: "Depuis l'application",
+          body: [
+            'Ouvrez TYA, allez dans Réglages → Compte et synchronisation, puis choisissez « Supprimer mon compte ». Une confirmation par mot de passe vous sera demandée. Le compte et tout ce qui est stocké dans le cloud sous ce compte sont supprimés immédiatement et définitivement.',
+          ],
+        },
+        {
+          heading: 'Par e-mail',
+          body: [
+            "Si vous ne parvenez plus à vous connecter — ou si vous vous êtes connecté avec Google et que l'option dans l'application réclame un mot de passe que vous n'avez jamais défini — écrivez à romainlambert@lasolutiondigital.com depuis l'adresse du compte, en demandant sa suppression. Les demandes sont traitées sous 30 jours.",
+          ],
+        },
+        {
+          heading: 'Ce qui est supprimé',
+          body: [
+            "Le compte de connexion lui-même, votre historique de consommations, vos boissons personnalisées et votre profil — c'est-à-dire votre nom, votre adresse e-mail, ainsi que ceux du sexe, de l'âge, du poids, de la taille, du budget de référence et des raisons d'utiliser l'application que vous avez choisi de renseigner.",
+          ],
+        },
+        {
+          heading: 'Ce qui est conservé, et combien de temps',
+          body: [
+            "Rien n'est conservé une fois la suppression effectuée : le compte et ses documents sont supprimés purement et simplement, et non marqués comme inactifs.",
+            "La suppression du compte ne touche pas à la copie encore présente sur votre téléphone. Pour l'effacer aussi, utilisez Réglages → Données & confidentialité → « Supprimer toutes mes données », qui efface l'appareil et le cloud ensemble.",
+          ],
+        },
+      ],
+    },
     privacy: {
       title: 'Politique de confidentialité',
       intro:
@@ -468,6 +532,38 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
           heading: 'Cookies y almacenamiento local (solo versión web)',
           body: [
             'La versión web almacena tu historial, tu perfil y tus ajustes en el almacenamiento local de tu navegador para que la aplicación funcione sin servidor. No se utilizan cookies de seguimiento ni publicitarias.',
+          ],
+        },
+      ],
+    },
+    deleteAccount: {
+      title: 'Eliminar tu cuenta',
+      intro:
+        'Cómo eliminar tu cuenta de TYA y los datos asociados. TYA está publicada por LaSolutionDigital.',
+      sections: [
+        {
+          heading: 'Desde la aplicación',
+          body: [
+            'Abre TYA, ve a Ajustes → Cuenta y sincronización, y elige «Eliminar mi cuenta». Se te pedirá confirmar con tu contraseña. La cuenta y todo lo almacenado en la nube bajo ella se eliminan de inmediato y de forma permanente.',
+          ],
+        },
+        {
+          heading: 'Por correo electrónico',
+          body: [
+            'Si ya no puedes iniciar sesión —o si entraste con Google y la opción de la aplicación te pide una contraseña que nunca creaste— escribe a romainlambert@lasolutiondigital.com desde la dirección de la cuenta, solicitando su eliminación. Las solicitudes se atienden en un plazo de 30 días.',
+          ],
+        },
+        {
+          heading: 'Qué se elimina',
+          body: [
+            'La propia cuenta de acceso, tu registro de consumiciones, tus bebidas personalizadas y tu perfil: tu nombre, tu dirección de correo y los datos de sexo, edad, peso, altura, gasto de referencia y motivos de uso que hayas decidido rellenar.',
+          ],
+        },
+        {
+          heading: 'Qué se conserva, y durante cuánto tiempo',
+          body: [
+            'No se conserva nada una vez ejecutada la eliminación: la cuenta y sus documentos se borran por completo, no se marcan como inactivos.',
+            'Eliminar la cuenta no afecta a la copia que sigue en tu teléfono. Para borrarla también, usa Ajustes → Datos y privacidad → «Eliminar todos mis datos», que limpia el dispositivo y la nube a la vez.',
           ],
         },
       ],
@@ -640,6 +736,38 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
       ],
     },
+    deleteAccount: {
+      title: 'Konto löschen',
+      intro:
+        'Wie du dein TYA-Konto und die damit verbundenen Daten löschst. TYA wird von LaSolutionDigital herausgegeben.',
+      sections: [
+        {
+          heading: 'In der App',
+          body: [
+            'Öffne TYA, gehe zu Einstellungen → Konto und Cloud-Synchronisierung und wähle „Konto löschen“. Du bestätigst mit deinem Passwort. Das Konto und alles, was in der Cloud darunter liegt, werden sofort und endgültig entfernt.',
+          ],
+        },
+        {
+          heading: 'Per E-Mail',
+          body: [
+            'Wenn du dich nicht mehr anmelden kannst — oder du dich mit Google angemeldet hast und die Option in der App nach einem Passwort fragt, das du nie vergeben hast — schreib an romainlambert@lasolutiondigital.com von der Adresse des Kontos aus und bitte um Löschung. Anfragen werden innerhalb von 30 Tagen bearbeitet.',
+          ],
+        },
+        {
+          heading: 'Was gelöscht wird',
+          body: [
+            'Das Anmeldekonto selbst, dein Trinkprotokoll, deine eigenen Getränke und dein Profil — also dein Name, deine E-Mail-Adresse sowie die Angaben zu Geschlecht, Alter, Gewicht, Größe, Ausgabenbasis und Gründen für die Nutzung, die du ausgefüllt hast.',
+          ],
+        },
+        {
+          heading: 'Was bleibt, und wie lange',
+          body: [
+            'Nach der Löschung bleibt nichts: Konto und Dokumente werden vollständig entfernt und nicht bloß als inaktiv markiert.',
+            'Die Kontolöschung berührt die Kopie auf deinem Telefon nicht. Um auch die zu löschen, nutze Einstellungen → Daten und Datenschutz → „Alle meine Daten löschen“, das Gerät und Cloud gemeinsam leert.',
+          ],
+        },
+      ],
+    },
     privacy: {
       title: 'Datenschutzerklärung',
       intro:
@@ -804,6 +932,38 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
           heading: 'Cookie e archiviazione locale (solo versione web)',
           body: [
             "La versione web archivia il tuo storico, il tuo profilo e le tue impostazioni nell'archiviazione locale del tuo browser, così l'app funziona senza server. Non vengono utilizzati cookie di tracciamento o pubblicitari.",
+          ],
+        },
+      ],
+    },
+    deleteAccount: {
+      title: 'Eliminare il tuo account',
+      intro:
+        'Come eliminare il tuo account TYA e i dati collegati. TYA è pubblicata da LaSolutionDigital.',
+      sections: [
+        {
+          heading: "Dall'app",
+          body: [
+            "Apri TYA, vai in Impostazioni → Account e sincronizzazione cloud e scegli «Elimina il mio account». Ti verrà chiesta una conferma con la password. L'account e tutto ciò che è archiviato nel cloud sotto di esso vengono rimossi subito e in modo definitivo.",
+          ],
+        },
+        {
+          heading: 'Via e-mail',
+          body: [
+            "Se non riesci più ad accedere — o se hai effettuato l'accesso con Google e l'opzione nell'app chiede una password che non hai mai impostato — scrivi a romainlambert@lasolutiondigital.com dall'indirizzo dell'account, chiedendone l'eliminazione. Le richieste vengono gestite entro 30 giorni.",
+          ],
+        },
+        {
+          heading: 'Cosa viene eliminato',
+          body: [
+            "L'account di accesso stesso, il tuo storico dei consumi, le tue bevande personalizzate e il tuo profilo: nome, indirizzo e-mail e i dati di sesso, età, peso, altezza, spesa di riferimento e motivi d'uso che hai scelto di compilare.",
+          ],
+        },
+        {
+          heading: 'Cosa resta, e per quanto',
+          body: [
+            "Dopo l'eliminazione non resta nulla: account e documenti vengono rimossi del tutto, non contrassegnati come inattivi.",
+            "Eliminare l'account non tocca la copia ancora presente sul telefono. Per cancellare anche quella, usa Impostazioni → Dati e privacy → «Elimina tutti i miei dati», che svuota dispositivo e cloud insieme.",
           ],
         },
       ],
@@ -976,6 +1136,38 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
       ],
     },
+    deleteAccount: {
+      title: 'Eliminar a tua conta',
+      intro:
+        'Como eliminar a tua conta TYA e os dados associados. A TYA é publicada pela LaSolutionDigital.',
+      sections: [
+        {
+          heading: 'A partir da aplicação',
+          body: [
+            'Abre a TYA, vai a Definições → Conta e sincronização na nuvem e escolhe «Eliminar a minha conta». Ser-te-á pedida uma confirmação com a palavra-passe. A conta e tudo o que está guardado na nuvem sob ela são removidos de imediato e de forma permanente.',
+          ],
+        },
+        {
+          heading: 'Por e-mail',
+          body: [
+            'Se já não conseguires iniciar sessão — ou se entraste com o Google e a opção na aplicação pede uma palavra-passe que nunca definiste — escreve para romainlambert@lasolutiondigital.com a partir do endereço da conta, a pedir a eliminação. Os pedidos são tratados no prazo de 30 dias.',
+          ],
+        },
+        {
+          heading: 'O que é eliminado',
+          body: [
+            'A própria conta de acesso, o teu registo de consumos, as tuas bebidas personalizadas e o teu perfil — ou seja, o teu nome, o teu endereço de e-mail e os dados de sexo, idade, peso, altura, orçamento de referência e motivos de utilização que tenhas preenchido.',
+          ],
+        },
+        {
+          heading: 'O que é mantido, e por quanto tempo',
+          body: [
+            'Nada é mantido depois da eliminação: a conta e os seus documentos são removidos por completo, não marcados como inativos.',
+            'Eliminar a conta não afeta a cópia que continua no teu telemóvel. Para apagar também essa, usa Definições → Dados e privacidade → «Eliminar todos os meus dados», que limpa o dispositivo e a nuvem em conjunto.',
+          ],
+        },
+      ],
+    },
     privacy: {
       title: 'Política de Privacidade',
       intro:
@@ -1140,6 +1332,38 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
       ],
     },
+    deleteAccount: {
+      title: '删除你的账户',
+      intro:
+        '如何删除你的 TYA 账户及与之关联的数据。TYA 由 LaSolutionDigital 发行。',
+      sections: [
+        {
+          heading: '在应用内操作',
+          body: [
+            '打开 TYA，进入「设置 → 账户与云同步」，选择“删除我的账户”。系统会要求你输入密码确认。账户及其在云端保存的全部内容会被立即永久删除。',
+          ],
+        },
+        {
+          heading: '通过电子邮件',
+          body: [
+            '如果你已无法登录，或你使用 Google 登录而应用内选项要求一个你从未设置过的密码，请用该账户的邮箱地址写信至 romainlambert@lasolutiondigital.com 申请删除。我们会在 30 天内处理。',
+          ],
+        },
+        {
+          heading: '哪些内容会被删除',
+          body: [
+            '登录账户本身、你的饮酒记录、自定义饮品，以及你的个人资料——即姓名、电子邮件地址，以及你自愿填写的性别、年龄、体重、身高、参考支出和使用原因。',
+          ],
+        },
+        {
+          heading: '哪些内容会保留，保留多久',
+          body: [
+            '删除执行后不保留任何内容：账户及其文档会被彻底移除，而不是标记为停用。',
+            '删除账户不会影响仍留在手机上的副本。若要一并清除，请使用「设置 → 数据与隐私 → 删除我的所有数据」，它会同时清空本设备和云端。',
+          ],
+        },
+      ],
+    },
     privacy: {
       title: '隐私政策',
       intro:
@@ -1296,6 +1520,38 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
           heading: 'ملفات تعريف الارتباط والتخزين المحلي (نسخة الويب فقط)',
           body: [
             'تُخزِّن نسخة الويب سجلك وملفك الشخصي وإعداداتك في التخزين المحلي لمتصفحك حتى يعمل التطبيق دون خادم. لا يُستخدم أي ملف تعريف ارتباط للتتبع أو الإعلانات.',
+          ],
+        },
+      ],
+    },
+    deleteAccount: {
+      title: 'حذف حسابك',
+      intro:
+        'كيفية حذف حساب TYA والبيانات المرتبطة به. تصدر TYA عن LaSolutionDigital.',
+      sections: [
+        {
+          heading: 'من داخل التطبيق',
+          body: [
+            'افتح TYA، وانتقل إلى الإعدادات ← الحساب والمزامنة السحابية، ثم اختر «حذف حسابي». سيُطلب منك التأكيد بكلمة المرور. يُحذف الحساب وكل ما هو مخزَّن في السحابة تحته فورًا وبصفة نهائية.',
+          ],
+        },
+        {
+          heading: 'عبر البريد الإلكتروني',
+          body: [
+            'إذا لم تعد تستطيع تسجيل الدخول — أو كنت قد سجّلت الدخول عبر Google ويطلب منك الخيار داخل التطبيق كلمة مرور لم تنشئها قط — فراسل romainlambert@lasolutiondigital.com من عنوان البريد الخاص بالحساب طالبًا حذفه. تُعالَج الطلبات خلال 30 يومًا.',
+          ],
+        },
+        {
+          heading: 'ما الذي يُحذف',
+          body: [
+            'حساب تسجيل الدخول نفسه، وسجل مشروباتك، ومشروباتك المخصّصة، وملفك الشخصي — أي اسمك وعنوان بريدك الإلكتروني، وما اخترت ملأه من الجنس والعمر والوزن والطول والإنفاق المرجعي وأسباب استخدام التطبيق.',
+          ],
+        },
+        {
+          heading: 'ما الذي يبقى، ولأي مدة',
+          body: [
+            'لا يبقى شيء بعد تنفيذ الحذف: يُزال الحساب ومستنداته إزالةً كاملة، ولا يُكتفى بوسمه غير نشط.',
+            'لا يمسّ حذف الحساب النسخة التي ما زالت على هاتفك. ولمحوها أيضًا، استخدم الإعدادات ← البيانات والخصوصية ← «حذف كل بياناتي»، وهو يُفرغ الجهاز والسحابة معًا.',
           ],
         },
       ],
