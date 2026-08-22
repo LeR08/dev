@@ -36,9 +36,21 @@ export function BacCard({ profile, entries, now = Date.now() }: BacCardProps) {
         {t('bac.title')}
       </Text>
       <Text variant="metric">{estimate.sober ? '0.0‰' : `${estimate.bac.toFixed(2)}‰`}</Text>
-      <View>
+      <View style={{ gap: theme.spacing(1) }}>
+        {estimate.sober ? (
+          <Text variant="caption" tone="faint">
+            {t('bac.soberNote')}
+          </Text>
+        ) : null}
+        {/*
+          The disclaimer shows at every reading, including 0.0‰. It used to be
+          swapped out for the sober note, which removed the words "never use
+          this to decide whether to drive" at precisely the moment someone is
+          most likely to be deciding exactly that — and on the reading most
+          easily mistaken for a measurement rather than an estimate.
+        */}
         <Text variant="caption" tone="faint">
-          {estimate.sober ? t('bac.soberNote') : t('bac.disclaimer')}
+          {t('bac.disclaimer')}
         </Text>
       </View>
     </Card>
