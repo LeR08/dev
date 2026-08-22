@@ -20,11 +20,15 @@ unblocks the rest.
 | # | Step | Who | Blocks |
 |---|---|---|---|
 | 1 | ~~Create the Play Console account~~ | you | **done** |
-| 2 | ~~Google Sign-In: SHA-1 → Firebase → Android client id~~ | you, then me | **done** for the EAS keystore |
+| 2 | ~~Google Sign-In~~ | you, then me | **done** — native SDK, verified |
 | 3 | **Firestore region + Spark/Blaze decision** | you | permanent, see below |
 | 4 | ~~Build the AAB~~ | you | **done**, versionCode 2 |
-| 5 | **Create the app in Play Console**, fill the listing, upload the AAB to **Internal testing**, roll out | you | Billing, AdMob |
-| 5b | **After that upload**: copy the Play App Signing SHA-1 into the same Firebase Android app | you | Google Sign-In for Store installs |
+| 5 | ~~Create the app in Play Console, upload to Internal testing, roll out~~ | you | **done** |
+| 5b | ~~Play App Signing SHA-1 into Firebase~~ | you | **done**, both fingerprints registered |
+
+Phase 1 is complete. The build on Play predates the native sign-in SDK, so it still carries the
+broken flow — rather than rebuild twice, the next production build should carry Billing as
+well.
 
 Step 1 is the only unavoidable wait, so start it before anything else. Step 2 fits neatly
 inside that wait.
@@ -75,7 +79,7 @@ None of these block a closed test, all of them block a public listing.
 | Data safety answers | worked out below; to enter in the console |
 | Content rating | notes below; questionnaire to fill |
 | AAB build | **done** — first build produced, versionCode 2 |
-| Google Sign-In (Android) | migrated to Google's native SDK; both SHA-1s registered in Firebase — needs a fresh build to test |
+| Google Sign-In (Android) | **done** — native SDK, verified working on a `preview` build |
 | Play Billing | not started; nothing sets `subscription.status` |
 | AdMob | dependency absent, `AdBanner` renders `null` |
 | PayPal donation | `EXPO_PUBLIC_PAYPAL_DONATE_URL` empty — card hidden |
