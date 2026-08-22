@@ -88,7 +88,7 @@ None of these block a closed test, all of them block a public listing.
 | AAB build | **done** — versionCode 24, the first carrying AdMob and Play Billing together |
 | Google Sign-In (Android) | **done** — native SDK, verified working on a `preview` build |
 | Play Billing | **wired** (`tya_supporter_monthly`); needs the product created in Play, then a build to test |
-| AdMob | **built** — real banner behind UMP consent; compiles via `plugins/withAdMobKotlinMetadata`; not yet seen on a device |
+| AdMob | **built, and blocked on publication** — see below; the app renders no banner and no error in the meantime |
 | PayPal donation | `EXPO_PUBLIC_PAYPAL_DONATE_URL` empty — card hidden |
 
 Regenerate the two graphics with `python scripts/build-store-graphics.py` after any change to
@@ -305,8 +305,8 @@ it is allowed near `production`.
 
 ### AdMob — the banner
 
-Wired. `ca-app-pub-2344459617810838~7959046290` sits in `app.config.js` (it goes into the
-manifest, and it is public by design); the banner unit `.../6454392933` is injected as
+Wired and compiling. `ca-app-pub-2344459617810838~7959046290` sits in `app.config.js` (it goes
+into the manifest, and is public by design); the banner unit `.../6454392933` is injected as
 `EXPO_PUBLIC_ADMOB_BANNER_UNIT_ID` from `eas.json`'s `production` profile only, so development
 and preview builds fall back to Google's public test unit — AdMob closes accounts over
 impressions a publisher generates on their own app.
@@ -314,21 +314,34 @@ impressions a publisher generates on their own app.
 That fallback does not protect the internal-testing builds, which come off the `production`
 profile and therefore carry the real unit. **Do not tap the banner on those.**
 
-Two things still on you:
+`plugins/withAdMobKotlinMetadata` is what makes it compile; the comment in that file explains
+why raising kotlinVersion project-wide does not, and why it broke gesture-handler when tried.
+
+#### Ads cannot be tested before the app is public
+
+Verified on a real device, versionCode 24: no consent form, no banner, and no privacy-options
+row in Settings. None of that is a code fault. AdMob enforces a chain:
+
+    app public on Play → linked in AdMob → review lifted → GDPR message creatable
+      → consent obtainable → banner served
+
+The AdMob console redirects the privacy-messaging page to
+`?onboardingTaskStep=FIRST_APP_LINK` until the app is linked, and an app in internal testing is
+not publicly findable, so it cannot be linked. Every link in that chain is Google's, and none
+can be pulled forward.
+
+The app behaves correctly while blocked: `gatherConsent` fails, `AdBanner` renders `null`, and
+nobody sees an empty slot or an error. That is the designed failure path and it now has a
+real-device confirmation.
+
+An open (public) test would give the app a public listing and should unblock linking without
+going to production. Otherwise this resolves itself after the first public release.
+
+Two things still on you once it does unlock:
 
 1. **Blocking controls** in AdMob: block the alcohol and gambling categories. An auction serves
    whatever wins, and this is an app about drinking less. Nothing in the code can do this.
-2. The Data safety rows above.
-
-The build risk is real and untested. AdMob was pulled out of this project once because
-`play-services-ads` 25.4.0 ships Kotlin metadata at 2.3.0 and a 2.0/2.1 compiler refuses to read
-metadata newer than itself — `:react-native-google-mobile-ads:compileReleaseKotlin` failed on
-EAS. The fix here raises Kotlin to 2.3.0 through `expo-build-properties`, which Expo supports
-explicitly (`expo-modules-autolinking` maps 2.3.0+ to its latest KSP). Upgrading the ads library
-would not have helped: 16.5.0 still pins 25.4.0, and it reads that version from its own
-`package.json` rather than from any Gradle property, so it cannot be overridden from here.
-
-Nobody has compiled this. If the Android build fails on a Kotlin task, that is where to look.
+2. The GDPR message, with `https://ler08.github.io/dev/privacy.html` as its policy URL.
 
 ### PayPal donation link
 
