@@ -215,6 +215,8 @@
     "goalPerWeek": "每周 {{count}}",
     "goalFreeDays": "{{count}} 天不饮酒",
     "subscriptionRowSubtitle": "高级版 — 尚未开放",
+    "adPrivacyRow": "广告隐私选项",
+    "adPrivacyRowSubtitle": "重新查看你对广告的同意设置",
     "accountRow": "账户与云同步",
     "accountRowSubtitle": "可选功能——在多台设备间保护你的记录",
     "accountSynced": "已同步",

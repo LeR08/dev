@@ -338,16 +338,22 @@ habits:
   Help & Resources. Shown at most once per app launch, only to free-tier users. Because it's
   our own copy rather than arbitrary ad-network creative, its content can actually be held to
   "anti-addiction, non-judgmental" rather than whatever an ad auction happens to serve.
-- **The AdMob banner is currently disabled** (`src/ads/AdBanner.tsx` always renders `null`,
-  and `react-native-google-mobile-ads` is removed from `package.json`/`app.config.js`). It used
-  Google's own public **test** ad unit ids and rendered fine on a real device build, but
-  `react-native-google-mobile-ads@16.4.0` pulls in `play-services-ads:25.4.0`, whose Kotlin
-  metadata (2.3.0) is newer than what this project's Gradle/Kotlin toolchain compiles against
-  (2.1.x) — that failed `:react-native-google-mobile-ads:compileReleaseKotlin` on EAS Build.
-  Re-add the dependency and the `app.config.js` plugin entry (see git history for the exact block)
-  once the Kotlin toolchain version is bumped to match, or once the library ships a build
-  compiled against an older Kotlin metadata version. Not a blocker for anything else — it's
-  a free-tier banner, not part of auth/sync.
+- **The AdMob banner** (`src/ads/AdBanner.tsx`) is one banner, on the supporter screen only —
+  not on launch, not in the log, not in the statistics. It is also the only thing that starts
+  the ads SDK: a user who never opens that screen never initialises it, and a supporter never
+  sees the card that holds it. Consent runs first through Google's UMP flow, so no ad is
+  requested until UMP says it may be, and `src/ads/AdPrivacyOptionsRow.tsx` puts the consent
+  form back within reach in Settings where Google requires that. `AdBanner.web.tsx` shadows the
+  native file so the web bundle never resolves the package at all.
+
+  The real unit id arrives from `EXPO_PUBLIC_ADMOB_BANNER_UNIT_ID`, set only in `eas.json`'s
+  `production` profile; everything else falls back to Google's public test unit, because AdMob
+  suspends accounts over impressions a publisher generates on their own app.
+
+  This dependency was removed once before: `play-services-ads:25.4.0` ships Kotlin metadata at
+  2.3.0, newer than the 2.0/2.1 compiler this project used, which failed
+  `:react-native-google-mobile-ads:compileReleaseKotlin` on EAS Build. `expo-build-properties`
+  now raises Kotlin to 2.3.0. That has not been compiled yet — see PUBLISHING.md.
 
 Whether to monetize at all, and how, is a human decision this codebase deliberately no longer
 pre-empts. Flagged again under [Open items](#open-items-before-any-public-release).

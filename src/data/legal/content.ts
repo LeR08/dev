@@ -161,7 +161,15 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Sharing',
-          body: ['Your data is never shared with other users, sold, or used for advertising. It leaves this device in two ways: cloud sync, which is part of using the app, and any export you start yourself.'],
+          body: ['Your drink log and profile are never shared with other users, sold, or used for advertising. They leave this device in two ways: cloud sync, which is part of using the app, and any export you start yourself. Advertising is a separate matter, described below.'],
+        },
+        {
+          heading: 'Advertising',
+          body: [
+            'The free version shows one banner, on the supporter screen only. It is served by Google AdMob. Opening that screen is what starts the ads SDK — it runs nowhere else in the app, and it does not run at all for supporters, who see no banner.',
+            "AdMob receives what it needs to select and measure an ad: your device's advertising identifier, technical details about the device, and an approximate location derived from your IP address. It does not receive your drink log, your profile, or anything else this app records.",
+            "Where consent is required — the EEA and the UK — Google's consent form is shown before the first ad request, and no ad is requested if you decline. You can reopen that form at any time from Settings, and you can reset or delete the advertising identifier in your device's Android settings.",
+          ],
         },
         {
           heading: 'Cloud sync',
@@ -321,7 +329,15 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Partage',
-          body: ["Vos données ne sont jamais partagées avec d'autres utilisateurs, ni vendues, ni utilisées à des fins publicitaires. Elles quittent cet appareil de deux façons : la synchronisation cloud, qui fait partie du fonctionnement de l'application, et les exports que vous déclenchez vous-même."],
+          body: ["Votre historique et votre profil ne sont jamais partagés avec d'autres utilisateurs, ni vendus, ni utilisés à des fins publicitaires. Ils quittent cet appareil de deux façons : la synchronisation cloud, qui fait partie du fonctionnement de l'application, et les exports que vous déclenchez vous-même. La publicité est un sujet distinct, décrit ci-dessous."],
+        },
+        {
+          heading: 'Publicité',
+          body: [
+            "La version gratuite affiche une bannière, uniquement sur l'écran de soutien. Elle est diffusée par Google AdMob. C'est l'ouverture de cet écran qui démarre le SDK publicitaire : il ne s'exécute nulle part ailleurs dans l'application, et pas du tout pour les abonnés, qui ne voient aucune bannière.",
+            "AdMob reçoit ce qui lui est nécessaire pour choisir et mesurer une annonce : l'identifiant publicitaire de votre appareil, des informations techniques sur celui-ci, et une localisation approximative déduite de votre adresse IP. Il ne reçoit ni votre historique de consommation, ni votre profil, ni quoi que ce soit d'autre enregistré par l'application.",
+            "Là où le consentement est requis — l'EEE et le Royaume-Uni — le formulaire de consentement de Google est affiché avant la première demande d'annonce, et aucune annonce n'est demandée si vous refusez. Vous pouvez rouvrir ce formulaire à tout moment depuis les Réglages, et vous pouvez réinitialiser ou supprimer l'identifiant publicitaire dans les réglages Android de votre appareil.",
+          ],
         },
         {
           heading: 'Synchronisation cloud',
@@ -481,7 +497,15 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Compartición',
-          body: ['Tus datos nunca se comparten con otros usuarios, ni se venden, ni se usan con fines publicitarios. Salen de este dispositivo de dos maneras: la sincronización en la nube, que forma parte del funcionamiento de la aplicación, y las exportaciones que inicias tú.'],
+          body: ['Tu historial y tu perfil nunca se comparten con otros usuarios, ni se venden, ni se usan con fines publicitarios. Salen de este dispositivo de dos maneras: la sincronización en la nube, que forma parte del funcionamiento de la aplicación, y las exportaciones que inicias tú. La publicidad es un asunto aparte y se describe más abajo.'],
+        },
+        {
+          heading: 'Publicidad',
+          body: [
+            'La versión gratuita muestra un banner, solo en la pantalla de apoyo. Lo sirve Google AdMob. Abrir esa pantalla es lo que arranca el SDK de anuncios: no se ejecuta en ninguna otra parte de la aplicación, y no se ejecuta en absoluto para quienes tienen la suscripción, que no ven ningún banner.',
+            'AdMob recibe lo necesario para seleccionar y medir un anuncio: el identificador publicitario de tu dispositivo, datos técnicos sobre él y una ubicación aproximada deducida de tu dirección IP. No recibe tu registro de consumiciones, ni tu perfil, ni nada más de lo que guarda esta aplicación.',
+            'Donde se requiere consentimiento —el EEE y el Reino Unido— el formulario de consentimiento de Google se muestra antes de la primera solicitud de anuncio, y no se solicita ningún anuncio si lo rechazas. Puedes volver a abrir ese formulario en cualquier momento desde Ajustes, y puedes restablecer o eliminar el identificador publicitario en los ajustes de Android de tu dispositivo.',
+          ],
         },
         {
           heading: 'Sincronización en la nube',
@@ -641,7 +665,15 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Weitergabe',
-          body: ['Deine Daten werden nie mit anderen Nutzer:innen geteilt, verkauft oder für Werbung verwendet. Sie verlassen dieses Gerät auf zwei Wegen: über die Cloud-Synchronisierung, die zur Nutzung der App gehört, und über Exporte, die du selbst startest.'],
+          body: ['Dein Trinkprotokoll und dein Profil werden nie mit anderen Nutzer:innen geteilt, verkauft oder für Werbung verwendet. Sie verlassen dieses Gerät auf zwei Wegen: über die Cloud-Synchronisierung, die zur Nutzung der App gehört, und über Exporte, die du selbst startest. Werbung ist eine eigene Sache und wird weiter unten beschrieben.'],
+        },
+        {
+          heading: 'Werbung',
+          body: [
+            'Die kostenlose Version zeigt ein Banner, und zwar nur auf dem Unterstützungs-Bildschirm. Ausgeliefert wird es von Google AdMob. Erst das Öffnen dieses Bildschirms startet das Werbe-SDK: An keiner anderen Stelle der App läuft es, und für Unterstützer:innen, die kein Banner sehen, läuft es überhaupt nicht.',
+            'AdMob erhält, was zur Auswahl und Messung einer Anzeige nötig ist: die Werbe-ID deines Geräts, technische Angaben zum Gerät und einen ungefähren Standort, der aus deiner IP-Adresse abgeleitet wird. Dein Trinkprotokoll, dein Profil und alles andere, was diese App aufzeichnet, erhält AdMob nicht.',
+            'Wo eine Einwilligung erforderlich ist — im EWR und im Vereinigten Königreich — wird Googles Einwilligungsformular vor der ersten Anzeigenanfrage angezeigt, und bei Ablehnung wird keine Anzeige angefordert. Du kannst dieses Formular jederzeit in den Einstellungen erneut öffnen und die Werbe-ID in den Android-Einstellungen deines Geräts zurücksetzen oder löschen.',
+          ],
         },
         {
           heading: 'Cloud-Synchronisierung',
@@ -801,7 +833,15 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Condivisione',
-          body: ["I tuoi dati non vengono mai condivisi con altri utenti, venduti o usati a fini pubblicitari. Lasciano questo dispositivo in due modi: la sincronizzazione cloud, che fa parte del funzionamento dell'app, e le esportazioni che avvii tu."],
+          body: ["Il tuo storico e il tuo profilo non vengono mai condivisi con altri utenti, venduti o usati a fini pubblicitari. Lasciano questo dispositivo in due modi: la sincronizzazione cloud, che fa parte del funzionamento dell'app, e le esportazioni che avvii tu. La pubblicità è una questione a parte, descritta qui sotto."],
+        },
+        {
+          heading: 'Pubblicità',
+          body: [
+            "La versione gratuita mostra un banner, solo nella schermata di sostegno. È servito da Google AdMob. È l'apertura di quella schermata ad avviare l'SDK pubblicitario: non viene eseguito da nessun'altra parte nell'app, e non viene eseguito affatto per chi ha l'abbonamento, che non vede alcun banner.",
+            "AdMob riceve ciò che serve a selezionare e misurare un annuncio: l'identificatore pubblicitario del tuo dispositivo, dettagli tecnici sul dispositivo e una posizione approssimativa dedotta dal tuo indirizzo IP. Non riceve il tuo storico dei consumi, il tuo profilo o altro di quanto questa app registra.",
+            "Dove il consenso è richiesto — SEE e Regno Unito — il modulo di consenso di Google viene mostrato prima della prima richiesta di annuncio, e se rifiuti non viene richiesto alcun annuncio. Puoi riaprire quel modulo in qualsiasi momento dalle Impostazioni, e puoi reimpostare o eliminare l'identificatore pubblicitario nelle impostazioni Android del tuo dispositivo.",
+          ],
         },
         {
           heading: 'Sincronizzazione cloud',
@@ -961,7 +1001,15 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'Partilha',
-          body: ['Os teus dados nunca são partilhados com outros utilizadores, vendidos ou usados para publicidade. Saem deste dispositivo de duas formas: a sincronização na nuvem, que faz parte do funcionamento da aplicação, e as exportações que inicias tu.'],
+          body: ['O teu histórico e o teu perfil nunca são partilhados com outros utilizadores, vendidos ou usados para publicidade. Saem deste dispositivo de duas formas: a sincronização na nuvem, que faz parte do funcionamento da aplicação, e as exportações que inicias tu. A publicidade é um assunto à parte e está descrita abaixo.'],
+        },
+        {
+          heading: 'Publicidade',
+          body: [
+            'A versão gratuita mostra um banner, apenas no ecrã de apoio. É servido pelo Google AdMob. É a abertura desse ecrã que arranca o SDK de publicidade: não corre em mais lado nenhum da aplicação, e não corre de todo para quem tem a subscrição, que não vê qualquer banner.',
+            'O AdMob recebe o que precisa para escolher e medir um anúncio: o identificador de publicidade do teu dispositivo, detalhes técnicos sobre o mesmo e uma localização aproximada deduzida do teu endereço IP. Não recebe o teu registo de consumos, o teu perfil, nem mais nada do que esta aplicação guarda.',
+            'Onde o consentimento é obrigatório — o EEE e o Reino Unido — o formulário de consentimento da Google é mostrado antes do primeiro pedido de anúncio, e nenhum anúncio é pedido se recusares. Podes reabrir esse formulário a qualquer momento nas Definições, e podes repor ou eliminar o identificador de publicidade nas definições Android do teu dispositivo.',
+          ],
         },
         {
           heading: 'Sincronização na nuvem',
@@ -1113,7 +1161,15 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: '数据共享',
-          body: ['你的数据绝不会与其他用户共享、出售或用于广告。数据以两种方式离开本设备：云同步（属于应用的正常运行），以及你自己发起的导出。'],
+          body: ['你的饮酒记录和个人资料绝不会与其他用户共享、出售或用于广告。它们以两种方式离开本设备：云同步（属于应用的正常运行），以及你自己发起的导出。广告是另一回事，说明见下文。'],
+        },
+        {
+          heading: '广告',
+          body: [
+            '免费版只在支持页面显示一条横幅广告，由 Google AdMob 提供。打开该页面才会启动广告 SDK：应用的其他任何位置都不会运行它；对订阅用户则完全不会运行，他们看不到任何横幅。',
+            'AdMob 会获取投放和衡量广告所需的信息：你设备的广告标识符、设备的技术信息，以及根据 IP 地址推断的大致位置。它不会获取你的饮酒记录、个人资料，或本应用记录的任何其他内容。',
+            '在需要征得同意的地区——欧洲经济区和英国——Google 的同意表单会在首次请求广告之前显示；如果你拒绝，则不会请求任何广告。你可以随时在设置中重新打开该表单，也可以在设备的 Android 设置中重置或删除广告标识符。',
+          ],
         },
         {
           heading: '云同步',
@@ -1265,7 +1321,15 @@ export const LEGAL_CONTENT: Record<LegalContentLocale, Record<LegalDocId, LegalD
         },
         {
           heading: 'المشاركة',
-          body: ['لا تُشارَك بياناتك أبدًا مع مستخدمين آخرين، ولا تُباع، ولا تُستخدَم لأغراض إعلانية. وهي تغادر هذا الجهاز بطريقتين: المزامنة السحابية، وهي جزء من عمل التطبيق، وأي تصدير تبدأه بنفسك.'],
+          body: ['لا يُشارَك سجل مشروباتك ولا ملفك الشخصي أبدًا مع مستخدمين آخرين، ولا يُباعان، ولا يُستخدَمان لأغراض إعلانية. وهما يغادران هذا الجهاز بطريقتين: المزامنة السحابية، وهي جزء من عمل التطبيق، وأي تصدير تبدأه بنفسك. أما الإعلانات فهي مسألة منفصلة موضّحة أدناه.'],
+        },
+        {
+          heading: 'الإعلانات',
+          body: [
+            'تعرض النسخة المجانية شريطًا إعلانيًا واحدًا، في شاشة الدعم فقط، تقدّمه خدمة Google AdMob. فتح تلك الشاشة هو ما يشغّل حزمة الإعلانات: فهي لا تعمل في أي مكان آخر من التطبيق، ولا تعمل إطلاقًا للمشتركين الذين لا يرون أي شريط إعلاني.',
+            'يتلقّى AdMob ما يلزمه لاختيار الإعلان وقياسه: المُعرِّف الإعلاني لجهازك، وتفاصيل تقنية عن الجهاز، وموقعًا تقريبيًا مستنتَجًا من عنوان IP الخاص بك. ولا يتلقّى سجل مشروباتك ولا ملفك الشخصي ولا أي شيء آخر يسجّله هذا التطبيق.',
+            'وحيث تكون الموافقة مطلوبة — المنطقة الاقتصادية الأوروبية والمملكة المتحدة — يُعرض نموذج الموافقة من Google قبل أول طلب إعلان، ولا يُطلب أي إعلان إذا رفضت. ويمكنك إعادة فتح ذلك النموذج في أي وقت من الإعدادات، كما يمكنك إعادة تعيين المُعرِّف الإعلاني أو حذفه من إعدادات أندرويد في جهازك.',
+          ],
         },
         {
           heading: 'المزامنة السحابية',

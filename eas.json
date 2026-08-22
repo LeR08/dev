@@ -50,7 +50,8 @@
         "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "485426562011",
         "EXPO_PUBLIC_FIREBASE_APP_ID": "1:485426562011:web:106a29c4edabc186281dfe",
         "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "485426562011-io7l045vmdcs3203pe0frhot8bs9foso.apps.googleusercontent.com",
-        "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "485426562011-91h37bldqmgns2omatqd5rvd1vr3dvb0.apps.googleusercontent.com"
+        "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "485426562011-91h37bldqmgns2omatqd5rvd1vr3dvb0.apps.googleusercontent.com",
+        "EXPO_PUBLIC_ADMOB_BANNER_UNIT_ID": "ca-app-pub-2344459617810838/6454392933"
       }
     }
   },

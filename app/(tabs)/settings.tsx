@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { View } from 'react-native';
 
+import { AdPrivacyOptionsRow } from '@/ads/AdPrivacyOptionsRow';
 import { AccountRow } from '@/components/AccountRow';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -140,6 +141,7 @@ export default function SettingsScreen() {
               subtitle={t('settings.subscriptionRowSubtitle')}
               onPress={() => router.push('/settings/subscription')}
             />
+            <AdPrivacyOptionsRow />
           </Card>
         </FadeInView>
 

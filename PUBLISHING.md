@@ -55,10 +55,11 @@ product id is fixed in `src/payments/billing.ts` and does not need the product t
 
 | # | Step | Who |
 |---|---|---|
-| 10 | AdMob account → App ID + banner unit id → block alcohol/gambling categories | you |
-| 11 | Re-add the dependency and render a real banner | me |
-| 12 | Prove it on `preview` — this is the one that broke the Android build before | both |
-| 13 | Update the Data safety form: the advertising ID becomes declarable | you |
+| 10 | AdMob account → App ID + banner unit id | **done** |
+| 11 | Re-add the dependency and render a real banner, with UMP consent | **done** |
+| 12 | AdMob → **Blocking controls**: block the alcohol and gambling categories | you |
+| 13 | Prove it on a build — this is the one that broke the Android build before | both |
+| 14 | Data safety form: declare the advertising ID rows (see below) | you |
 
 ### Phase 4 — before opening to the public
 
@@ -86,7 +87,7 @@ None of these block a closed test, all of them block a public listing.
 | AAB build | **done** — first build produced, versionCode 2 |
 | Google Sign-In (Android) | **done** — native SDK, verified working on a `preview` build |
 | Play Billing | **wired** (`tya_supporter_monthly`); needs the product created in Play, then a build to test |
-| AdMob | dependency absent, `AdBanner` renders `null` |
+| AdMob | **wired** — real banner behind UMP consent; ids in `app.config.js` and `eas.json`; never built yet |
 | PayPal donation | `EXPO_PUBLIC_PAYPAL_DONATE_URL` empty — card hidden |
 
 Regenerate the two graphics with `python scripts/build-store-graphics.py` after any change to
@@ -111,10 +112,25 @@ at the "you can use the app without it" level.
 | App activity | Other user-generated content | Yes | No | Yes | App functionality | `Entry` records — what, when, how much, optional note and location (`src/domain/types.ts`) |
 | App info & performance | — | No | — | — | — | no crash or diagnostics SDK is installed |
 
-**Do not** declare: location (the `Entry.location` field is a free-text label the user types,
-not a device location reading — there is no location permission in `app.config.js`),
-advertising ID (AdMob is removed — `src/ads/AdBanner.tsx` returns `null` and the dependency is
-out of `package.json`), or analytics (there is none).
+### Data types the ad banner adds
+
+These are not ours — they are what the Google Mobile Ads SDK collects on its own once
+`AdBanner` mounts (`src/ads/AdBanner.tsx`). Google publishes the disclosure guidance for AdMob
+publishers; re-read the current version of that page before submitting, because the list moves.
+
+| Play category | Data type | Collected | Shared | Required | Purpose | Why |
+|---|---|---|---|---|---|---|
+| Device or other IDs | Device or other IDs | Yes | Yes | Yes | Advertising or marketing | the advertising identifier, sent to Google to select and measure the banner |
+| Location | Approximate location | Yes | Yes | Yes | Advertising or marketing | derived from the IP address by Google, not from a device sensor — the app still requests no location permission |
+| App activity | App interactions | Yes | Yes | Yes | Advertising or marketing | ad impressions and taps, measured by Google |
+
+Declared as **required** rather than optional on purpose. The UMP consent form does let people
+in the EEA and the UK decline, but everywhere else `gatherConsent` resolves with no form and no
+choice, and "optional" in this form means optional for everyone.
+
+**Do not** declare: precise location (the `Entry.location` field is a free-text label the user
+types, not a device location reading — there is no location permission in `app.config.js`), or
+analytics (there is none).
 
 ### The security questions
 
@@ -239,28 +255,30 @@ it is allowed near `production`.
 
 ### AdMob — the banner
 
-The banner is disabled and the dependency is out of `package.json`; the README's ads section
-explains why. To turn it back on:
+Wired. `ca-app-pub-2344459617810838~7959046290` sits in `app.config.js` (it goes into the
+manifest, and it is public by design); the banner unit `.../6454392933` is injected as
+`EXPO_PUBLIC_ADMOB_BANNER_UNIT_ID` from `eas.json`'s `production` profile only, so development
+and preview builds fall back to Google's public test unit — AdMob closes accounts over
+impressions a publisher generates on their own app.
 
-1. **admob.google.com**, same Google account → **Apps → Add app**. Answer "no" to "is your app
-   listed on a store?" until it is, then add it again afterwards to link the real listing.
-2. Platform Android, name TYA. AdMob issues an **App ID** shaped
-   `ca-app-pub-################~##########`. Note the **tilde** — the ad unit id uses a slash
-   and is a different value. Mixing them up gives an app that builds and never shows anything.
-3. **Ad units → Add ad unit → Banner** → that is the unit id
-   `ca-app-pub-################/##########`.
-4. In AdMob, **Blocking controls**: block alcohol and gambling categories. An auction serves
-   whatever wins, and this is an app about drinking less.
-5. Send both ids over. The wiring is: add `react-native-google-mobile-ads`, its plugin entry
-   with `androidAppId` in `app.config.js`, and make `src/ads/AdBanner.tsx` render a real
-   `BannerAd` instead of `null`.
+That fallback does not protect the internal-testing builds, which come off the `production`
+profile and therefore carry the real unit. **Do not tap the banner on those.**
 
-Same caution as Billing, and a specific one: this dependency was removed because
-`play-services-ads` shipped Kotlin metadata newer than this project's toolchain compiles
-against, which **failed the Android build**. The library has moved on, but that has not been
-re-tested here. Prove it on `preview` before `production`.
+Two things still on you:
 
-Declaring the advertising ID in the Data safety form becomes mandatory once AdMob is in.
+1. **Blocking controls** in AdMob: block the alcohol and gambling categories. An auction serves
+   whatever wins, and this is an app about drinking less. Nothing in the code can do this.
+2. The Data safety rows above.
+
+The build risk is real and untested. AdMob was pulled out of this project once because
+`play-services-ads` 25.4.0 ships Kotlin metadata at 2.3.0 and a 2.0/2.1 compiler refuses to read
+metadata newer than itself — `:react-native-google-mobile-ads:compileReleaseKotlin` failed on
+EAS. The fix here raises Kotlin to 2.3.0 through `expo-build-properties`, which Expo supports
+explicitly (`expo-modules-autolinking` maps 2.3.0+ to its latest KSP). Upgrading the ads library
+would not have helped: 16.5.0 still pins 25.4.0, and it reads that version from its own
+`package.json` rather than from any Gradle property, so it cannot be overridden from here.
+
+Nobody has compiled this. If the Android build fails on a Kotlin task, that is where to look.
 
 ### PayPal donation link
 

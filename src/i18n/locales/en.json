@@ -215,6 +215,8 @@
     "goalPerWeek": "{{count}}/week",
     "goalFreeDays": "{{count}} free days",
     "subscriptionRowSubtitle": "Premium — not open yet",
+    "adPrivacyRow": "Ad privacy choices",
+    "adPrivacyRowSubtitle": "Review the consent you gave for advertising",
     "accountRow": "Account & cloud sync",
     "accountRowSubtitle": "Optional — keep your history safe across devices",
     "accountSynced": "Synced",

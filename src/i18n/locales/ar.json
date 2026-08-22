@@ -215,6 +215,8 @@
     "goalPerWeek": "{{count}}/أسبوعيًا",
     "goalFreeDays": "{{count}} أيام خالية",
     "subscriptionRowSubtitle": "Premium — لم يُفتح بعد",
+    "adPrivacyRow": "خيارات خصوصية الإعلانات",
+    "adPrivacyRowSubtitle": "راجع الموافقة التي منحتها بشأن الإعلانات",
     "accountRow": "الحساب والمزامنة السحابية",
     "accountRowSubtitle": "اختياري — حافظ على سجلك آمنًا عبر عدة أجهزة",
     "accountSynced": "تمت المزامنة",

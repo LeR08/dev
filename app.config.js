@@ -95,6 +95,29 @@ module.exports = {
       // native, adding it means the next build has to be a real one — this
       // cannot be picked up by a JS reload.
       '@react-native-google-signin/google-signin',
+      // AdMob. The app id below is public by design — it ships inside the
+      // APK's manifest and identifies the publisher, not an account secret.
+      [
+        'react-native-google-mobile-ads',
+        {
+          androidAppId: 'ca-app-pub-2344459617810838~7959046290',
+        },
+      ],
+      // Raises Kotlin from Expo's default 2.0.21. play-services-ads 25.4.0
+      // ships Kotlin metadata at 2.3.0, and a 2.0/2.1 compiler refuses to read
+      // metadata newer than itself — which is exactly how
+      // :react-native-google-mobile-ads:compileReleaseKotlin failed the last
+      // time AdMob was in this project. Expo supports 2.3.0+ explicitly
+      // (expo-modules-autolinking maps it to the latest KSP), so this is the
+      // sanctioned fix rather than pinning an older ads SDK.
+      [
+        'expo-build-properties',
+        {
+          android: {
+            kotlinVersion: '2.3.0',
+          },
+        },
+      ],
     ],
     experiments: {
       typedRoutes: true,

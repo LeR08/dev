@@ -215,6 +215,8 @@
     "goalPerWeek": "{{count}}/semana",
     "goalFreeDays": "{{count}} dias livres",
     "subscriptionRowSubtitle": "Premium — ainda não disponível",
+    "adPrivacyRow": "Opções de privacidade da publicidade",
+    "adPrivacyRowSubtitle": "Rever o consentimento que deste para a publicidade",
     "accountRow": "Conta e sincronização",
     "accountRowSubtitle": "Opcional — mantém o teu histórico seguro em vários dispositivos",
     "accountSynced": "Sincronizado",

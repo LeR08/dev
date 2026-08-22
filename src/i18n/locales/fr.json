@@ -215,6 +215,8 @@
     "goalPerWeek": "{{count}}/semaine",
     "goalFreeDays": "{{count}} jours sans alcool",
     "subscriptionRowSubtitle": "Premium — pas encore ouvert",
+    "adPrivacyRow": "Choix de confidentialité (publicité)",
+    "adPrivacyRowSubtitle": "Revenir sur le consentement donné pour la publicité",
     "accountRow": "Compte et synchronisation",
     "accountRowSubtitle": "Optionnel — protégez votre historique sur plusieurs appareils",
     "accountSynced": "Synchronisé",

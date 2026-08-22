@@ -215,6 +215,8 @@
     "goalPerWeek": "{{count}}/Woche",
     "goalFreeDays": "{{count}} freie Tage",
     "subscriptionRowSubtitle": "Premium — noch nicht verfügbar",
+    "adPrivacyRow": "Datenschutzoptionen für Werbung",
+    "adPrivacyRowSubtitle": "Deine Einwilligung zur Werbung erneut ansehen",
     "accountRow": "Konto & Cloud-Synchronisierung",
     "accountRowSubtitle": "Optional — sichert deinen Verlauf geräteübergreifend",
     "accountSynced": "Synchronisiert",
