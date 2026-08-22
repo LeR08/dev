@@ -119,25 +119,15 @@ module.exports = {
           androidAppId: 'ca-app-pub-2344459617810838~7959046290',
         },
       ],
-      // Raises Kotlin from Expo's default 2.0.21. play-services-ads 25.4.0
-      // ships Kotlin metadata at 2.3.0, and a 2.0/2.1 compiler refuses to read
-      // metadata newer than itself — which is exactly how
-      // :react-native-google-mobile-ads:compileReleaseKotlin failed the last
-      // time AdMob was in this project. Expo supports 2.3.0+ explicitly
-      // (expo-modules-autolinking maps it to the latest KSP), so this is the
-      // sanctioned fix rather than pinning an older ads SDK.
-      [
-        'expo-build-properties',
-        {
-          android: {
-            // Kept at 2.3.0 because the failed build proved it works for every
-            // other module — reanimated, worklets, google-signin and nitro all
-            // compiled under it. It does NOT reach the AdMob module, which is
-            // what './plugins/withAdMobKotlinMetadata' is for.
-            kotlinVersion: '2.3.0',
-          },
-        },
-      ],
+      // Kotlin is deliberately left at the version Expo and React Native pick.
+      //
+      // An earlier attempt raised it to 2.3.0 to get play-services-ads' newer
+      // metadata read. It could not work: the third-party modules compile with
+      // their own Kotlin 2.1 compiler regardless of the root setting, so all
+      // the override did was hand them a 2.3.0 stdlib they cannot read. That
+      // broke react-native-gesture-handler, which had been compiling fine.
+      // The real fix is the plugin below, scoped to the one module that needs
+      // it.
       './plugins/withAdMobKotlinMetadata',
     ],
     experiments: {
