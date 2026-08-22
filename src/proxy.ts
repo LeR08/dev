@@ -5,10 +5,13 @@ import { AUTH_ROUTES, PROTECTED_PREFIXES, routes } from '@/lib/constants/routes'
 /**
  * Barrière 1 sur 4 (voir docs/ARCHITECTURE.md §4.2).
  *
+ * Next.js 16 remplace la convention `middleware.ts` par `proxy.ts` ; le
+ * comportement est identique.
+ *
  * Rafraîchit la session et gère les redirections. C'est une commodité d'UX :
  * la sécurité réelle vient des gardes serveur et surtout de la RLS PostgreSQL.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { response, user } = await updateSession(request);
   const { pathname, search } = request.nextUrl;
 

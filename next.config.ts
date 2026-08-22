@@ -10,9 +10,9 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'demo.invalid' },
     ],
   },
-  experimental: {
-    typedRoutes: true,
-  },
+  // typedRoutes est volontairement désactivé : les chemins dynamiques
+  // (`/courses/${slug}`) ne sont pas exprimables dans son typage, et
+  // src/lib/constants/routes.ts joue déjà le rôle de source unique de vérité.
 };
 
 export default nextConfig;
