@@ -145,6 +145,9 @@ module.exports = {
         projectId: '9b767876-5eec-4875-b368-b1d4b5d6bfe4',
       },
     },
-    owner: 'ler08',
+    // The organisation, not the personal account. The project lives under
+    // `ler08s-team` since the app is published by LaSolutionDigital, and the
+    // owner here has to match or `eas` cannot find the project at all.
+    owner: 'ler08s-team',
   },
 };
