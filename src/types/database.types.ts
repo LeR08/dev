@@ -1835,6 +1835,10 @@ export type Database = {
         Args: { p_entity: string; p_parent_id: string | null; p_ordered_ids: string[] };
         Returns: undefined;
       };
+      grade_numeric_exercise: {
+        Args: { p_exercise_id: string; p_response: string };
+        Returns: boolean | null;
+      };
       check_badges: { Args: { p_user_id: string }; Returns: number };
       is_staff: { Args: Record<string, never>; Returns: boolean };
       is_admin: { Args: Record<string, never>; Returns: boolean };

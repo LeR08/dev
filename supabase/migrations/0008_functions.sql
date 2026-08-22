@@ -736,3 +736,50 @@ begin
   end if;
 end;
 $$;
+
+-- ---------------------------------------------------------------------------
+-- Correction d'un exercice numérique.
+-- expected_answer et tolerance sont révoqués en lecture directe (0009) : la
+-- comparaison ne peut se faire qu'ici. Renvoie null si l'exercice n'est pas
+-- de type numérique — la correction reste alors manuelle.
+-- ---------------------------------------------------------------------------
+create or replace function public.grade_numeric_exercise(p_exercise_id uuid, p_response text)
+returns boolean
+language plpgsql
+stable
+security definer
+set search_path = public
+as $$
+declare
+  v_exercise record;
+  v_expected numeric;
+  v_given    numeric;
+begin
+  select e.kind, e.expected_answer, e.tolerance, e.status, l.course_id, l.is_free_preview
+    into v_exercise
+  from public.exercises e
+  join public.lessons l on l.id = e.lesson_id
+  where e.id = p_exercise_id;
+
+  if not found or v_exercise.status <> 'published' then
+    return null;
+  end if;
+
+  if not (v_exercise.is_free_preview or public.has_course_access(v_exercise.course_id)) then
+    raise exception 'Accès non autorisé' using errcode = 'insufficient_privilege';
+  end if;
+
+  if v_exercise.kind <> 'numeric' or v_exercise.expected_answer is null then
+    return null;
+  end if;
+
+  begin
+    v_expected := replace(trim(v_exercise.expected_answer), ',', '.')::numeric;
+    v_given    := replace(trim(p_response), ',', '.')::numeric;
+  exception when others then
+    return false;   -- réponse non numérique
+  end;
+
+  return abs(v_given - v_expected) <= coalesce(v_exercise.tolerance, 0);
+end;
+$$;
