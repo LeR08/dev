@@ -239,7 +239,8 @@ export default function AuthGateScreen() {
               <GoogleSignInButton
                 label={t('account.continueWithGoogle')}
                 webClientId={GOOGLE_WEB_CLIENT_ID}
-                genericErrorMessage={t('account.errorGeneric')}
+                genericErrorMessage={t('account.errorGoogleFailed')}
+                playServicesErrorMessage={t('account.errorPlayServices')}
                 onError={setErrorMessage}
               />
             )}

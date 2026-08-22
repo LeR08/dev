@@ -604,6 +604,8 @@
     "errorUserNotFound": "Aucun compte trouvé avec cet e-mail.",
     "errorTooManyRequests": "Trop de tentatives — patientez un instant et réessayez.",
     "errorGeneric": "Une erreur est survenue. Vérifiez votre connexion et réessayez.",
+    "errorGoogleFailed": "La connexion Google n'a pas abouti. Vous pouvez vous connecter avec votre adresse e-mail et votre mot de passe.",
+    "errorPlayServices": "Les services Google Play doivent être installés ou mis à jour sur cet appareil pour que la connexion Google fonctionne.",
     "orDivider": "ou",
     "continueWithGoogle": "Continuer avec Google",
     "appleNotice": "La connexion avec Apple n'est pas encore disponible sur cette version — la connexion par e-mail et par Google fonctionnent déjà."

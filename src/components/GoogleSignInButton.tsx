@@ -2,6 +2,7 @@ import {
   GoogleSignin,
   isCancelledResponse,
   isSuccessResponse,
+  statusCodes,
 } from '@react-native-google-signin/google-signin';
 import React, { useState } from 'react';
 
@@ -48,8 +49,19 @@ export type GoogleSignInButtonProps = {
   label: string;
   webClientId: string;
   onError: (message: string) => void;
-  /** Translated fallback for anything the SDK reports that we do not map. */
+  /**
+   * Translated fallback for anything the SDK reports that we do not map.
+   *
+   * This must not be the app's all-purpose "check your connection" string.
+   * The commonest cause of a failure here is a signing certificate Google
+   * does not recognise — a build installed from Play is signed with Play's
+   * app signing key, not the upload key, and that fingerprint has to be
+   * registered separately. Telling someone to check their connection sends
+   * them to look at the one thing that is working.
+   */
   genericErrorMessage: string;
+  /** Shown when Google Play services are missing or too old to be used. */
+  playServicesErrorMessage: string;
   /** Called before the flow starts, e.g. to clear a pending sign-out guard. */
   onBeforeSignIn?: () => void;
 };
@@ -59,6 +71,7 @@ export function GoogleSignInButton({
   webClientId,
   onError,
   genericErrorMessage,
+  playServicesErrorMessage,
   onBeforeSignIn,
 }: GoogleSignInButtonProps) {
   const [busy, setBusy] = useState(false);
@@ -80,8 +93,17 @@ export function GoogleSignInButton({
         return;
       }
       await signInWithGoogleIdToken(response.data.idToken);
-    } catch {
-      onError(genericErrorMessage);
+    } catch (cause) {
+      const code =
+        cause && typeof cause === 'object' && 'code' in cause
+          ? String((cause as { code?: unknown }).code)
+          : '';
+      if (code === statusCodes.IN_PROGRESS) return;
+      onError(
+        code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
+          ? playServicesErrorMessage
+          : genericErrorMessage
+      );
     } finally {
       setBusy(false);
     }

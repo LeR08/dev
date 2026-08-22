@@ -604,6 +604,8 @@
     "errorUserNotFound": "Kein Konto mit dieser E-Mail gefunden.",
     "errorTooManyRequests": "Zu viele Versuche — warte einen Moment und versuche es erneut.",
     "errorGeneric": "Etwas ist schiefgelaufen. Verbindung prüfen und erneut versuchen.",
+    "errorGoogleFailed": "Die Google-Anmeldung ist nicht durchgegangen. Du kannst dich stattdessen mit E-Mail-Adresse und Passwort anmelden.",
+    "errorPlayServices": "Die Google-Play-Dienste müssen auf diesem Gerät installiert oder aktualisiert werden, damit die Google-Anmeldung funktioniert.",
     "orDivider": "oder",
     "continueWithGoogle": "Weiter mit Google",
     "appleNotice": "Die Anmeldung mit Apple ist in dieser Version noch nicht eingerichtet — die Anmeldung per E-Mail und mit Google funktionieren bereits."

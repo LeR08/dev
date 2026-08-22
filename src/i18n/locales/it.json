@@ -604,6 +604,8 @@
     "errorUserNotFound": "Nessun account trovato con questa e-mail.",
     "errorTooManyRequests": "Troppi tentativi — attendi un momento e riprova.",
     "errorGeneric": "Qualcosa è andato storto. Controlla la connessione e riprova.",
+    "errorGoogleFailed": "L'accesso con Google non è andato a buon fine. Puoi accedere con il tuo indirizzo e-mail e la password.",
+    "errorPlayServices": "I servizi Google Play devono essere installati o aggiornati su questo dispositivo perché l'accesso con Google funzioni.",
     "orDivider": "oppure",
     "continueWithGoogle": "Continua con Google",
     "appleNotice": "L'accesso con Apple non è ancora configurato in questa versione — l'accesso via e-mail e con Google funzionano già."

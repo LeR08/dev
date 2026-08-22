@@ -604,6 +604,8 @@
     "errorUserNotFound": "No account found with that email.",
     "errorTooManyRequests": "Too many attempts — wait a moment and try again.",
     "errorGeneric": "Something went wrong. Check your connection and try again.",
+    "errorGoogleFailed": "Google sign-in did not go through. You can sign in with your email address and password instead.",
+    "errorPlayServices": "Google Play services need to be installed or updated on this device before Google sign-in can work.",
     "orDivider": "or",
     "continueWithGoogle": "Continue with Google",
     "appleNotice": "Apple sign-in isn't set up on this build yet — email and Google sign-in both work today."

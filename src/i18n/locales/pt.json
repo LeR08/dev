@@ -604,6 +604,8 @@
     "errorUserNotFound": "Nenhuma conta encontrada com esse e-mail.",
     "errorTooManyRequests": "Demasiadas tentativas — espera um momento e tenta novamente.",
     "errorGeneric": "Algo correu mal. Verifica a tua ligação e tenta novamente.",
+    "errorGoogleFailed": "O início de sessão com o Google não foi concluído. Podes entrar com o teu endereço de e-mail e palavra-passe.",
+    "errorPlayServices": "Os serviços do Google Play têm de ser instalados ou atualizados neste dispositivo para o início de sessão com o Google funcionar.",
     "orDivider": "ou",
     "continueWithGoogle": "Continuar com Google",
     "appleNotice": "O início de sessão com Apple ainda não está configurado nesta versão — o início de sessão por e-mail e com Google já funcionam."
