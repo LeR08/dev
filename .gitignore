@@ -13,6 +13,9 @@ expo-env.d.ts
 .kotlin/
 *.orig.*
 *.jks
+# `eas credentials` can write this, and it holds the keystore password in
+# plain text next to the keystore it unlocks.
+credentials.json
 *.p8
 *.p12
 *.key

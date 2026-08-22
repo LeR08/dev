@@ -25,6 +25,9 @@ expo-env.d.ts
 .env.production
 .env.development
 *.jks
+# `eas credentials` can write this, and it holds the keystore password in
+# plain text next to the keystore it unlocks.
+credentials.json
 *.p8
 *.p12
 *.key
