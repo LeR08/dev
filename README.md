@@ -15,6 +15,7 @@ the app is designed or tested against.
 
 > **Every console identifier — package name, fingerprints, client ids, public URLs — is in
 > [SETUP.md](SETUP.md).** `PUBLISHING.md` covers what still has to be decided and filled in.
+> [LESSONS.md](LESSONS.md) is what this cost and what to do differently on the next project.
 
 > Tally was this project's first identity, kept as a personal build. It is no longer built
 > from this repo — an installed copy keeps working and keeps its data, but everything here is
