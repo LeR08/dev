@@ -59,11 +59,6 @@ If sign-in ever fails again with code 10 after a signing change, start here: ope
 → Protégé avec Play → Signature d'application and copy **every** SHA-1 the page offers,
 including any under "Clés de signature d'application précédentes".
 
-The upload key is yours. The app signing key is Google's, held on their servers: Play strips
-your signature from an uploaded AAB and re-signs with it. That separation is why losing the
-upload key is recoverable — Google can issue a new one without breaking updates for existing
-users.
-
 ## Keystore
 
 Downloaded via `eas credentials` → Keystore → Download existing keystore, and stored **outside
