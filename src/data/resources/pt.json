@@ -1,0 +1,15 @@
+{
+  "country": "PT",
+  "entries": [
+    {
+      "name": "Linha Vida — SOS Droga",
+      "contact": "1414",
+      "notes": "Gratuita e anónima, dias úteis das 10h às 18h. Serviço do SICAD (Serviço de Intervenção nos Comportamentos Aditivos e nas Dependências)."
+    },
+    {
+      "name": "SNS 24",
+      "contact": "808 24 24 24",
+      "notes": "Linha de saúde nacional, 24/7 — não específica para o álcool, mas pode orientar-te para o serviço certo."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native
+.kotlin/
+*.orig.*
+*.jks
+# `eas credentials` can write this, and it holds the keystore password in
+# plain text next to the keystore it unlocks.
+credentials.json
+
+# Stray media. A 23 MB mp4 sat in the repo root for weeks, unreferenced,
+# and went up to EAS Build on every single run — it was 23 of the 25.5 MB
+# each build reported compressing.
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files and secrets — never commit real API keys (Stripe, PayPal,
+# AdMob, ...). Keep an .env.example checked in instead, with placeholder values.
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# typescript
+*.tsbuildinfo
+
+# generated native folders
+/ios
+/android

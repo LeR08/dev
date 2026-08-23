@@ -1,0 +1,61 @@
+# What NOT to upload to EAS Build.
+#
+# EAS normally derives this from git. Without git installed (EAS_NO_VCS=1 —
+# see the README's build section) it has no such reference, so this file is
+# what keeps node_modules and build output out of the upload. Note that once
+# this file exists it REPLACES .gitignore for EAS, so anything that must stay
+# off the build server has to be listed here too, not only there.
+
+# dependencies — EAS installs these itself from package-lock.json
+node_modules/
+
+# build output
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+/ios
+/android
+
+# secrets: the build profiles in eas.json carry their own env block, so the
+# build server never needs the local .env
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+*.jks
+# `eas credentials` can write this, and it holds the keystore password in
+# plain text next to the keystore it unlocks.
+credentials.json
+
+# Stray media. A 23 MB mp4 sat in the repo root for weeks, unreferenced,
+# and went up to EAS Build on every single run — it was 23 of the 25.5 MB
+# each build reported compressing.
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+
+# version control and editor noise
+.git/
+.gitignore
+.DS_Store
+*.tsbuildinfo
+.metro-health-check*
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+.kotlin/
+*.orig.*
+
+# not needed to build the app
+__tests__/
+coverage/
+scripts/
+docs/

@@ -1,0 +1,15 @@
+{
+  "country": "ES",
+  "entries": [
+    {
+      "name": "Línea 024 — Atención a la conducta suicida",
+      "contact": "024",
+      "notes": "Gratuita, confidencial, 24/7, todo el país. Servicio del Ministerio de Sanidad — no es específica sobre el alcohol, solo para riesgo de conducta suicida (sanidad.gob.es/linea024)."
+    },
+    {
+      "name": "Adicciones — servicio de tu comunidad autónoma",
+      "contact": "Varía según la región — por ejemplo, el 012 en Andalucía o la Línia Verda en Cataluña",
+      "notes": "La atención a las adicciones en España está organizada por comunidad autónoma, no por una única línea nacional. Busca \"teléfono adicciones\" junto con el nombre de tu comunidad autónoma."
+    }
+  ]
+}

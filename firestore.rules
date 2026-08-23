@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Paste this into Firebase Console → Firestore Database → Rules (or deploy
+// via the Firebase CLI: `firebase deploy --only firestore:rules`).
+//
+// The client code in src/sync/firestore.ts assumes THIS is the real access
+// control — a Firebase client config (src/sync/firebaseApp.ts) is not a
+// secret and cannot be the security boundary on its own. Every read/write
+// is scoped to the signed-in user's own uid; nobody can read or write
+// another account's data, signed in or not.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      match /entries/{entryId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+
+      match /drinks/{drinkId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+  }
+}

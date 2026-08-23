@@ -1,0 +1,324 @@
+import { useRouter } from 'expo-router';
+import React, { useMemo, useState } from 'react';
+import { Pressable, ScrollView, SectionList, View } from 'react-native';
+
+import { EntryRow } from '@/components/EntryRow';
+import { Chip } from '@/components/ui/Chip';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { FadeInView } from '@/components/ui/FadeInView';
+import { Field } from '@/components/ui/Field';
+import { Text } from '@/components/ui/Text';
+import { gramsToIntake } from '@/domain/alcohol';
+import { addDays, dayKey, startOfDay, trailingRange, type Range } from '@/domain/dates';
+import { formatDate, formatMoney, formatRelativeDay } from '@/domain/format';
+import { filterEntries } from '@/domain/search';
+import { totals } from '@/domain/stats';
+import { CATEGORIES, type Category, type Entry } from '@/domain/types';
+import { useNow } from '@/hooks/useNow';
+import { categoryLabel } from '@/i18n/categoryLabel';
+import { formatIntakeLabel } from '@/i18n/formatIntakeLabel';
+import { useTranslation } from '@/i18n/I18nProvider';
+import { useApp } from '@/state/AppProvider';
+import { useTheme } from '@/theme/ThemeProvider';
+
+type Period = 'all' | '30d' | '90d' | '365d' | '1825d' | 'custom';
+
+const PERIOD_LABEL_KEY: Record<Exclude<Period, 'custom'>, string> = {
+  '30d': 'historyScreen.period30d',
+  '90d': 'historyScreen.period90d',
+  '365d': 'historyScreen.periodYear',
+  '1825d': 'historyScreen.period5y',
+  all: 'historyScreen.periodAll',
+};
+
+/**
+ * The 5-year lens sits alongside the honest "all time" one (never a
+ * fabricated projection) so a long enough run of real history reads as more
+ * than a string of individual weeks — years of small choices add up, for
+ * better or worse.
+ */
+const PERIODS: { value: Exclude<Period, 'custom'>; days: number | null }[] = [
+  { value: '30d', days: 30 },
+  { value: '90d', days: 90 },
+  { value: '365d', days: 365 },
+  { value: '1825d', days: 1825 },
+  { value: 'all', days: null },
+];
+
+export default function HistoryScreen() {
+  const theme = useTheme();
+  const router = useRouter();
+  const now = useNow();
+  const { t } = useTranslation();
+  const { entries, settings } = useApp();
+
+  const [query, setQuery] = useState('');
+  const [period, setPeriod] = useState<Period>('30d');
+  const [category, setCategory] = useState<Category | 'all'>('all');
+  const [customStart, setCustomStart] = useState(() => trailingRange(now, 'day', 30, settings.weekStartsOn).start);
+
+  const range = useMemo<Range | null>(() => {
+    if (period === 'custom') {
+      return { start: startOfDay(customStart).getTime(), end: now };
+    }
+    const days = PERIODS.find((item) => item.value === period)?.days ?? null;
+    if (days === null) return null;
+    return trailingRange(now, 'day', days, settings.weekStartsOn);
+  }, [customStart, now, period, settings.weekStartsOn]);
+
+  const filtered = useMemo(
+    () => filterEntries(entries, { range, category, query }),
+    [category, entries, query, range]
+  );
+
+  const sections = useMemo(() => groupByDay(filtered), [filtered]);
+  const summary = useMemo(() => totals(filtered), [filtered]);
+  const summaryIntake = gramsToIntake(summary.grams, settings.intakeUnit, settings.standardDrinkGrams);
+
+  const hasFilters = query.trim().length > 0 || category !== 'all' || period !== 'all';
+
+  return (
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <SectionList
+        sections={sections}
+        keyExtractor={(entry) => entry.id}
+        stickySectionHeadersEnabled={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{
+          paddingHorizontal: theme.spacing(5),
+          paddingBottom: theme.spacing(12),
+          maxWidth: 560,
+          width: '100%',
+          alignSelf: 'center',
+        }}
+        ListHeaderComponent={
+          <FadeInView>
+            <View style={{ gap: theme.spacing(3), paddingTop: theme.spacing(8), paddingBottom: theme.spacing(3) }}>
+              <Text variant="title">{t('historyScreen.title')}</Text>
+
+              <Field
+                placeholder={t('historyScreen.searchPlaceholder')}
+                value={query}
+                onChangeText={setQuery}
+                autoCapitalize="none"
+                autoCorrect={false}
+                accessibilityLabel={t('historyScreen.searchA11y')}
+              />
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: theme.spacing(2), paddingRight: theme.spacing(5) }}
+              >
+                {PERIODS.map((item) => (
+                  <Chip
+                    key={item.value}
+                    label={t(PERIOD_LABEL_KEY[item.value] as never)}
+                    selected={period === item.value}
+                    onPress={() => setPeriod(item.value)}
+                  />
+                ))}
+                <Chip
+                  label={t('historyScreen.periodCustom')}
+                  selected={period === 'custom'}
+                  onPress={() => setPeriod('custom')}
+                />
+              </ScrollView>
+
+              {period === 'custom' ? (
+                <StartDatePicker
+                  value={customStart}
+                  max={now}
+                  onChange={setCustomStart}
+                  label={t('historyScreen.customStartLabel')}
+                />
+              ) : null}
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ gap: theme.spacing(2), paddingRight: theme.spacing(5) }}
+              >
+                <Chip
+                  label={t('historyScreen.allDrinks')}
+                  selected={category === 'all'}
+                  onPress={() => setCategory('all')}
+                />
+                {CATEGORIES.map((item) => (
+                  <Chip
+                    key={item}
+                    label={categoryLabel(t, item)}
+                    dotColor={theme.categoryColor(item)}
+                    selected={category === item}
+                    onPress={() => setCategory(item)}
+                  />
+                ))}
+              </ScrollView>
+
+              {filtered.length > 0 ? (
+                <Text variant="caption" tone="muted">
+                  {t(
+                    summary.entries === 1 ? ('historyScreen.entriesOne' as never) : ('historyScreen.entriesOther' as never),
+                    { count: summary.entries }
+                  )}{' '}
+                  · {formatIntakeLabel(t, summaryIntake, settings.intakeUnit)}
+                  {summary.spend > 0 ? ` · ${formatMoney(summary.spend, settings.currency, { compact: true })}` : ''}
+                </Text>
+              ) : null}
+            </View>
+          </FadeInView>
+        }
+        ListEmptyComponent={
+          hasFilters && entries.length > 0 ? (
+            <EmptyState
+              title={t('historyScreen.noMatchTitle')}
+              body={t('historyScreen.noMatchBody')}
+              glyph="⌕"
+            />
+          ) : (
+            <EmptyState
+              title={t('historyScreen.emptyTitle')}
+              body={t('historyScreen.emptyBody')}
+              actionLabel={t('today.logButton')}
+              onAction={() => router.push('/log')}
+              glyph="◌"
+            />
+          )
+        }
+        renderSectionHeader={({ section }) => (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'baseline',
+              justifyContent: 'space-between',
+              paddingTop: theme.spacing(4),
+              paddingBottom: theme.spacing(1),
+            }}
+          >
+            <Text variant="label" tone="muted">
+              {formatRelativeDay(section.date, now, { today: t('common.today'), yesterday: t('common.yesterday') })}
+            </Text>
+            <Text variant="caption" tone="faint">
+              {formatIntakeLabel(
+                t,
+                gramsToIntake(section.grams, settings.intakeUnit, settings.standardDrinkGrams),
+                settings.intakeUnit
+              )}
+              {section.spend > 0 ? ` · ${formatMoney(section.spend, settings.currency, { compact: true })}` : ''}
+            </Text>
+          </View>
+        )}
+        renderItem={({ item, index, section }) => (
+          <View>
+            {index > 0 ? <View style={{ height: 1, backgroundColor: theme.colors.border }} /> : null}
+            <EntryRow
+              entry={item}
+              settings={settings}
+              onPress={() => router.push({ pathname: '/entry/[id]', params: { id: item.id } })}
+            />
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+/**
+ * Lets the user pick exactly which day the "custom" window starts on, so a
+ * trailing preset (30/90/365 days) doesn't drag in days before they actually
+ * started tracking and skew the averages.
+ */
+function StartDatePicker({
+  value,
+  max,
+  onChange,
+  label,
+}: {
+  value: number;
+  max: number;
+  onChange: (value: number) => void;
+  label: string;
+}) {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const previousDayLabel = t('dateTimeField.previousDay');
+  const nextDayLabel = t('dateTimeField.nextDay');
+  const canGoForward = startOfDay(value).getTime() < startOfDay(max).getTime();
+
+  const arrow = (symbol: string, days: number, accessibilityLabel: string, disabled: boolean) => (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      disabled={disabled}
+      onPress={() => onChange(Math.min(addDays(value, days).getTime(), max))}
+      style={({ pressed }) => ({
+        width: 36,
+        height: 36,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: theme.radius.pill,
+        backgroundColor: theme.colors.surface,
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+        opacity: disabled ? 0.35 : pressed ? 0.6 : 1,
+      })}
+    >
+      <Text variant="body">{symbol}</Text>
+    </Pressable>
+  );
+
+  return (
+    <View style={{ gap: theme.spacing(1.5) }}>
+      <Text variant="caption" tone="muted" overline>
+        {label}
+      </Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: theme.colors.surfaceMuted,
+          borderRadius: theme.radius.pill,
+          borderWidth: 1,
+          borderColor: theme.colors.border,
+          padding: theme.spacing(1),
+        }}
+      >
+        {arrow('‹', -1, previousDayLabel, false)}
+        <Text variant="label">{formatDate(value)}</Text>
+        {arrow('›', 1, nextDayLabel, !canGoForward)}
+      </View>
+    </View>
+  );
+}
+
+type DaySection = {
+  key: string;
+  date: number;
+  grams: number;
+  spend: number;
+  data: Entry[];
+};
+
+function groupByDay(entries: Entry[]): DaySection[] {
+  const sections = new Map<string, DaySection>();
+
+  for (const entry of entries) {
+    const key = dayKey(entry.consumedAt);
+    let section = sections.get(key);
+    if (!section) {
+      section = { key, date: startOfDay(entry.consumedAt).getTime(), grams: 0, spend: 0, data: [] };
+      sections.set(key, section);
+    }
+    section.data.push(entry);
+    section.spend += entry.price ?? 0;
+  }
+
+  // Day totals reuse the shared aggregation so the header can never disagree
+  // with the dashboard.
+  for (const section of sections.values()) {
+    section.grams = totals(section.data).grams;
+  }
+
+  return [...sections.values()].sort((a, b) => b.date - a.date);
+}
