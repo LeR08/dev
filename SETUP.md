@@ -48,16 +48,28 @@ users.
 
 **There are two app signing keys, not one.** This app is enrolled in Play's quantum-safe
 signing beta, so the Signature d'application page shows a *Clé classique* and a *Clé
-cryptographique post-quantique* side by side, each with its own fingerprint. Registering only
-the classic one cost the better part of a day: Google Sign-In returned DEVELOPER_ERROR
-(status code 10) on every Play install while working perfectly on a directly-installed APK,
-and every console check came back clean — both fingerprints present, OAuth clients correct,
-consent screen in production, Firebase provider enabled — because the fingerprint actually
-signing the delivered APK was the one nobody had looked at.
+cryptographique post-quantique* side by side, each with its own fingerprint. The post-quantum
+one went unnoticed for a day, which is worth knowing on any Play project — but registering it
+did **not** fix the problem below, so do not read this section as a solved case.
 
-If sign-in ever fails again with code 10 after a signing change, start here: open Play Console
-→ Protégé avec Play → Signature d'application and copy **every** SHA-1 the page offers,
-including any under "Clés de signature d'application précédentes".
+### Open: Google Sign-In fails on Play installs
+
+`GoogleSignin.signIn()` returns DEVELOPER_ERROR (status code 10) on every build installed from
+Play. The same code, in a `preview` APK installed directly, signs in perfectly.
+
+Ruled out, each verified in the console:
+
+- All three SHA-1 fingerprints above are registered on the Firebase Android app.
+- Three Android OAuth clients exist, all with package `com.tya.tracker`, carrying those
+  fingerprints.
+- OAuth consent screen: External, **In production** — not Testing.
+- Firebase Authentication: Google provider enabled.
+- The web client id passed to the SDK is the project's own Web client.
+- Email/password sign-in works normally, so Firebase Auth and Firestore are healthy.
+
+Open with Google support. The single strongest fact for that conversation is the preview-APK
+comparison: identical code, identical client id, different signing certificate, opposite
+result.
 
 ## Keystore
 
