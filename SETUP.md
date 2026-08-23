@@ -31,15 +31,33 @@ SDK needs it to return an `idToken`, which is what Firebase consumes. The Androi
 must exist and carry the right fingerprints, but its id is never passed to anything — it was
 removed from `eas.json` after sitting there unread for weeks.
 
-## The two SHA-1 fingerprints
+## The three SHA-1 fingerprints
 
-Both must be registered on the Firebase Android app. They sign different things, and having
-only one is why Google sign-in worked on `preview` builds and failed from Play.
+All three must be registered on the Firebase Android app.
 
 | Key | SHA-1 | Signs |
 |---|---|---|
 | Upload | `0A:87:A5:BE:9F:DE:64:DE:D1:FB:CD:DB:08:0B:78:F7:C4:2D:6E:74` | `preview` builds installed directly |
-| Play app signing | `5D:B9:54:E8:9C:A8:B2:48:09:3C:9C:6B:82:CD:0A:3B:65:5E:AA:1E` | everything installed from Play |
+| Play app signing — classic | `5D:B9:54:E8:9C:A8:B2:48:09:3C:9C:6B:82:CD:0A:3B:65:5E:AA:1E` | Play installs |
+| Play app signing — post-quantum | `69:F3:3A:1E:D0:21:C0:49:0F:20:BA:E4:6C:3F:30:72:C8:FD:F0:F0` | Play installs |
+
+The upload key is yours. The app signing keys are Google's and never leave their servers: Play
+strips your signature from an uploaded AAB and re-signs. That separation is why losing the
+upload key is recoverable — Google can issue a new one without breaking updates for existing
+users.
+
+**There are two app signing keys, not one.** This app is enrolled in Play's quantum-safe
+signing beta, so the Signature d'application page shows a *Clé classique* and a *Clé
+cryptographique post-quantique* side by side, each with its own fingerprint. Registering only
+the classic one cost the better part of a day: Google Sign-In returned DEVELOPER_ERROR
+(status code 10) on every Play install while working perfectly on a directly-installed APK,
+and every console check came back clean — both fingerprints present, OAuth clients correct,
+consent screen in production, Firebase provider enabled — because the fingerprint actually
+signing the delivered APK was the one nobody had looked at.
+
+If sign-in ever fails again with code 10 after a signing change, start here: open Play Console
+→ Protégé avec Play → Signature d'application and copy **every** SHA-1 the page offers,
+including any under "Clés de signature d'application précédentes".
 
 The upload key is yours. The app signing key is Google's, held on their servers: Play strips
 your signature from an uploaded AAB and re-signs with it. That separation is why losing the
