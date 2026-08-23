@@ -28,6 +28,14 @@ expo-env.d.ts
 # `eas credentials` can write this, and it holds the keystore password in
 # plain text next to the keystore it unlocks.
 credentials.json
+
+# Stray media. A 23 MB mp4 sat in the repo root for weeks, unreferenced,
+# and went up to EAS Build on every single run — it was 23 of the 25.5 MB
+# each build reported compressing.
+*.mp4
+*.mov
+*.avi
+*.mkv
 *.p8
 *.p12
 *.key
