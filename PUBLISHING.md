@@ -59,7 +59,7 @@ product id is fixed in `src/payments/billing.ts` and does not need the product t
 | 11 | Re-add the dependency and render a real banner, with UMP consent | **done** |
 | 12 | AdMob → **Blocking controls**: block the alcohol and gambling categories | you |
 | 13 | Prove it on a build — this is the one that broke the Android build before | both |
-| 14 | Data safety form: declare the advertising ID rows (see below) | you |
+| 14 | Data safety form: declare the advertising ID rows (see below) | **done** |
 
 ### Phase 4 — before opening to the public
 
@@ -82,12 +82,12 @@ None of these block a closed test, all of them block a public listing.
 | App icon 512×512 | **done** — `store/icon-512.png` |
 | Feature graphic 1024×500 | **done** — `store/feature-graphic.png` |
 | Phone screenshots | **done** — `store/screenshots/*.png`, 1080×2400 |
-| Store listing text | English drafted below; seven translations to do |
-| Data safety answers | worked out below; to enter in the console |
-| Content rating | notes below; questionnaire to fill |
-| AAB build | **done** — versionCode 24, the first carrying AdMob and Play Billing together |
-| Google Sign-In (Android) | **done** — native SDK, verified working on a `preview` build |
-| Play Billing | **wired** (`tya_supporter_monthly`); needs the product created in Play, then a build to test |
+| Store listing text | French and English written below; six translations to do. Screenshots are in English on a fr-FR listing — worth regenerating |
+| Data safety | **done** — entered in the console, using the tables below |
+| Content rating | **done** — PEGI 18, consistent with the 18+ target audience |
+| AAB build | **done** — versionCode 25; 24 was the first to carry AdMob and Play Billing together |
+| Google Sign-In (Android) | **broken from Play** — works on a `preview` build, fails on a Play-installed one. Both SHA-1s are registered, the consent screen is in production, the Firebase provider is enabled: three hypotheses, three dead ends. Build 25 prints the SDK's error code on screen to end the guessing |
+| Play Billing | **done** — a real purchase went through on a device at €5.99/month, price read from Play |
 | AdMob | **built, and blocked on publication** — see below; the app renders no banner and no error in the meantime |
 | PayPal donation | `EXPO_PUBLIC_PAYPAL_DONATE_URL` empty — card hidden |
 
