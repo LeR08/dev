@@ -52,7 +52,26 @@ npm install
 
 Deux méthodes. La première ne demande aucune installation.
 
-### Méthode A — Éditeur SQL (la plus simple)
+### Avant tout : la vérification préalable
+
+Collez `supabase/migrations/0000_preflight.sql` dans **SQL Editor → New query**.
+
+Il ne modifie rien. Soit il confirme que le schéma `public` est libre, soit il
+liste les tables en conflit et indique la marche à suivre. Sur un projet où un
+guide de démarrage Supabase a déjà tourné, cette étape vous épargne une
+cascade d'erreurs incompréhensibles.
+
+En cas de conflit sur un projet neuf : exécutez
+`supabase/tools/reset_public_schema.sql` (destructif pour le schéma `public`,
+sans effet sur les comptes et les fichiers), puis reprenez ici.
+
+### Méthode A — Un seul fichier (la plus simple)
+
+**SQL Editor → New query** → collez **`supabase/install.sql`** → **Run**.
+
+Vérification préalable et 11 migrations, dans l'ordre, en une seule exécution.
+
+### Méthode B — Fichier par fichier
 
 **SQL Editor → New query**, puis collez et exécutez les fichiers **dans
 l'ordre**, un par un :
@@ -74,7 +93,7 @@ L'ordre compte : chaque fichier s'appuie sur le précédent. Une migration
 s'applique **une seule fois** — c'est normal qu'un second passage échoue sur
 `relation already exists`.
 
-### Méthode B — `psql` (plus rapide, tout en une commande)
+### Méthode C — `psql` (plus rapide, tout en une commande)
 
 L'URL de connexion se trouve dans **Project Settings → Database →
 Connection string → URI**.

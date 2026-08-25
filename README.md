@@ -242,23 +242,62 @@ variable et en observant la réponse réelle).
 
 ### 1. Créer le schéma
 
-Les migrations s'appliquent **dans l'ordre**, **une seule fois**.
+> **Sur un projet Supabase neuf, commencez par la vérification préalable.**
+> Si vous avez déjà exécuté un guide de démarrage Supabase (« User
+> Management », par exemple), le schéma `public` contient déjà une table
+> `profiles` incompatible. Les migrations échoueraient alors en cascade, avec
+> des messages sans rapport avec la cause réelle.
+>
+> Collez `supabase/migrations/0000_preflight.sql` dans l'éditeur SQL. Il ne
+> modifie rien et vous dit exactement quoi faire.
 
-**Méthode A — éditeur SQL Supabase** (aucune installation) : *SQL Editor →
-New query*, puis collez et exécutez chaque fichier de `supabase/migrations/`
-dans l'ordre numérique, de `0001` à `0011`.
+**Méthode A — un seul fichier** (la plus simple)
 
-**Méthode B — `psql`** (une commande). L'URL est dans
+*SQL Editor → New query* → collez **`supabase/install.sql`** (108 Ko) → *Run*.
+
+Il contient la vérification préalable et les 11 migrations, dans l'ordre. En
+cas de conflit il s'arrête avant toute modification.
+
+**Méthode B — fichier par fichier**
+
+*SQL Editor → New query*, puis chaque fichier de `supabase/migrations/` dans
+l'ordre numérique, de `0000` à `0011`. Utile pour voir précisément où ça
+coince.
+
+**Méthode C — `psql`** (une commande). L'URL est dans
 *Project Settings → Database → Connection string → URI* :
 
 ```bash
 export DATABASE_URL="postgresql://postgres.[ref]:[mot-de-passe]@aws-0-eu-central-1.pooler.supabase.com:5432/postgres"
 
-for f in supabase/migrations/*.sql; do
-  echo "→ $f"
-  psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$f"
-done
+psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f supabase/install.sql
 ```
+
+> `install.sql` est **généré** depuis les migrations
+> (`npm run build:install-sql`). La source de vérité reste
+> `supabase/migrations/` ; la CI vérifie que les deux ne divergent pas.
+
+#### Le schéma `public` contient déjà des tables
+
+C'est le cas si vous avez suivi un guide de démarrage Supabase avant
+d'installer cette application. Sur un **projet neuf sans données à conserver** :
+
+```sql
+-- ⚠ DESTRUCTIF : efface tout le schéma public.
+-- Les comptes (schéma auth) et les fichiers (schéma storage) sont conservés.
+-- Contenu de supabase/tools/reset_public_schema.sql
+```
+
+Collez `supabase/tools/reset_public_schema.sql`, puis reprenez à
+`0000_preflight.sql`.
+
+Les comptes déjà inscrits retrouvent automatiquement leur profil : la migration
+`0011` recrée les lignes `profiles` manquantes depuis `auth.users`, prénom et
+nom compris.
+
+Si votre base **contient des données à conserver**, ne lancez pas ce script :
+renommez les tables en conflit, ou installez l'application dans un projet
+Supabase distinct.
 
 ### 2. Charger le catalogue de démonstration
 
@@ -317,6 +356,7 @@ npm run lint        # ESLint
 npm run test        # tests unitaires (Vitest)
 npm run test:watch  # tests en continu
 npm run format      # Prettier
+npm run build:install-sql   # régénère supabase/install.sql depuis les migrations
 ```
 
 Tests de la base contre PostgreSQL — voir [`tests/README.md`](tests/README.md) :
@@ -550,6 +590,18 @@ Remplacez les URL depuis l'administration.
 **`permission denied for table …`**
 La migration `0009_rls.sql` n'a pas été appliquée, ou l'a été partiellement.
 Rejouez-la : les policies sont rejouables sans erreur.
+
+**`relation "profiles" already exists`, puis une cascade d'erreurs**
+Le schéma `public` contenait déjà des tables du même nom — typiquement celles
+d'un guide de démarrage Supabase. **La première erreur est la seule vraie** :
+tout ce qui suit en découle. Voir
+[Le schéma public contient déjà des tables](#le-schéma-public-contient-déjà-des-tables).
+
+**`column "first_name" of relation "profiles" does not exist`**
+Même cause : la table `profiles` présente n'est pas celle de cette application.
+La migration `0002` a échoué bien plus tôt. Exécutez
+`supabase/migrations/0000_preflight.sql` pour voir la liste exacte des
+conflits.
 
 **Je n'ai pas accès à `/admin` (404)**
 Le compte n'est pas administrateur. Voir

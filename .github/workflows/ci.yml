@@ -66,8 +66,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: install.sql est bien à jour vis-à-vis des migrations
+        run: node scripts/build-install-sql.mjs --check
+
       - name: Objets fournis par Supabase (auth, storage, rôles)
         run: $PSQL -f tests/sql/00_supabase_shim.sql
+
+      - name: La vérification préalable passe sur une base vierge
+        run: $PSQL -f supabase/migrations/0000_preflight.sql
 
       - name: Appliquer les migrations
         run: |
