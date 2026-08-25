@@ -53,7 +53,15 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" suppressHydrationWarning className={inter.variable}>
+    <html
+      lang="fr"
+      suppressHydrationWarning
+      className={inter.variable}
+      // Déclare explicitement le défilement fluide défini dans globals.css.
+      // Sans cet attribut, Next.js avertit en console et désactive le
+      // défilement fluide pendant les transitions de route.
+      data-scroll-behavior="smooth"
+    >
       <body className="min-h-dvh antialiased">
         <a
           href="#contenu"

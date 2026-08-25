@@ -38,6 +38,7 @@ La formation se vend en dehors de la plateforme ; l'accès se débloque par
 | Tests unitaires | ✅ 33 |
 | Tests SQL — logique métier | ✅ 18, contre PostgreSQL 16 réel |
 | Tests SQL — sécurité RLS | ✅ 27, contre PostgreSQL 16 réel |
+| Tests SQL — robustesse de l'auth | ✅ 8, contre PostgreSQL 16 réel |
 | Rendu navigateur | ✅ 8 pages, clair/sombre, desktop/mobile, 0 erreur console |
 | Catalogue de démonstration | 22 formations · 254 leçons · 50 h · 13 quiz |
 
@@ -245,7 +246,7 @@ Les migrations s'appliquent **dans l'ordre**, **une seule fois**.
 
 **Méthode A — éditeur SQL Supabase** (aucune installation) : *SQL Editor →
 New query*, puis collez et exécutez chaque fichier de `supabase/migrations/`
-dans l'ordre numérique, de `0001` à `0010`.
+dans l'ordre numérique, de `0001` à `0011`.
 
 **Méthode B — `psql`** (une commande). L'URL est dans
 *Project Settings → Database → Connection string → URI* :
@@ -323,6 +324,7 @@ Tests de la base contre PostgreSQL — voir [`tests/README.md`](tests/README.md)
 ```bash
 psql "$DATABASE_URL" -f tests/sql/01_business_logic.sql
 psql "$DATABASE_URL" -f tests/sql/02_security_rls.sql
+psql "$DATABASE_URL" -f tests/sql/03_auth_recovery.sql
 ```
 
 ---
@@ -478,6 +480,57 @@ Deux limites à connaître dès maintenant :
 **Erreur 500 : `Variable d'environnement manquante : …`**
 La variable n'est pas dans `.env.local`, ou pas définie sur Vercel. Sur Vercel,
 ajoutez-la **puis redéployez** : les variables sont lues au build.
+
+### L'authentification ne fonctionne pas
+
+L'application affiche désormais un message explicite pour chaque cause. Lisez-le
+d'abord : il désigne le réglage à corriger.
+
+| Message affiché sur `/login` | Cause | Correction |
+|---|---|---|
+| « Ce lien a expiré ou a déjà été utilisé » | Lien de confirmation périmé (24 h par défaut) ou déjà cliqué | Demandez un nouvel e-mail |
+| « Ce lien est incomplet » | Le lien a été recopié à la main, ou ouvert dans un autre navigateur que celui de l'inscription | Cliquez sur le lien directement depuis l'e-mail, dans le même navigateur |
+| « Le service d'authentification a refusé ce lien » | L'URL de callback n'est pas déclarée dans le projet Supabase | Ajoutez `https://votre-domaine.com/callback` dans **Authentication → URL Configuration → Redirect URLs** |
+| « Ce compte a été désactivé » | `profiles.is_active = false` | Réactivez le compte depuis **Administration → Membres** |
+| « Votre compte n'a pas pu être initialisé » | Aucune ligne `profiles` pour ce compte | La migration `0011` répare automatiquement ; vérifiez qu'elle est appliquée |
+
+**Les trois vérifications qui résolvent la grande majorité des cas :**
+
+1. **Site URL et Redirect URLs.** Dans Supabase → Authentication → URL
+   Configuration :
+   - *Site URL* = exactement la valeur de `NEXT_PUBLIC_SITE_URL`
+   - *Redirect URLs* contient `https://votre-domaine.com/callback`
+     **et** `http://localhost:3000/callback`
+
+   L'oubli du `/callback` dans les Redirect URLs est la cause la plus fréquente.
+
+2. **Confirmation d'e-mail.** Si *Confirm email* est activé (Authentication →
+   Providers → Email), un compte non confirmé ne peut pas se connecter. En
+   développement, désactivez-la pour éviter d'attendre un e-mail à chaque test.
+
+3. **Quota d'e-mails.** Le service intégré de Supabase est limité à quelques
+   messages par heure et sert uniquement aux tests. Au-delà, les e-mails ne
+   partent plus — silencieusement. Branchez un SMTP (Resend, Brevo : palier
+   gratuit suffisant) dans **Project Settings → Authentication → SMTP Settings**.
+
+**Comptes créés avant la migration `0006`** — depuis le tableau de bord
+Supabase, par exemple — n'ont pas de ligne `profiles` : le trigger n'existait
+pas encore. La migration `0011` les répare rétroactivement et installe une
+fonction d'auto-réparation. Pour vérifier qu'il n'en reste aucun :
+
+```sql
+select count(*) from auth.users u
+left join public.profiles p on p.id = u.id
+where p.id is null;
+-- attendu : 0
+```
+
+**Boucle de redirection entre `/login` et `/dashboard`**
+Symptôme d'un compte sans profil, corrigé par la migration `0011`. Si elle n'est
+pas encore appliquée, faites-le : les redirections passent désormais par
+`/logout`, qui efface réellement la session au lieu de la laisser en place.
+
+---
 
 **Le lien de confirmation d'e-mail renvoie vers `localhost`**
 La *Site URL* de Supabase (Authentication → URL Configuration) est restée sur

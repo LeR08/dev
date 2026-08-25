@@ -1860,6 +1860,7 @@ export type Database = {
         Returns: Json;
       };
       check_badges: { Args: { p_user_id: string }; Returns: number };
+      ensure_profile: { Args: Record<string, never>; Returns: boolean };
       is_staff: { Args: Record<string, never>; Returns: boolean };
       is_admin: { Args: Record<string, never>; Returns: boolean };
     };

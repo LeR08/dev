@@ -15,8 +15,14 @@ import type { Enums } from '@/types/database.types';
 
 export async function requireUser(): Promise<SessionUser> {
   const user = await getSessionUser();
+
+  // Passer par /logout plutôt que par /login : un Server Component ne peut pas
+  // écrire de cookie, donc la session resterait en place. Le proxy la verrait
+  // encore valide et renverrait vers /dashboard, qui renverrait vers /login…
+  // La route de déconnexion, elle, efface réellement la session.
   if (!user) redirect(routes.login);
-  if (!user.profile.is_active) redirect(`${routes.login}?error=account_disabled`);
+  if (!user.profile.is_active) redirect(`${routes.logout}?reason=account_disabled`);
+
   return user;
 }
 

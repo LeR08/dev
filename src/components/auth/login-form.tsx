@@ -14,13 +14,36 @@ import { signIn } from '@/server/actions/auth.actions';
 import { loginSchema, type LoginInput } from '@/validations/auth.schema';
 import { routes } from '@/lib/constants/routes';
 
+/**
+ * Messages associés aux codes d'erreur transmis dans l'URL par /callback et
+ * /logout.
+ *
+ * Sans cette table, un lien de confirmation expiré renvoyait vers /login sans
+ * le moindre message : l'utilisateur voyait un formulaire vide et concluait
+ * que « l'authentification ne marche pas ». Une erreur silencieuse est la pire
+ * des erreurs.
+ */
+const URL_ERRORS: Record<string, string> = {
+  account_disabled: 'Ce compte a été désactivé. Contactez le support.',
+  expired_link:
+    "Ce lien a expiré ou a déjà été utilisé. Demandez-en un nouveau ci-dessous.",
+  invalid_link:
+    "Ce lien est incomplet. Ouvrez-le directement depuis l'e-mail, sans le recopier, et dans le même navigateur que celui utilisé pour l'inscription.",
+  provider_error:
+    "Le service d'authentification a refusé ce lien. Vérifiez que l'adresse du site est bien déclarée dans les URL de redirection du projet Supabase.",
+  profile_missing:
+    "Votre compte n'a pas pu être initialisé. Reconnectez-vous ; si le problème persiste, contactez le support.",
+};
+
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const urlError = searchParams.get('error');
+  const urlDetail = searchParams.get('detail');
+
   const [formError, setFormError] = React.useState<string | null>(
-    searchParams.get('error') === 'account_disabled'
-      ? 'Ce compte a été désactivé. Contactez le support.'
-      : null,
+    urlError ? (URL_ERRORS[urlError] ?? "Une erreur est survenue lors de l'authentification.") : null,
   );
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -50,7 +73,16 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-      {formError && <Alert variant="danger">{formError}</Alert>}
+      {formError && (
+        <Alert variant="danger">
+          {formError}
+          {/* Le détail technique renvoyé par Supabase aide au diagnostic sans
+              polluer le message principal. */}
+          {urlDetail && (
+            <span className="mt-1 block text-xs opacity-75">Détail : {urlDetail}</span>
+          )}
+        </Alert>
+      )}
 
       <Field label="Adresse e-mail" htmlFor="email" required error={errors.email?.message}>
         <Input

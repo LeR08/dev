@@ -11,6 +11,7 @@ privilèges de colonne.
 |---|---|
 | `sql/01_business_logic.sql` | Inscription, activation de code, progression vidéo, complétion en cascade, idempotence de l'XP, séries, badges, correction de quiz, exercices numériques, temps d'étude |
 | `sql/02_security_rls.sql` | Isolation entre membres, verrouillage du contenu payant, impossibilité de tricher (score, XP, rôle), invisibilité des codes d'accès, accès anonyme, accès du staff |
+| `sql/03_auth_recovery.sql` | Création du profil à l'inscription, réparation d'un compte sans profil, idempotence de `ensure_profile()`, absence de compte orphelin |
 
 ### Exécution contre le projet Supabase
 
@@ -18,9 +19,11 @@ privilèges de colonne.
 # URL de connexion : Dashboard > Project Settings > Database > Connection string
 psql "$DATABASE_URL" -f tests/sql/01_business_logic.sql
 psql "$DATABASE_URL" -f tests/sql/02_security_rls.sql
+psql "$DATABASE_URL" -f tests/sql/03_auth_recovery.sql
 ```
 
-Les tests créent des comptes de test (`test-*@demo.invalid`, `sec-*@demo.invalid`)
+Les tests créent des comptes de test (`test-*@demo.invalid`, `sec-*@demo.invalid`,
+`recovery-*@demo.invalid`)
 et les nettoient au début de chaque exécution. Ils sont rejouables.
 
 ### Exécution en local
@@ -36,6 +39,7 @@ for f in supabase/migrations/*.sql; do psql -v ON_ERROR_STOP=1 -d edulearn_test 
 psql -d edulearn_test -f supabase/seed.sql
 psql -v ON_ERROR_STOP=1 -d edulearn_test -f tests/sql/01_business_logic.sql
 psql -v ON_ERROR_STOP=1 -d edulearn_test -f tests/sql/02_security_rls.sql
+psql -v ON_ERROR_STOP=1 -d edulearn_test -f tests/sql/03_auth_recovery.sql
 ```
 
 Un échec s'arrête immédiatement (`ON_ERROR_STOP`) et affiche une ligne

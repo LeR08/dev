@@ -99,3 +99,6 @@ jobs:
 
       - name: Tests de sécurité RLS
         run: $PSQL -f tests/sql/02_security_rls.sql
+
+      - name: Tests de robustesse de l'authentification
+        run: $PSQL -f tests/sql/03_auth_recovery.sql

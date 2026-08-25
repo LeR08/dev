@@ -33,11 +33,28 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
     .eq('id', user.id)
     .maybeSingle();
 
-  // Le profil est créé par trigger sur auth.users ; s'il manque, la session est
-  // inutilisable — on la traite comme absente plutôt que de planter le rendu.
-  if (!profile) return null;
+  if (profile) {
+    return { id: user.id, email: user.email ?? '', profile };
+  }
 
-  return { id: user.id, email: user.email ?? '', profile };
+  // Le profil est normalement créé par le trigger on_auth_user_created. S'il
+  // manque — compte créé avant l'application de la migration 0006, ou depuis le
+  // tableau de bord Supabase — la session serait valide mais inutilisable, et
+  // le membre tournerait en boucle entre /login et /dashboard.
+  //
+  // On le répare une fois, exactement comme l'aurait fait le trigger.
+  const { data: repaired } = await supabase.rpc('ensure_profile');
+  if (!repaired) return null;
+
+  const { data: healed } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (!healed) return null;
+
+  return { id: user.id, email: user.email ?? '', profile: healed };
 });
 
 /** Accès actifs du membre — sert au verrouillage du contenu côté interface. */
