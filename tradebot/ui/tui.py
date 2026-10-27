@@ -22,12 +22,13 @@ class TradebotApp(App):
     TITLE = "tradebot"
     CSS = """
     #header { height: 3; padding: 0 1; background: $panel; }
-    #top { height: 1fr; }
-    #positions { width: 3fr; border: round $primary; }
-    #scan { width: 2fr; border: round $primary; padding: 0 1; }
-    #votes { height: 12; border: round $primary; }
-    #log { height: 12; border: round $secondary; }
-    #output { height: auto; max-height: 14; border: round $accent; padding: 0 1; }
+    #body { height: 1fr; }
+    #top { height: 2fr; min-height: 6; }
+    #positions { width: 3fr; height: 100%; border: round $primary; }
+    #scan { width: 2fr; height: 100%; border: round $primary; padding: 0 1; }
+    #votes { height: 2fr; min-height: 5; border: round $primary; }
+    #log { height: 1fr; min-height: 4; border: round $secondary; }
+    #output { height: auto; min-height: 3; max-height: 10; border: round $accent; padding: 0 1; }
     #cmd { dock: bottom; }
     """
     BINDINGS = [("ctrl+q", "quit", "Quit"), ("ctrl+k", "kill", "Kill switch")]
@@ -40,7 +41,7 @@ class TradebotApp(App):
 
     def compose(self) -> ComposeResult:
         yield Static(id="header")
-        with Vertical():
+        with Vertical(id="body"):
             with Horizontal(id="top"):
                 yield DataTable(id="positions", zebra_stripes=True)
                 yield Static(id="scan", markup=False)
