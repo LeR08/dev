@@ -415,7 +415,13 @@ class KrakenAdapter(BrokerAdapter):
         data = self._addorder_payload(req, pair)
         if self.mode == Mode.TEST:
             if self.cfg.execution.validate_orders_in_test and self.secrets.has_kraken_keys:
-                await self._private("AddOrder", {**data, "validate": "true"})
+                try:
+                    await self._private("AddOrder", {**data, "validate": "true"})
+                except OrderRejected as exc:
+                    if "Insufficient funds" not in str(exc):
+                        raise
+                    # paper balance is simulated: an empty real account must not block test mode
+                    log.info("dry-run: real account lacks funds (ignored in test mode)", extra={"broker": "kraken"})
             try:
                 await self.get_orderbook(req.symbol, 10)
             except BrokerError:

@@ -216,6 +216,7 @@ class BrokerTrader:
         equity, cash = await self.adapter.get_equity()
         positions = self.db.open_positions(self.broker, mode)
         quotes = await self._quotes([p.symbol for p in positions])
+        self.data.set_quotes(quotes)
         infos: dict[str, PositionInfo] = {}
         unrealized = 0.0
         for p in positions:

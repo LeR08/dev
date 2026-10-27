@@ -1,5 +1,7 @@
-"""Local terminal dashboard (Textual): panels on top, command line at the bottom.
+"""Local terminal dashboard (Textual).
 
+Layout: header (mode badges, equity, P&L) / Analyse (last scan + agent votes) /
+Positions en cours (live P&L) / Positions terminées (realised P&L) / log / command line.
 Local only: no web server, no remote control port.
 """
 
@@ -11,6 +13,7 @@ from textual.widgets import DataTable, Footer, Input, RichLog, Static
 
 from tradebot.brokers.base import Mode
 from tradebot.logging_setup import UI_BUFFER
+from tradebot.storage.db import as_utc
 from tradebot.ui.commands import CommandProcessor
 
 
@@ -18,20 +21,29 @@ def badge(mode: Mode) -> str:
     return "[bold white on green] TEST [/]" if mode == Mode.TEST else "[bold white on red] LIVE [/]"
 
 
+def pnl_markup(value: float | None, suffix: str = " €") -> str:
+    if value is None:
+        return ""
+    color = "green" if value > 0 else "red" if value < 0 else "white"
+    return f"[{color}]{value:+,.2f}{suffix}[/]"
+
+
 class TradebotApp(App):
     TITLE = "tradebot"
     CSS = """
     #header { height: 3; padding: 0 1; background: $panel; }
     #body { height: 1fr; }
-    #top { height: 2fr; min-height: 6; }
-    #positions { width: 3fr; height: 100%; border: round $primary; }
-    #scan { width: 2fr; height: 100%; border: round $primary; padding: 0 1; }
-    #votes { height: 2fr; min-height: 5; border: round $primary; }
+    #analyse { height: 2fr; min-height: 7; border: round $primary; }
+    #scan { width: 1fr; height: 100%; padding: 0 1; border-right: solid $primary-darken-2; }
+    #votes { width: 3fr; height: 100%; }
+    #positions-row { height: 2fr; min-height: 7; }
+    #open { width: 1fr; height: 100%; border: round $success; }
+    #closed { width: 1fr; height: 100%; border: round $warning; }
     #log { height: 1fr; min-height: 4; border: round $secondary; }
     #output { height: auto; min-height: 3; max-height: 10; border: round $accent; padding: 0 1; }
     #cmd { dock: bottom; }
     """
-    BINDINGS = [("ctrl+q", "quit", "Quit"), ("ctrl+k", "kill", "Kill switch")]
+    BINDINGS = [("ctrl+q", "quit", "Quitter"), ("ctrl+k", "kill", "Kill switch")]
 
     def __init__(self, bot):
         super().__init__()
@@ -42,24 +54,30 @@ class TradebotApp(App):
     def compose(self) -> ComposeResult:
         yield Static(id="header")
         with Vertical(id="body"):
-            with Horizontal(id="top"):
-                yield DataTable(id="positions", zebra_stripes=True)
+            with Horizontal(id="analyse"):
                 yield Static(id="scan", markup=False)
-            yield DataTable(id="votes", zebra_stripes=True)
+                yield DataTable(id="votes", zebra_stripes=True, cursor_type="none")
+            with Horizontal(id="positions-row"):
+                yield DataTable(id="open", zebra_stripes=True, cursor_type="none")
+                yield DataTable(id="closed", zebra_stripes=True, cursor_type="none")
             yield RichLog(id="log", markup=False, wrap=True, max_lines=1000)
-            yield Static("Type 'help' for commands.", id="output", markup=False)
-        yield Input(placeholder="command (help, start all, status, kill, live on kraken ...)", id="cmd")
+            yield Static("Tapez 'help' pour la liste des commandes. Ex : start kraken", id="output", markup=False)
+        yield Input(placeholder="commande (help, start kraken, status, kill, live on kraken ...)", id="cmd")
         yield Footer()
 
     def on_mount(self) -> None:
-        pos = self.query_one("#positions", DataTable)
-        pos.border_title = "Open positions"
-        pos.add_columns("symbol", "broker", "mode", "size", "entry", "P&L", "take-profit", "stop", "flag")
+        self.query_one("#analyse").border_title = "Analyse"
         votes = self.query_one("#votes", DataTable)
-        votes.border_title = "Agent votes (last decisions)"
-        votes.add_columns("time", "broker", "symbol", "arbitrage", "convergence", "smart money", "consensus", "risk")
-        self.query_one("#scan", Static).border_title = "Last scan"
-        self.query_one("#log", RichLog).border_title = "Log"
+        votes.add_columns("heure", "broker", "symbole", "arbitrage", "convergence", "smart money", "décision",
+                          "risque")
+        opened = self.query_one("#open", DataTable)
+        opened.border_title = "Positions en cours"
+        opened.add_columns("symbole", "broker", "taille", "entrée", "prix", "P&L €", "P&L %",
+                           "objectif", "stop", "alerte")
+        closed = self.query_one("#closed", DataTable)
+        closed.border_title = "Positions terminées"
+        closed.add_columns("symbole", "broker", "entrée", "sortie", "P&L €", "P&L %", "raison", "fermée")
+        self.query_one("#log", RichLog).border_title = "Journal"
         self.query_one("#cmd", Input).focus()
         self.refresh_panels()
         self.set_interval(2.0, self.refresh_panels)
@@ -68,64 +86,105 @@ class TradebotApp(App):
 
     def refresh_panels(self) -> None:
         bot = self.bot
+        open_rows, unrealized = self._open_rows()
+        closed_rows, realized, n_closed, wins = self._closed_rows()
+
         parts = []
         for b, t in bot.traders.items():
             st = t.state
             conn = "[green]●[/]" if bot.adapters[b].connected else "[red]●[/]"
-            parts.append(f"{b.value.upper()} {badge(t.mode)} {conn}  equity {st.equity:,.2f} EUR  "
-                         f"day P&L {st.daily_pnl:+,.2f}  {'running' if t.running else 'stopped'}")
+            parts.append(f"{b.value.upper():<6} {badge(t.mode)} {conn}  capital {st.equity:,.2f} €  "
+                         f"jour {pnl_markup(st.daily_pnl)}  {'en marche' if t.running else 'arrêté'}")
         self.query_one("#header", Static).update("\n".join(parts))
 
-        pos = self.query_one("#positions", DataTable)
-        pos.clear()
-        for b, t in bot.traders.items():
-            for p in bot.db.open_positions(b, t.mode):
-                price = t.data._quotes.get(p.symbol)
-                pnl = (price.bid - p.entry_price) * p.qty if price else None
-                pos.add_row(p.symbol, b.value, p.mode.upper(), f"{p.qty:.6g}", f"{p.entry_price:.6g}",
-                            "" if pnl is None else f"{pnl:+.2f}",
-                            "" if p.take_profit_price is None else f"{p.take_profit_price:.6g}",
-                            "" if p.stop_price is None else f"{p.stop_price:.6g}", t.state.flags.get(p.symbol, ""))
-
+        # Analyse
         lines = []
         for b, t in bot.traders.items():
             r = t.last_scan
             if r is None:
-                lines.append(f"{b.value}: no scan yet")
+                lines.append(f"{b.value}: pas encore de scan")
                 continue
-            reasons = ", ".join(f"{k} {v}" for k, v in r.top_reasons(4)) or "-"
-            lines.append(f"{b.value} {r.ts:%H:%M:%S}\n  scanned {r.scanned}  passed {len(r.passed)} "
-                         f"({r.pass_rate:.0%})\n  rejected: {reasons}")
+            reasons = ", ".join(f"{k} {v}" for k, v in r.top_reasons(3)) or "-"
+            lines.append(f"{b.value} {r.ts:%H:%M:%S}\n {r.scanned} analysés, {len(r.passed)} retenus "
+                         f"({r.pass_rate:.0%})\n rejets: {reasons}")
         self.query_one("#scan", Static).update("\n".join(lines))
-
         votes = self.query_one("#votes", DataTable)
         votes.clear()
-        for d, vs in bot.db.last_decisions(10):
+        for d, vs in bot.db.last_decisions(15):
             by = {v.agent: v for v in vs}
 
             def fmt(name: str) -> str:
                 v = by.get(name)
-                return f"{v.direction} {v.confidence:.2f}" if v else ""
+                if not v:
+                    return ""
+                color = {"LONG": "green", "AVOID": "red"}.get(str(v.direction), "grey50")
+                return f"[{color}]{v.direction} {v.confidence:.2f}[/]"
 
-            votes.add_row(f"{d.ts:%H:%M:%S}", d.broker, d.symbol, fmt("arbitrage"), fmt("convergence"),
-                          fmt("smart_money"), d.result.upper(), (d.risk_result or "")[:40])
+            votes.add_row(f"{as_utc(d.ts).astimezone():%H:%M:%S}", d.broker, d.symbol, fmt("arbitrage"),
+                          fmt("convergence"), fmt("smart_money"), d.result.upper(), (d.risk_result or "")[:40])
+
+        # Positions en cours
+        opened = self.query_one("#open", DataTable)
+        opened.clear()
+        for row in open_rows:
+            opened.add_row(*row)
+        opened.border_subtitle = f"{len(open_rows)} ouverte(s) · P&L latent {pnl_markup(unrealized)}"
+
+        # Positions terminées
+        closed = self.query_one("#closed", DataTable)
+        closed.clear()
+        for row in closed_rows:
+            closed.add_row(*row)
+        rate = f"{wins / n_closed * 100:.0f}%" if n_closed else "-"
+        closed.border_subtitle = f"{n_closed} trade(s) · gagnants {rate} · P&L réalisé {pnl_markup(realized)}"
 
         log = self.query_one("#log", RichLog)
-        lines = list(UI_BUFFER.lines)
-        new = lines[self._log_seen:] if self._log_seen <= len(lines) else lines
+        all_lines = list(UI_BUFFER.lines)
+        new = all_lines[self._log_seen:] if self._log_seen <= len(all_lines) else all_lines
         for line in new:
             log.write(line)
-        self._log_seen = len(lines)
+        self._log_seen = len(all_lines)
+
+    def _open_rows(self) -> tuple[list[tuple], float]:
+        rows, total = [], 0.0
+        for b, t in self.bot.traders.items():
+            for p in self.bot.db.open_positions(b, t.mode):
+                q = t.data._quotes.get(p.symbol)
+                price = q.bid if q and q.bid > 0 else None
+                pnl = (price - p.entry_price) * p.qty - (p.fees or 0) if price else None
+                pct = (price / p.entry_price - 1) * 100 if price else None
+                total += pnl or 0.0
+                rows.append((p.symbol, b.value, f"{p.qty:.6g}", f"{p.entry_price:.6g}",
+                             "" if price is None else f"{price:.6g}", pnl_markup(pnl, ""),
+                             pnl_markup(pct, " %"),
+                             "" if p.take_profit_price is None else f"{p.take_profit_price:.6g}",
+                             "" if p.stop_price is None else f"{p.stop_price:.6g}", t.state.flags.get(p.symbol, "")))
+        return rows, total
+
+    def _closed_rows(self, limit: int = 30) -> tuple[list[tuple], float, int, int]:
+        rows, total, n, wins = [], 0.0, 0, 0
+        for b, t in self.bot.traders.items():
+            closed = self.bot.db.closed_positions(b, t.mode)  # current mode only: test and live never mixed
+            n += len(closed)
+            wins += sum(1 for p in closed if (p.pnl or 0) > 0)
+            total += sum(p.pnl or 0 for p in closed)
+            for p in closed[-limit:]:
+                pct = (p.exit_price / p.entry_price - 1) * 100 if p.exit_price else None
+                rows.append((as_utc(p.closed_at), (p.symbol, b.value, f"{p.entry_price:.6g}",
+                             "" if p.exit_price is None else f"{p.exit_price:.6g}", pnl_markup(p.pnl, ""),
+                             pnl_markup(pct, " %"), p.exit_reason or "",
+                             f"{as_utc(p.closed_at).astimezone():%d/%m %Hh%M}" if p.closed_at else "")))
+        rows.sort(key=lambda r: r[0], reverse=True)  # most recent first
+        return [r[1] for r in rows[:limit]], total, n, wins
 
     # ------------------------------------------------------------------ commands
 
     async def on_input_submitted(self, event: Input.Submitted) -> None:
         line = event.value
         event.input.value = ""
-        out_widget = self.query_one("#output", Static)
         if not line.strip() and not self.proc.awaiting_confirmation:
             return
-        out_widget.update(f"> {line}\n…")
+        self.query_one("#output", Static).update(f"> {line}\n…")
         self.run_worker(self._run_command(line), exclusive=False)
 
     async def _run_command(self, line: str) -> None:
@@ -134,8 +193,8 @@ class TradebotApp(App):
             await self.action_quit()
             return
         cmd = self.query_one("#cmd", Input)
-        cmd.placeholder = ("type the confirmation phrase (anything else cancels)"
-                           if self.proc.awaiting_confirmation else "command")
+        cmd.placeholder = ("tapez la phrase de confirmation (toute autre saisie annule)"
+                           if self.proc.awaiting_confirmation else "commande")
         self.query_one("#output", Static).update(out or "ok")
         self.refresh_panels()
 

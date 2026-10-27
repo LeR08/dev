@@ -28,8 +28,8 @@ def vote(snap: Snapshot, cfg: dict) -> Vote:
         ref = float(close.mean())
         ref_name = f"SMA{window}"
     std = float(close.std(ddof=1))
-    if std <= 0:
-        return Vote.none(NAME, "zero volatility")
+    if std <= abs(ref) * 1e-6:
+        return Vote.none(NAME, "no volatility")
     price = snap.quote.ask if snap.quote and snap.quote.ask > 0 else float(close[-1])
     z = (price - ref) / std
     if z > -k:

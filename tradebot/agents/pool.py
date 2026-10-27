@@ -10,6 +10,7 @@ import asyncio
 import logging
 import multiprocessing
 from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures.process import BrokenProcessPool
 from typing import Callable
 
 from tradebot.agents import arbitrage, convergence, smart_money
@@ -36,8 +37,24 @@ class AgentPool:
         self.isolated = isolated
         self._executors: dict[str, ProcessPoolExecutor] = {}
         if isolated:
-            ctx = multiprocessing.get_context("spawn")  # clean interpreter per agent, no shared memory
-            self._executors = {name: ProcessPoolExecutor(max_workers=1, mp_context=ctx) for name in AGENTS}
+            self._executors = {name: self._new_executor() for name in AGENTS}
+
+    @staticmethod
+    def _new_executor() -> ProcessPoolExecutor:
+        ctx = multiprocessing.get_context("spawn")  # clean interpreter per agent, no shared memory
+        return ProcessPoolExecutor(max_workers=1, mp_context=ctx)
+
+    def _restart(self, name: str) -> None:
+        log.warning("agent worker %s died: restarting it", name)
+        self._executors[name].shutdown(wait=False, cancel_futures=True)
+        self._executors[name] = self._new_executor()
+
+    def _submit(self, loop, name: str, snap: Snapshot, cfg: dict):
+        try:
+            return loop.run_in_executor(self._executors[name], safe_vote, name, snap, cfg)
+        except BrokenProcessPool:
+            self._restart(name)
+            return loop.run_in_executor(self._executors[name], safe_vote, name, snap, cfg)
 
     async def votes(self, snap: Snapshot, cfgs: dict[str, dict]) -> list[Vote]:
         """``cfgs`` maps agent name -> config dict; disabled agents vote NONE."""
@@ -48,12 +65,14 @@ class AgentPool:
             if not cfg.get("enabled", True):
                 tasks.append(asyncio.sleep(0, Vote.none(name, "agent disabled")))
             elif self.isolated:
-                tasks.append(loop.run_in_executor(self._executors[name], safe_vote, name, snap, cfg))
+                tasks.append(self._submit(loop, name, snap, cfg))
             else:
                 tasks.append(asyncio.sleep(0, safe_vote(name, snap, cfg)))
         results = await asyncio.gather(*tasks, return_exceptions=True)
         out = []
         for name, r in zip(AGENTS, results):
+            if isinstance(r, BrokenProcessPool):
+                self._restart(name)
             out.append(r if isinstance(r, Vote) else Vote.none(name, f"worker error: {r!r}"))
         return out
 
