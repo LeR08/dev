@@ -1,0 +1,137 @@
+# Strategy configuration. Reload at runtime with: config reload
+
+cycle_seconds:
+  kraken: 60
+  ibkr: 300
+
+# Separate simulated balance used in test mode (EUR, per broker).
+paper_starting_balance_eur:
+  kraken: 1000
+  ibkr: 1000
+
+consensus:
+  # Minimum number of LONG votes (with no AVOID) for a full-size position.
+  full_size_min_long: 2
+  # Size factor when exactly one agent votes LONG and the others NONE.
+  half_size_factor: 0.5
+
+kraken:
+  quote_currency: EUR
+  fee_tier: starter            # starter | intermediate | pro (call-counter limits)
+  scanner:
+    max_spread_bps: 30
+    depth_levels: 10
+    min_depth_eur: 20000       # notional on each side within depth_levels
+    low_liquidity_hours_utc: []   # e.g. [2, 3, 4] -> no entries during those UTC hours
+    include_only: []           # restrict universe, e.g. ["BTC/EUR", "ETH/EUR"]
+    exclude: []
+  bars:
+    interval_minutes: 15
+    lookback: 200
+  agents:
+    arbitrage:
+      enabled: true
+      bridges: [BTC, ETH]      # triangle EUR -> X -> bridge -> EUR
+      min_edge_bps: 15         # net of three fees and slippage
+      slippage_bps: 5
+    convergence:
+      enabled: true
+      reference: vwap          # vwap | sma
+      window: 48
+      k_std: 2.0
+      volume_mult: 1.5
+      volume_window: 48
+    smart_money:
+      enabled: true
+      window_hours: 24
+      min_net_flow_eur: 5000000
+      min_tx_eur: 250000       # ignore smaller transfers
+      erc20:                   # tokens tracked on Ethereum: symbol -> [contract, decimals]
+        LINK: ["0x514910771af9ca656af840dff83e8264ecf986ca", 18]
+        UNI: ["0x1f9840a85d5af5bf1d1762f925bdaddc4201f984", 18]
+  execution:
+    entry_timeout_seconds: 120
+    exit_limit_timeout_seconds: 60
+    paper_slippage_bps: 5
+    validate_orders_in_test: true   # dry-run AddOrder(validate=true) when keys are present
+
+ibkr:
+  base_currency: EUR
+  data_delay_minutes: 15
+  gateway:
+    host: 127.0.0.1
+    paper_port: 4002
+    live_port: 4001
+    client_id: 17
+    connect_timeout_seconds: 15
+  scanner:
+    max_spread_bps: 50
+    min_avg_daily_volume: 500000   # shares
+    avoid_open_close_minutes: 15
+    avoid_earnings_days: true
+  bars:
+    bar_size: "1 day"
+    duration: "1 Y"
+    intraday_bar_size: "15 mins"
+    intraday_duration: "5 D"
+  agents:
+    arbitrage:
+      enabled: true
+      lookback: 60
+      z_entry: 2.0
+    convergence:
+      enabled: true
+      reference: sma
+      window: 20
+      k_std: 2.0
+      volume_mult: 1.2
+      volume_window: 20
+      delay_penalty: 0.15      # confidence reduction for delayed data
+    smart_money:
+      enabled: true
+      window_days: 14
+      cluster_min_insiders: 3
+      min_buy_value: 100000          # in instrument currency
+      heavy_sell_value: 2000000
+      heavy_sell_min_insiders: 3
+      ignore_planned_sales: true     # SEC 10b5-1 plans
+      institutions_13f: []           # filer CIKs whose 13F holdings are tracked
+  fees:
+    model: fixed               # fixed | tiered
+    us_per_share: 0.005
+    us_min_per_order: 1.0
+    us_max_pct: 1.0
+    eu_pct: 0.05
+    eu_min_per_order: 3.0
+  fx_fallback_to_eur:
+    USD: 0.92
+    GBP: 1.16
+    CHF: 1.06
+  execution:
+    entry_timeout_seconds: 600
+    exit_limit_timeout_seconds: 300
+
+exits:
+  take_profit_fraction: 0.85
+  volume_spike:
+    bars: 3
+    mult: 3.0
+    stall_pct: 0.3             # |price change| over those bars below this % counts as stalling
+  max_holding_hours:
+    kraken: 72
+    ibkr: 240
+
+backtest:
+  spread_bps: 10
+  slippage_bps: 5
+  walk_forward:
+    folds: 4
+    train_fraction: 0.7
+    grid:
+      convergence.k_std: [1.5, 2.0, 2.5]
+
+data:
+  etherscan_min_interval_seconds: 0.4
+  edgar_min_interval_seconds: 0.15
+  amf_min_interval_seconds: 0.5
+  amf_api: "https://bdif.amf-france.org/back/api/v1"

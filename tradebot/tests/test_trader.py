@@ -1,0 +1,132 @@
+"""Integration: full cycle on fake brokers, exits, kill switch, automatic fallback."""
+
+from __future__ import annotations
+
+import time
+
+import pytest
+
+from tradebot.brokers.base import Broker, Mode, OrderType, Side
+from tradebot.engine.mode import Precondition, confirm_phrase
+from tradebot.tests.fakes import make_bars
+
+
+def setup_dip(bot):
+    """BTC/EUR far below its VWAP on high volume -> convergence votes LONG (half size)."""
+    k = bot.adapters[Broker.KRAKEN]
+    closes = [60_000.0 + (i % 3 - 1) * 50 for i in range(60)] + [58_000.0]
+    vols = [10.0] * 60 + [40.0]
+    k.bars["BTC/EUR"] = make_bars(closes, vols)
+    k.set_price("BTC/EUR", 58_000.0)
+    return k
+
+
+async def test_full_cycle_entry_fill_and_take_profit(make_bot):
+    bot = make_bot()
+    bot.cfg.strategy.kraken.scanner.min_depth_eur = 0
+    k = setup_dip(bot)
+    trader = bot.traders[Broker.KRAKEN]
+    await trader.start()
+    await trader.shutdown()  # we drive cycles manually
+    trader.entries_enabled = True
+    await trader.cycle()
+
+    entry = [r for r in k.placed if r.side == Side.BUY]
+    assert len(entry) == 1 and entry[0].post_only and entry[0].stop_loss < entry[0].limit_price
+    assert entry[0].qty * entry[0].limit_price == pytest.approx(1000 * 0.025, rel=0.01)  # half size
+    d, votes = bot.db.last_decisions(1)[0]
+    assert d.result == "half" and {v.agent for v in votes} == {"arbitrage", "convergence", "smart_money"}
+    assert d.mode == "test" and d.broker == "kraken"
+
+    k.set_price("BTC/EUR", 57_900.0)  # ask drops through our bid -> maker fill
+    trader.entries_enabled = False
+    await trader.cycle()
+    pos = bot.db.open_positions(Broker.KRAKEN, Mode.TEST)
+    assert len(pos) == 1 and pos[0].stop_price is not None
+    assert any(o.order_type == OrderType.STOP_LOSS for o in k.paper.open_orders())  # stop held at "broker"
+
+    k.set_price("BTC/EUR", 60_500.0)  # beyond 85 % of the way to the VWAP target
+    await trader.cycle()  # exit limit posted at the ask
+    k.set_price("BTC/EUR", 60_700.0)
+    await trader.cycle()
+    closed = bot.db.closed_positions(Broker.KRAKEN, Mode.TEST)
+    assert len(closed) == 1 and closed[0].exit_reason == "take_profit"
+    assert closed[0].pnl > 0 and closed[0].fees > 0
+    await bot.shutdown()
+
+
+async def test_kill_closes_everything_within_30s_and_sets_test(make_bot):
+    bot = make_bot()
+    bot.cfg.strategy.kraken.scanner.min_depth_eur = 0
+    k = setup_dip(bot)
+    trader = bot.traders[Broker.KRAKEN]
+    await k.connect()
+    trader.entries_enabled = True
+    await trader.cycle()
+    k.set_price("BTC/EUR", 57_900.0)
+    trader.entries_enabled = False
+    await trader.cycle()
+    assert bot.db.open_positions(Broker.KRAKEN, Mode.TEST)
+    bot.mode.request_live(Broker.IBKR, confirm_phrase("ibkr"), [Precondition("ok", True)])
+
+    t0 = time.monotonic()
+    report = await bot.kill()
+    assert time.monotonic() - t0 < 30
+    await trader.sync_fills()
+    assert not k.paper.open_orders()
+    assert not k.paper.positions
+    assert bot.db.closed_positions(Broker.KRAKEN, Mode.TEST)[0].exit_reason == "kill_switch"
+    assert bot.mode.snapshot() == {"kraken": "test", "ibkr": "test"}
+    assert any("all brokers set to TEST" in line for line in report)
+    await bot.shutdown()
+
+
+async def test_order_error_in_live_falls_back_to_test(make_bot):
+    bot = make_bot()
+    k = bot.adapters[Broker.KRAKEN]
+    bot.risk.cfg(Broker.KRAKEN).live_capital_cap_eur = 500
+    bot.mode.request_live(Broker.KRAKEN, confirm_phrase("kraken"), [Precondition("ok", True)])
+
+    async def boom(req):
+        raise RuntimeError("socket closed")
+
+    k.place_order = boom
+    k.set_price("BTC/EUR", 50_000.0)
+    from tradebot.brokers.base import OrderRequest
+    from tradebot.engine.risk import AccountState
+
+    req = OrderRequest("BTC/EUR", Side.BUY, 0.001, OrderType.LIMIT, limit_price=50_000, reference_price=50_000)
+    rd = bot.risk.approve(Broker.KRAKEN, req, AccountState(Broker.KRAKEN, Mode.LIVE, 1000, 1000))
+    assert await bot.traders[Broker.KRAKEN].submit(rd.request) is None
+    assert bot.mode.mode(Broker.KRAKEN) == Mode.TEST
+
+
+async def test_daily_loss_limit_closes_and_halts(make_bot):
+    bot = make_bot()
+    bot.cfg.strategy.kraken.scanner.min_depth_eur = 0
+    k = setup_dip(bot)
+    trader = bot.traders[Broker.KRAKEN]
+    trader.entries_enabled = True
+    await trader.cycle()
+    k.set_price("BTC/EUR", 57_900.0)
+    trader.entries_enabled = False
+    await trader.cycle()
+    trader.state.day_start_equity = 2000  # simulate a large loss today
+    await trader.cycle()
+    assert bot.risk.halt_reason(Broker.KRAKEN) == "daily_loss_limit"
+    await trader.sync_fills()
+    assert not bot.db.open_positions(Broker.KRAKEN, Mode.TEST)
+    assert bot.mode.mode(Broker.KRAKEN) == Mode.TEST
+
+
+async def test_ibkr_exit_refused_when_market_closed(make_bot):
+    bot = make_bot()
+    i = bot.adapters[Broker.IBKR]
+    i.market_open = False
+    bot.db.open_position(broker=Broker.IBKR, mode=Mode.TEST, symbol="AAPL", qty=1, entry_price=100.0,
+                         currency="USD", stop_price=97.0)
+    i.set_price("AAPL", 100)
+    ok = await bot.traders[Broker.IBKR].close_position_row(bot.db.open_positions(Broker.IBKR, Mode.TEST)[0].id,
+                                                           "AAPL", "manual_close")
+    assert not ok and "market closed" in bot.traders[Broker.IBKR].state.flags["AAPL"]
+
