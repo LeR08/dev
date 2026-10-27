@@ -11,8 +11,9 @@ from tradebot.brokers.base import Bar, Quote
 
 class Direction(StrEnum):
     LONG = "LONG"
+    SHORT = "SHORT"
     NONE = "NONE"
-    AVOID = "AVOID"
+    AVOID = "AVOID"  # blocks any trade in either direction
 
 
 @dataclass(frozen=True)

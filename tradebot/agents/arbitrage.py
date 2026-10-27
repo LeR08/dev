@@ -2,9 +2,9 @@
 
 * Kraken: triangular check EUR -> X -> bridge -> EUR versus the direct X/EUR
   price, net of three taker fees and slippage. LONG X/EUR only if X/EUR is
-  cheap relative to the cross rate and the edge survives costs.
-* IBKR: pair trading on configured pairs; LONG the cheap leg when the spread
-  z-score passes the threshold (no short leg in v1).
+  cheap relative to the cross rate (SHORT if rich) and the edge survives costs.
+* IBKR: pair trading on configured pairs; LONG the cheap leg / SHORT the rich
+  leg when the spread z-score passes the threshold.
 """
 
 from __future__ import annotations
@@ -41,10 +41,13 @@ def _cross(related: dict[str, Quote], base: str, bridge: str) -> Quote | None:
 
 
 def _vote_kraken(snap: Snapshot, cfg: dict) -> Vote:
+    """LONG X/EUR when it is cheap vs the cross rate, SHORT when it is rich."""
     base, _, quote = snap.symbol.partition("/")
-    if snap.quote is None or snap.quote.ask <= 0:
+    q = snap.quote
+    if q is None or q.ask <= 0 or q.bid <= 0:
         return Vote.none(NAME, "no quote")
-    best: tuple[float, str, float] | None = None
+    fee, slip = snap.taker_fee, float(cfg.get("slippage_bps", 5))
+    best: tuple[float, Direction, str, float] | None = None
     for bridge in cfg.get("bridges", ["BTC", "ETH"]):
         if bridge == base:
             continue
@@ -52,20 +55,24 @@ def _vote_kraken(snap: Snapshot, cfg: dict) -> Vote:
         bridge_q = snap.related_quotes.get(f"{bridge}/{quote}")
         if cross is None or bridge_q is None:
             continue
-        edge = triangular_edge(snap.quote.ask, cross.bid, bridge_q.bid, snap.taker_fee,
-                               float(cfg.get("slippage_bps", 5)))
-        implied = cross.bid * bridge_q.bid
-        if best is None or edge > best[0]:
-            best = (edge, bridge, implied)
+        # cheap: buy X/EUR at ask, sell X via the bridge at bids
+        long_edge = triangular_edge(q.ask, cross.bid, bridge_q.bid, fee, slip)
+        # rich: sell X/EUR at bid, buy X via the bridge at asks
+        short_edge = triangular_edge(cross.ask * bridge_q.ask, 1.0, q.bid, fee, slip) if cross.ask > 0 else -1.0
+        for edge, direction, implied in ((long_edge, Direction.LONG, cross.bid * bridge_q.bid),
+                                         (short_edge, Direction.SHORT, cross.ask * bridge_q.ask)):
+            if best is None or edge > best[0]:
+                best = (edge, direction, bridge, implied)
     if best is None:
         return Vote.none(NAME, "no triangle available for this pair")
-    edge, bridge, implied = best
+    edge, direction, bridge, implied = best
     min_edge = float(cfg.get("min_edge_bps", 15)) / 10_000
     if edge < min_edge:
         return Vote.none(NAME, f"best triangle via {bridge}: net edge {edge * 1e4:.1f} bps < {min_edge * 1e4:.0f}")
     conf = min(1.0, 0.5 + (edge - min_edge) / (4 * min_edge))
-    return Vote(NAME, Direction.LONG, round(conf, 3),
-                f"{snap.symbol} cheap vs {base}/{bridge}x{bridge}/{quote}: net edge {edge * 1e4:.1f} bps",
+    word = "cheap" if direction == Direction.LONG else "rich"
+    return Vote(NAME, direction, round(conf, 3),
+                f"{snap.symbol} {word} vs {base}/{bridge}x{bridge}/{quote}: net edge {edge * 1e4:.1f} bps",
                 target_price=implied)
 
 
@@ -98,11 +105,12 @@ def _vote_ibkr(snap: Snapshot, cfg: dict) -> Vote:
         a = np.array([mine[t] for t in common])
         b = np.array([theirs[t] for t in common])
         z, beta, alpha, std = pair_zscore(a, b)
-        if z <= -z_entry:  # this symbol is the cheap leg
+        if abs(z) >= z_entry:  # cheap leg -> LONG, rich leg -> SHORT
             target = math.exp(alpha + beta * math.log(b[-1]))
             conf = min(1.0, 0.5 + (abs(z) - z_entry) / (2 * z_entry))
-            v = Vote(NAME, Direction.LONG, round(conf, 3),
-                     f"pair {snap.symbol}/{partner}: spread z={z:.2f} (cheap leg), beta={beta:.2f}",
+            direction, word = (Direction.LONG, "cheap") if z < 0 else (Direction.SHORT, "rich")
+            v = Vote(NAME, direction, round(conf, 3),
+                     f"pair {snap.symbol}/{partner}: spread z={z:.2f} ({word} leg), beta={beta:.2f}",
                      target_price=target)
             if best is None or v.confidence > best.confidence:
                 best = v

@@ -153,6 +153,10 @@ class Bot:
         lines.append(f"Paper results: {len(closed)} closed trades, P&L {pnl:+.2f} EUR, "
                      f"win rate {wins / len(closed) * 100 if closed else 0:.1f}%, "
                      f"fees {self.db.fees_paid(broker, Mode.TEST):.2f} EUR")
+        if cfg.allow_short or cfg.max_leverage > 1:
+            lines.append(f"WARNING: shorts={'on' if cfg.allow_short else 'off'}, max leverage {cfg.max_leverage}x. "
+                         "This needs a margin-enabled account (Kraken margin / IBKR margin account). "
+                         "Losses can exceed the capital of a position; stops can slip in fast markets.")
         lines.append("Preconditions:")
         lines += [f"  [{'x' if p.ok else ' '}] {p.name}: {p.detail}" for p in pre]
         return pre, "\n".join(lines)

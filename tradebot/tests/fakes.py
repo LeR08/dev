@@ -183,9 +183,10 @@ class FakeIB:
         from ib_async import LimitOrder, StopOrder
 
         parent = LimitOrder(action, quantity, limitPrice, orderId=self._req_id(), transmit=False)
-        tp = LimitOrder("SELL", quantity, takeProfitPrice, orderId=self._req_id(), parentId=parent.orderId,
+        reverse = "BUY" if action == "SELL" else "SELL"  # same as ib_async.IB.bracketOrder
+        tp = LimitOrder(reverse, quantity, takeProfitPrice, orderId=self._req_id(), parentId=parent.orderId,
                         transmit=False)
-        sl = StopOrder("SELL", quantity, stopLossPrice, orderId=self._req_id(), parentId=parent.orderId,
+        sl = StopOrder(reverse, quantity, stopLossPrice, orderId=self._req_id(), parentId=parent.orderId,
                        transmit=True)
         return SimpleNamespace(parent=parent, takeProfit=tp, stopLoss=sl)
 

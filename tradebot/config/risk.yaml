@@ -4,7 +4,9 @@ kraken:
   max_position_pct_full: 5.0
   max_position_pct_half: 2.5
   max_open_positions: 5
-  max_exposure_pct: 30.0
+  max_exposure_pct: 60.0         # gross notional (longs + shorts) in % of equity
+  max_leverage: 2.0              # hard cap; automatic leverage never exceeds it
+  allow_short: true
   stop_loss_pct: 3.0
   daily_loss_limit_pct: 3.0
   max_drawdown_pct: 15.0
@@ -14,7 +16,9 @@ ibkr:
   max_position_pct_full: 5.0
   max_position_pct_half: 2.5
   max_open_positions: 5
-  max_exposure_pct: 30.0
+  max_exposure_pct: 60.0         # gross notional (longs + shorts) in % of equity
+  max_leverage: 2.0              # hard cap; automatic leverage never exceeds it
+  allow_short: true
   stop_loss_pct: 3.0
   daily_loss_limit_pct: 3.0
   max_drawdown_pct: 15.0

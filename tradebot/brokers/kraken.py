@@ -17,6 +17,7 @@ import hashlib
 import hmac
 import json
 import logging
+import math
 import time
 import urllib.parse
 from datetime import datetime, timezone
@@ -127,7 +128,7 @@ class KrakenAdapter(BrokerAdapter):
         self._connected = False
         self._status = "unknown"
         self.paper = paper or PaperEngine("kraken", paper_cash, pct_fee_fn(self._fee_for),
-                                          slippage_bps=cfg.execution.paper_slippage_bps)
+                                          slippage_bps=cfg.execution.paper_slippage_bps, financing=cfg.financing)
 
     # ------------------------------------------------------------------ basics
 
@@ -246,10 +247,31 @@ class KrakenAdapter(BrokerAdapter):
 
     def _rules_from_pair(self, symbol: str, p: dict) -> InstrumentRules:
         tick = float(p.get("tick_size") or 10 ** -int(p.get("pair_decimals", 2)))
+        lev_buy = [int(x) for x in p.get("leverage_buy") or []]
+        lev_sell = [int(x) for x in p.get("leverage_sell") or []]
         return InstrumentRules(symbol=symbol, currency=symbol.split("/")[1],
                                min_qty=float(p.get("ordermin", 0) or 0),
                                qty_step=10 ** -int(p.get("lot_decimals", 8)), tick_size=tick,
-                               min_notional=float(p.get("costmin", 0) or 0))
+                               min_notional=float(p.get("costmin", 0) or 0),
+                               max_leverage=float(max(lev_buy, default=1)),
+                               shortable=bool(lev_sell))
+
+    def margin_leverage(self, symbol: str, req: OrderRequest) -> int | None:
+        """Kraken ``leverage`` parameter for a margin order, or None for a plain spot order.
+
+        Kraken's per-order leverage sets the collateral used; the position size (and
+        therefore the account leverage) comes from the volume chosen by the RiskManager.
+        Shorts always need margin, so they use at least the pair's smallest leverage.
+        """
+        p = self._pair(symbol)
+        short = req.position_side.value == "short"
+        options = sorted(int(x) for x in (p.get("leverage_sell") if short else p.get("leverage_buy")) or [])
+        if not short and req.leverage <= 1:
+            return None
+        if not options:
+            raise OrderRejected(f"{symbol}: margin {'short' if short else 'long'} not available on Kraken")
+        want = max(2, math.ceil(req.leverage))
+        return next((o for o in options if o >= want), options[-1])
 
     def _pair(self, symbol: str) -> dict:
         p = self._pairs.get(symbol)
@@ -374,6 +396,18 @@ class KrakenAdapter(BrokerAdapter):
             sym = f"{asset}/{q}"
             if asset != q and sym in self._pairs and bal.total >= float(self._pairs[sym].get("ordermin", 0) or 0):
                 out[sym] = Position(sym, bal.total, 0.0, q)
+        # margin positions (longs with leverage, shorts) are not in Balance
+        res = await self._private("OpenPositions", {"docalcs": "true"})
+        for raw in (res or {}).values():
+            sym = self._by_altname.get(raw.get("pair", ""))
+            if sym is None:
+                continue
+            qty = float(raw.get("vol", 0)) - float(raw.get("vol_closed", 0))
+            signed = qty if raw.get("type") == "buy" else -qty
+            prev = out.get(sym)
+            total = (prev.qty if prev else 0.0) + signed
+            avg = float(raw.get("cost", 0)) / float(raw.get("vol", 1) or 1)
+            out[sym] = Position(sym, total, avg, q)
         return out
 
     async def get_equity(self) -> tuple[float, float]:
@@ -384,8 +418,14 @@ class KrakenAdapter(BrokerAdapter):
                 except BrokerError:
                     pass
             return self.paper.equity(), self.paper.cash - self.paper.reserved_cash()
-        bals = await self.get_balances()
         q = self.cfg.quote_currency
+        try:
+            # TradeBalance includes unrealised P&L of margin positions ("e") and free margin ("mf")
+            tb = await self._private("TradeBalance", {"asset": "Z" + q if q in ("EUR", "USD") else q})
+            return float(tb["e"]), float(tb.get("mf", tb["e"]))
+        except (BrokerError, KeyError):
+            pass
+        bals = await self.get_balances()
         cash = bals.get(q, Balance(q, 0, 0)).total
         syms = [f"{a}/{q}" for a in bals if a != q and f"{a}/{q}" in self._pairs]
         quotes = await self.get_quotes(syms) if syms else {}
@@ -414,6 +454,8 @@ class KrakenAdapter(BrokerAdapter):
 
         data = self._addorder_payload(req, pair)
         if self.mode == Mode.TEST:
+            if req.opens and req.position_side.value == "short" and not rules.shortable:
+                raise OrderRejected(f"{req.symbol}: no margin short on Kraken for this pair")
             if self.cfg.execution.validate_orders_in_test and self.secrets.has_kraken_keys:
                 try:
                     await self._private("AddOrder", {**data, "validate": "true"})
@@ -447,8 +489,13 @@ class KrakenAdapter(BrokerAdapter):
                 data["oflag"] = "post"
         elif req.order_type == OrderType.STOP_LOSS:
             data["price"] = self._fmt(req.stop_price, pd)
-        if req.stop_loss is not None and req.side == Side.BUY:
-            data["close[ordertype]"] = "stop-loss"
+        lev = self.margin_leverage(req.symbol, req)
+        if lev is not None:
+            data["leverage"] = str(lev)
+            if not req.opens:
+                data["reduce_only"] = "true"  # closing a margin position never opens a new one
+        if req.stop_loss is not None and req.opens:
+            data["close[ordertype]"] = "stop-loss"  # protective close attached at the broker (long or short)
             data["close[price]"] = self._fmt(req.stop_loss, pd)
         return data
 

@@ -12,8 +12,12 @@ preconditions met and the exact phrase `I ACCEPT REAL LOSSES ON <BROKER>`, can t
 > No promise of returns. Judge the bot on its backtest and paper results only, and only once there are
 > more than 100 trades (reports flag smaller samples as *NOT SIGNIFICANT*).
 
-Out of scope (by design): prediction markets, VPN/geo-circumvention, unregulated exchanges, leverage,
-margin, short selling, futures, options, cloud services, paid data feeds, LLM calls in the trading loop.
+**Longs and shorts, with automatic leverage** (see below). Shorts and leverage need a margin-enabled
+account (Kraken margin trading / IBKR margin account); with leverage, losses can exceed the capital of a
+position and stops can slip in fast markets.
+
+Out of scope (by design): prediction markets, VPN/geo-circumvention, unregulated exchanges, futures,
+options, cloud services, paid data feeds, LLM calls in the trading loop.
 
 ## Install
 
@@ -78,26 +82,35 @@ tradebot/
 * **Scanner** (every cycle): spread, Kraken order-book depth / IBKR average daily volume, time windows
   (IBKR first/last 15 min, earnings days from `universe_ibkr.yaml`; Kraken low-liquidity hours).
 * **Agents** (rule-based, one worker process each, read-only snapshot, no shared memory):
-  * *Arbitrage*: Kraken triangle EUR→X→bridge→EUR net of 3 taker fees + slippage; IBKR pair trading
-    (LONG the cheap leg only).
-  * *Convergence*: price ≥ k σ below VWAP/SMA with volume confirmation (IBKR: confidence reduced for delayed data).
-  * *Smart money*: Kraken — flows to/from labelled exchange wallets (`wallet_labels.yaml` is the only
-    source of wallet ownership); IBKR — insider cluster buying / heavy selling (SEC Form 4, AMF BDIF
-    declarations; 10b5-1 planned sales ignored), optional 13F holdings change.
-* **Consensus**: any AVOID → no trade; 2–3 LONG → full size; 1 LONG → half size; 0 → no trade.
-  Every decision is stored with the three votes and reasons.
+  * *Arbitrage*: Kraken triangle vs the cross rate, net of 3 taker fees + slippage (cheap → LONG,
+    rich → SHORT); IBKR pair trading (LONG the cheap leg, SHORT the rich leg).
+  * *Convergence*: price ≥ k σ below (LONG) / above (SHORT) VWAP/SMA with volume confirmation
+    (IBKR: confidence reduced for delayed data).
+  * *Smart money*: Kraken — outflows from labelled exchange wallets → LONG, inflows → SHORT
+    (`wallet_labels.yaml` is the only source of wallet ownership); IBKR — insider cluster buying → LONG,
+    heavy selling → SHORT (SEC Form 4, AMF BDIF; 10b5-1 planned sales ignored), optional 13F change.
+* **Consensus**: any AVOID or LONG+SHORT conflict → no trade; 2–3 votes in one direction → full size;
+  1 vote → half size; none → no trade. Every decision is stored with the three votes and reasons.
+* **Automatic leverage**: `target daily volatility / realised daily volatility`, clamped to
+  [1×, `max_leverage`] (default cap 2× per broker in `risk.yaml`). Calm market → more leverage, volatile
+  market → less. Position notional = equity × 5 % (full) or 2.5 % (half) × leverage.
 * **RiskManager**: every order (test or live, entry or exit) must carry an HMAC-signed approval;
-  adapters refuse anything else. Limits from `risk.yaml` (5 % / 2.5 % per position, 5 positions,
-  30 % exposure, 3 % stop, 3 % daily loss, 15 % drawdown, 10 orders/min, live capital cap with no default).
+  adapters refuse anything else. Limits from `risk.yaml` (5 % / 2.5 % per position before leverage,
+  5 positions, 60 % gross exposure, 2× max leverage, shorts on/off, free-margin check, 3 % stop above or
+  below entry, 3 % daily loss, 15 % drawdown, 10 orders/min, live capital cap with no default).
+  Exits are reduce-only: they can never flip or enlarge a position.
   Daily loss → close positions, test mode, entries halted until the next day. Drawdown → same, until
   `risk review`.
-* **Execution**: Kraken post-only limit entries with a conditional stop-loss close attached; exits
-  limit-first, market after a timeout. IBKR bracket orders (limit entry + take-profit + stop-loss),
+* **Execution**: Kraken post-only limit entries with a conditional stop-loss close attached; margin
+  orders use Kraken's `leverage` parameter (shorts always on margin) and closes are `reduce_only`.
+  Unfilled entries are cancelled after 1800 s; exits are limit-first, market after a timeout.
+  IBKR bracket orders (limit entry + take-profit + stop-loss, reversed for shorts),
   orders only during exchange sessions (holidays included); weekend/holiday holds are flagged.
   Failed submissions are never retried blindly (Kraken `userref` / IBKR `orderRef` lookups first).
 * **Exits** (first hit wins): 85 % of the move to the agent's target, volume spike with stalling price
   (after entry), smart-money flip to AVOID, stop-loss (also held at the broker), time stop, kill switch.
 * **Test mode**: Kraken → internal paper engine filled against live order books (fees, slippage,
+  margin opening fee, rollover / borrow / margin interest, liquidation below maintenance margin,
   optional `validate=true` dry-run); IBKR → native paper account, sizing capped to the configured paper
   balance (default 1 000 EUR per broker).
 * **Backtest**: same scanner, agents, consensus, RiskManager and exits, with the paper engine as broker;

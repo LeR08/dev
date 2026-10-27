@@ -53,13 +53,13 @@ def test_refusals():
     rm = RiskManager(RiskConfig())
     full = {f"S{i}": PositionInfo(1, 10) for i in range(5)}
     assert not rm.approve(Broker.KRAKEN, entry(), acct(positions=full), RULES).approved  # max positions
-    big = {"ETH/EUR": PositionInfo(1, 300)}
-    assert not rm.approve(Broker.KRAKEN, entry(), acct(positions=big), RULES).approved  # exposure 30 %
+    big = {"ETH/EUR": PositionInfo(1, 600)}
+    assert not rm.approve(Broker.KRAKEN, entry(), acct(positions=big), RULES).approved  # gross exposure 60 %
     assert not rm.approve(Broker.KRAKEN, entry(), acct(mode=Mode.LIVE), RULES).approved  # live cap missing
     mkt = OrderRequest("BTC/EUR", Side.BUY, 0.001, OrderType.MARKET, reference_price=50_000)
     assert not rm.approve(Broker.KRAKEN, mkt, acct(), RULES).approved  # market buys
-    short = OrderRequest("BTC/EUR", Side.SELL, 1, OrderType.LIMIT, limit_price=50_000, purpose=Purpose.EXIT)
-    assert not rm.approve(Broker.KRAKEN, short, acct(), RULES).approved  # no short selling
+    naked = OrderRequest("BTC/EUR", Side.SELL, 1, OrderType.LIMIT, limit_price=50_000, purpose=Purpose.EXIT)
+    assert not rm.approve(Broker.KRAKEN, naked, acct(), RULES).approved  # exits only close positions
     tiny = rm.approve(Broker.KRAKEN, entry(), acct(equity=10, cash=10), RULES)
     assert not tiny.approved and "minimum" in tiny.reason
 
@@ -131,3 +131,62 @@ def test_risk_set_validates_and_logs():
     with pytest.raises(KeyError):
         rm.set_limit("kraken.leverage", "2")
     assert any(e.kind.value == "limit_changed" for e in events)
+
+
+def short_entry(qty=1.0, price=50_000.0, **kw) -> OrderRequest:
+    return OrderRequest("BTC/EUR", Side.SELL, qty, OrderType.LIMIT, limit_price=price, post_only=True,
+                        reference_price=price, **kw)
+
+
+def test_short_entry_gets_stop_above_and_is_sized():
+    rm = RiskManager(RiskConfig())
+    d = rm.approve(Broker.KRAKEN, short_entry(), acct(), RULES)
+    assert d.approved and d.request.stop_loss == pytest.approx(51_500.0, abs=0.1)  # 3 % above
+    assert d.request.qty * 50_000 == pytest.approx(50.0, rel=1e-6)
+    bad_tp = rm.approve(Broker.KRAKEN, short_entry(take_profit=52_000), acct(), RULES)
+    assert not bad_tp.approved
+
+
+def test_short_refused_when_disabled_or_not_shortable():
+    cfg = RiskConfig()
+    cfg.kraken.allow_short = False
+    assert not RiskManager(cfg).approve(Broker.KRAKEN, short_entry(), acct(), RULES).approved
+    no_margin = InstrumentRules("BTC/EUR", "EUR", min_qty=0.0001, qty_step=1e-8, shortable=False)
+    assert not RiskManager(RiskConfig()).approve(Broker.KRAKEN, short_entry(), acct(), no_margin).approved
+
+
+def test_leverage_is_capped_and_multiplies_size():
+    rm = RiskManager(RiskConfig())  # max_leverage 2
+    d = rm.approve(Broker.KRAKEN, entry(qty=1, leverage=5.0), acct(), RULES)
+    assert d.approved and d.request.leverage == 2.0 and d.resized
+    assert d.request.qty * 50_000 == pytest.approx(100.0, rel=1e-6)  # 5 % x 2
+    low = InstrumentRules("BTC/EUR", "EUR", min_qty=0.0001, qty_step=1e-8, max_leverage=1.5)
+    assert rm.approve(Broker.KRAKEN, entry(qty=1, leverage=5.0), acct(), low).request.leverage == 1.5
+
+
+def test_leverage_limited_by_free_margin():
+    cfg = RiskConfig()
+    cfg.kraken.max_exposure_pct = 500  # isolate the margin check
+    rm = RiskManager(cfg)
+    # 1000 equity, 980 EUR already tied up as collateral -> only 20 EUR of free margin
+    used = {"ETH/EUR": PositionInfo(1, 980, 1.0)}
+    d = rm.approve(Broker.KRAKEN, entry(qty=1, leverage=2.0), acct(cash=20, positions=used), RULES)
+    assert d.approved and d.request.qty * 50_000 == pytest.approx(20 * 0.95 * 2, rel=1e-6)
+
+
+def test_exit_must_reduce_and_keeps_position_leverage():
+    rm = RiskManager(RiskConfig())
+    shorted = {"BTC/EUR": PositionInfo(-0.002, 100, 2.0)}
+    cover = OrderRequest("BTC/EUR", Side.BUY, 1, OrderType.LIMIT, limit_price=49_000, purpose=Purpose.EXIT)
+    d = rm.approve(Broker.KRAKEN, cover, acct(positions=shorted), RULES)
+    assert d.approved and d.request.qty == 0.002 and d.request.leverage == 2.0
+    wrong = OrderRequest("BTC/EUR", Side.SELL, 0.001, OrderType.LIMIT, limit_price=49_000, purpose=Purpose.EXIT)
+    assert not rm.approve(Broker.KRAKEN, wrong, acct(positions=shorted), RULES).approved
+
+
+def test_approval_covers_leverage():
+    rm = RiskManager(RiskConfig())
+    req = rm.approve(Broker.KRAKEN, entry(qty=0.0002, leverage=2.0), acct(), RULES).request
+    req.leverage = 5.0
+    with pytest.raises(UnapprovedOrder):
+        ensure_approved(req, Mode.TEST)

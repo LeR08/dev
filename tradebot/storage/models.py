@@ -91,6 +91,7 @@ class OrderRow(_Tagged, Base):
     stop_price: Mapped[float | None] = mapped_column(Float, nullable=True)
     stop_loss: Mapped[float | None] = mapped_column(Float, nullable=True)
     take_profit: Mapped[float | None] = mapped_column(Float, nullable=True)
+    leverage: Mapped[float] = mapped_column(Float, default=1.0, server_default="1.0")
     status: Mapped[str] = mapped_column(String(16))
     purpose: Mapped[str] = mapped_column(String(16))
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -115,7 +116,9 @@ class PositionRow(_Tagged, Base):
     __tablename__ = "positions"
     symbol: Mapped[str] = mapped_column(String(32), index=True)
     status: Mapped[str] = mapped_column(String(8), default="open", index=True)  # open / closed
-    qty: Mapped[float] = mapped_column(Float)
+    side: Mapped[str] = mapped_column(String(8), default="long", server_default="long")  # long / short
+    leverage: Mapped[float] = mapped_column(Float, default=1.0, server_default="1.0")
+    qty: Mapped[float] = mapped_column(Float)  # always positive; see side
     currency: Mapped[str] = mapped_column(String(8), default="EUR")
     entry_price: Mapped[float] = mapped_column(Float)
     target_price: Mapped[float | None] = mapped_column(Float, nullable=True)

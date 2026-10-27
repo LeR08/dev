@@ -21,6 +21,10 @@ def badge(mode: Mode) -> str:
     return "[bold white on green] TEST [/]" if mode == Mode.TEST else "[bold white on red] LIVE [/]"
 
 
+def side_markup(side: str) -> str:
+    return "[green]LONG[/]" if side != "short" else "[magenta]SHORT[/]"
+
+
 def pnl_markup(value: float | None, suffix: str = " €") -> str:
     if value is None:
         return ""
@@ -72,11 +76,11 @@ class TradebotApp(App):
                           "risque")
         opened = self.query_one("#open", DataTable)
         opened.border_title = "Positions en cours"
-        opened.add_columns("symbole", "broker", "taille", "entrée", "prix", "P&L €", "P&L %",
+        opened.add_columns("symbole", "broker", "sens", "levier", "taille", "entrée", "prix", "P&L €", "P&L %",
                            "objectif", "stop", "alerte")
         closed = self.query_one("#closed", DataTable)
         closed.border_title = "Positions terminées"
-        closed.add_columns("symbole", "broker", "entrée", "sortie", "P&L €", "P&L %", "raison", "fermée")
+        closed.add_columns("symbole", "broker", "sens", "levier", "entrée", "sortie", "P&L €", "P&L %", "raison", "fermée")
         self.query_one("#log", RichLog).border_title = "Journal"
         self.query_one("#cmd", Input).focus()
         self.refresh_panels()
@@ -117,7 +121,7 @@ class TradebotApp(App):
                 v = by.get(name)
                 if not v:
                     return ""
-                color = {"LONG": "green", "AVOID": "red"}.get(str(v.direction), "grey50")
+                color = {"LONG": "green", "SHORT": "magenta", "AVOID": "red"}.get(str(v.direction), "grey50")
                 return f"[{color}]{v.direction} {v.confidence:.2f}[/]"
 
             votes.add_row(f"{as_utc(d.ts).astimezone():%H:%M:%S}", d.broker, d.symbol, fmt("arbitrage"),
@@ -150,11 +154,12 @@ class TradebotApp(App):
         for b, t in self.bot.traders.items():
             for p in self.bot.db.open_positions(b, t.mode):
                 q = t.data._quotes.get(p.symbol)
-                price = q.bid if q and q.bid > 0 else None
-                pnl = (price - p.entry_price) * p.qty - (p.fees or 0) if price else None
-                pct = (price / p.entry_price - 1) * 100 if price else None
+                sign = -1 if p.side == "short" else 1
+                price = (q.bid if sign > 0 else q.ask) if q and q.bid > 0 and q.ask > 0 else None
+                pnl = (price - p.entry_price) * p.qty * sign - (p.fees or 0) if price else None
+                pct = (price / p.entry_price - 1) * 100 * sign * (p.leverage or 1) if price else None
                 total += pnl or 0.0
-                rows.append((p.symbol, b.value, f"{p.qty:.6g}", f"{p.entry_price:.6g}",
+                rows.append((p.symbol, b.value, side_markup(p.side), f"{p.leverage or 1:.1f}x", f"{p.qty:.6g}", f"{p.entry_price:.6g}",
                              "" if price is None else f"{price:.6g}", pnl_markup(pnl, ""),
                              pnl_markup(pct, " %"),
                              "" if p.take_profit_price is None else f"{p.take_profit_price:.6g}",
@@ -169,8 +174,10 @@ class TradebotApp(App):
             wins += sum(1 for p in closed if (p.pnl or 0) > 0)
             total += sum(p.pnl or 0 for p in closed)
             for p in closed[-limit:]:
-                pct = (p.exit_price / p.entry_price - 1) * 100 if p.exit_price else None
-                rows.append((as_utc(p.closed_at), (p.symbol, b.value, f"{p.entry_price:.6g}",
+                sign = -1 if p.side == "short" else 1
+                pct = (p.exit_price / p.entry_price - 1) * 100 * sign * (p.leverage or 1) if p.exit_price else None
+                rows.append((as_utc(p.closed_at), (p.symbol, b.value, side_markup(p.side), f"{p.leverage or 1:.1f}x",
+                             f"{p.entry_price:.6g}",
                              "" if p.exit_price is None else f"{p.exit_price:.6g}", pnl_markup(p.pnl, ""),
                              pnl_markup(pct, " %"), p.exit_reason or "",
                              f"{as_utc(p.closed_at).astimezone():%d/%m %Hh%M}" if p.closed_at else "")))

@@ -73,8 +73,27 @@ class KrakenAgentsCfg(_Model):
     smart_money: SmartMoneyKrakenCfg = SmartMoneyKrakenCfg()
 
 
+class LeverageCfg(_Model):
+    """Automatic leverage: target_daily_vol / realised daily vol, clamped to [1, risk max_leverage]."""
+
+    enabled: bool = True
+    target_daily_vol_pct: float = 2.0
+    vol_lookback_bars: int = 96
+    full_consensus_only: bool = False  # True: half-size signals always trade at 1x
+
+
+class FinancingCfg(_Model):
+    """Costs of margin/short positions (used by the paper engine and P&L)."""
+
+    open_fee_bps: float = 0.0  # Kraken margin opening fee
+    rollover_bps_per_4h: float = 0.0  # Kraken rollover, on borrowed notional
+    borrow_fee_pct_year: float = 0.0  # IBKR stock borrow (shorts)
+    margin_interest_pct_year: float = 0.0  # IBKR interest on borrowed cash (leveraged longs)
+    maintenance_margin_pct: float = 50.0  # paper: liquidation when equity < this % of used margin
+
+
 class KrakenExecCfg(_Model):
-    entry_timeout_seconds: int = 120
+    entry_timeout_seconds: int = 1800
     exit_limit_timeout_seconds: int = 60
     paper_slippage_bps: float = 5
     validate_orders_in_test: bool = True
@@ -82,6 +101,8 @@ class KrakenExecCfg(_Model):
 
 class KrakenCfg(_Model):
     quote_currency: str = "EUR"
+    leverage: LeverageCfg = LeverageCfg()
+    financing: FinancingCfg = FinancingCfg(open_fee_bps=2.0, rollover_bps_per_4h=2.0)
     fee_tier: Literal["starter", "intermediate", "pro"] = "starter"
     scanner: KrakenScannerCfg = KrakenScannerCfg()
     bars: KrakenBarsCfg = KrakenBarsCfg()
@@ -144,12 +165,14 @@ class IBKRFeesCfg(_Model):
 
 
 class IBKRExecCfg(_Model):
-    entry_timeout_seconds: int = 600
+    entry_timeout_seconds: int = 1800
     exit_limit_timeout_seconds: int = 300
 
 
 class IBKRCfg(_Model):
     base_currency: str = "EUR"
+    leverage: LeverageCfg = LeverageCfg(target_daily_vol_pct=1.5, vol_lookback_bars=20)
+    financing: FinancingCfg = FinancingCfg(borrow_fee_pct_year=3.0, margin_interest_pct_year=6.0)
     data_delay_minutes: int = 15
     gateway: GatewayCfg = GatewayCfg()
     scanner: IBKRScannerCfg = IBKRScannerCfg()
@@ -216,7 +239,9 @@ class BrokerRiskCfg(_Model):
     max_position_pct_full: float = Field(5.0, gt=0, le=100)
     max_position_pct_half: float = Field(2.5, gt=0, le=100)
     max_open_positions: int = Field(5, ge=0)
-    max_exposure_pct: float = Field(30.0, ge=0, le=100)
+    max_exposure_pct: float = Field(60.0, ge=0, le=1000)  # gross notional (longs + shorts) / equity
+    max_leverage: float = Field(2.0, ge=1, le=10)  # hard cap on account leverage per position
+    allow_short: bool = True
     stop_loss_pct: float = Field(3.0, gt=0, lt=100)
     daily_loss_limit_pct: float = Field(3.0, gt=0, le=100)
     max_drawdown_pct: float = Field(15.0, gt=0, le=100)

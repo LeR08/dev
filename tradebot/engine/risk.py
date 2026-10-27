@@ -42,14 +42,17 @@ class RiskApproval:
     side: str
     qty: float
     stop_loss: float | None
+    leverage: float
+    purpose: str
     mode: str
     issued_at: datetime
     signature: str
 
 
-def _signature(client_id: str, symbol: str, side: str, qty: float, stop_loss: float | None,
-               mode: str, issued_at: datetime) -> str:
-    msg = f"{client_id}|{symbol}|{side}|{qty!r}|{stop_loss!r}|{mode}|{issued_at.isoformat()}"
+def _signature(client_id: str, symbol: str, side: str, qty: float, stop_loss: float | None, leverage: float,
+               purpose: str, mode: str, issued_at: datetime) -> str:
+    msg = (f"{client_id}|{symbol}|{side}|{qty!r}|{stop_loss!r}|{leverage!r}|{purpose}|{mode}|"
+           f"{issued_at.isoformat()}")
     return hmac.new(_APPROVAL_KEY, msg.encode(), hashlib.sha256).hexdigest()
 
 
@@ -58,23 +61,25 @@ def ensure_approved(req: OrderRequest, mode: Mode, now: datetime | None = None) 
     a = req.approval
     if not isinstance(a, RiskApproval):
         raise UnapprovedOrder("order has no RiskManager approval")
-    if (a.client_id, a.symbol, a.side, a.qty, a.stop_loss, a.mode) != (
-        req.client_id, req.symbol, str(req.side), req.qty, req.stop_loss, str(mode)
+    if (a.client_id, a.symbol, a.side, a.qty, a.stop_loss, a.leverage, a.purpose, a.mode) != (
+        req.client_id, req.symbol, str(req.side), req.qty, req.stop_loss, req.leverage, str(req.purpose), str(mode)
     ):
         raise UnapprovedOrder("order differs from what the RiskManager approved")
-    expected = _signature(a.client_id, a.symbol, a.side, a.qty, a.stop_loss, a.mode, a.issued_at)
+    expected = _signature(a.client_id, a.symbol, a.side, a.qty, a.stop_loss, a.leverage, a.purpose, a.mode,
+                          a.issued_at)
     if not hmac.compare_digest(expected, a.signature):
         raise UnapprovedOrder("invalid approval signature")
     if (now or utcnow()) - a.issued_at > APPROVAL_MAX_AGE:
         raise UnapprovedOrder("approval expired")
-    if req.purpose == Purpose.ENTRY and req.side == Side.BUY and req.stop_loss is None:
+    if req.purpose == Purpose.ENTRY and req.stop_loss is None:
         raise UnapprovedOrder("entry without stop-loss")
 
 
 @dataclass
 class PositionInfo:
-    qty: float
-    value_eur: float
+    qty: float  # signed: negative = short
+    value_eur: float  # absolute notional in EUR
+    leverage: float = 1.0
 
 
 @dataclass
@@ -92,7 +97,12 @@ class AccountState:
 
     @property
     def exposure(self) -> float:
-        return sum(p.value_eur for p in self.positions.values()) + self.open_entry_value
+        """Gross notional: longs + shorts + resting entries."""
+        return sum(abs(p.value_eur) for p in self.positions.values()) + self.open_entry_value
+
+    @property
+    def margin_used(self) -> float:
+        return sum(abs(p.value_eur) / max(1.0, p.leverage) for p in self.positions.values())
 
 
 @dataclass
@@ -217,7 +227,11 @@ class RiskManager:
     def approve(self, broker: Broker, req: OrderRequest, acct: AccountState,
                 rules: InstrumentRules | None = None, size_factor: float = 1.0,
                 emergency: bool = False) -> RiskDecision:
-        """Check (and if needed resize) an order. Returns an approved copy or a refusal."""
+        """Check (and if needed resize) an order. Returns an approved copy or a refusal.
+
+        Entries open a long (buy) or a short (sell); every other purpose must
+        reduce an existing position (no flipping, no adding through exits).
+        """
         broker = Broker(broker)
         cfg = self.cfg(broker)
         rules = rules or InstrumentRules(req.symbol)
@@ -232,14 +246,18 @@ class RiskManager:
         if req.qty <= 0:
             return self._refuse(broker, req, "quantity must be positive")
 
-        if req.side == Side.BUY:
-            if req.purpose != Purpose.ENTRY:
-                return self._refuse(broker, req, "buy orders are only allowed as entries (no short covering in v1)")
+        held = acct.positions.get(req.symbol)
+        held_qty = held.qty if held else 0.0
+
+        if req.purpose == Purpose.ENTRY:
+            short = req.side == Side.SELL
             if req.order_type == OrderType.MARKET:
-                return self._refuse(broker, req, "market orders are reserved for emergency exits")
+                return self._refuse(broker, req, "market orders are reserved for exits")
             reason = self.halt_reason(broker)
             if reason:
                 return self._refuse(broker, req, f"new entries halted: {reason}")
+            if short and not (cfg.allow_short and rules.shortable):
+                return self._refuse(broker, req, "short selling disabled for this broker/instrument")
             if acct.mode == Mode.LIVE and cfg.live_capital_cap_eur is None:
                 return self._refuse(broker, req, "live capital cap not set")
             price = req.limit_price or req.reference_price
@@ -247,55 +265,69 @@ class RiskManager:
                 return self._refuse(broker, req, "entry needs a positive limit price")
             if size_factor <= 0:
                 return self._refuse(broker, req, "size factor is zero")
-            if req.symbol in acct.positions and acct.positions[req.symbol].qty > 0:
+            if abs(held_qty) > 0:
                 return self._refuse(broker, req, "position already open on this symbol")
             if len(acct.positions) + acct.open_entry_count >= cfg.max_open_positions:
                 return self._refuse(broker, req, f"max open positions ({cfg.max_open_positions}) reached")
 
+            lev = max(1.0, min(req.leverage, cfg.max_leverage, rules.max_leverage))
+            if lev < req.leverage - 1e-9:
+                resized = True
             capital = self.capital(broker, acct)
             pct = cfg.max_position_pct_full if size_factor >= 1.0 else cfg.max_position_pct_half
             unit_eur = price * acct.fx
-            max_qty = capital * pct / 100 / unit_eur
+            max_qty = capital * pct / 100 * lev / unit_eur
             room = capital * cfg.max_exposure_pct / 100 - acct.exposure
             if room <= 0:
-                return self._refuse(broker, req, f"max exposure ({cfg.max_exposure_pct}%) reached")
-            max_qty = min(max_qty, room / unit_eur, acct.cash * 0.995 / unit_eur)  # no leverage
+                return self._refuse(broker, req, f"max gross exposure ({cfg.max_exposure_pct}%) reached")
+            max_qty = min(max_qty, room / unit_eur)
+            if lev <= 1.0 and not short:
+                max_qty = min(max_qty, acct.cash * 0.995 / unit_eur)  # spot long: paid in cash
+            else:
+                free_margin = acct.equity - acct.margin_used
+                max_qty = min(max_qty, free_margin * 0.95 * lev / unit_eur)  # margin: collateral = notional/lev
             qty = rules.round_qty(min(req.qty, max_qty))
             if qty < req.qty - 1e-12:
                 resized = True
             if qty <= 0 or qty < rules.min_qty or qty * price < rules.min_notional:
                 return self._refuse(broker, req, "size below broker minimum after applying limits")
 
-            floor_stop = rules.round_price(price * (1 - cfg.stop_loss_pct / 100), Side.SELL)
-            stop = max(req.stop_loss or 0.0, floor_stop)
-            if stop >= price:
-                return self._refuse(broker, req, "stop-loss must be below entry price")
-            if req.take_profit is not None and req.take_profit <= price:
-                return self._refuse(broker, req, "take-profit must be above entry price")
-            req = replace(req, qty=qty, stop_loss=stop)
+            if short:
+                cap_stop = rules.round_price(price * (1 + cfg.stop_loss_pct / 100), Side.BUY)
+                stop = min(req.stop_loss or cap_stop, cap_stop)
+                if stop <= price:
+                    return self._refuse(broker, req, "short stop-loss must be above entry price")
+                if req.take_profit is not None and req.take_profit >= price:
+                    return self._refuse(broker, req, "short take-profit must be below entry price")
+            else:
+                floor_stop = rules.round_price(price * (1 - cfg.stop_loss_pct / 100), Side.SELL)
+                stop = max(req.stop_loss or 0.0, floor_stop)
+                if stop >= price:
+                    return self._refuse(broker, req, "stop-loss must be below entry price")
+                if req.take_profit is not None and req.take_profit <= price:
+                    return self._refuse(broker, req, "take-profit must be above entry price")
+            req = replace(req, qty=qty, stop_loss=stop, leverage=lev)
 
-        else:  # SELL: exits, stops, take-profits, emergency closes
-            held = acct.positions.get(req.symbol)
-            held_qty = held.qty if held else 0.0
-            if held_qty <= 0:
-                return self._refuse(broker, req, "no position to sell (short selling disabled)")
+        else:  # exits, stops, take-profits, emergency closes: reduce only
+            if held_qty == 0:
+                return self._refuse(broker, req, "no position to close")
+            closing_side = Side.SELL if held_qty > 0 else Side.BUY
+            if req.side != closing_side:
+                return self._refuse(broker, req, "exit would increase the position (reduce-only)")
             if req.order_type == OrderType.MARKET and req.purpose not in (Purpose.EXIT, Purpose.EMERGENCY):
-                return self._refuse(broker, req, "market sells only for exits")
-            qty = min(req.qty, held_qty)
+                return self._refuse(broker, req, "market orders only for exits")
+            qty = min(req.qty, abs(held_qty))
             if qty < req.qty - 1e-12:
                 resized = True
-            req = replace(req, qty=qty, stop_loss=None)
+            req = replace(req, qty=qty, stop_loss=None, leverage=held.leverage if held else req.leverage)
 
         if resized:
-            self._emit(broker, RiskEventKind.RESIZED, {"symbol": req.symbol, "qty": req.qty})
+            self._emit(broker, RiskEventKind.RESIZED, {"symbol": req.symbol, "qty": req.qty,
+                                                       "leverage": req.leverage})
         now = self.clock()
-        approval = RiskApproval(
-            client_id=req.client_id, symbol=req.symbol, side=str(req.side), qty=req.qty,
-            stop_loss=req.stop_loss, mode=str(acct.mode), issued_at=now,
-            signature=_signature(req.client_id, req.symbol, str(req.side), req.qty, req.stop_loss,
-                                 str(acct.mode), now),
-        )
-        req.approval = approval
+        args = (req.client_id, req.symbol, str(req.side), req.qty, req.stop_loss, req.leverage, str(req.purpose),
+                str(acct.mode))
+        req.approval = RiskApproval(*args, issued_at=now, signature=_signature(*args, now))
         self._order_times[str(broker)].append(now)
         return RiskDecision(True, req, "resized" if resized else "ok", resized)
 

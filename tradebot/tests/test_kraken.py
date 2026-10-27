@@ -5,7 +5,7 @@ import urllib.parse
 import httpx
 import pytest
 
-from tradebot.brokers.base import Broker, Mode, OrderRequest, OrderType, Side, UnapprovedOrder
+from tradebot.brokers.base import Broker, Mode, OrderRequest, OrderType, Purpose, Side, UnapprovedOrder
 from tradebot.brokers.kraken import KrakenAdapter, norm_symbol, sign
 from tradebot.engine.mode import ModeSwitch, Precondition, confirm_phrase
 from tradebot.engine.risk import AccountState, RiskManager
@@ -29,7 +29,8 @@ def test_symbol_normalisation():
 PAIRS = {
     "XXBTZEUR": {"altname": "XBTEUR", "wsname": "XBT/EUR", "base": "XXBT", "quote": "ZEUR", "pair_decimals": 1,
                  "lot_decimals": 8, "ordermin": "0.00005", "costmin": "0.5", "tick_size": "0.1",
-                 "fees": [[0, 0.4]], "fees_maker": [[0, 0.25]], "status": "online"},
+                 "fees": [[0, 0.4]], "fees_maker": [[0, 0.25]], "status": "online",
+                 "leverage_buy": [2, 3, 4, 5], "leverage_sell": [2, 3, 4, 5]},
 }
 
 
@@ -117,3 +118,39 @@ async def test_withdrawal_probe():
     assert await a.withdrawal_enabled() is False
     b, _ = make_adapter(KrakenMock(), keys=False)
     assert await b.withdrawal_enabled() is None
+
+
+async def test_live_short_uses_margin_leverage_and_stop_above():
+    mock = KrakenMock()
+    a, mode = make_adapter(mock)
+    await a.connect()
+    mode.request_live(Broker.KRAKEN, confirm_phrase("kraken"), [Precondition("ok", True)])
+    rm = RiskManager(RiskConfig())
+    rm.cfg(Broker.KRAKEN).live_capital_cap_eur = 1000
+    req = OrderRequest("BTC/EUR", Side.SELL, 1.0, OrderType.LIMIT, limit_price=60010.0, post_only=True,
+                       reference_price=60010.0, leverage=1.0)
+    rules = await a.get_rules("BTC/EUR")
+    assert rules.shortable and rules.max_leverage == 5
+    req = rm.approve(Broker.KRAKEN, req, AccountState(Broker.KRAKEN, Mode.LIVE, 1000, 1000), rules).request
+    await a.place_order(req)
+    body = [b for m, b in mock.private_calls if m == "AddOrder"][-1]
+    assert body["type"] == "sell" and body["leverage"] == "2"  # shorts always need margin
+    assert float(body["close[price]"]) > 60010 and "reduce_only" not in body
+
+
+async def test_margin_exit_is_reduce_only():
+    from tradebot.engine.risk import PositionInfo
+
+    mock = KrakenMock()
+    a, mode = make_adapter(mock)
+    await a.connect()
+    mode.request_live(Broker.KRAKEN, confirm_phrase("kraken"), [Precondition("ok", True)])
+    rm = RiskManager(RiskConfig())
+    acct = AccountState(Broker.KRAKEN, Mode.LIVE, 1000, 1000, {"BTC/EUR": PositionInfo(-0.001, 60, 2.0)})
+    req = OrderRequest("BTC/EUR", Side.BUY, 0.001, OrderType.LIMIT, limit_price=59000.0, post_only=True,
+                       purpose=Purpose.EXIT)
+    req = rm.approve(Broker.KRAKEN, req, acct, await a.get_rules("BTC/EUR")).request
+    await a.place_order(req)
+    body = [b for m, b in mock.private_calls if m == "AddOrder"][-1]
+    assert body["type"] == "buy" and body["leverage"] == "2" and body["reduce_only"] == "true"
+    assert "close[ordertype]" not in body

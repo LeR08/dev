@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
 
-from sqlalchemy import create_engine, event, func, select
+from sqlalchemy import create_engine, event, func, inspect, select, text
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -53,7 +53,22 @@ class Database:
             cur.close()
 
         Base.metadata.create_all(self.engine)
+        self._migrate()
         self._sessions = sessionmaker(self.engine, expire_on_commit=False)
+
+    def _migrate(self) -> None:
+        """Add columns introduced after a database was created (SQLite ALTER TABLE ADD COLUMN)."""
+        insp = inspect(self.engine)
+        with self.engine.begin() as conn:
+            for table in Base.metadata.sorted_tables:
+                existing = {c["name"] for c in insp.get_columns(table.name)}
+                for col in table.columns:
+                    if col.name in existing:
+                        continue
+                    ddl = f'ALTER TABLE {table.name} ADD COLUMN "{col.name}" {col.type.compile(self.engine.dialect)}'
+                    if col.server_default is not None:
+                        ddl += f" DEFAULT '{col.server_default.arg}'"
+                    conn.execute(text(ddl))
 
     @contextmanager
     def session(self) -> Iterator[Session]:
@@ -117,7 +132,8 @@ class Database:
                 row = OrderRow(broker=str(broker), mode=str(mode), client_id=req.client_id, symbol=req.symbol,
                                side=str(req.side), qty=req.qty, order_type=str(req.order_type),
                                limit_price=req.limit_price, stop_price=req.stop_price, stop_loss=req.stop_loss,
-                               take_profit=req.take_profit, purpose=str(req.purpose), status="pending")
+                               take_profit=req.take_profit, leverage=req.leverage, purpose=str(req.purpose),
+                               status="pending")
                 s.add(row)
             if order is not None:
                 row.broker_order_id = order.id

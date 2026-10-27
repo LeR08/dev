@@ -416,7 +416,7 @@ class IBKRAdapter(BrokerAdapter):
         ib = await self._ensure()
         out = {}
         for p in ib.positions():
-            if p.position > 0:
+            if p.position != 0:  # negative = short
                 out[p.contract.symbol] = Position(p.contract.symbol, float(p.position), float(p.avgCost),
                                                   p.contract.currency)
         return out
@@ -446,8 +446,7 @@ class IBKRAdapter(BrokerAdapter):
         o, st = t.order, t.orderStatus
         ref = o.orderRef or ""
         suffix = ref.split(":")[1] if ":" in ref else ""
-        purpose = {"tp": Purpose.TAKE_PROFIT, "sl": Purpose.STOP}.get(suffix, Purpose.ENTRY if o.action == "BUY"
-                                                                     else Purpose.EXIT)
+        purpose = {"tp": Purpose.TAKE_PROFIT, "sl": Purpose.STOP}.get(suffix, Purpose.ENTRY)
         kind = {"LMT": OrderType.LIMIT, "MKT": OrderType.MARKET, "STP": OrderType.STOP_LOSS}.get(o.orderType,
                                                                                                OrderType.LIMIT)
         status = {"Filled": OrderStatus.FILLED, "Cancelled": OrderStatus.CANCELLED,
@@ -477,17 +476,21 @@ class IBKRAdapter(BrokerAdapter):
         if qty < rules.min_qty:
             raise OrderRejected(f"{req.symbol}: quantity rounds below {rules.min_qty} share(s)")
 
-        if req.side == Side.BUY:
-            lp = rules.round_price(req.limit_price, Side.BUY)
-            sl = rules.round_price(req.stop_loss, Side.SELL)
+        action = "BUY" if req.side == Side.BUY else "SELL"
+        if req.opens:
+            # entry: long (BUY) or short (SELL, needs a margin account); children close the other way
+            close_side = Side.SELL if req.side == Side.BUY else Side.BUY
+            close_action = "SELL" if action == "BUY" else "BUY"
+            lp = rules.round_price(req.limit_price, req.side)
+            sl = rules.round_price(req.stop_loss, close_side)
             if req.take_profit is not None:
-                tp = rules.round_price(req.take_profit, Side.SELL)
-                bracket = ib.bracketOrder("BUY", qty, lp, tp, sl)
+                tp = rules.round_price(req.take_profit, close_side)
+                bracket = ib.bracketOrder(action, qty, lp, tp, sl)
                 orders = [bracket.parent, bracket.takeProfit, bracket.stopLoss]
                 suffixes = ["", ":tp", ":sl"]
             else:
-                parent = LimitOrder("BUY", qty, lp, orderId=ib.client.getReqId(), transmit=False)
-                stop = StopOrder("SELL", qty, sl, orderId=ib.client.getReqId(), parentId=parent.orderId,
+                parent = LimitOrder(action, qty, lp, orderId=ib.client.getReqId(), transmit=False)
+                stop = StopOrder(close_action, qty, sl, orderId=ib.client.getReqId(), parentId=parent.orderId,
                                  transmit=True)
                 orders, suffixes = [parent, stop], ["", ":sl"]
             for o, sfx in zip(orders, suffixes):
@@ -496,9 +499,9 @@ class IBKRAdapter(BrokerAdapter):
                 o.tif = "DAY" if sfx == "" else "GTC"
         else:
             if req.order_type == OrderType.MARKET:
-                o = MarketOrder("SELL", qty)
+                o = MarketOrder(action, qty)
             else:
-                o = LimitOrder("SELL", qty, rules.round_price(req.limit_price, Side.SELL))
+                o = LimitOrder(action, qty, rules.round_price(req.limit_price, req.side))
             o.orderRef = req.client_id
             o.tif = "DAY"
             orders = [o]
@@ -534,8 +537,8 @@ class IBKRAdapter(BrokerAdapter):
             ref = ex.orderRef or ""
             suffix = ref.split(":")[1] if ":" in ref else ""
             side = Side.BUY if ex.side == "BOT" else Side.SELL
-            purpose = {"tp": Purpose.TAKE_PROFIT, "sl": Purpose.STOP}.get(
-                suffix, Purpose.ENTRY if side == Side.BUY else Purpose.EXIT)
+            # entry vs exit is decided by the trader (pending orders / open position side)
+            purpose = {"tp": Purpose.TAKE_PROFIT, "sl": Purpose.STOP}.get(suffix, Purpose.ENTRY)
             fee = _num(getattr(f.commissionReport, "commission", 0))
             ts = f.time if isinstance(f.time, datetime) else utcnow()
             out.append(Fill(str(ex.orderId), ref.split(":")[0], f.contract.symbol, side, float(ex.shares),

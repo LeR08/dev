@@ -130,3 +130,65 @@ async def test_ibkr_exit_refused_when_market_closed(make_bot):
                                                            "AAPL", "manual_close")
     assert not ok and "market closed" in bot.traders[Broker.IBKR].state.flags["AAPL"]
 
+
+
+def setup_spike(bot):
+    """BTC/EUR far above its VWAP on high volume -> convergence votes SHORT (half size, 1x)."""
+    k = bot.adapters[Broker.KRAKEN]
+    closes = [60_000.0 + (i % 3 - 1) * 50 for i in range(100)] + [62_000.0]
+    vols = [10.0] * 100 + [40.0]
+    k.bars["BTC/EUR"] = make_bars(closes, vols)
+    k.set_price("BTC/EUR", 62_000.0)
+    return k
+
+
+async def test_short_cycle_entry_and_take_profit(make_bot):
+    bot = make_bot()
+    bot.cfg.strategy.kraken.scanner.min_depth_eur = 0
+    k = setup_spike(bot)
+    trader = bot.traders[Broker.KRAKEN]
+    trader.entries_enabled = True
+    await trader.cycle()
+    entry = [r for r in k.placed if r.purpose.value == "entry"]
+    assert len(entry) == 1 and entry[0].side == Side.SELL and entry[0].stop_loss > entry[0].limit_price
+    assert entry[0].leverage == 1.0  # the 3 % spike makes realised vol > target: no leverage
+
+    k.set_price("BTC/EUR", 62_100.0)  # bid rises through our ask -> maker fill
+    trader.entries_enabled = False
+    await trader.cycle()
+    pos = bot.db.open_positions(Broker.KRAKEN, Mode.TEST)
+    assert len(pos) == 1 and pos[0].side == "short"
+    assert any(o.order_type == OrderType.STOP_LOSS and o.side == Side.BUY for o in k.paper.open_orders())
+
+    k.set_price("BTC/EUR", 60_100.0)  # back toward the VWAP target
+    await trader.cycle()  # cover order posted at the bid
+    k.set_price("BTC/EUR", 59_900.0)
+    await trader.cycle()
+    closed = bot.db.closed_positions(Broker.KRAKEN, Mode.TEST)
+    assert len(closed) == 1 and closed[0].side == "short" and closed[0].pnl > 0
+    assert closed[0].exit_reason == "take_profit"
+    await bot.shutdown()
+
+
+async def test_full_consensus_uses_automatic_leverage(make_bot, monkeypatch):
+    from tradebot.agents.base import Direction, Vote
+
+    bot = make_bot()
+    bot.cfg.strategy.kraken.scanner.min_depth_eur = 0
+    k = setup_dip(bot)
+    trader = bot.traders[Broker.KRAKEN]
+
+    async def two_longs(snap, cfgs):
+        return [Vote("arbitrage", Direction.LONG, 0.8, "x", 61_000.0), Vote("convergence", Direction.LONG, 0.8, "y",
+                                                                           61_000.0),
+                Vote.none("smart_money", "")]
+
+    monkeypatch.setattr(trader.agents, "votes", two_longs)
+    bot.cfg.strategy.kraken.leverage.target_daily_vol_pct = 20.0  # the fixture's 3 % dip is "calm" vs 20 %/day
+    trader.entries_enabled = True
+    await trader.cycle()
+    entry = [r for r in k.placed if r.purpose.value == "entry"][0]
+    # realised vol well below target -> leverage hits the 2x cap; notional = 5 % x 2 of equity
+    assert entry.leverage == 2.0
+    assert entry.qty * entry.limit_price == pytest.approx(1000 * 0.05 * 2, rel=0.01)
+    await bot.shutdown()

@@ -60,3 +60,35 @@ def test_exit_rules_in_order():
     assert em.evaluate(pos, 101, bars, None, T0) == ExitReason.VOLUME_SPIKE  # spike after entry, price stalls
     late = PositionView("X/EUR", 100.0, 110.0, 97.0, bars[-2].ts)
     assert em.evaluate(late, 101, bars, None, T0) is None  # spike that started before entry is ignored
+
+
+def test_auto_leverage_from_volatility():
+    import numpy as np
+
+    from tradebot.engine.leverage import auto_leverage, realised_daily_vol_pct
+    from tradebot.settings import LeverageCfg
+
+    rng = np.random.default_rng(0)
+    calm = make_bars(list(100 * np.exp(np.cumsum(rng.normal(0, 0.0005, 100)))))
+    wild = make_bars(list(100 * np.exp(np.cumsum(rng.normal(0, 0.01, 100)))))
+    cfg = LeverageCfg(target_daily_vol_pct=2.0, vol_lookback_bars=96)
+    assert realised_daily_vol_pct(calm, 96) < realised_daily_vol_pct(wild, 96)
+    assert auto_leverage(calm, cfg, 3.0, 1.0)[0] == 3.0  # calm: capped at max
+    assert auto_leverage(wild, cfg, 3.0, 1.0)[0] == 1.0  # ~10 %/day: no leverage
+    assert auto_leverage(calm, cfg, 3.0, 0.5)[0] == 3.0  # half-size signals may use leverage by default
+    strict = LeverageCfg(target_daily_vol_pct=2.0, vol_lookback_bars=96, full_consensus_only=True)
+    assert auto_leverage(calm, strict, 3.0, 0.5)[0] == 1.0
+    assert auto_leverage(calm, LeverageCfg(enabled=False), 3.0, 1.0)[0] == 1.0
+
+
+def test_short_exit_rules():
+    from tradebot.brokers.base import PositionSide
+
+    em = ExitManager(ExitsCfg(), "kraken")
+    pos = PositionView("X/EUR", 100.0, 90.0, 103.0, T0, PositionSide.SHORT)
+    assert take_profit_price(100, 90, 0.85, PositionSide.SHORT) == 91.5
+    assert em.evaluate(pos, 91.4, [], None, T0) == ExitReason.TAKE_PROFIT
+    assert em.evaluate(pos, 103.1, [], None, T0) == ExitReason.STOP_LOSS
+    long_vote = Vote("smart_money", Direction.LONG, 0.8, "")
+    assert em.evaluate(pos, 99, [], long_vote, T0) == ExitReason.SMART_MONEY
+    assert em.evaluate(pos, 99, [], None, T0) is None

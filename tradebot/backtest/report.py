@@ -22,6 +22,8 @@ class Trade:
     pnl: float  # EUR, net of fees
     fees: float  # EUR
     reason: str
+    side: str = "long"
+    leverage: float = 1.0
 
 
 @dataclass
@@ -39,6 +41,9 @@ class Metrics:
     fees_paid: float
     buy_and_hold_return_pct: float | None = None
     exit_reasons: dict[str, int] = field(default_factory=dict)
+    n_long: int = 0
+    n_short: int = 0
+    avg_leverage: float = 1.0
 
     @property
     def significant(self) -> bool:
@@ -88,6 +93,9 @@ def compute_metrics(trades: list[Trade], equity: list[float], periods_per_year: 
         fees_paid=fees_paid if fees_paid is not None else sum(t.fees for t in trades),
         buy_and_hold_return_pct=buy_and_hold_pct,
         exit_reasons=reasons,
+        n_long=sum(1 for t in trades if t.side == "long"),
+        n_short=sum(1 for t in trades if t.side == "short"),
+        avg_leverage=sum(t.leverage for t in trades) / len(trades) if trades else 1.0,
     )
 
 
@@ -107,6 +115,8 @@ def format_metrics(m: Metrics, title: str) -> str:
     ]
     if m.buy_and_hold_return_pct is not None:
         lines.append(f"  buy & hold       {m.buy_and_hold_return_pct:+.2f} % (same universe, equal weight)")
+    if m.n_long or m.n_short:
+        lines.append(f"  long / short     {m.n_long} / {m.n_short} trades, avg leverage {m.avg_leverage:.2f}x")
     if m.exit_reasons:
         lines.append("  exits            " + ", ".join(f"{k}={v}" for k, v in sorted(m.exit_reasons.items())))
     if not m.significant:

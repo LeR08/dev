@@ -108,15 +108,16 @@ class CommandProcessor:
                 pass
             for p in positions:
                 q = quotes.get(p.symbol)
-                price = q.bid if q else None
-                pnl = (price - p.entry_price) * p.qty if price else None
-                rows.append([p.symbol, b.value, p.mode.upper(), _f(p.qty, 6), _f(p.entry_price, 4), _f(price, 4),
-                             _f(pnl), _f(p.take_profit_price or (p.entry_price + 0.85 * (p.target_price - p.entry_price)
-                                                                 if p.target_price else None), 4),
+                sign = -1 if p.side == "short" else 1
+                price = (q.bid if sign > 0 else q.ask) if q else None
+                pnl = (price - p.entry_price) * p.qty * sign if price else None
+                rows.append([p.symbol, b.value, p.side.upper(), f"{p.leverage or 1:.1f}x", _f(p.qty, 6),
+                             _f(p.entry_price, 4), _f(price, 4), _f(pnl), _f(p.take_profit_price, 4),
                              _f(p.stop_price, 4), t.state.flags.get(p.symbol, "")])
         if not rows:
             return "no open positions"
-        return table(["symbol", "broker", "mode", "size", "entry", "price", "P&L", "take-profit", "stop", "flag"], rows)
+        return table(["symbol", "broker", "side", "lev", "size", "entry", "price", "P&L", "take-profit", "stop", "flag"],
+                     rows)
 
     async def cmd_orders(self, args) -> str:
         rows = []

@@ -33,6 +33,23 @@ class Side(StrEnum):
     SELL = "sell"
 
 
+class PositionSide(StrEnum):
+    LONG = "long"
+    SHORT = "short"
+
+    @property
+    def entry_side(self) -> "Side":
+        return Side.BUY if self == PositionSide.LONG else Side.SELL
+
+    @property
+    def exit_side(self) -> "Side":
+        return Side.SELL if self == PositionSide.LONG else Side.BUY
+
+    @property
+    def sign(self) -> int:
+        return 1 if self == PositionSide.LONG else -1
+
+
 class OrderType(StrEnum):
     LIMIT = "limit"
     MARKET = "market"
@@ -156,9 +173,13 @@ class Balance:
 @dataclass
 class Position:
     symbol: str
-    qty: float
+    qty: float  # signed: negative = short
     avg_price: float
     currency: str = "EUR"
+
+    @property
+    def side(self) -> PositionSide:
+        return PositionSide.LONG if self.qty >= 0 else PositionSide.SHORT
 
 
 @dataclass(frozen=True)
@@ -169,6 +190,8 @@ class InstrumentRules:
     qty_step: float = 0.0  # 0 = free; 1 = whole shares
     tick_size: float = 0.0
     min_notional: float = 0.0
+    max_leverage: float = 10.0  # broker-side cap for this instrument (Kraken: AssetPairs leverage lists)
+    shortable: bool = True
 
     def round_qty(self, qty: float) -> float:
         if self.qty_step > 0:
@@ -209,7 +232,19 @@ class OrderRequest:
     purpose: Purpose = Purpose.ENTRY
     client_id: str = field(default_factory=lambda: uuid.uuid4().hex)
     reference_price: float | None = None  # price used for risk sizing
+    leverage: float = 1.0  # account leverage of the position this order opens/closes
     approval: Any = None  # set by RiskManager only
+
+    @property
+    def opens(self) -> bool:
+        return self.purpose == Purpose.ENTRY
+
+    @property
+    def position_side(self) -> PositionSide:
+        """Side of the position this order opens (entries) or closes (exits)."""
+        if self.opens:
+            return PositionSide.LONG if self.side == Side.BUY else PositionSide.SHORT
+        return PositionSide.LONG if self.side == Side.SELL else PositionSide.SHORT
 
     def notional(self, price: float | None = None) -> float:
         p = price or self.limit_price or self.reference_price or self.stop_price or 0.0

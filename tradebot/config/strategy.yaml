@@ -17,6 +17,20 @@ consensus:
 
 kraken:
   quote_currency: EUR
+  # Automatic leverage = target daily volatility / realised daily volatility,
+  # clamped between 1x and risk.yaml max_leverage. Calm market -> more leverage,
+  # volatile market -> less. Half-size signals (1 agent) keep half the size, so
+  # a 1-agent signal at 2x weighs the same as an unlevered 2-agent signal.
+  # full_consensus_only: true -> 1-agent signals always trade at 1x.
+  leverage:
+    enabled: true
+    target_daily_vol_pct: 2.0
+    vol_lookback_bars: 96        # 96 x 15 min = 24 h
+    full_consensus_only: false
+  financing:                     # Kraken margin costs (check your fee page)
+    open_fee_bps: 2              # 0.02 % of notional when a margin position opens
+    rollover_bps_per_4h: 2       # 0.02 % every 4 h on margin positions
+    maintenance_margin_pct: 50   # paper engine liquidation threshold
   fee_tier: starter            # starter | intermediate | pro (call-counter limits)
   scanner:
     max_spread_bps: 30
@@ -50,13 +64,22 @@ kraken:
         LINK: ["0x514910771af9ca656af840dff83e8264ecf986ca", 18]
         UNI: ["0x1f9840a85d5af5bf1d1762f925bdaddc4201f984", 18]
   execution:
-    entry_timeout_seconds: 120
+    entry_timeout_seconds: 1800   # unfilled entry orders are cancelled after 30 min
     exit_limit_timeout_seconds: 60
     paper_slippage_bps: 5
     validate_orders_in_test: true   # dry-run AddOrder(validate=true) when keys are present
 
 ibkr:
   base_currency: EUR
+  leverage:
+    enabled: true
+    target_daily_vol_pct: 1.5
+    vol_lookback_bars: 20        # daily bars
+    full_consensus_only: false
+  financing:                     # requires an IBKR margin account for shorts / leverage
+    borrow_fee_pct_year: 3.0     # stock borrow fee for shorts (varies a lot per stock)
+    margin_interest_pct_year: 6.0
+    maintenance_margin_pct: 50
   data_delay_minutes: 15
   gateway:
     host: 127.0.0.1
@@ -108,7 +131,7 @@ ibkr:
     GBP: 1.16
     CHF: 1.06
   execution:
-    entry_timeout_seconds: 600
+    entry_timeout_seconds: 1800
     exit_limit_timeout_seconds: 300
 
 exits:

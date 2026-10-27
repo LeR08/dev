@@ -26,6 +26,7 @@ from tradebot.brokers.base import (
     OrderBook,
     OrderRequest,
     OrderType,
+    PositionSide,
     Purpose,
     Quote,
     Side,
@@ -34,6 +35,7 @@ from tradebot.brokers.ibkr import IBKRFeeSchedule
 from tradebot.brokers.paper_engine import PaperEngine, pct_fee_fn
 from tradebot.backtest.report import Metrics, Trade, compute_metrics, format_metrics
 from tradebot.engine.consensus import decide
+from tradebot.engine.leverage import auto_leverage
 from tradebot.engine.exits import ExitManager, PositionView, take_profit_price
 from tradebot.engine.risk import AccountState, PositionInfo, RiskManager
 from tradebot.engine.scanner import InstrumentSnapshot, Scanner
@@ -66,6 +68,8 @@ class _OpenPos:
     opened: datetime
     fees: float
     fx: float
+    side: PositionSide = PositionSide.LONG
+    leverage: float = 1.0
 
 
 def apply_overrides(cfg: AppConfig, broker: str, overrides: dict[str, float]) -> AppConfig:
@@ -108,7 +112,7 @@ class Backtester:
     def _rules(self, symbol: str) -> InstrumentRules:
         if self.broker == Broker.IBKR:
             return InstrumentRules(symbol, self._currency(symbol), min_qty=1, qty_step=1, tick_size=0.01)
-        return InstrumentRules(symbol, self._currency(symbol), qty_step=1e-8)
+        return InstrumentRules(symbol, self._currency(symbol), qty_step=1e-8, max_leverage=5)
 
     def _lag_bars(self) -> int:
         if self.broker != Broker.IBKR:
@@ -135,7 +139,7 @@ class Backtester:
             fee_fn = IBKRFeeSchedule(cfg.strategy.ibkr.fees, self._currency)
         clock_now = [start]
         paper = PaperEngine(str(self.broker), self.start_cash, fee_fn, slippage_bps=bt.slippage_bps, fx=self._fx,
-                            clock=lambda: clock_now[0])
+                            clock=lambda: clock_now[0], financing=bcfg.financing)
         risk = RiskManager(cfg.risk.model_copy(deep=True), clock=lambda: clock_now[0])
         scanner = Scanner(self.broker, bcfg.scanner)
         exits = ExitManager(cfg.strategy.exits, str(self.broker))
@@ -146,7 +150,8 @@ class Backtester:
         index = {s: {b.ts: i for i, b in enumerate(bars)} for s, bars in self.bars.items()}
         timeline = sorted({b.ts for bars in self.bars.values() for b in bars if start <= b.ts <= end})
         positions: dict[str, _OpenPos] = {}
-        pending: dict[str, tuple[str, datetime, float | None, float | None]] = {}  # order id -> (symbol,..)
+        # order id -> (symbol, created, target, stop, side, leverage)
+        pending: dict[str, tuple[str, datetime, float | None, float | None, PositionSide, float]] = {}
         trades: list[Trade] = []
         equity_curve: list[tuple[datetime, float]] = []
         peak = day_start = self.start_cash
@@ -160,22 +165,23 @@ class Backtester:
                 if i is None:
                     continue
                 for f in paper.on_bar(s, bars[i], bt.spread_bps):
-                    if f.side == Side.BUY:
-                        info = next((v for k, v in pending.items() if k == f.order_id), None)
-                        pending.pop(f.order_id, None)
-                        target, stop = (info[2], info[3]) if info else (None, None)
+                    if f.purpose == Purpose.ENTRY:
+                        info = pending.pop(f.order_id, None)
+                        target, stop, side, lev = (info[2], info[3], info[4], info[5]) if info else \
+                            (None, None, PositionSide.LONG if f.side == Side.BUY else PositionSide.SHORT, 1.0)
                         fx = self._fx(self._currency(s))
-                        positions[s] = _OpenPos(s, f.qty, f.price, target, stop, ts, f.fee * fx, fx)
+                        positions[s] = _OpenPos(s, f.qty, f.price, target, stop, ts, f.fee * fx, fx, side, lev)
                     else:
                         p = positions.pop(s, None)
                         if p:
-                            reason = {Purpose.STOP: "stop_loss", Purpose.TAKE_PROFIT: "take_profit"}.get(
-                                f.purpose, "exit")
+                            reason = {Purpose.STOP: "stop_loss", Purpose.TAKE_PROFIT: "take_profit",
+                                      Purpose.EMERGENCY: "liquidation"}.get(f.purpose, "exit")
                             fees = p.fees + f.fee * p.fx
-                            pnl = (f.price - p.entry) * f.qty * p.fx - fees
-                            trades.append(Trade(s, p.opened, ts, p.entry, f.price, f.qty, pnl, fees, reason))
+                            pnl = (f.price - p.entry) * f.qty * p.side.sign * p.fx - fees
+                            trades.append(Trade(s, p.opened, ts, p.entry, f.price, f.qty, pnl, fees, reason,
+                                                p.side.value, p.leverage))
             # entries not filled within one bar are cancelled
-            for oid, (s, created, _, _) in list(pending.items()):
+            for oid, (s, created, *_rest) in list(pending.items()):
                 if created < ts:
                     paper.cancel(oid)
                     pending.pop(oid, None)
@@ -187,11 +193,11 @@ class Backtester:
             peak = max(peak, equity)
 
             def acct_state() -> AccountState:
-                infos = {s: PositionInfo(p.qty, p.qty * (paper.last_price(s) or p.entry) * p.fx)
-                         for s, p in positions.items()}
+                infos = {s: PositionInfo(p.qty * p.side.sign, p.qty * (paper.last_price(s) or p.entry) * p.fx,
+                                         p.leverage) for s, p in positions.items()}
                 return AccountState(self.broker, Mode.TEST, paper.equity(), paper.cash - paper.reserved_cash(),
                                     infos, sum(o.qty * (o.limit_price or 0) for o in paper.open_orders()
-                                               if o.side == Side.BUY),
+                                               if o.purpose == Purpose.ENTRY),
                                     len(pending), day_start, peak)
 
             # 2) account limits
@@ -213,7 +219,7 @@ class Backtester:
                 smart = next(v for v in self.pool.vote_sync(snap, {k: {**v, "enabled": k == "smart_money"}
                                                                    for k, v in agent_cfgs.items()})
                              if v.agent == "smart_money")
-                view = PositionView(s, p.entry, p.target, p.stop, p.opened)
+                view = PositionView(s, p.entry, p.target, p.stop, p.opened, p.side)
                 reason = exits.evaluate(view, self.bars[s][i].close, visible, smart, ts)
                 if reason:
                     self._market_exit(paper, risk, positions, s, acct_state(), reason.value, trades)
@@ -247,23 +253,29 @@ class Backtester:
                 decision = decide(self.pool.vote_sync(snap, agent_cfgs), cfg.strategy.consensus)
                 if not decision.trade:
                     continue
-                price = self.bars[s][i].close * (1 - half)
+                side = decision.side
+                close = self.bars[s][i].close
+                price = close * (1 - half) if side == PositionSide.LONG else close * (1 + half)
                 rules = self._rules(s)
                 fx = self._fx(rules.currency)
-                tp = take_profit_price(price, decision.target_price, cfg.strategy.exits.take_profit_fraction)
+                rc = risk.cfg(self.broker)
+                lev, _ = auto_leverage(visible, bcfg.leverage, min(rc.max_leverage, rules.max_leverage),
+                                       decision.size_factor)
+                tp = take_profit_price(price, decision.target_price, cfg.strategy.exits.take_profit_fraction, side)
                 acct = acct_state()
                 acct.fx = fx
-                rc = risk.cfg(self.broker)
                 pct = rc.max_position_pct_full if decision.size_factor >= 1 else rc.max_position_pct_half
-                qty = rules.round_qty(risk.capital(self.broker, acct) * pct / 100 / (price * fx))
-                req = OrderRequest(s, Side.BUY, qty, OrderType.LIMIT, limit_price=price, reference_price=price,
-                                   take_profit=tp if self.broker == Broker.IBKR else None, purpose=Purpose.ENTRY)
+                qty = rules.round_qty(risk.capital(self.broker, acct) * pct / 100 * lev / (price * fx))
+                req = OrderRequest(s, side.entry_side, qty, OrderType.LIMIT, limit_price=price, reference_price=price,
+                                   take_profit=tp if self.broker == Broker.IBKR else None, purpose=Purpose.ENTRY,
+                                   leverage=lev)
                 rd = risk.approve(self.broker, req, acct, rules, decision.size_factor)
                 if not rd.approved:
                     continue
                 order = paper.place(rd.request, rules)
                 if order.is_open:
-                    pending[order.id] = (s, ts, decision.target_price, rd.request.stop_loss)
+                    pending[order.id] = (s, ts, decision.target_price, rd.request.stop_loss, side,
+                                         rd.request.leverage)
 
         # close what is left at the last price
         for s in list(positions):
@@ -282,31 +294,33 @@ class Backtester:
 
     def _market_exit(self, paper: PaperEngine, risk: RiskManager, positions: dict, symbol: str,
                      acct: AccountState | None, reason: str, trades: list[Trade]) -> None:
-        for o in paper.open_orders():
-            if o.symbol == symbol and o.side == Side.SELL:
-                paper.cancel(o.id)
         p = positions.get(symbol)
         if p is None:
             return
+        for o in paper.open_orders():
+            if o.symbol == symbol and o.side == p.side.exit_side:
+                paper.cancel(o.id)
         held = paper.positions.get(symbol)
         if held is None:
             positions.pop(symbol, None)
             return
+        xs = p.side.exit_side
         if acct is not None:
-            req = OrderRequest(symbol, Side.SELL, held.qty, OrderType.MARKET, purpose=Purpose.EXIT)
+            req = OrderRequest(symbol, xs, abs(held.qty), OrderType.MARKET, purpose=Purpose.EXIT,
+                               leverage=p.leverage)
             rd = risk.approve(self.broker, req, acct, emergency=True)
             if not rd.approved:
                 return
             req = rd.request
         else:
-            req = OrderRequest(symbol, Side.SELL, held.qty, OrderType.MARKET, purpose=Purpose.EXIT)
+            req = OrderRequest(symbol, xs, abs(held.qty), OrderType.MARKET, purpose=Purpose.EXIT, leverage=p.leverage)
         order = paper.place(req, self._rules(symbol))
         if order.status.value == "filled":
             positions.pop(symbol, None)
             fees = p.fees + order.fee * p.fx
-            pnl = (order.avg_fill_price - p.entry) * order.qty * p.fx - fees
+            pnl = (order.avg_fill_price - p.entry) * order.qty * p.side.sign * p.fx - fees
             trades.append(Trade(symbol, p.opened, paper.clock(), p.entry, order.avg_fill_price, order.qty,
-                                pnl, fees, reason))
+                                pnl, fees, reason, p.side.value, p.leverage))
 
     def _snapshot(self, symbol: str, ts: datetime, visible: list[Bar], half: float, agent_cfgs: dict) -> Snapshot:
         last = visible[-1] if visible else None

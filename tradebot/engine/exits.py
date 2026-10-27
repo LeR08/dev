@@ -1,7 +1,8 @@
 """Exit logic: a position closes on the first condition met.
 
 The stop-loss also lives at the broker (Kraken conditional close / IBKR bracket
-child) so a bot crash never leaves a position unprotected.
+child) so a bot crash never leaves a position unprotected. Rules are symmetric
+for longs and shorts.
 """
 
 from __future__ import annotations
@@ -13,7 +14,7 @@ from enum import StrEnum
 import numpy as np
 
 from tradebot.agents.base import Direction, Vote
-from tradebot.brokers.base import Bar
+from tradebot.brokers.base import Bar, PositionSide
 from tradebot.settings import ExitsCfg
 
 
@@ -26,6 +27,7 @@ class ExitReason(StrEnum):
     KILL = "kill_switch"
     MANUAL = "manual_close"
     RISK_LIMIT = "risk_limit"
+    LIQUIDATION = "liquidation"
 
 
 @dataclass
@@ -35,10 +37,13 @@ class PositionView:
     target_price: float | None
     stop_price: float | None
     opened_at: datetime
+    side: PositionSide = PositionSide.LONG
 
 
-def take_profit_price(entry: float, target: float | None, fraction: float) -> float | None:
-    if target is None or target <= entry:
+def take_profit_price(entry: float, target: float | None, fraction: float,
+                      side: PositionSide = PositionSide.LONG) -> float | None:
+    """Price at ``fraction`` of the way from entry to the agent's target (None if the target is on the wrong side)."""
+    if target is None or (target - entry) * side.sign <= 0:
         return None
     return entry + fraction * (target - entry)
 
@@ -50,14 +55,18 @@ class ExitManager:
 
     def evaluate(self, pos: PositionView, price: float, bars: list[Bar] | tuple[Bar, ...],
                  smart_vote: Vote | None, now: datetime) -> ExitReason | None:
-        tp = take_profit_price(pos.entry_price, pos.target_price, self.cfg.take_profit_fraction)
-        if tp is not None and price >= tp:
+        """``price`` is the price the position would close at (bid for longs, ask for shorts)."""
+        sign = pos.side.sign
+        tp = take_profit_price(pos.entry_price, pos.target_price, self.cfg.take_profit_fraction, pos.side)
+        if tp is not None and (price - tp) * sign >= 0:
             return ExitReason.TAKE_PROFIT
         if self._volume_spike(bars, pos.opened_at):
             return ExitReason.VOLUME_SPIKE
-        if smart_vote is not None and smart_vote.direction == Direction.AVOID:
-            return ExitReason.SMART_MONEY
-        if pos.stop_price is not None and price <= pos.stop_price:
+        if smart_vote is not None:
+            against = Direction.SHORT if pos.side == PositionSide.LONG else Direction.LONG
+            if smart_vote.direction in (Direction.AVOID, against):
+                return ExitReason.SMART_MONEY
+        if pos.stop_price is not None and (price - pos.stop_price) * sign <= 0:
             return ExitReason.STOP_LOSS
         max_h = self.cfg.max_holding_hours.get(self.broker)
         if max_h is not None and now - pos.opened_at >= timedelta(hours=max_h):

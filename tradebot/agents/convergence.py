@@ -1,4 +1,7 @@
-"""Convergence agent: mean reversion toward VWAP / moving average, with volume confirmation."""
+"""Convergence agent: mean reversion toward VWAP / moving average, with volume confirmation.
+
+Price k standard deviations BELOW the reference -> LONG; ABOVE -> SHORT. Target = reference.
+"""
 
 from __future__ import annotations
 
@@ -30,10 +33,16 @@ def vote(snap: Snapshot, cfg: dict) -> Vote:
     std = float(close.std(ddof=1))
     if std <= abs(ref) * 1e-6:
         return Vote.none(NAME, "no volatility")
-    price = snap.quote.ask if snap.quote and snap.quote.ask > 0 else float(close[-1])
-    z = (price - ref) / std
-    if z > -k:
-        return Vote.none(NAME, f"z={z:.2f} vs {ref_name} (needs <= -{k})")
+    last_close = float(close[-1])
+    q = snap.quote
+    z_long = ((q.ask if q and q.ask > 0 else last_close) - ref) / std
+    z_short = ((q.bid if q and q.bid > 0 else last_close) - ref) / std
+    if z_long <= -k:
+        direction, z, price = Direction.LONG, z_long, (q.ask if q and q.ask > 0 else last_close)
+    elif z_short >= k:
+        direction, z, price = Direction.SHORT, z_short, (q.bid if q and q.bid > 0 else last_close)
+    else:
+        return Vote.none(NAME, f"z={z_long:.2f} vs {ref_name} (needs <= -{k} or >= +{k})")
 
     vols = np.array([b.volume for b in bars[-vol_window - 1:-1]])
     avg_vol = float(vols.mean()) if len(vols) else 0.0
@@ -41,10 +50,11 @@ def vote(snap: Snapshot, cfg: dict) -> Vote:
     if avg_vol <= 0 or last_vol < vol_mult * avg_vol:
         return Vote.none(NAME, f"z={z:.2f} but volume {last_vol:.0f} < {vol_mult}x avg {avg_vol:.0f}")
 
-    conf = min(1.0, 0.5 + (abs(z) - k) / (2 * k) + 0.1 * (last_vol / avg_vol - vol_mult))
+    conf = 0.5 + (abs(z) - k) / (2 * k) + 0.1 * (last_vol / avg_vol - vol_mult)
     if snap.data_delay_minutes > 0:
         conf *= 1 - float(cfg.get("delay_penalty", 0.0))
     conf = max(0.05, min(1.0, conf))
-    return Vote(NAME, Direction.LONG, round(conf, 3),
-                f"price {price:.6g} is {abs(z):.2f} sd below {ref_name} {ref:.6g}; volume {last_vol / avg_vol:.1f}x avg",
+    where = "below" if direction == Direction.LONG else "above"
+    return Vote(NAME, direction, round(conf, 3),
+                f"price {price:.6g} is {abs(z):.2f} sd {where} {ref_name} {ref:.6g}; volume {last_vol / avg_vol:.1f}x avg",
                 target_price=ref)

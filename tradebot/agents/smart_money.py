@@ -1,9 +1,11 @@
 """Smart-money agent.
 
 * Kraken: large outflows from labelled exchange wallets (accumulation) -> LONG;
-  large inflows to exchanges (likely selling) -> AVOID.
+  large inflows to exchanges (likely selling) -> SHORT.
 * IBKR: insider cluster buying (several Form 4 / AMF declarations in a short
-  window) -> LONG; heavy insider selling -> AVOID.
+  window) -> LONG; heavy insider selling -> SHORT.
+
+A SHORT vote also blocks any LONG entry (opposite votes cancel in the consensus).
 """
 
 from __future__ import annotations
@@ -25,7 +27,7 @@ def _vote_kraken(snap: Snapshot, cfg: dict) -> Vote:
         return Vote(NAME, Direction.LONG, round(min(1.0, 0.5 + 0.25 * (net / threshold - 1)), 3),
                     "accumulation: " + detail)
     if -net >= threshold:
-        return Vote(NAME, Direction.AVOID, round(min(1.0, 0.5 + 0.25 * (-net / threshold - 1)), 3),
+        return Vote(NAME, Direction.SHORT, round(min(1.0, 0.5 + 0.25 * (-net / threshold - 1)), 3),
                     "exchange inflows: " + detail)
     return Vote.none(NAME, detail)
 
@@ -48,7 +50,8 @@ def _vote_ibkr(snap: Snapshot, cfg: dict) -> Vote:
 
     if len(sellers) >= int(cfg.get("heavy_sell_min_insiders", 3)) and sell_val >= float(cfg.get("heavy_sell_value", 2e6)) \
             and sell_val > buy_val:
-        return Vote(NAME, Direction.AVOID, round(min(1.0, 0.5 + 0.1 * len(sellers)), 3), "heavy insider selling: " + detail)
+        return Vote(NAME, Direction.SHORT, round(min(1.0, 0.5 + 0.1 * len(sellers)), 3),
+                    "heavy insider selling: " + detail)
     if len(buyers) >= int(cfg.get("cluster_min_insiders", 3)) and buy_val >= float(cfg.get("min_buy_value", 1e5)) \
             and buy_val > sell_val:
         conf = 0.5 + 0.1 * (len(buyers) - int(cfg.get("cluster_min_insiders", 3)))

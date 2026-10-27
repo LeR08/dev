@@ -105,3 +105,17 @@ def test_fee_schedule():
     assert fees("AAPL", Side.BUY, 10, 200, False) == pytest.approx(1.0)  # min per order
     assert fees("MC", Side.BUY, 10, 600, False) == pytest.approx(3.0)  # EU min
     assert fees("MC", Side.BUY, 100, 600, False) == pytest.approx(30.0)  # 0.05 %
+
+
+async def test_short_bracket_children_buy_back():
+    ib = FakeIB(liquid_hours=today_hours(True))
+    a, _ = make(ib)
+    rm = RiskManager(RiskConfig())
+    req = OrderRequest("AAPL", Side.SELL, 1, OrderType.LIMIT, limit_price=200.0, reference_price=200.0,
+                       take_profit=190.0)
+    req = rm.approve(Broker.IBKR, req, AccountState(Broker.IBKR, Mode.TEST, 10_000, 10_000), None).request
+    await a.place_order(req)
+    kinds = [(t.order.orderType, t.order.action) for t in ib.trades()]
+    assert ("LMT", "SELL") in kinds and ("STP", "BUY") in kinds and ("LMT", "BUY") in kinds
+    stop = next(t.order for t in ib.trades() if t.order.orderType == "STP")
+    assert stop.auxPrice > 200

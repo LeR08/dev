@@ -25,12 +25,14 @@ from tradebot.brokers.base import (
     OrderRejected,
     OrderRequest,
     OrderType,
+    PositionSide,
     Purpose,
     Quote,
     Side,
     utcnow,
 )
 from tradebot.engine.consensus import ConsensusDecision, decide
+from tradebot.engine.leverage import auto_leverage
 from tradebot.engine.exits import ExitManager, ExitReason, PositionView, take_profit_price
 from tradebot.engine.mode import ModeSwitch
 from tradebot.engine.risk import AccountState, PositionInfo, RiskEvent, RiskEventKind, RiskManager
@@ -51,6 +53,8 @@ class PendingEntry:
     stop_loss: float | None
     take_profit: float | None
     value_eur: float = 0.0
+    side: PositionSide = PositionSide.LONG
+    leverage: float = 1.0
 
 
 @dataclass
@@ -221,15 +225,17 @@ class BrokerTrader:
         unrealized = 0.0
         for p in positions:
             fx = await self.adapter.fx_to_eur(p.currency)
-            price = quotes[p.symbol].bid if p.symbol in quotes and quotes[p.symbol].bid > 0 else p.entry_price
-            infos[p.symbol] = PositionInfo(p.qty, p.qty * price * fx)
-            unrealized += (price - p.entry_price) * p.qty * fx
+            sign = PositionSide(p.side).sign
+            q = quotes.get(p.symbol)
+            price = (q.bid if sign > 0 else q.ask) if q and q.bid > 0 and q.ask > 0 else p.entry_price
+            infos[p.symbol] = PositionInfo(sign * p.qty, p.qty * price * fx, p.leverage or 1.0)
+            unrealized += (price - p.entry_price) * p.qty * sign * fx
         if self.broker == Broker.IBKR and mode == Mode.TEST:
             # IBKR paper accounts hold large simulated balances: cap to the configured paper balance
             virtual = self.cfg.strategy.paper_starting_balance_eur.get("ibkr", 1000.0) + \
                 self.db.realized_pnl(self.broker, Mode.TEST) + unrealized
-            exposure = sum(i.value_eur for i in infos.values())
-            equity, cash = min(equity, virtual), max(0.0, min(cash, virtual - exposure))
+            margin = sum(i.value_eur / max(1.0, i.leverage) for i in infos.values())
+            equity, cash = min(equity, virtual), max(0.0, min(cash, virtual - margin))
         st = self.state
         today = self.clock().date()
         if st.day != today:
@@ -318,38 +324,51 @@ class BrokerTrader:
         dec_id = self.db.record_decision(self.broker, self.mode, symbol, decision, votes)
         if not decision.trade:
             return
-        quote = self.data._quotes[symbol]
+        side = decision.side
+        rcfg = self.risk.cfg(self.broker)
         rules = await self.adapter.get_rules(symbol)
+        if side == PositionSide.SHORT and not (rcfg.allow_short and rules.shortable):
+            self.db.update_decision(dec_id, "refused: short selling disabled", None)
+            return
+        quote = self.data._quotes[symbol]
         fx = await self.adapter.fx_to_eur(rules.currency)
         if self.broker == Broker.KRAKEN:
-            price = quote.bid  # resting at the bid: post-only maker order
+            # post-only maker order resting on our side of the book
+            price = quote.bid if side == PositionSide.LONG else quote.ask
         else:
-            price = rules.round_price(quote.mid, Side.BUY)  # delayed data: limit at mid, never chase
+            price = rules.round_price(quote.mid, side.entry_side)  # delayed data: limit at mid, never chase
         if price <= 0:
             self.db.update_decision(dec_id, "refused: no price", None)
             return
-        tp = take_profit_price(price, decision.target_price, self.cfg.strategy.exits.take_profit_fraction)
-        rcfg = self.risk.cfg(self.broker)
+        try:
+            bars = await self.adapter.get_bars(symbol, self.bcfg.leverage.vol_lookback_bars + 1)
+        except BrokerError:
+            bars = []
+        lev, lev_reason = auto_leverage(bars, self.bcfg.leverage, min(rcfg.max_leverage, rules.max_leverage),
+                                        decision.size_factor)
+        tp = take_profit_price(price, decision.target_price, self.cfg.strategy.exits.take_profit_fraction, side)
         pct = rcfg.max_position_pct_full if decision.size_factor >= 1 else rcfg.max_position_pct_half
-        qty = rules.round_qty(self.risk.capital(self.broker, acct) * pct / 100 / (price * fx))
-        req = OrderRequest(symbol, Side.BUY, qty, OrderType.LIMIT, limit_price=price,
+        qty = rules.round_qty(self.risk.capital(self.broker, acct) * pct / 100 * lev / (price * fx))
+        req = OrderRequest(symbol, side.entry_side, qty, OrderType.LIMIT, limit_price=price,
                            post_only=self.broker == Broker.KRAKEN,
                            take_profit=tp if self.broker == Broker.IBKR else None,
-                           reference_price=price, purpose=Purpose.ENTRY)
+                           reference_price=price, purpose=Purpose.ENTRY, leverage=lev)
         acct.fx = fx
         rd = self.risk.approve(self.broker, req, acct, rules, decision.size_factor)
-        self.db.update_decision(dec_id, rd.reason if rd.approved else f"refused: {rd.reason}",
+        self.db.update_decision(dec_id, (f"{rd.reason} {side.value} {rd.request.leverage:.1f}x" if rd.approved
+                                         else f"refused: {rd.reason}"),
                                 rd.request.client_id if rd.request else None)
         if not rd.approved:
             self.log.info("entry %s refused by risk: %s", symbol, rd.reason)
             return
         order = await self.submit(rd.request)
         if order is not None:
+            r = rd.request
             self._pending_entries[order.client_id] = PendingEntry(order.id, symbol, self.clock(), decision,
-                                                                  rd.request.stop_loss, tp,
-                                                                  order.qty * price * fx)
-            self.log.info("entry %s %s qty=%s @ %s (%s, stop %s)", symbol, decision.label, order.qty, price,
-                          decision.reason, rd.request.stop_loss)
+                                                                  r.stop_loss, tp, order.qty * price * fx,
+                                                                  side, r.leverage)
+            self.log.info("entry %s %s %s qty=%s @ %s lev %.1fx (%s; %s, stop %s)", side.value.upper(), symbol,
+                          decision.label, order.qty, price, r.leverage, lev_reason, decision.reason, r.stop_loss)
 
     # ------------------------------------------------------------------ order submission
 
@@ -381,10 +400,21 @@ class BrokerTrader:
             fee_eur = f.fee * fx
             self.db.record_fill(self.broker, mode, f, fee_eur)
             self.db.update_order_status(f.order_id, "filled")
-            if f.side == Side.BUY:
-                self._on_entry_fill(f, fee_eur, mode)
-            else:
+            if self._is_exit_fill(f, mode):
                 self._on_exit_fill(f, fee_eur, fx, mode)
+            else:
+                self._on_entry_fill(f, fee_eur, mode)
+
+    def _is_exit_fill(self, f: Fill, mode: Mode) -> bool:
+        """A fill closes a position if we sent it as an exit, or if it goes against an open position."""
+        if f.client_id in self._pending_exits:
+            return True
+        if f.client_id in self._pending_entries:
+            return False
+        if f.purpose in (Purpose.STOP, Purpose.TAKE_PROFIT, Purpose.EXIT, Purpose.EMERGENCY):
+            return True
+        pos = next((p for p in self.db.open_positions(self.broker, mode) if p.symbol == f.symbol), None)
+        return pos is not None and PositionSide(pos.side).exit_side == f.side
 
     def _on_entry_fill(self, f: Fill, fee_eur: float, mode: Mode) -> None:
         pe = self._pending_entries.pop(f.client_id, None)
@@ -396,8 +426,10 @@ class BrokerTrader:
                                     fees=p.fees + fee_eur)
             return
         decision = pe.decision if pe else None
+        side = pe.side if pe else (PositionSide.LONG if f.side == Side.BUY else PositionSide.SHORT)
         self.db.open_position(
             broker=self.broker, mode=mode, symbol=f.symbol, qty=f.qty, entry_price=f.price,
+            side=side.value, leverage=pe.leverage if pe else 1.0,
             currency=(self.cfg.universe_ibkr.entry(f.symbol).currency if self.broker == Broker.IBKR and
                       self.cfg.universe_ibkr.entry(f.symbol) else f.symbol.split("/")[-1]),
             target_price=decision.target_price if decision else None,
@@ -405,27 +437,45 @@ class BrokerTrader:
             stop_price=pe.stop_loss if pe else None, opened_at=f.ts, fees=fee_eur,
             entry_order_id=f.order_id, size_factor=decision.size_factor if decision else 1.0,
             entry_agents=list(decision.entering_agents) if decision else [])
-        self.log.info("position opened %s qty=%s @ %s", f.symbol, f.qty, f.price)
+        self.log.info("position opened %s %s qty=%s @ %s (%.1fx)", side.value.upper(), f.symbol, f.qty, f.price,
+                      pe.leverage if pe else 1.0)
 
     def _on_exit_fill(self, f: Fill, fee_eur: float, fx: float, mode: Mode) -> None:
         pex = self._pending_exits.pop(f.client_id, None)
         positions = [p for p in self.db.open_positions(self.broker, mode) if p.symbol == f.symbol]
         if not positions:
-            self.log.warning("sell fill on %s without an open bot position", f.symbol)
+            self.log.warning("closing fill on %s without an open bot position", f.symbol)
             return
         p = positions[0]
+        sign = PositionSide(p.side).sign
         reason = pex.reason if pex else {Purpose.STOP: ExitReason.STOP_LOSS.value,
-                                         Purpose.TAKE_PROFIT: ExitReason.TAKE_PROFIT.value}.get(f.purpose, "broker_exit")
-        realized = (f.price - p.entry_price) * f.qty * fx
+                                         Purpose.TAKE_PROFIT: ExitReason.TAKE_PROFIT.value,
+                                         Purpose.EMERGENCY: ExitReason.LIQUIDATION.value}.get(f.purpose,
+                                                                                              "broker_exit")
+        realized = (f.price - p.entry_price) * f.qty * sign * fx
         remaining = p.qty - f.qty
         fees = p.fees + fee_eur
         if remaining > 1e-9:
             self.db.update_position(p.id, qty=remaining, fees=fees, pnl=(p.pnl or 0.0) + realized)
             return
-        pnl = (p.pnl or 0.0) + realized - fees
+        pnl = (p.pnl or 0.0) + realized - fees - self._financing_cost(p, f.ts)
         self.db.close_position(p.id, f.price, reason, pnl, fees, f.ts)
         self.state.flags.pop(f.symbol, None)
-        self.log.info("position closed %s @ %s (%s) pnl=%.2f EUR", f.symbol, f.price, reason, pnl)
+        self.log.info("position closed %s %s @ %s (%s) pnl=%.2f EUR", p.side.upper(), f.symbol, f.price, reason, pnl)
+
+    def _financing_cost(self, p, until: datetime) -> float:
+        """Estimated margin/borrow cost (EUR) of a short or leveraged position over its life."""
+        lev = p.leverage or 1.0
+        short = p.side == PositionSide.SHORT.value
+        if not short and lev <= 1:
+            return 0.0
+        f = self.bcfg.financing
+        hours = max(0.0, (until - as_utc(p.opened_at)).total_seconds() / 3600)
+        notional = p.qty * p.entry_price
+        borrowed = notional if short else notional * (1 - 1 / lev)
+        cost = notional * f.open_fee_bps / 10_000 + borrowed * f.rollover_bps_per_4h / 10_000 * hours / 4
+        cost += (notional * f.borrow_fee_pct_year if short else borrowed * f.margin_interest_pct_year) / 100 * hours / 8760
+        return cost
 
     # ------------------------------------------------------------------ pending orders
 
@@ -469,8 +519,10 @@ class BrokerTrader:
             except BrokerError:
                 bars = []
             smart = await self._smart_vote(p.symbol, q)
-            view = PositionView(p.symbol, p.entry_price, p.target_price, p.stop_price, as_utc(p.opened_at))
-            reason = self.exits.evaluate(view, q.bid or q.last, bars, smart, now)
+            side = PositionSide(p.side)
+            view = PositionView(p.symbol, p.entry_price, p.target_price, p.stop_price, as_utc(p.opened_at), side)
+            close_price = (q.bid if side == PositionSide.LONG else q.ask) or q.last
+            reason = self.exits.evaluate(view, close_price, bars, smart, now)
             if self.broker == Broker.IBKR:
                 await self._flag_weekend(p.symbol, now)
             if reason:
@@ -498,9 +550,13 @@ class BrokerTrader:
             self.state.flags[symbol] = f"exit pending ({reason}): market closed"
             self.log.warning("cannot exit %s now (%s): market closed", symbol, reason)
             return False
+        pos = next((p for p in self.db.open_positions(self.broker, self.mode) if p.id == position_id), None)
+        if pos is None:
+            return False
+        exit_side = PositionSide(pos.side).exit_side
         # protective/bracket children must be cancelled first (they reserve the quantity)
         for o in await self.adapter.get_open_orders():
-            if o.symbol == symbol and o.side == Side.SELL:
+            if o.symbol == symbol and o.side == exit_side:
                 await self.adapter.cancel_order(o.id)
         return await self._send_exit(position_id, symbol, reason, market=emergency, emergency=emergency)
 
@@ -512,17 +568,20 @@ class BrokerTrader:
         acct = await self.account_state()
         quote = await self.adapter.get_quote(symbol)
         rules = await self.adapter.get_rules(symbol)
+        side = PositionSide(pos.side)
+        xs, lev = side.exit_side, pos.leverage or 1.0
         if market:
-            req = OrderRequest(symbol, Side.SELL, pos.qty, OrderType.MARKET,
+            req = OrderRequest(symbol, xs, pos.qty, OrderType.MARKET,
                                purpose=Purpose.EMERGENCY if emergency else Purpose.EXIT,
-                               reference_price=quote.bid)
-        elif self.broker == Broker.KRAKEN:
-            req = OrderRequest(symbol, Side.SELL, pos.qty, OrderType.LIMIT,
-                               limit_price=rules.round_price(quote.ask, Side.SELL), post_only=True,
-                               purpose=Purpose.EXIT)
-        else:
-            req = OrderRequest(symbol, Side.SELL, pos.qty, OrderType.LIMIT,
-                               limit_price=rules.round_price(quote.bid, Side.SELL), purpose=Purpose.EXIT)
+                               reference_price=quote.bid if xs == Side.SELL else quote.ask, leverage=lev)
+        elif self.broker == Broker.KRAKEN:  # maker on our side of the book
+            px = quote.ask if xs == Side.SELL else quote.bid
+            req = OrderRequest(symbol, xs, pos.qty, OrderType.LIMIT, limit_price=rules.round_price(px, xs),
+                               post_only=True, purpose=Purpose.EXIT, leverage=lev)
+        else:  # marketable limit
+            px = quote.bid if xs == Side.SELL else quote.ask
+            req = OrderRequest(symbol, xs, pos.qty, OrderType.LIMIT, limit_price=rules.round_price(px, xs),
+                               purpose=Purpose.EXIT, leverage=lev)
         rd = self.risk.approve(self.broker, req, acct, rules, emergency=emergency or market)
         if not rd.approved:
             self.log.warning("exit %s refused by risk: %s", symbol, rd.reason)
@@ -579,7 +638,7 @@ class BrokerTrader:
             broker_pos = await self.adapter.get_positions()
             for p in positions:
                 held = broker_pos.get(p.symbol)
-                if held is None or held.qty <= 0:
+                if held is None or held.qty == 0:
                     continue
                 ok = await self._send_exit(p.id, p.symbol, ExitReason.KILL.value, market=True, emergency=True) \
                     if await self.adapter.is_market_open(p.symbol) else False
