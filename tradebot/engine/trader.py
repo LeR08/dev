@@ -56,6 +56,7 @@ class PendingEntry:
     value_eur: float = 0.0
     side: PositionSide = PositionSide.LONG
     leverage: float = 1.0
+    target: float | None = None
 
 
 @dataclass
@@ -375,7 +376,7 @@ class BrokerTrader:
             r = rd.request
             self._pending_entries[order.client_id] = PendingEntry(order.id, symbol, self.clock(), decision,
                                                                   r.stop_loss, tp, order.qty * price * fx,
-                                                                  side, r.leverage)
+                                                                  side, r.leverage, plan.target)
             self.log.info("entry %s %s %s qty=%s @ %s lev %.1fx (%s; %s, stop %s)", side.value.upper(), symbol,
                           decision.label, order.qty, price, r.leverage, lev_reason,
                           f"{decision.reason}; {plan_reason}", r.stop_loss)
@@ -442,7 +443,7 @@ class BrokerTrader:
             side=side.value, leverage=pe.leverage if pe else 1.0,
             currency=(self.cfg.universe_ibkr.entry(f.symbol).currency if self.broker == Broker.IBKR and
                       self.cfg.universe_ibkr.entry(f.symbol) else f.symbol.split("/")[-1]),
-            target_price=decision.target_price if decision else None,
+            target_price=(pe.target if pe and pe.target is not None else decision.target_price if decision else None),
             take_profit_price=pe.take_profit if pe else None,
             stop_price=pe.stop_loss if pe else None, initial_stop_price=pe.stop_loss if pe else None,
             opened_at=f.ts, fees=fee_eur,

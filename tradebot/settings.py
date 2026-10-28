@@ -212,7 +212,7 @@ class TradePlanCfg(_Model):
     atr_period: int = 14
     stop_atr_mult: float = 2.5  # stop distance = ATR x mult, within [min_stop_pct, risk.yaml stop_loss_pct]
     min_stop_pct: float = 0.5
-
+    default_target_atr_mult: float = 8.0  # take-profit distance (ATR) when the agent gives no target
 
 class ExitsCfg(_Model):
     take_profit_fraction: float = 0.85

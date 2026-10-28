@@ -293,7 +293,7 @@ class Backtester:
                     continue
                 order = paper.place(rd.request, rules)
                 if order.is_open:
-                    pending[order.id] = (s, ts, decision.target_price, rd.request.stop_loss, side,
+                    pending[order.id] = (s, ts, plan.target, rd.request.stop_loss, side,
                                          rd.request.leverage)
 
         # close what is left at the last price

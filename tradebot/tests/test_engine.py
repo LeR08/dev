@@ -132,3 +132,15 @@ def test_volume_spike_exit_only_protects_gains():
     pos = PositionView("X/EUR", 100.0, 110.0, 97.0, T0)
     assert em.evaluate(pos, 101, bars, None, T0) == ExitReason.VOLUME_SPIKE
     assert em.evaluate(pos, 99.5, bars, None, T0) is None  # losing: the stop handles it
+
+
+def test_trade_plan_default_target_when_agent_has_none():
+    from tradebot.brokers.base import Fees, PositionSide
+    from tradebot.engine.planning import plan_trade
+    from tradebot.settings import TradePlanCfg
+
+    bars = make_bars([100.0] * 30)  # ATR 0.2
+    plan, why = plan_trade(PositionSide.LONG, 100.0, None, bars, TradePlanCfg(min_stop_pct=0.1, stop_atr_mult=2.5),
+                           3.0, 0.85, Fees(0.0, 0.0))
+    assert plan and plan.take_profit == pytest.approx(101.6) and plan.target > plan.take_profit
+    assert plan.reward_risk == pytest.approx(1.6 / 0.5)

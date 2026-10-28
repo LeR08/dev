@@ -19,6 +19,7 @@ trade_plan:
   atr_period: 14
   stop_atr_mult: 2.5
   min_stop_pct: 0.5
+  default_target_atr_mult: 8   # take-profit 8 ATR away when an agent gives no price target (smart money)
 
 consensus:
   # Minimum number of LONG votes (with no AVOID) for a full-size position.

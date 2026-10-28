@@ -35,6 +35,7 @@ class TradePlan:
     take_profit: float
     atr: float | None
     reward_risk: float  # net of fees
+    target: float | None = None  # agent target, or the ATR-based default
 
     @property
     def risk_per_unit(self) -> float:
@@ -43,18 +44,24 @@ class TradePlan:
 
 def plan_trade(side: PositionSide, entry: float, target: float | None, bars, cfg: TradePlanCfg,
                max_stop_pct: float, tp_fraction: float, fees: Fees) -> tuple[TradePlan | None, str]:
+    a = atr(bars, cfg.atr_period)
+    if target is None:
+        # agents without a price target (smart money): aim default_target_atr_mult ATR away
+        if not a:
+            return None, "no target and no volatility estimate"
+        target = entry + side.sign * cfg.default_target_atr_mult * a / tp_fraction
     tp = take_profit_price(entry, target, tp_fraction, side)
     if tp is None:
-        return None, "no target on the right side of the price"
-    a = atr(bars, cfg.atr_period)
+        return None, "target on the wrong side of the price"
     dist = a * cfg.stop_atr_mult if a else entry * max_stop_pct / 100
     dist = min(max(dist, entry * cfg.min_stop_pct / 100), entry * max_stop_pct / 100)
     stop = entry - side.sign * dist
-    round_trip = entry * (fees.maker + fees.taker)  # maker entry, worst case taker exit
-    net_reward = abs(tp - entry) - round_trip
-    net_risk = dist + round_trip
+    win_fees = entry * 2 * fees.maker  # maker entry, maker limit exit at the take-profit
+    loss_fees = entry * (fees.maker + fees.taker)  # the stop fills as a taker
+    net_reward = abs(tp - entry) - win_fees
+    net_risk = dist + loss_fees
     rr = net_reward / net_risk if net_risk > 0 else 0.0
     if rr < cfg.min_reward_risk:
         return None, (f"reward/risk {rr:.2f} < {cfg.min_reward_risk} (target {abs(tp - entry) / entry * 100:.2f}%, "
-                      f"stop {dist / entry * 100:.2f}%, fees {round_trip / entry * 100:.2f}%)")
-    return TradePlan(side, entry, stop, tp, a, rr), f"reward/risk {rr:.2f}, stop {dist / entry * 100:.2f}%"
+                      f"stop {dist / entry * 100:.2f}%, fees {win_fees / entry * 100:.2f}-{loss_fees / entry * 100:.2f}%)")
+    return TradePlan(side, entry, stop, tp, a, rr, target), f"reward/risk {rr:.2f}, stop {dist / entry * 100:.2f}%"
