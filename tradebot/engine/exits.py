@@ -38,6 +38,12 @@ class PositionView:
     stop_price: float | None
     opened_at: datetime
     side: PositionSide = PositionSide.LONG
+    initial_stop: float | None = None
+
+    @property
+    def initial_risk(self) -> float | None:
+        stop = self.initial_stop if self.initial_stop is not None else self.stop_price
+        return abs(self.entry_price - stop) if stop is not None else None
 
 
 def take_profit_price(entry: float, target: float | None, fraction: float,
@@ -60,7 +66,8 @@ class ExitManager:
         tp = take_profit_price(pos.entry_price, pos.target_price, self.cfg.take_profit_fraction, pos.side)
         if tp is not None and (price - tp) * sign >= 0:
             return ExitReason.TAKE_PROFIT
-        if self._volume_spike(bars, pos.opened_at):
+        in_profit = (price - pos.entry_price) * sign > 0
+        if (in_profit or not self.cfg.volume_spike.only_in_profit) and self._volume_spike(bars, pos.opened_at):
             return ExitReason.VOLUME_SPIKE
         if smart_vote is not None:
             against = Direction.SHORT if pos.side == PositionSide.LONG else Direction.LONG
@@ -72,6 +79,28 @@ class ExitManager:
         if max_h is not None and now - pos.opened_at >= timedelta(hours=max_h):
             return ExitReason.TIME_STOP
         return None
+
+    def trailing_stop(self, pos: PositionView, price: float, atr_value: float | None,
+                      fee_rate: float = 0.0) -> float | None:
+        """New (tighter) stop, or None. Break-even (+fees) at ``breakeven_at_r`` R, then ATR trail."""
+        t = self.cfg.trailing
+        risk = pos.initial_risk
+        if not t.enabled or not risk or pos.stop_price is None:
+            return None
+        sign = pos.side.sign
+        gain = (price - pos.entry_price) * sign
+        if gain < t.breakeven_at_r * risk:
+            return None
+        candidates = [pos.entry_price * (1 + sign * fee_rate)]  # never give back the fees once 1R is reached
+        if atr_value:
+            candidates.append(price - sign * t.trail_atr_mult * atr_value)
+        new = max(candidates) if sign > 0 else min(candidates)
+        if (price - new) * sign <= 0:
+            return None  # would be at/through the market
+        min_step = price * 0.001
+        if (new - pos.stop_price) * sign <= min_step:
+            return None  # only tighten, and only by a meaningful amount
+        return new
 
     def _volume_spike(self, bars, opened_at: datetime) -> bool:
         vs = self.cfg.volume_spike

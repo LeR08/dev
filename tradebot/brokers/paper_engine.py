@@ -309,6 +309,9 @@ class PaperEngine:
         pos = self.positions.get(order.symbol)
         delta = order.qty if order.side == Side.BUY else -order.qty
         opening = pos is None or pos.qty == 0 or (pos.qty > 0) == (delta > 0)
+        if opening and order.purpose != Purpose.ENTRY:
+            self._reject(order, "reduce-only: nothing left to close")  # e.g. a stale stop after a take-profit
+            return None
         if not opening:
             order.qty = min(order.qty, abs(pos.qty))  # reduce-only: never flips
             delta = order.qty if order.side == Side.BUY else -order.qty

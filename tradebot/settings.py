@@ -38,8 +38,8 @@ class KrakenScannerCfg(_Model):
 
 
 class KrakenBarsCfg(_Model):
-    interval_minutes: int = 15
-    lookback: int = 200
+    interval_minutes: int = 60
+    lookback: int = 300
 
 
 class ArbitrageKrakenCfg(_Model):
@@ -57,6 +57,8 @@ class ConvergenceCfg(_Model):
     volume_mult: float = 1.5
     volume_window: int = 48
     delay_penalty: float = 0.0
+    trend_window: int = 192  # long moving average used as trend filter (bars)
+    max_trend_pct: float = 2.0  # no LONG if that average fell more than this over `window` bars (SHORT: rose)
 
 
 class SmartMoneyKrakenCfg(_Model):
@@ -192,11 +194,30 @@ class VolumeSpikeCfg(_Model):
     bars: int = 3
     mult: float = 3.0
     stall_pct: float = 0.3
+    only_in_profit: bool = True  # protect gains; losing trades are handled by the stop
+
+
+class TrailingCfg(_Model):
+    """Stop moved to break-even (fees included) at +N R, then trailed N ATR behind the price."""
+
+    enabled: bool = True
+    breakeven_at_r: float = 1.0
+    trail_atr_mult: float = 2.0
+
+
+class TradePlanCfg(_Model):
+    """Entry filter: the trade must pay at least ``min_reward_risk`` times what it risks, fees included."""
+
+    min_reward_risk: float = 1.5
+    atr_period: int = 14
+    stop_atr_mult: float = 2.5  # stop distance = ATR x mult, within [min_stop_pct, risk.yaml stop_loss_pct]
+    min_stop_pct: float = 0.5
 
 
 class ExitsCfg(_Model):
     take_profit_fraction: float = 0.85
     volume_spike: VolumeSpikeCfg = VolumeSpikeCfg()
+    trailing: TrailingCfg = TrailingCfg()
     max_holding_hours: dict[str, float] = {"kraken": 72, "ibkr": 240}
 
 
@@ -221,6 +242,7 @@ class DataCfg(_Model):
 
 class StrategyConfig(_Model):
     cycle_seconds: dict[str, float] = {"kraken": 60, "ibkr": 300}
+    trade_plan: TradePlanCfg = TradePlanCfg()
     paper_starting_balance_eur: dict[str, float] = {"kraken": 1000, "ibkr": 1000}
     consensus: ConsensusCfg = ConsensusCfg()
     kraken: KrakenCfg = KrakenCfg()

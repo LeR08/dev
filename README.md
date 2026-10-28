@@ -91,6 +91,10 @@ tradebot/
     heavy selling → SHORT (SEC Form 4, AMF BDIF; 10b5-1 planned sales ignored), optional 13F change.
 * **Consensus**: any AVOID or LONG+SHORT conflict → no trade; 2–3 votes in one direction → full size;
   1 vote → half size; none → no trade. Every decision is stored with the three votes and reasons.
+* **Trade plan** (every signal, before the RiskManager): stop at 2.5 × ATR (between 0.5 % and the 3 %
+  hard cap); the trade is skipped unless the net gain to the take-profit is ≥ 1.5 × the net loss at the
+  stop, round-trip fees included. Kraken runs on 1 h bars: 15 min moves are too small to pay its fees.
+  Convergence also refuses to fade a strong trend (no LONG into a falling market, no SHORT into a rising one).
 * **Automatic leverage**: `target daily volatility / realised daily volatility`, clamped to
   [1×, `max_leverage`] (default cap 2× per broker in `risk.yaml`). Calm market → more leverage, volatile
   market → less. Position notional = equity × 5 % (full) or 2.5 % (half) × leverage.
@@ -108,7 +112,7 @@ tradebot/
   orders only during exchange sessions (holidays included); weekend/holiday holds are flagged.
   Failed submissions are never retried blindly (Kraken `userref` / IBKR `orderRef` lookups first).
 * **Exits** (first hit wins): 85 % of the move to the agent's target, volume spike with stalling price
-  (after entry), smart-money flip to AVOID, stop-loss (also held at the broker), time stop, kill switch.
+  (after entry, only to protect a gain), trailing stop (break-even + fees at +1 R, then 2 ATR behind), smart-money flip to AVOID, stop-loss (also held at the broker), time stop, kill switch.
 * **Test mode**: Kraken → internal paper engine filled against live order books (fees, slippage,
   margin opening fee, rollover / borrow / margin interest, liquidation below maintenance margin,
   optional `validate=true` dry-run); IBKR → native paper account, sizing capped to the configured paper

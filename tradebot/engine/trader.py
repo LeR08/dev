@@ -33,7 +33,8 @@ from tradebot.brokers.base import (
 )
 from tradebot.engine.consensus import ConsensusDecision, decide
 from tradebot.engine.leverage import auto_leverage
-from tradebot.engine.exits import ExitManager, ExitReason, PositionView, take_profit_price
+from tradebot.engine.planning import atr, plan_trade
+from tradebot.engine.exits import ExitManager, ExitReason, PositionView
 from tradebot.engine.mode import ModeSwitch
 from tradebot.engine.risk import AccountState, PositionInfo, RiskEvent, RiskEventKind, RiskManager
 from tradebot.engine.scanner import InstrumentSnapshot, Scanner, ScanResult
@@ -341,17 +342,25 @@ class BrokerTrader:
             self.db.update_decision(dec_id, "refused: no price", None)
             return
         try:
-            bars = await self.adapter.get_bars(symbol, self.bcfg.leverage.vol_lookback_bars + 1)
+            bars = await self.adapter.get_bars(symbol, max(self.bcfg.leverage.vol_lookback_bars + 1,
+                                                           self.cfg.strategy.trade_plan.atr_period + 1, 100))
         except BrokerError:
             bars = []
+        plan, plan_reason = plan_trade(side, price, decision.target_price, bars, self.cfg.strategy.trade_plan,
+                                       rcfg.stop_loss_pct, self.cfg.strategy.exits.take_profit_fraction,
+                                       await self.adapter.get_fees(symbol))
+        if plan is None:
+            self.db.update_decision(dec_id, f"skipped: {plan_reason}", None)
+            self.log.info("entry %s %s skipped: %s", side.value, symbol, plan_reason)
+            return
         lev, lev_reason = auto_leverage(bars, self.bcfg.leverage, min(rcfg.max_leverage, rules.max_leverage),
                                         decision.size_factor)
-        tp = take_profit_price(price, decision.target_price, self.cfg.strategy.exits.take_profit_fraction, side)
+        tp = plan.take_profit
         pct = rcfg.max_position_pct_full if decision.size_factor >= 1 else rcfg.max_position_pct_half
         qty = rules.round_qty(self.risk.capital(self.broker, acct) * pct / 100 * lev / (price * fx))
         req = OrderRequest(symbol, side.entry_side, qty, OrderType.LIMIT, limit_price=price,
                            post_only=self.broker == Broker.KRAKEN,
-                           take_profit=tp if self.broker == Broker.IBKR else None,
+                           take_profit=tp if self.broker == Broker.IBKR else None, stop_loss=plan.stop,
                            reference_price=price, purpose=Purpose.ENTRY, leverage=lev)
         acct.fx = fx
         rd = self.risk.approve(self.broker, req, acct, rules, decision.size_factor)
@@ -368,7 +377,8 @@ class BrokerTrader:
                                                                   r.stop_loss, tp, order.qty * price * fx,
                                                                   side, r.leverage)
             self.log.info("entry %s %s %s qty=%s @ %s lev %.1fx (%s; %s, stop %s)", side.value.upper(), symbol,
-                          decision.label, order.qty, price, r.leverage, lev_reason, decision.reason, r.stop_loss)
+                          decision.label, order.qty, price, r.leverage, lev_reason,
+                          f"{decision.reason}; {plan_reason}", r.stop_loss)
 
     # ------------------------------------------------------------------ order submission
 
@@ -434,7 +444,8 @@ class BrokerTrader:
                       self.cfg.universe_ibkr.entry(f.symbol) else f.symbol.split("/")[-1]),
             target_price=decision.target_price if decision else None,
             take_profit_price=pe.take_profit if pe else None,
-            stop_price=pe.stop_loss if pe else None, opened_at=f.ts, fees=fee_eur,
+            stop_price=pe.stop_loss if pe else None, initial_stop_price=pe.stop_loss if pe else None,
+            opened_at=f.ts, fees=fee_eur,
             entry_order_id=f.order_id, size_factor=decision.size_factor if decision else 1.0,
             entry_agents=list(decision.entering_agents) if decision else [])
         self.log.info("position opened %s %s qty=%s @ %s (%.1fx)", side.value.upper(), f.symbol, f.qty, f.price,
@@ -520,13 +531,46 @@ class BrokerTrader:
                 bars = []
             smart = await self._smart_vote(p.symbol, q)
             side = PositionSide(p.side)
-            view = PositionView(p.symbol, p.entry_price, p.target_price, p.stop_price, as_utc(p.opened_at), side)
+            view = PositionView(p.symbol, p.entry_price, p.target_price, p.stop_price, as_utc(p.opened_at), side,
+                                p.initial_stop_price)
             close_price = (q.bid if side == PositionSide.LONG else q.ask) or q.last
+            fees = await self.adapter.get_fees(p.symbol)
+            new_stop = self.exits.trailing_stop(view, close_price, atr(bars, self.cfg.strategy.trade_plan.atr_period),
+                                                fees.maker + fees.taker)
+            if new_stop is not None and await self._move_stop(p, new_stop):
+                view.stop_price = new_stop
             reason = self.exits.evaluate(view, close_price, bars, smart, now)
             if self.broker == Broker.IBKR:
                 await self._flag_weekend(p.symbol, now)
             if reason:
                 await self.close_position_row(p.id, p.symbol, reason.value)
+
+    async def _move_stop(self, p, new_stop: float) -> bool:
+        """Replace the broker-side stop with a tighter one (trailing / break-even)."""
+        rules = await self.adapter.get_rules(p.symbol)
+        side = PositionSide(p.side)
+        new_stop = rules.round_price(new_stop, side.entry_side)  # round toward the position: never looser
+        old = [o for o in await self.adapter.get_open_orders()
+               if o.symbol == p.symbol and o.order_type == OrderType.STOP_LOSS and o.side == side.exit_side]
+        acct = await self.account_state()
+
+        async def place(stop: float) -> bool:
+            req = OrderRequest(p.symbol, side.exit_side, p.qty, OrderType.STOP_LOSS, stop_price=stop,
+                               purpose=Purpose.STOP, leverage=p.leverage or 1.0)
+            rd = self.risk.approve(self.broker, req, acct, rules, emergency=True)
+            return rd.approved and await self.submit(rd.request) is not None
+
+        for o in old:
+            await self.adapter.cancel_order(o.id)
+        if await place(new_stop):
+            self.db.update_position(p.id, stop_price=new_stop)
+            self.log.info("%s %s stop moved %s -> %s", side.value, p.symbol, p.stop_price, new_stop)
+            return True
+        # never leave the position unprotected: put the previous stop back
+        if p.stop_price is None or not await place(p.stop_price):
+            self.state.flags[p.symbol] = "STOP MISSING at broker — check manually"
+            self.log.error("could not restore the stop on %s", p.symbol)
+        return False
 
     async def _smart_vote(self, symbol: str, quote: Quote) -> Vote | None:
         cfgs = self.agent_cfgs()

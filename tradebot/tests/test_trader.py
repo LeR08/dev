@@ -14,10 +14,10 @@ from tradebot.tests.fakes import make_bars
 def setup_dip(bot):
     """BTC/EUR far below its VWAP on high volume -> convergence votes LONG (half size)."""
     k = bot.adapters[Broker.KRAKEN]
-    closes = [60_000.0 + (i % 3 - 1) * 50 for i in range(60)] + [58_000.0]
+    closes = [60_000.0 + (i % 3 - 1) * 50 for i in range(60)] + [57_000.0]  # -5 %: target far enough to pay fees
     vols = [10.0] * 60 + [40.0]
     k.bars["BTC/EUR"] = make_bars(closes, vols)
-    k.set_price("BTC/EUR", 58_000.0)
+    k.set_price("BTC/EUR", 57_000.0)
     return k
 
 
@@ -38,7 +38,7 @@ async def test_full_cycle_entry_fill_and_take_profit(make_bot):
     assert d.result == "half" and {v.agent for v in votes} == {"arbitrage", "convergence", "smart_money"}
     assert d.mode == "test" and d.broker == "kraken"
 
-    k.set_price("BTC/EUR", 57_900.0)  # ask drops through our bid -> maker fill
+    k.set_price("BTC/EUR", 56_900.0)  # ask drops through our bid -> maker fill
     trader.entries_enabled = False
     await trader.cycle()
     pos = bot.db.open_positions(Broker.KRAKEN, Mode.TEST)
@@ -63,7 +63,7 @@ async def test_kill_closes_everything_within_30s_and_sets_test(make_bot):
     await k.connect()
     trader.entries_enabled = True
     await trader.cycle()
-    k.set_price("BTC/EUR", 57_900.0)
+    k.set_price("BTC/EUR", 56_900.0)
     trader.entries_enabled = False
     await trader.cycle()
     assert bot.db.open_positions(Broker.KRAKEN, Mode.TEST)
@@ -108,7 +108,7 @@ async def test_daily_loss_limit_closes_and_halts(make_bot):
     trader = bot.traders[Broker.KRAKEN]
     trader.entries_enabled = True
     await trader.cycle()
-    k.set_price("BTC/EUR", 57_900.0)
+    k.set_price("BTC/EUR", 56_900.0)
     trader.entries_enabled = False
     await trader.cycle()
     trader.state.day_start_equity = 2000  # simulate a large loss today
@@ -135,10 +135,10 @@ async def test_ibkr_exit_refused_when_market_closed(make_bot):
 def setup_spike(bot):
     """BTC/EUR far above its VWAP on high volume -> convergence votes SHORT (half size, 1x)."""
     k = bot.adapters[Broker.KRAKEN]
-    closes = [60_000.0 + (i % 3 - 1) * 50 for i in range(100)] + [62_000.0]
+    closes = [60_000.0 + (i % 3 - 1) * 50 for i in range(100)] + [63_000.0]
     vols = [10.0] * 100 + [40.0]
     k.bars["BTC/EUR"] = make_bars(closes, vols)
-    k.set_price("BTC/EUR", 62_000.0)
+    k.set_price("BTC/EUR", 63_000.0)
     return k
 
 
@@ -151,9 +151,9 @@ async def test_short_cycle_entry_and_take_profit(make_bot):
     await trader.cycle()
     entry = [r for r in k.placed if r.purpose.value == "entry"]
     assert len(entry) == 1 and entry[0].side == Side.SELL and entry[0].stop_loss > entry[0].limit_price
-    assert entry[0].leverage == 1.0  # the 3 % spike makes realised vol > target: no leverage
+    assert entry[0].leverage == 1.0  # the 5 % spike makes realised vol > target: no leverage
 
-    k.set_price("BTC/EUR", 62_100.0)  # bid rises through our ask -> maker fill
+    k.set_price("BTC/EUR", 63_100.0)  # bid rises through our ask -> maker fill
     trader.entries_enabled = False
     await trader.cycle()
     pos = bot.db.open_positions(Broker.KRAKEN, Mode.TEST)
@@ -184,11 +184,48 @@ async def test_full_consensus_uses_automatic_leverage(make_bot, monkeypatch):
                 Vote.none("smart_money", "")]
 
     monkeypatch.setattr(trader.agents, "votes", two_longs)
-    bot.cfg.strategy.kraken.leverage.target_daily_vol_pct = 20.0  # the fixture's 3 % dip is "calm" vs 20 %/day
+    bot.cfg.strategy.kraken.leverage.target_daily_vol_pct = 50.0  # the fixture dip counts as "calm" vs 50 %/day
     trader.entries_enabled = True
     await trader.cycle()
     entry = [r for r in k.placed if r.purpose.value == "entry"][0]
     # realised vol well below target -> leverage hits the 2x cap; notional = 5 % x 2 of equity
     assert entry.leverage == 2.0
     assert entry.qty * entry.limit_price == pytest.approx(1000 * 0.05 * 2, rel=0.01)
+    await bot.shutdown()
+
+
+async def test_small_target_is_skipped_by_reward_risk_filter(make_bot):
+    bot = make_bot()
+    bot.cfg.strategy.kraken.scanner.min_depth_eur = 0
+    k = bot.adapters[Broker.KRAKEN]
+    closes = [60_000.0 + (i % 3 - 1) * 50 for i in range(60)] + [58_800.0]  # -2 %: gain mostly eaten by fees
+    k.bars["BTC/EUR"] = make_bars(closes, [10.0] * 60 + [40.0])
+    k.set_price("BTC/EUR", 58_800.0)
+    trader = bot.traders[Broker.KRAKEN]
+    trader.entries_enabled = True
+    await trader.cycle()
+    assert not [r for r in k.placed if r.purpose.value == "entry"]
+    d, _ = bot.db.last_decisions(1)[0]
+    assert d.risk_result.startswith("skipped: reward/risk")
+    await bot.shutdown()
+
+
+async def test_trailing_stop_moves_to_break_even_at_broker(make_bot):
+    bot = make_bot()
+    bot.cfg.strategy.kraken.scanner.min_depth_eur = 0
+    k = setup_dip(bot)
+    trader = bot.traders[Broker.KRAKEN]
+    trader.entries_enabled = True
+    await trader.cycle()
+    k.set_price("BTC/EUR", 56_900.0)
+    trader.entries_enabled = False
+    await trader.cycle()
+    pos = bot.db.open_positions(Broker.KRAKEN, Mode.TEST)[0]
+    risk = pos.entry_price - pos.initial_stop_price
+    k.set_price("BTC/EUR", pos.entry_price + 1.2 * risk)  # +1.2 R, still below the take-profit
+    await trader.cycle()
+    pos = bot.db.open_positions(Broker.KRAKEN, Mode.TEST)[0]
+    assert pos.stop_price > pos.entry_price  # break-even plus fees
+    stops = [o for o in k.paper.open_orders() if o.order_type == OrderType.STOP_LOSS]
+    assert len(stops) == 1 and stops[0].stop_price == pytest.approx(pos.stop_price)
     await bot.shutdown()

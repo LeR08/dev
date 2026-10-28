@@ -44,6 +44,19 @@ def vote(snap: Snapshot, cfg: dict) -> Vote:
     else:
         return Vote.none(NAME, f"z={z_long:.2f} vs {ref_name} (needs <= -{k} or >= +{k})")
 
+    # trend filter: do not fade a strong trend (mean reversion fails when the trend persists)
+    trend_window = int(cfg.get("trend_window", 0))
+    max_trend = float(cfg.get("max_trend_pct", 0))
+    if trend_window and max_trend and len(bars) >= trend_window + window:
+        closes = np.array([b.close for b in bars])
+        now_ma = closes[-trend_window:].mean()
+        past_ma = closes[-trend_window - window:-window].mean()
+        trend = (now_ma / past_ma - 1) * 100
+        if direction == Direction.LONG and trend < -max_trend:
+            return Vote.none(NAME, f"z={z:.2f} but falling trend ({trend:+.2f}% < -{max_trend}%)")
+        if direction == Direction.SHORT and trend > max_trend:
+            return Vote.none(NAME, f"z={z:.2f} but rising trend ({trend:+.2f}% > +{max_trend}%)")
+
     vols = np.array([b.volume for b in bars[-vol_window - 1:-1]])
     avg_vol = float(vols.mean()) if len(vols) else 0.0
     last_vol = float(bars[-1].volume)

@@ -36,7 +36,8 @@ from tradebot.brokers.paper_engine import PaperEngine, pct_fee_fn
 from tradebot.backtest.report import Metrics, Trade, compute_metrics, format_metrics
 from tradebot.engine.consensus import decide
 from tradebot.engine.leverage import auto_leverage
-from tradebot.engine.exits import ExitManager, PositionView, take_profit_price
+from tradebot.engine.planning import atr, plan_trade
+from tradebot.engine.exits import ExitManager, PositionView
 from tradebot.engine.risk import AccountState, PositionInfo, RiskManager
 from tradebot.engine.scanner import InstrumentSnapshot, Scanner
 from tradebot.settings import AppConfig
@@ -70,6 +71,9 @@ class _OpenPos:
     fx: float
     side: PositionSide = PositionSide.LONG
     leverage: float = 1.0
+    initial_stop: float | None = None
+    exit_reason: str | None = None
+    exit_since: datetime | None = None
 
 
 def apply_overrides(cfg: AppConfig, broker: str, overrides: dict[str, float]) -> AppConfig:
@@ -170,12 +174,13 @@ class Backtester:
                         target, stop, side, lev = (info[2], info[3], info[4], info[5]) if info else \
                             (None, None, PositionSide.LONG if f.side == Side.BUY else PositionSide.SHORT, 1.0)
                         fx = self._fx(self._currency(s))
-                        positions[s] = _OpenPos(s, f.qty, f.price, target, stop, ts, f.fee * fx, fx, side, lev)
+                        positions[s] = _OpenPos(s, f.qty, f.price, target, stop, ts, f.fee * fx, fx, side, lev, stop)
                     else:
                         p = positions.pop(s, None)
                         if p:
-                            reason = {Purpose.STOP: "stop_loss", Purpose.TAKE_PROFIT: "take_profit",
-                                      Purpose.EMERGENCY: "liquidation"}.get(f.purpose, "exit")
+                            reason = {Purpose.STOP: "trailing_stop" if p.stop != p.initial_stop else "stop_loss",
+                                      Purpose.TAKE_PROFIT: "take_profit",
+                                      Purpose.EMERGENCY: "liquidation"}.get(f.purpose, p.exit_reason or "exit")
                             fees = p.fees + f.fee * p.fx
                             pnl = (f.price - p.entry) * f.qty * p.side.sign * p.fx - fees
                             trades.append(Trade(s, p.opened, ts, p.entry, f.price, f.qty, pnl, fees, reason,
@@ -219,10 +224,20 @@ class Backtester:
                 smart = next(v for v in self.pool.vote_sync(snap, {k: {**v, "enabled": k == "smart_money"}
                                                                    for k, v in agent_cfgs.items()})
                              if v.agent == "smart_money")
-                view = PositionView(s, p.entry, p.target, p.stop, p.opened, p.side)
-                reason = exits.evaluate(view, self.bars[s][i].close, visible, smart, ts)
+                if p.exit_reason is not None:  # limit exit not filled within one bar -> market
+                    if p.exit_since is not None and p.exit_since < ts:
+                        self._market_exit(paper, risk, positions, s, acct_state(), p.exit_reason, trades)
+                    continue
+                close = self.bars[s][i].close
+                view = PositionView(s, p.entry, p.target, p.stop, p.opened, p.side, p.initial_stop)
+                new_stop = exits.trailing_stop(view, close, atr(visible, cfg.strategy.trade_plan.atr_period),
+                                               self.fees.maker + self.fees.taker)
+                if new_stop is not None:
+                    self._move_stop(paper, p, new_stop)
+                    view.stop_price = new_stop
+                reason = exits.evaluate(view, close, visible, smart, ts)
                 if reason:
-                    self._market_exit(paper, risk, positions, s, acct_state(), reason.value, trades)
+                    self._limit_exit(paper, risk, p, acct_state(), reason.value, close * (1 + half * p.side.sign), ts)
 
             # 4) entries
             if risk.halt_reason(self.broker):
@@ -259,16 +274,20 @@ class Backtester:
                 rules = self._rules(s)
                 fx = self._fx(rules.currency)
                 rc = risk.cfg(self.broker)
+                plan, _why = plan_trade(side, price, decision.target_price, visible, cfg.strategy.trade_plan,
+                                        rc.stop_loss_pct, cfg.strategy.exits.take_profit_fraction, self._plan_fees())
+                if plan is None:
+                    continue
                 lev, _ = auto_leverage(visible, bcfg.leverage, min(rc.max_leverage, rules.max_leverage),
                                        decision.size_factor)
-                tp = take_profit_price(price, decision.target_price, cfg.strategy.exits.take_profit_fraction, side)
+                tp = plan.take_profit
                 acct = acct_state()
                 acct.fx = fx
                 pct = rc.max_position_pct_full if decision.size_factor >= 1 else rc.max_position_pct_half
                 qty = rules.round_qty(risk.capital(self.broker, acct) * pct / 100 * lev / (price * fx))
                 req = OrderRequest(s, side.entry_side, qty, OrderType.LIMIT, limit_price=price, reference_price=price,
                                    take_profit=tp if self.broker == Broker.IBKR else None, purpose=Purpose.ENTRY,
-                                   leverage=lev)
+                                   leverage=lev, stop_loss=plan.stop)
                 rd = risk.approve(self.broker, req, acct, rules, decision.size_factor)
                 if not rd.approved:
                     continue
@@ -291,6 +310,36 @@ class Backtester:
         # time-of-day windows are meaningless on daily bars: only spread / volume / earnings apply
         cfg = scanner.cfg.model_copy(update={"avoid_open_close_minutes": 0})
         return Scanner(self.broker, cfg).scan(snaps, ts)
+
+    def _plan_fees(self) -> Fees:
+        return self.fees if self.broker == Broker.KRAKEN else Fees(0.001, 0.001)
+
+    def _move_stop(self, paper: PaperEngine, p: _OpenPos, new_stop: float) -> None:
+        """Replace the broker-side stop with a tighter one (same OCO group as the old one)."""
+        group = None
+        for o in paper.open_orders():
+            if o.symbol == p.symbol and o.order_type == OrderType.STOP_LOSS:
+                group = o.oco_group
+                paper.cancel(o.id)
+        held = paper.positions.get(p.symbol)
+        if held is None:
+            return
+        paper.place(OrderRequest(p.symbol, p.side.exit_side, abs(held.qty), OrderType.STOP_LOSS, stop_price=new_stop,
+                                 purpose=Purpose.STOP, leverage=p.leverage),
+                    self._rules(p.symbol), oco_group=group)
+        p.stop = new_stop
+
+    def _limit_exit(self, paper: PaperEngine, risk: RiskManager, p: _OpenPos, acct: AccountState, reason: str,
+                    price: float, ts: datetime) -> None:
+        """Maker exit at our side of the spread (like the live bot); the stop stays in place meanwhile."""
+        held = paper.positions.get(p.symbol)
+        if held is None:
+            return
+        req = OrderRequest(p.symbol, p.side.exit_side, abs(held.qty), OrderType.LIMIT, limit_price=price,
+                           post_only=True, purpose=Purpose.EXIT, leverage=p.leverage)
+        rd = risk.approve(self.broker, req, acct, emergency=True)
+        if rd.approved and paper.place(rd.request, self._rules(p.symbol)).is_open:
+            p.exit_reason, p.exit_since = reason, ts
 
     def _market_exit(self, paper: PaperEngine, risk: RiskManager, positions: dict, symbol: str,
                      acct: AccountState | None, reason: str, trades: list[Trade]) -> None:

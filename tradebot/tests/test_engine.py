@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from datetime import timedelta
 
+import pytest
+
 from tradebot.agents.base import Direction, Vote
 from tradebot.brokers.base import Broker, OrderBook, Quote
 from tradebot.engine.exits import ExitManager, ExitReason, PositionView, take_profit_price
@@ -92,3 +94,41 @@ def test_short_exit_rules():
     long_vote = Vote("smart_money", Direction.LONG, 0.8, "")
     assert em.evaluate(pos, 99, [], long_vote, T0) == ExitReason.SMART_MONEY
     assert em.evaluate(pos, 99, [], None, T0) is None
+
+
+def test_trade_plan_atr_stop_and_reward_risk():
+    from tradebot.brokers.base import Fees, PositionSide
+    from tradebot.engine.planning import atr, plan_trade
+    from tradebot.settings import TradePlanCfg
+
+    bars = make_bars([100.0] * 30)  # high/low +-0.1 % -> ATR 0.2
+    assert atr(bars, 14) == pytest.approx(0.2, rel=0.01)
+    fees = Fees(0.0025, 0.004)
+    cfg = TradePlanCfg(min_reward_risk=1.5, stop_atr_mult=2.5, min_stop_pct=0.5)
+    plan, why = plan_trade(PositionSide.LONG, 100.0, 105.0, bars, cfg, 3.0, 0.85, fees)
+    assert plan and plan.stop == pytest.approx(99.5)  # 2.5 x 0.2 = 0.5 = min stop 0.5 %
+    assert plan.take_profit == pytest.approx(104.25)
+    plan, why = plan_trade(PositionSide.LONG, 100.0, 101.0, bars, cfg, 3.0, 0.85, fees)
+    assert plan is None and "reward/risk" in why  # 0.85 % target vs 0.65 % fees
+    short, _ = plan_trade(PositionSide.SHORT, 100.0, 95.0, bars, cfg, 3.0, 0.85, fees)
+    assert short and short.stop > 100
+
+
+def test_trailing_stop_breakeven_then_atr():
+    from tradebot.brokers.base import PositionSide
+
+    em = ExitManager(ExitsCfg(), "kraken")
+    pos = PositionView("X/EUR", 100.0, 110.0, 98.0, T0, PositionSide.LONG, 98.0)
+    assert em.trailing_stop(pos, 101.0, 0.5) is None  # +0.5 R
+    assert em.trailing_stop(pos, 102.2, 2.0, 0.0065) == pytest.approx(100.65)  # break-even + fees
+    assert em.trailing_stop(pos, 106.0, 1.0, 0.0065) == pytest.approx(104.0)  # ATR trail wins
+    short = PositionView("X/EUR", 100.0, 90.0, 102.0, T0, PositionSide.SHORT, 102.0)
+    assert em.trailing_stop(short, 97.5, 2.0, 0.0) == pytest.approx(100.0)
+
+
+def test_volume_spike_exit_only_protects_gains():
+    em = ExitManager(ExitsCfg(), "kraken")
+    bars = make_bars([100.0] * 40, [10.0] * 37 + [100.0] * 3, start=T0 - timedelta(hours=9))
+    pos = PositionView("X/EUR", 100.0, 110.0, 97.0, T0)
+    assert em.evaluate(pos, 101, bars, None, T0) == ExitReason.VOLUME_SPIKE
+    assert em.evaluate(pos, 99.5, bars, None, T0) is None  # losing: the stop handles it

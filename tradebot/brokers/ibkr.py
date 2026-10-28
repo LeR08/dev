@@ -500,10 +500,12 @@ class IBKRAdapter(BrokerAdapter):
         else:
             if req.order_type == OrderType.MARKET:
                 o = MarketOrder(action, qty)
+            elif req.order_type == OrderType.STOP_LOSS:  # replacement / trailing stop
+                o = StopOrder(action, qty, rules.round_price(req.stop_price, Side.SELL if action == "BUY" else Side.BUY))
             else:
                 o = LimitOrder(action, qty, rules.round_price(req.limit_price, req.side))
-            o.orderRef = req.client_id
-            o.tif = "DAY"
+            o.orderRef = req.client_id + (":sl" if req.order_type == OrderType.STOP_LOSS else "")
+            o.tif = "GTC" if req.order_type == OrderType.STOP_LOSS else "DAY"
             orders = [o]
 
         trades = [ib.placeOrder(c, o) for o in orders]

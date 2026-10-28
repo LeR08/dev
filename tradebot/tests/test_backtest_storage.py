@@ -18,9 +18,11 @@ def noisy_bars(n=600, seed=3):
     price = 100.0
     out = []
     for i in range(n):
-        ret = rng.normal(0, 0.006)
+        ret = rng.normal(0, 0.002)
         if i % 50 == 49:
-            ret = -0.03  # periodic dips -> mean reversion trades
+            ret = -0.05  # periodic dips -> mean reversion trades worth their fees
+        elif i >= 50 and i % 50 < 10:
+            ret += 0.005  # ...that recover, so there is no lasting trend
         o = price
         price = price * (1 + ret)
         vol = 100 * (4 if i % 50 == 49 else 1) * rng.uniform(0.8, 1.2)
