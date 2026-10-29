@@ -86,6 +86,12 @@ class UiBufferHandler(logging.Handler):
     def __init__(self, maxlen: int = 500):
         super().__init__()
         self.lines: deque[str] = deque(maxlen=maxlen)
+        self.total = 0  # lines ever emitted (keeps growing after the deque is full)
+
+    def since(self, seen: int) -> tuple[list[str], int]:
+        """Lines emitted after ``seen`` (as many as are still buffered) and the new counter."""
+        new = min(self.total - seen, len(self.lines))
+        return (list(self.lines)[len(self.lines) - new:] if new > 0 else []), self.total
 
     def emit(self, record: logging.LogRecord) -> None:
         modes = _mode_provider() if _mode_provider else {}
@@ -94,6 +100,7 @@ class UiBufferHandler(logging.Handler):
         tag = f"[{broker}:{mode}]" if broker else ""
         ts = datetime.fromtimestamp(record.created).strftime("%H:%M:%S")
         self.lines.append(MASKER.mask(f"{ts} {record.levelname:<7} {tag} {record.getMessage()}"))
+        self.total += 1
 
 
 UI_BUFFER = UiBufferHandler()

@@ -8,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 from tradebot.backtest.report import MIN_SIGNIFICANT_TRADES, max_drawdown_pct
 from tradebot.brokers.base import Broker, BrokerError, Mode
 from tradebot.engine.mode import confirm_phrase
+from tradebot.storage.db import as_utc
 
 HELP = """Commands
   start [kraken|ibkr|all]        start trading loops (always in test mode)
@@ -22,6 +23,7 @@ HELP = """Commands
   risk show | risk set <key> <value> | risk review <broker>
   backtest <broker> <from> <to>  e.g. backtest kraken 2026-01-01 2026-06-30
   report [day|week|all]
+  trades [n]                     last closed trades with agents, stop, target, result in R
   config reload
   help | quit"""
 
@@ -235,6 +237,26 @@ class CommandProcessor:
         if not rows:
             return f"no trading activity ({period})"
         return table(["broker", "mode", "trades", "P&L EUR", "win rate", "max DD", "fees EUR", "note"], rows)
+
+    async def cmd_trades(self, args) -> str:
+        n = int(args[0]) if args else 20
+        rows = []
+        for b, t in self.bot.traders.items():
+            for p in self.bot.db.closed_positions(b, t.mode)[-n:]:
+                sign = -1 if p.side == "short" else 1
+                init = p.initial_stop_price or p.stop_price
+                risk = abs(p.entry_price - init) if init else None
+                r_mult = (p.exit_price - p.entry_price) * sign / risk if risk and p.exit_price else None
+                held = (as_utc(p.closed_at) - as_utc(p.opened_at)) if p.closed_at else None
+                rows.append([as_utc(p.closed_at).astimezone().strftime("%d/%m %H:%M") if p.closed_at else "",
+                             p.symbol, p.side.upper(), f"{p.leverage or 1:.1f}x", ",".join(p.entry_agents or []),
+                             _f(p.entry_price, 6), _f(init, 6), _f(p.target_price, 6), _f(p.exit_price, 6),
+                             "" if r_mult is None else f"{r_mult:+.2f}R", _f(p.pnl), _f(p.fees),
+                             p.exit_reason or "", str(held).split(".")[0] if held else ""])
+        if not rows:
+            return "no closed trades yet"
+        return table(["closed", "symbol", "side", "lev", "agents", "entry", "init stop", "target", "exit", "R",
+                      "P&L EUR", "fees", "reason", "held"], rows)
 
     async def cmd_config(self, args) -> str:
         if args[:1] != ["reload"]:

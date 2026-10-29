@@ -143,11 +143,9 @@ class TradebotApp(App):
         closed.border_subtitle = f"{n_closed} trade(s) · gagnants {rate} · P&L réalisé {pnl_markup(realized)}"
 
         log = self.query_one("#log", RichLog)
-        all_lines = list(UI_BUFFER.lines)
-        new = all_lines[self._log_seen:] if self._log_seen <= len(all_lines) else all_lines
+        new, self._log_seen = UI_BUFFER.since(self._log_seen)
         for line in new:
             log.write(line)
-        self._log_seen = len(all_lines)
 
     def _open_rows(self) -> tuple[list[tuple], float]:
         rows, total = [], 0.0

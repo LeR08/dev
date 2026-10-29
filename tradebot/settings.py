@@ -188,6 +188,8 @@ class IBKRCfg(_Model):
 class ConsensusCfg(_Model):
     full_size_min_long: int = 2
     half_size_factor: float = 0.5
+    # agents allowed to open a half-size trade on their own; the others only confirm or block
+    solo_agents: list[str] = ["arbitrage", "convergence"]
 
 
 class VolumeSpikeCfg(_Model):

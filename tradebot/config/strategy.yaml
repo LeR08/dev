@@ -26,6 +26,10 @@ consensus:
   full_size_min_long: 2
   # Size factor when exactly one agent votes LONG and the others NONE.
   half_size_factor: 0.5
+  # Agents allowed to open a (half-size) trade alone. smart_money is not in the list:
+  # its signal could not be backtested (no free on-chain/insider history), so it only
+  # confirms (-> full size) or blocks (opposite vote) the price-based agents.
+  solo_agents: [arbitrage, convergence]
 
 kraken:
   quote_currency: EUR

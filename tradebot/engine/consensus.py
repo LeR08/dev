@@ -5,7 +5,7 @@
 | any AVOID                               | no trade              |
 | LONG and SHORT votes at the same time   | no trade (conflict)   |
 | 2 or 3 votes in the same direction      | full size             |
-| 1 directional vote, others NONE         | half size             |
+| 1 directional vote, others NONE         | half size (solo_agents only) |
 | no directional vote                     | no trade              |
 """
 
@@ -52,4 +52,6 @@ def decide(votes: list[Vote], cfg: ConsensusCfg | None = None) -> ConsensusDecis
     agents = tuple(v.agent for v in voters)
     if len(voters) >= cfg.full_size_min_long:
         return ConsensusDecision("full", 1.0, f"{len(voters)} {word} votes ({', '.join(agents)})", target, agents, side)
+    if agents[0] not in cfg.solo_agents:
+        return ConsensusDecision("none", 0.0, f"1 {word} vote from {agents[0]}: confirmation only, not traded alone")
     return ConsensusDecision("half", cfg.half_size_factor, f"1 {word} vote ({agents[0]})", target, agents, side)

@@ -10,6 +10,7 @@ from tradebot.agents.base import Direction, InsiderActivity, InsiderTxn, Onchain
 from tradebot.agents.pool import AgentPool
 from tradebot.brokers.base import Quote
 from tradebot.engine.consensus import decide
+from tradebot.settings import ConsensusCfg
 from tradebot.tests.fakes import T0, make_bars
 
 
@@ -80,17 +81,21 @@ def test_consensus_table():
     L = lambda a: Vote(a, Direction.LONG, 0.7, "", 110.0)  # noqa: E731
     N = lambda a: Vote.none(a, "")  # noqa: E731
     A = lambda a: Vote(a, Direction.AVOID, 0.9, "")  # noqa: E731
+    cfg = ConsensusCfg(solo_agents=["a", "b", "c"])
     assert decide([L("a"), L("b"), A("c")]).size_factor == 0
     assert decide([L("a"), L("b"), L("c")]).size_factor == 1.0
     assert decide([L("a"), L("b"), N("c")]).label == "full"
-    assert decide([L("a"), N("b"), N("c")]).size_factor == 0.5
+    assert decide([L("a"), N("b"), N("c")], cfg).size_factor == 0.5
     assert decide([N("a"), N("b"), N("c")]).size_factor == 0
     S = lambda a: Vote(a, Direction.SHORT, 0.7, "", 90.0)  # noqa: E731
     d = decide([S("a"), S("b"), N("c")])
     assert d.label == "full" and d.side.value == "short" and d.target_price == 90.0
-    assert decide([S("a"), N("b"), N("c")]).size_factor == 0.5
+    assert decide([S("a"), N("b"), N("c")], cfg).size_factor == 0.5
     assert decide([L("a"), S("b"), N("c")]).size_factor == 0  # conflicting directions
     assert decide([S("a"), S("b"), A("c")]).size_factor == 0
+    sm = Vote("smart_money", Direction.LONG, 0.9, "")
+    assert decide([sm, N("b"), N("c")]).size_factor == 0  # smart money alone only confirms
+    assert decide([sm, Vote("convergence", Direction.LONG, 0.6, "", 110.0), N("c")]).label == "full"
 
 
 async def test_agents_run_in_separate_processes():

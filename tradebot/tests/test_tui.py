@@ -40,3 +40,24 @@ async def test_tui_shows_open_and_closed_pnl(make_bot):
         assert opened.row_count == 1 and closed.row_count == 1
         assert "+0.95" in str(closed.border_subtitle) and "gagnants 100%" in str(closed.border_subtitle)
         assert "latent" in str(opened.border_subtitle)
+
+
+def test_log_buffer_keeps_updating_after_it_is_full():
+    import logging
+
+    from tradebot.logging_setup import UiBufferHandler
+
+    buf = UiBufferHandler(maxlen=5)
+    log = logging.getLogger("bufftest")
+    log.addHandler(buf)
+    log.setLevel(logging.INFO)
+    seen = 0
+    for i in range(12):
+        log.info("line %d", i)
+        new, seen = buf.since(seen)
+        assert len(new) == 1 and new[0].endswith(f"line {i}")
+    log.info("a")
+    log.info("b")
+    new, seen = buf.since(seen)
+    assert [x[-1] for x in new] == ["a", "b"]
+    log.removeHandler(buf)

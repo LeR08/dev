@@ -352,7 +352,7 @@ class BrokerTrader:
                                        await self.adapter.get_fees(symbol))
         if plan is None:
             self.db.update_decision(dec_id, f"skipped: {plan_reason}", None)
-            self.log.info("entry %s %s skipped: %s", side.value, symbol, plan_reason)
+            self.log.debug("entry %s %s skipped: %s", side.value, symbol, plan_reason)
             return
         lev, lev_reason = auto_leverage(bars, self.bcfg.leverage, min(rcfg.max_leverage, rules.max_leverage),
                                         decision.size_factor)
