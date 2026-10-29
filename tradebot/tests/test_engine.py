@@ -20,15 +20,18 @@ def test_kraken_scanner_filters_and_reasons():
     sc = Scanner(Broker.KRAKEN, KrakenScannerCfg(max_spread_bps=30, min_depth_eur=10_000,
                                                  low_liquidity_hours_utc=[3]))
     snaps = [
-        InstrumentSnapshot("A/EUR", Quote("A/EUR", 100, 100.1, 100), book(50_000)),
-        InstrumentSnapshot("B/EUR", Quote("B/EUR", 100, 101, 100), book(50_000)),  # spread 100 bps
-        InstrumentSnapshot("C/EUR", Quote("C/EUR", 100, 100.1, 100), book(1_000)),  # thin
+        InstrumentSnapshot("A/EUR", Quote("A/EUR", 100, 100.1, 100, 1e6), book(50_000)),
+        InstrumentSnapshot("B/EUR", Quote("B/EUR", 100, 101, 100, 1e6), book(50_000)),  # spread 100 bps
+        InstrumentSnapshot("C/EUR", Quote("C/EUR", 100, 100.1, 100, 1e6), book(1_000)),  # thin
         InstrumentSnapshot("D/EUR", None),
+        InstrumentSnapshot("E/EUR", Quote("E/EUR", 100, 100.1, 100, 10), book(50_000)),  # 1 000 EUR / 24 h
+        InstrumentSnapshot("USDT/EUR", Quote("USDT/EUR", 0.92, 0.9201, 0.92, 1e9), book(50_000)),
     ]
     r = sc.scan(snaps, T0.replace(hour=12))
     assert r.passed == ["A/EUR"]
     assert r.rejected["B/EUR"].startswith("spread") and r.rejected["C/EUR"].startswith("depth")
-    assert r.pass_rate == 0.25 and dict(r.top_reasons())["no_quote"] == 1
+    assert r.rejected["E/EUR"].startswith("volume") and r.rejected["USDT/EUR"] == "excluded: stablecoin"
+    assert r.pass_rate == 1 / 6 and dict(r.top_reasons(6))["no_quote"] == 1
     r = sc.scan(snaps[:1], T0.replace(hour=3))
     assert r.rejected["A/EUR"].startswith("time_window")
 
@@ -57,7 +60,9 @@ def test_exit_rules_in_order():
     avoid = Vote("smart_money", Direction.AVOID, 0.8, "")
     assert em.evaluate(pos, 105, [], avoid, T0) == ExitReason.SMART_MONEY
     assert em.evaluate(pos, 96.9, [], None, T0) == ExitReason.STOP_LOSS
-    assert em.evaluate(pos, 101, [], None, T0 + timedelta(hours=73)) == ExitReason.TIME_STOP
+    assert em.evaluate(pos, 101, [], None, T0 + timedelta(hours=481)) == ExitReason.TIME_STOP
+    trailed = PositionView("X/EUR", 100.0, 110.0, 100.5, T0, initial_stop=97.0)
+    assert em.evaluate(trailed, 101, [], None, T0 + timedelta(hours=481)) is None  # protected: runs on
     bars = make_bars([100.0] * 40, [10.0] * 37 + [100.0] * 3, start=T0 - timedelta(hours=9))
     assert em.evaluate(pos, 101, bars, None, T0) == ExitReason.VOLUME_SPIKE  # spike after entry, price stalls
     late = PositionView("X/EUR", 100.0, 110.0, 97.0, bars[-2].ts)

@@ -91,6 +91,13 @@ tradebot/
     heavy selling → SHORT (SEC Form 4, AMF BDIF; 10b5-1 planned sales ignored), optional 13F change.
 * **Consensus**: any AVOID or LONG+SHORT conflict → no trade; 2–3 votes in one direction → full size;
   1 vote → half size; none → no trade. Every decision is stored with the three votes and reasons.
+* **Trend agent** (CTA-style): close beyond the 55-bar high/low with EMA20/EMA100 aligned → LONG/SHORT,
+  no take-profit (the trailing stop closes it).
+* **Sizing**: fixed-fractional risk — a stop-out costs at most `risk_per_trade_pct` (0.5 %) of capital,
+  notional capped at 10 % (5 % half size) before leverage; stops are ATR-based up to an 8 % hard maximum.
+* **Kraken horizon**: daily bars, USD pairs with ≥ 5 M$ 24 h volume, stablecoins excluded. On 24 liquid
+  USD pairs over 2 years this was the only horizon not losing in both a falling and a rising market —
+  and its edge is still tiny (see the backtest command before trusting it).
 * **Trade plan** (every signal, before the RiskManager): stop at 2.5 × ATR (between 0.5 % and the 3 %
   hard cap); the trade is skipped unless the net gain to the take-profit is ≥ 1.5 × the net loss at the
   stop, round-trip fees included. Kraken runs on 1 h bars: 15 min moves are too small to pay its fees.

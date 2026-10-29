@@ -1,7 +1,7 @@
 # Strategy configuration. Reload at runtime with: config reload
 
 cycle_seconds:
-  kraken: 60
+  kraken: 900                  # daily bars: a scan every 15 min is plenty (exits/stops checked each cycle)
   ibkr: 300
 
 # Separate simulated balance used in test mode (EUR, per broker).
@@ -19,7 +19,8 @@ trade_plan:
   atr_period: 14
   stop_atr_mult: 2.5
   min_stop_pct: 0.5
-  default_target_atr_mult: 8   # take-profit 8 ATR away when an agent gives no price target (smart money)
+  default_target_atr_mult: 8   # expected move (ATR) for agents without a price target
+  trail_only_agents: [trend]   # trend trades: no take-profit, the trailing stop closes them
 
 consensus:
   # Minimum number of LONG votes (with no AVOID) for a full-size position.
@@ -29,7 +30,7 @@ consensus:
   # Agents allowed to open a (half-size) trade alone. smart_money is not in the list:
   # its signal could not be backtested (no free on-chain/insider history), so it only
   # confirms (-> full size) or blocks (opposite vote) the price-based agents.
-  solo_agents: [arbitrage, convergence]
+  solo_agents: [arbitrage, convergence, trend]
 
 kraken:
   # Pairs traded against USD (BTC/USD, ETH/USD...): the most liquid quote on Kraken
@@ -46,7 +47,7 @@ kraken:
   leverage:
     enabled: true
     target_daily_vol_pct: 2.0
-    vol_lookback_bars: 24        # 24 x 1 h = 24 h
+    vol_lookback_bars: 20        # 20 daily bars
     full_consensus_only: false
   financing:                     # Kraken margin costs (check your fee page)
     open_fee_bps: 2              # 0.02 % of notional when a margin position opens
@@ -61,8 +62,12 @@ kraken:
     include_only: []           # restrict universe, e.g. ["BTC/USD", "ETH/USD"]
     exclude: []
     exclude_stablecoins: true  # skip USDT/USDC/EURC... vs USD: they barely move
+    min_volume_24h: 5000000    # USD; skips illiquid coins (violent wicks, slippage)
   bars:
-    interval_minutes: 60       # 1 h bars: moves large enough to pay Kraken fees (15 min were not)
+    # Daily bars. Backtests on 24 liquid USD pairs (2 years): 15 min and 1 h moves are too
+    # small to pay Kraken's fees; daily bars were the only horizon positive in both a
+    # falling (-52 %) and a rising (+30 %) market. Kraken serves up to 720 daily bars.
+    interval_minutes: 1440
     lookback: 300
   agents:
     arbitrage:
@@ -87,6 +92,12 @@ kraken:
       erc20:                   # tokens tracked on Ethereum: symbol -> [contract, decimals]
         LINK: ["0x514910771af9ca656af840dff83e8264ecf986ca", 18]
         UNI: ["0x1f9840a85d5af5bf1d1762f925bdaddc4201f984", 18]
+    trend:                     # CTA-style breakout: close beyond the N-bar high/low with the EMAs aligned
+      enabled: true
+      fast: 20
+      slow: 100
+      breakout: 55
+      min_trend_gap_pct: 0.0
   execution:
     entry_timeout_seconds: 1800   # unfilled entry orders are cancelled after 30 min
     exit_limit_timeout_seconds: 60
@@ -172,7 +183,7 @@ exits:
     breakeven_at_r: 1.0        # once the gain reaches 1x the initial risk, stop -> entry + fees
     trail_atr_mult: 2.0        # then the stop follows the price 2 ATR behind
   max_holding_hours:
-    kraken: 72
+    kraken: 480                # 20 days: trend trades need weeks (a 72 h stop closed most of them)
     ibkr: 240
 
 backtest:

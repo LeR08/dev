@@ -33,9 +33,10 @@ async def test_full_cycle_entry_fill_and_take_profit(make_bot):
 
     entry = [r for r in k.placed if r.side == Side.BUY]
     assert len(entry) == 1 and entry[0].post_only and entry[0].stop_loss < entry[0].limit_price
-    assert entry[0].qty * entry[0].limit_price == pytest.approx(1000 * 0.025, rel=0.01)  # half size
+    # half size: capped at 5 % of capital (the 0.25 % risk budget allows more with this tight stop)
+    assert entry[0].qty * entry[0].limit_price == pytest.approx(1000 * 0.05, rel=0.01)
     d, votes = bot.db.last_decisions(1)[0]
-    assert d.result == "half" and {v.agent for v in votes} == {"arbitrage", "convergence", "smart_money"}
+    assert d.result == "half" and {v.agent for v in votes} == {"arbitrage", "convergence", "smart_money", "trend"}
     assert d.mode == "test" and d.broker == "kraken"
 
     k.set_price("BTC/EUR", 56_900.0)  # ask drops through our bid -> maker fill
@@ -188,9 +189,9 @@ async def test_full_consensus_uses_automatic_leverage(make_bot, monkeypatch):
     trader.entries_enabled = True
     await trader.cycle()
     entry = [r for r in k.placed if r.purpose.value == "entry"][0]
-    # realised vol well below target -> leverage hits the 2x cap; notional = 5 % x 2 of equity
+    # realised vol well below target -> leverage hits the 2x cap; notional = 10 % x 2 of equity
     assert entry.leverage == 2.0
-    assert entry.qty * entry.limit_price == pytest.approx(1000 * 0.05 * 2, rel=0.01)
+    assert entry.qty * entry.limit_price == pytest.approx(1000 * 0.10 * 2, rel=0.01)  # 10 % cap x 2
     await bot.shutdown()
 
 

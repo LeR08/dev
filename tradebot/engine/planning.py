@@ -32,7 +32,7 @@ class TradePlan:
     side: PositionSide
     entry: float
     stop: float
-    take_profit: float
+    take_profit: float | None
     atr: float | None
     reward_risk: float  # net of fees
     target: float | None = None  # agent target, or the ATR-based default
@@ -43,7 +43,9 @@ class TradePlan:
 
 
 def plan_trade(side: PositionSide, entry: float, target: float | None, bars, cfg: TradePlanCfg,
-               max_stop_pct: float, tp_fraction: float, fees: Fees) -> tuple[TradePlan | None, str]:
+               max_stop_pct: float, tp_fraction: float, fees: Fees,
+               trail_only: bool = False) -> tuple[TradePlan | None, str]:
+    """``trail_only``: trend trade, no take-profit (the expected move is still used for the reward/risk check)."""
     a = atr(bars, cfg.atr_period)
     if target is None:
         # agents without a price target (smart money): aim default_target_atr_mult ATR away
@@ -64,4 +66,7 @@ def plan_trade(side: PositionSide, entry: float, target: float | None, bars, cfg
     if rr < cfg.min_reward_risk:
         return None, (f"reward/risk {rr:.2f} < {cfg.min_reward_risk} (target {abs(tp - entry) / entry * 100:.2f}%, "
                       f"stop {dist / entry * 100:.2f}%, fees {win_fees / entry * 100:.2f}-{loss_fees / entry * 100:.2f}%)")
+    if trail_only:
+        return (TradePlan(side, entry, stop, None, a, rr, None),
+                f"trend trade (trailing exit), expected reward/risk {rr:.2f}, stop {dist / entry * 100:.2f}%")
     return TradePlan(side, entry, stop, tp, a, rr, target), f"reward/risk {rr:.2f}, stop {dist / entry * 100:.2f}%"

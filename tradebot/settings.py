@@ -36,10 +36,11 @@ class KrakenScannerCfg(_Model):
     include_only: list[str] = []
     exclude: list[str] = []
     exclude_stablecoins: bool = True  # USDC/USDT/EURC... barely move: nothing to trade
+    min_volume_24h: float = 5_000_000  # quote currency; skips illiquid coins (wicks, slippage)
 
 
 class KrakenBarsCfg(_Model):
-    interval_minutes: int = 60
+    interval_minutes: int = 1440
     lookback: int = 300
 
 
@@ -70,10 +71,19 @@ class SmartMoneyKrakenCfg(_Model):
     erc20: dict[str, tuple[str, int]] = {}
 
 
+class TrendCfg(_Model):
+    enabled: bool = True
+    fast: int = 20
+    slow: int = 100
+    breakout: int = 55
+    min_trend_gap_pct: float = 0.0
+
+
 class KrakenAgentsCfg(_Model):
     arbitrage: ArbitrageKrakenCfg = ArbitrageKrakenCfg()
     convergence: ConvergenceCfg = ConvergenceCfg()
     smart_money: SmartMoneyKrakenCfg = SmartMoneyKrakenCfg()
+    trend: TrendCfg = TrendCfg()
 
 
 class LeverageCfg(_Model):
@@ -157,6 +167,7 @@ class IBKRAgentsCfg(_Model):
     arbitrage: PairsCfg = PairsCfg()
     convergence: ConvergenceCfg = ConvergenceCfg(reference="sma", window=20, volume_window=20, volume_mult=1.2)
     smart_money: SmartMoneyIBKRCfg = SmartMoneyIBKRCfg()
+    trend: TrendCfg = TrendCfg()
 
 
 class IBKRFeesCfg(_Model):
@@ -191,7 +202,7 @@ class ConsensusCfg(_Model):
     full_size_min_long: int = 2
     half_size_factor: float = 0.5
     # agents allowed to open a half-size trade on their own; the others only confirm or block
-    solo_agents: list[str] = ["arbitrage", "convergence"]
+    solo_agents: list[str] = ["arbitrage", "convergence", "trend"]
 
 
 class VolumeSpikeCfg(_Model):
@@ -216,13 +227,14 @@ class TradePlanCfg(_Model):
     atr_period: int = 14
     stop_atr_mult: float = 2.5  # stop distance = ATR x mult, within [min_stop_pct, risk.yaml stop_loss_pct]
     min_stop_pct: float = 0.5
-    default_target_atr_mult: float = 8.0  # take-profit distance (ATR) when the agent gives no target
+    default_target_atr_mult: float = 8.0  # expected move (ATR) used for agents without a price target
+    trail_only_agents: list[str] = ["trend"]  # their trades have no take-profit: the trailing stop closes them
 
 class ExitsCfg(_Model):
     take_profit_fraction: float = 0.85
     volume_spike: VolumeSpikeCfg = VolumeSpikeCfg()
     trailing: TrailingCfg = TrailingCfg()
-    max_holding_hours: dict[str, float] = {"kraken": 72, "ibkr": 240}
+    max_holding_hours: dict[str, float] = {"kraken": 480, "ibkr": 240}
 
 
 class WalkForwardCfg(_Model):
@@ -245,7 +257,7 @@ class DataCfg(_Model):
 
 
 class StrategyConfig(_Model):
-    cycle_seconds: dict[str, float] = {"kraken": 60, "ibkr": 300}
+    cycle_seconds: dict[str, float] = {"kraken": 900, "ibkr": 300}
     trade_plan: TradePlanCfg = TradePlanCfg()
     paper_starting_balance_eur: dict[str, float] = {"kraken": 1000, "ibkr": 1000}
     consensus: ConsensusCfg = ConsensusCfg()
@@ -262,13 +274,14 @@ class StrategyConfig(_Model):
 class BrokerRiskCfg(_Model):
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
-    max_position_pct_full: float = Field(5.0, gt=0, le=100)
-    max_position_pct_half: float = Field(2.5, gt=0, le=100)
+    max_position_pct_full: float = Field(10.0, gt=0, le=100)  # notional cap (before leverage)
+    max_position_pct_half: float = Field(5.0, gt=0, le=100)
+    risk_per_trade_pct: float | None = Field(0.5, gt=0, le=10)  # loss at the stop, % of capital (half size: x0.5)
     max_open_positions: int = Field(5, ge=0)
     max_exposure_pct: float = Field(60.0, ge=0, le=1000)  # gross notional (longs + shorts) / equity
     max_leverage: int = Field(2, ge=1, le=10)  # hard cap, whole number: 1 = no margin, 2..10x
     allow_short: bool = True
-    stop_loss_pct: float = Field(3.0, gt=0, lt=100)
+    stop_loss_pct: float = Field(8.0, gt=0, lt=100)  # hard maximum stop distance; the ATR stop is usually closer
     daily_loss_limit_pct: float = Field(3.0, gt=0, le=100)
     max_drawdown_pct: float = Field(15.0, gt=0, le=100)
     max_orders_per_minute: int = Field(10, ge=1)

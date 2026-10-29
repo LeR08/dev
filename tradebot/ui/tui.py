@@ -72,8 +72,8 @@ class TradebotApp(App):
     def on_mount(self) -> None:
         self.query_one("#analyse").border_title = "Analyse"
         votes = self.query_one("#votes", DataTable)
-        votes.add_columns("heure", "broker", "symbole", "arbitrage", "convergence", "smart money", "décision",
-                          "risque")
+        votes.add_columns("heure", "broker", "symbole", "arbitrage", "convergence", "smart money", "tendance",
+                          "décision", "risque")
         opened = self.query_one("#open", DataTable)
         opened.border_title = "Positions en cours"
         opened.add_columns("symbole", "broker", "sens", "levier", "taille", "entrée", "prix", "P&L €", "P&L %",
@@ -125,7 +125,8 @@ class TradebotApp(App):
                 return f"[{color}]{v.direction} {v.confidence:.2f}[/]"
 
             votes.add_row(f"{as_utc(d.ts).astimezone():%H:%M:%S}", d.broker, d.symbol, fmt("arbitrage"),
-                          fmt("convergence"), fmt("smart_money"), d.result.upper(), (d.risk_result or "")[:40])
+                          fmt("convergence"), fmt("smart_money"), fmt("trend"), d.result.upper(),
+                          (d.risk_result or "")[:40])
 
         # Positions en cours
         opened = self.query_one("#open", DataTable)

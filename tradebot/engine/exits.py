@@ -76,7 +76,10 @@ class ExitManager:
         if pos.stop_price is not None and (price - pos.stop_price) * sign <= 0:
             return ExitReason.STOP_LOSS
         max_h = self.cfg.max_holding_hours.get(self.broker)
-        if max_h is not None and now - pos.opened_at >= timedelta(hours=max_h):
+        trailing = pos.initial_stop is not None and pos.stop_price is not None and \
+            (pos.stop_price - pos.initial_stop) * sign > 0
+        # the time stop is for trades going nowhere; a trade already protected by its trailing stop runs on
+        if max_h is not None and not trailing and now - pos.opened_at >= timedelta(hours=max_h):
             return ExitReason.TIME_STOP
         return None
 
@@ -89,11 +92,16 @@ class ExitManager:
             return None
         sign = pos.side.sign
         gain = (price - pos.entry_price) * sign
-        if gain < t.breakeven_at_r * risk:
-            return None
-        candidates = [pos.entry_price * (1 + sign * fee_rate)]  # never give back the fees once 1R is reached
+        candidates = []
+        if t.breakeven_at_r > 0:
+            if gain < t.breakeven_at_r * risk:
+                return None
+            candidates.append(pos.entry_price * (1 + sign * fee_rate))  # never give back the fees once reached
         if atr_value:
+            # breakeven_at_r = 0: chandelier stop, trailing from the first bar
             candidates.append(price - sign * t.trail_atr_mult * atr_value)
+        if not candidates:
+            return None
         new = max(candidates) if sign > 0 else min(candidates)
         if (price - new) * sign <= 0:
             return None  # would be at/through the market

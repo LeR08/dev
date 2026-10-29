@@ -347,9 +347,12 @@ class BrokerTrader:
                                                            self.cfg.strategy.trade_plan.atr_period + 1, 100))
         except BrokerError:
             bars = []
-        plan, plan_reason = plan_trade(side, price, decision.target_price, bars, self.cfg.strategy.trade_plan,
+        tp_cfg = self.cfg.strategy.trade_plan
+        trail_only = bool(decision.entering_agents) and all(a in tp_cfg.trail_only_agents
+                                                             for a in decision.entering_agents)
+        plan, plan_reason = plan_trade(side, price, decision.target_price, bars, tp_cfg,
                                        rcfg.stop_loss_pct, self.cfg.strategy.exits.take_profit_fraction,
-                                       await self.adapter.get_fees(symbol))
+                                       await self.adapter.get_fees(symbol), trail_only)
         if plan is None:
             self.db.update_decision(dec_id, f"skipped: {plan_reason}", None)
             self.log.debug("entry %s %s skipped: %s", side.value, symbol, plan_reason)

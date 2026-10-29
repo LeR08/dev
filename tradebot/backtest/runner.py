@@ -252,7 +252,9 @@ class Backtester:
                 if i is None:
                     continue
                 b = bars[i]
-                q = Quote(s, b.close * (1 - half), b.close * (1 + half), b.close, b.volume, ts)
+                per_day = max(1, round(86400 / self.interval.total_seconds()))
+                vol24 = sum(x.volume for x in bars[max(0, i - per_day + 1): i + 1]) * (per_day / min(per_day, i + 1))
+                q = Quote(s, b.close * (1 - half), b.close * (1 + half), b.close, vol24, ts)
                 depth = b.close * b.volume / 2
                 book = OrderBook(s, ((q.bid, depth / q.bid),), ((q.ask, depth / q.ask),), ts)
                 adv = sum(x.volume for x in bars[max(0, i - 19): i + 1]) / min(20, i + 1)
@@ -278,8 +280,12 @@ class Backtester:
                 rules = self._rules(s)
                 fx = self._fx(rules.currency)
                 rc = risk.cfg(self.broker)
-                plan, _why = plan_trade(side, price, decision.target_price, visible, cfg.strategy.trade_plan,
-                                        rc.stop_loss_pct, cfg.strategy.exits.take_profit_fraction, self._plan_fees())
+                tp_cfg = cfg.strategy.trade_plan
+                trail_only = bool(decision.entering_agents) and all(a in tp_cfg.trail_only_agents
+                                                                     for a in decision.entering_agents)
+                plan, _why = plan_trade(side, price, decision.target_price, visible, tp_cfg,
+                                        rc.stop_loss_pct, cfg.strategy.exits.take_profit_fraction, self._plan_fees(),
+                                        trail_only)
                 if plan is None:
                     continue
                 lev, _ = auto_leverage(visible, bcfg.leverage, min(rc.max_leverage, rules.max_leverage),

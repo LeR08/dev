@@ -81,6 +81,9 @@ class Scanner:
                 return "excluded: config"
             if cfg.exclude_stablecoins and is_stablecoin(s.symbol):
                 return "excluded: stablecoin"
+            vol_quote = s.quote.volume * s.quote.mid
+            if cfg.min_volume_24h and vol_quote < cfg.min_volume_24h:
+                return f"volume: 24h {vol_quote:,.0f} < {cfg.min_volume_24h:,.0f}"
             if s.book is None:
                 return "depth: no order book"
             depth = min(s.book.depth_notional(Side.BUY, cfg.depth_levels),

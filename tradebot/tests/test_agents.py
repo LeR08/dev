@@ -102,9 +102,9 @@ async def test_agents_run_in_separate_processes():
     pool = AgentPool(isolated=True)
     try:
         votes = await pool.votes(snap(bars=tuple(make_bars([100.0] * 60))), {})
-        assert [v.agent for v in votes] == ["arbitrage", "convergence", "smart_money"]
+        assert [v.agent for v in votes] == ["arbitrage", "convergence", "smart_money", "trend"]
         pids = {ex._processes and next(iter(ex._processes)) for ex in pool._executors.values()}
-        assert len(pids) == 3  # one worker process per agent
+        assert len(pids) == 4  # one worker process per agent
     finally:
         pool.shutdown()
 
@@ -139,3 +139,15 @@ def test_triangle_short_when_pair_is_rich():
     v = arbitrage.vote(snap(quote=q, related_quotes=related, taker_fee=0.0026),
                        {"bridges": ["BTC"], "min_edge_bps": 15, "slippage_bps": 5})
     assert v.direction == Direction.SHORT and v.target_price == pytest.approx(3000)
+
+
+def test_trend_breakout_long_and_short():
+    from tradebot.agents import trend
+
+    up = [100.0 * (1.004 ** i) for i in range(160)] + [100.0 * (1.004 ** 160) * 1.03]
+    v = trend.vote(snap(symbol="BTC/USD", bars=tuple(make_bars(up))), {})
+    assert v.direction == Direction.LONG and v.target_price is None
+    down = [100.0 * (0.996 ** i) for i in range(160)] + [100.0 * (0.996 ** 160) * 0.97]
+    assert trend.vote(snap(symbol="BTC/USD", bars=tuple(make_bars(down))), {}).direction == Direction.SHORT
+    flat = [100.0 + (i % 5) for i in range(160)]
+    assert trend.vote(snap(symbol="BTC/USD", bars=tuple(make_bars(flat))), {}).direction == Direction.NONE

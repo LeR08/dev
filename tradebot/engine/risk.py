@@ -274,25 +274,6 @@ class RiskManager:
             lev = float(max(1, math.floor(min(req.leverage, cfg.max_leverage, rules.max_leverage))))  # whole x
             if lev < req.leverage - 1e-9:
                 resized = True
-            capital = self.capital(broker, acct)
-            pct = cfg.max_position_pct_full if size_factor >= 1.0 else cfg.max_position_pct_half
-            unit_eur = price * acct.fx
-            max_qty = capital * pct / 100 * lev / unit_eur
-            room = capital * cfg.max_exposure_pct / 100 - acct.exposure
-            if room <= 0:
-                return self._refuse(broker, req, f"max gross exposure ({cfg.max_exposure_pct}%) reached")
-            max_qty = min(max_qty, room / unit_eur)
-            if lev <= 1.0 and not short:
-                max_qty = min(max_qty, acct.cash * 0.995 / unit_eur)  # spot long: paid in cash
-            else:
-                free_margin = acct.equity - acct.margin_used
-                max_qty = min(max_qty, free_margin * 0.95 * lev / unit_eur)  # margin: collateral = notional/lev
-            qty = rules.round_qty(min(req.qty, max_qty))
-            if qty < req.qty - 1e-12:
-                resized = True
-            if qty <= 0 or qty < rules.min_qty or qty * price < rules.min_notional:
-                return self._refuse(broker, req, "size below broker minimum after applying limits")
-
             if short:
                 cap_stop = rules.round_price(price * (1 + cfg.stop_loss_pct / 100), Side.BUY)
                 stop = min(req.stop_loss or cap_stop, cap_stop)
@@ -307,6 +288,29 @@ class RiskManager:
                     return self._refuse(broker, req, "stop-loss must be below entry price")
                 if req.take_profit is not None and req.take_profit <= price:
                     return self._refuse(broker, req, "take-profit must be above entry price")
+
+            capital = self.capital(broker, acct)
+            pct = cfg.max_position_pct_full if size_factor >= 1.0 else cfg.max_position_pct_half
+            unit_eur = price * acct.fx
+            max_qty = capital * pct / 100 * lev / unit_eur
+            if cfg.risk_per_trade_pct:
+                # fixed-fractional risk: a stop-out costs at most risk_per_trade_pct of capital (x size factor)
+                risk_eur = capital * cfg.risk_per_trade_pct / 100 * min(1.0, size_factor)
+                max_qty = min(max_qty, risk_eur / (abs(price - stop) * acct.fx))
+            room = capital * cfg.max_exposure_pct / 100 - acct.exposure
+            if room <= 0:
+                return self._refuse(broker, req, f"max gross exposure ({cfg.max_exposure_pct}%) reached")
+            max_qty = min(max_qty, room / unit_eur)
+            if lev <= 1.0 and not short:
+                max_qty = min(max_qty, acct.cash * 0.995 / unit_eur)  # spot long: paid in cash
+            else:
+                free_margin = acct.equity - acct.margin_used
+                max_qty = min(max_qty, free_margin * 0.95 * lev / unit_eur)  # margin: collateral = notional/lev
+            qty = rules.round_qty(min(req.qty, max_qty))
+            if qty < req.qty - 1e-12:
+                resized = True
+            if qty <= 0 or qty < rules.min_qty or qty * price < rules.min_notional:
+                return self._refuse(broker, req, "size below broker minimum after applying limits")
             req = replace(req, qty=qty, stop_loss=stop, leverage=lev)
 
         else:  # exits, stops, take-profits, emergency closes: reduce only

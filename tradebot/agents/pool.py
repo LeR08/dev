@@ -13,7 +13,7 @@ from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures.process import BrokenProcessPool
 from typing import Callable
 
-from tradebot.agents import arbitrage, convergence, smart_money
+from tradebot.agents import arbitrage, convergence, smart_money, trend
 from tradebot.agents.base import Snapshot, Vote
 
 log = logging.getLogger(__name__)
@@ -22,6 +22,7 @@ AGENTS: dict[str, Callable[[Snapshot, dict], Vote]] = {
     arbitrage.NAME: arbitrage.vote,
     convergence.NAME: convergence.vote,
     smart_money.NAME: smart_money.vote,
+    trend.NAME: trend.vote,
 }
 
 
