@@ -1,7 +1,9 @@
 """Smart-money agent.
 
-* Kraken: large outflows from labelled exchange wallets (accumulation) -> LONG;
-  large inflows to exchanges (likely selling) -> SHORT.
+* Kraken: exchange balances of the coin falling (coins withdrawn: accumulation) -> LONG;
+  rising (coins deposited to be sold) -> SHORT. For coins without their own data,
+  stablecoins arriving on exchanges (buying power) -> LONG, leaving -> SHORT.
+  Flows come from balance snapshots, so they need ~half a window of history first.
 * IBKR: insider cluster buying (several Form 4 / AMF declarations in a short
   window) -> LONG; heavy insider selling -> SHORT.
 
@@ -15,21 +17,47 @@ from tradebot.agents.base import Direction, Snapshot, Vote
 NAME = "smart_money"
 
 
-def _vote_kraken(snap: Snapshot, cfg: dict) -> Vote:
-    f = snap.onchain
-    if f is None:
-        return Vote.none(NAME, "no on-chain data for this asset")
-    threshold = float(cfg.get("min_net_flow_eur", 5_000_000))
-    net = f.net_outflow_eur
-    detail = (f"{f.window_hours}h exchange flows: out {f.outflow:,.2f} ({f.n_out} tx) / in {f.inflow:,.2f} "
-              f"({f.n_in} tx) {f.asset}, net {net:,.0f} EUR")
-    if net >= threshold:
-        return Vote(NAME, Direction.LONG, round(min(1.0, 0.5 + 0.25 * (net / threshold - 1)), 3),
-                    "accumulation: " + detail)
-    if -net >= threshold:
-        return Vote(NAME, Direction.SHORT, round(min(1.0, 0.5 + 0.25 * (-net / threshold - 1)), 3),
-                    "exchange inflows: " + detail)
+def _asset_vote(f, cfg: dict) -> Vote | None:
+    min_eur = float(cfg.get("min_net_flow_eur", 5_000_000))
+    min_pct = float(cfg.get("min_net_flow_pct", 0.5))
+    net, pct = f.net_outflow_eur, f.net_outflow_pct
+    detail = (f"{f.window_hours}h exchange balance of {f.asset}: {'-' if net > 0 else '+'}"
+              f"{abs(f.outflow - f.inflow):,.2f} ({'' if pct is None else f'{-pct:+.2f}% , '}{-net:+,.0f} EUR)")
+    strong = abs(net) >= min_eur and (pct is None or abs(pct) >= min_pct)
+    if not strong:
+        return Vote.none(NAME, detail)
+    scale = abs(pct) / min_pct if pct else abs(net) / min_eur
+    conf = round(min(1.0, 0.5 + 0.2 * (scale - 1)), 3)
+    if net > 0:
+        return Vote(NAME, Direction.LONG, conf, "coins leaving exchanges (accumulation): " + detail)
+    return Vote(NAME, Direction.SHORT, conf, "coins arriving on exchanges (selling pressure): " + detail)
+
+
+def _market_vote(m, cfg: dict) -> Vote | None:
+    if m is None or not cfg.get("stablecoin_signal", True):
+        return None
+    min_eur = float(cfg.get("stable_min_flow_eur", 100_000_000))
+    into = (m.inflow - m.outflow) * m.price_eur  # stablecoins deposited on exchanges
+    detail = f"{m.window_hours}h stablecoins on exchanges {into:+,.0f} EUR"
+    if into >= min_eur:
+        return Vote(NAME, Direction.LONG, 0.4, "buying power arriving: " + detail)
+    if -into >= min_eur:
+        return Vote(NAME, Direction.SHORT, 0.4, "buying power leaving: " + detail)
     return Vote.none(NAME, detail)
+
+
+def _vote_kraken(snap: Snapshot, cfg: dict) -> Vote:
+    own = _asset_vote(snap.onchain, cfg) if snap.onchain is not None else None
+    market = _market_vote(snap.market_flow, cfg)
+    if own is not None and own.direction != Direction.NONE:
+        if market is not None and market.direction == own.direction:
+            return Vote(NAME, own.direction, round(min(1.0, own.confidence + 0.15), 3),
+                        own.reason + "; confirmed by " + market.reason)
+        return own
+    if market is not None and market.direction != Direction.NONE:
+        return market
+    reasons = [v.reason for v in (own, market) if v is not None]
+    return Vote.none(NAME, "; ".join(reasons) or "no on-chain history yet (balance snapshots building up)")
 
 
 def _vote_ibkr(snap: Snapshot, cfg: dict) -> Vote:

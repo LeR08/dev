@@ -86,8 +86,9 @@ tradebot/
     rich → SHORT); IBKR pair trading (LONG the cheap leg, SHORT the rich leg).
   * *Convergence*: price ≥ k σ below (LONG) / above (SHORT) VWAP/SMA with volume confirmation
     (IBKR: confidence reduced for delayed data).
-  * *Smart money*: Kraken — outflows from labelled exchange wallets → LONG, inflows → SHORT
-    (`wallet_labels.yaml` is the only source of wallet ownership); IBKR — insider cluster buying → LONG,
+  * *Smart money*: Kraken — exchange balances sampled every 30 min (Etherscan, mempool.space): coins
+    leaving exchanges → LONG, arriving → SHORT; stablecoins arriving → market-wide LONG. Needs ~12-24 h of
+    snapshots before it votes (`wallet_labels.yaml` is the only source of wallet ownership); IBKR — insider cluster buying → LONG,
     heavy selling → SHORT (SEC Form 4, AMF BDIF; 10b5-1 planned sales ignored), optional 13F change.
 * **Consensus**: any AVOID or LONG+SHORT conflict → no trade; 2–3 votes in one direction → full size;
   1 vote → half size; none → no trade. Every decision is stored with the three votes and reasons.
@@ -102,6 +103,9 @@ tradebot/
   hard cap); the trade is skipped unless the net gain to the take-profit is ≥ 1.5 × the net loss at the
   stop, round-trip fees included. Kraken runs on 1 h bars: 15 min moves are too small to pay its fees.
   Convergence also refuses to fade a strong trend (no LONG into a falling market, no SHORT into a rising one).
+* **Risk profiles** (`profile normal|aggressive`, or `profile:` in `risk.yaml`): aggressive = 1.5 % risk per
+  trade, positions up to 25 %, up to 3× leverage only when the chart and on-chain data agree, loss limits
+  6 % / day and 25 % drawdown. Backtest (2 years, daily): drawdown ×3.7 for return ×3.9.
 * **Automatic leverage**: `target daily volatility / realised daily volatility`, clamped to
   [1×, `max_leverage`] (default cap 2× per broker in `risk.yaml`). Calm market → more leverage, volatile
   market → less. Position notional = equity × 5 % (full) or 2.5 % (half) × leverage.

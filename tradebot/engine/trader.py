@@ -184,6 +184,8 @@ class BrokerTrader:
 
     async def cycle(self) -> None:
         async with self._lock:
+            if self.broker == Broker.KRAKEN:
+                await self.data.refresh_onchain()
             await self.sync_fills()
             acct = await self.account_state()
             self._record_equity(acct)

@@ -49,12 +49,38 @@ class DataHub:
         if hit and time.monotonic() - hit[0] < 300:
             return hit[1]
         try:
-            flow = await self.onchain.flows(asset, price_eur, sm.window_hours, sm.min_tx_eur, sm.erc20, self.clock())
+            flow = await self.onchain.flows(asset, price_eur, sm.window_hours, sm.erc20, self.clock())
         except Exception as exc:  # noqa: BLE001
             log.warning("on-chain data unavailable for %s: %s", asset, type(exc).__name__, extra={"broker": "kraken"})
             flow = None
         self._onchain_cache[asset] = (time.monotonic(), flow)
         return flow
+
+    async def _market_flow(self, usd_to_eur: float) -> OnchainFlow | None:
+        sm = self.cfg.strategy.kraken.agents.smart_money
+        if self.onchain is None or not sm.enabled or not sm.stablecoin_signal:
+            return None
+        hit = self._onchain_cache.get("__STABLES__")
+        if hit and time.monotonic() - hit[0] < 300:
+            return hit[1]
+        try:
+            flow = await self.onchain.stablecoin_flow(usd_to_eur, sm.window_hours, self.clock())
+        except Exception as exc:  # noqa: BLE001
+            log.warning("stablecoin flows unavailable: %s", type(exc).__name__, extra={"broker": "kraken"})
+            flow = None
+        self._onchain_cache["__STABLES__"] = (time.monotonic(), flow)
+        return flow
+
+    async def refresh_onchain(self) -> int:
+        """Take due exchange-balance snapshots for every tracked asset (called every Kraken cycle)."""
+        sm = self.cfg.strategy.kraken.agents.smart_money
+        if self.onchain is None or not sm.enabled:
+            return 0
+        try:
+            return await self.onchain.snapshot_all(sm.erc20, self.clock())
+        except Exception as exc:  # noqa: BLE001
+            log.warning("on-chain snapshots failed: %s", type(exc).__name__, extra={"broker": "kraken"})
+            return 0
 
     async def kraken_snapshot(self, adapter, symbol: str, taker_fee: float) -> Snapshot:
         bars = await adapter.get_bars(symbol, self.cfg.strategy.kraken.bars.lookback)
@@ -64,8 +90,9 @@ class DataHub:
         related = {s: q for s, q in self._quotes.items()
                    if base in s.split("/") or s.split("/")[0] in bridges}
         flow = await self._onchain_flow(base, quote.mid * adapter.fx_rate(symbol.split("/")[1]))
+        market = await self._market_flow(adapter.fx_rate("USD"))
         return Snapshot(broker="kraken", symbol=symbol, ts=self.clock(), bars=tuple(bars), quote=quote,
-                        related_quotes=related, onchain=flow, taker_fee=taker_fee)
+                        related_quotes=related, onchain=flow, market_flow=market, taker_fee=taker_fee)
 
     # ------------------------------------------------------------------ ibkr
 

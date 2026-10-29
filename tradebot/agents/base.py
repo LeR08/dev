@@ -38,10 +38,18 @@ class OnchainFlow:
     price_eur: float
     n_in: int = 0
     n_out: int = 0
+    exchange_balance: float | None = None  # total held by the labelled exchange wallets (asset units)
 
     @property
     def net_outflow_eur(self) -> float:
         return (self.outflow - self.inflow) * self.price_eur
+
+    @property
+    def net_outflow_pct(self) -> float | None:
+        """Net outflow as % of exchange balance (positive = coins leaving exchanges)."""
+        if not self.exchange_balance:
+            return None
+        return (self.outflow - self.inflow) / self.exchange_balance * 100
 
 
 @dataclass(frozen=True)
@@ -77,6 +85,7 @@ class Snapshot:
     related_bars: dict[str, tuple[Bar, ...]] = field(default_factory=dict)
     pair_partners: tuple[str, ...] = ()
     onchain: OnchainFlow | None = None
+    market_flow: OnchainFlow | None = None  # stablecoins on exchanges (market-wide buying power)
     insider: InsiderActivity | None = None
     taker_fee: float = 0.0026
     data_delay_minutes: int = 0

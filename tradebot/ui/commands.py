@@ -8,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 from tradebot.backtest.report import MIN_SIGNIFICANT_TRADES, max_drawdown_pct
 from tradebot.brokers.base import Broker, BrokerError, Mode
 from tradebot.engine.mode import confirm_phrase
+from tradebot.engine.risk import RiskEventKind
 from tradebot.storage.db import as_utc
 
 HELP = """Commands
@@ -24,6 +25,7 @@ HELP = """Commands
   backtest <broker> <from> <to>  e.g. backtest kraken 2026-01-01 2026-06-30
   report [day|week|all]
   trades [n]                     last closed trades with agents, stop, target, result in R
+  profile [normal|aggressive]    show / switch the risk profile
   config reload
   help | quit"""
 
@@ -257,6 +259,18 @@ class CommandProcessor:
             return "no closed trades yet"
         return table(["closed", "symbol", "side", "lev", "agents", "entry", "init stop", "target", "exit", "R",
                       "P&L EUR", "fees", "reason", "held"], rows)
+
+    async def cmd_profile(self, args) -> str:
+        from tradebot.engine.profiles import PROFILES, apply_profile
+
+        if not args:
+            return f"profile: {self.bot.cfg.risk.profile}  (available: {', '.join(PROFILES)})"
+        changes = apply_profile(self.bot.cfg, args[0].lower())
+        self.bot.risk.config = self.bot.cfg.risk
+        for c in changes:
+            self.bot.risk._emit(Broker.KRAKEN, RiskEventKind.LIMIT_CHANGED, {"change": c})
+        return f"profile {args[0].lower()} applied (session; set `profile:` in risk.yaml to keep it):\n  " + \
+            "\n  ".join(changes or ["no change"])
 
     async def cmd_config(self, args) -> str:
         if args[:1] != ["reload"]:

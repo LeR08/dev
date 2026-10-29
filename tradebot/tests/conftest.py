@@ -4,9 +4,17 @@ import pytest
 
 from tradebot.app import Bot
 from tradebot.brokers.base import Broker
-from tradebot.settings import Secrets, load_config
+from tradebot.engine.profiles import apply_profile
+from tradebot.settings import Secrets, load_config as _load_config
 from tradebot.storage.db import Database
 from tradebot.tests.fakes import FakeAdapter
+
+
+def load_config():
+    """Tests run on the normal profile, whatever risk.yaml says."""
+    cfg = _load_config()
+    apply_profile(cfg, "normal")
+    return cfg
 
 
 @pytest.fixture

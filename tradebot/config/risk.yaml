@@ -1,5 +1,11 @@
 # Risk limits, enforced by the RiskManager in test AND live mode.
 # Change at runtime with: risk set <broker>.<key> <value>   (changes are logged)
+#
+# profile: custom      -> the values below are used as written
+#          normal      -> 0.5 % risk per trade, leverage <= 2x
+#          aggressive  -> 1.5 % risk per trade, positions up to 25 %, leverage <= 3x (only when chart
+#                         and on-chain agree), daily loss 6 %, drawdown 25 %. Switch live: `profile aggressive`
+profile: aggressive   # chosen by the operator; `profile normal` to calm down
 kraken:
   max_position_pct_full: 10.0     # notional cap per position (before leverage)
   max_position_pct_half: 5.0

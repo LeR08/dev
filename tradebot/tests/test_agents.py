@@ -151,3 +151,47 @@ def test_trend_breakout_long_and_short():
     assert trend.vote(snap(symbol="BTC/USD", bars=tuple(make_bars(down))), {}).direction == Direction.SHORT
     flat = [100.0 + (i % 5) for i in range(160)]
     assert trend.vote(snap(symbol="BTC/USD", bars=tuple(make_bars(flat))), {}).direction == Direction.NONE
+
+
+def test_exchange_netflow_from_balance_snapshots():
+    from datetime import timedelta as td
+
+    from tradebot.data.onchain import netflow_from_snapshots
+
+    rows = [(T0, {"wallets": {"a": 1000.0, "b": 500.0}}),
+            (T0 + td(hours=12), {"wallets": {"a": 990.0, "b": 500.0}}),
+            (T0 + td(hours=24), {"wallets": {"a": 970.0, "b": 480.0, "new": 9999.0}})]
+    net, total, span = netflow_from_snapshots(rows, td(hours=24), T0 + td(hours=24))
+    assert net == -50.0 and span == 24 and total == 1450.0  # a wallet added later is ignored
+    assert netflow_from_snapshots(rows[:1], td(hours=24), T0) is None
+    assert netflow_from_snapshots(rows[:2], td(hours=48), T0 + td(hours=12)) is None  # history too short
+
+
+def test_smart_money_balance_and_stablecoin_signals():
+    cfg = {"min_net_flow_eur": 1_000_000, "min_net_flow_pct": 0.5, "stable_min_flow_eur": 100_000_000}
+    leaving = OnchainFlow("BTC", 0, 3000, 24, 60_000, exchange_balance=500_000)  # -0.6 % of exchange balance
+    assert smart_money.vote(snap(symbol="BTC/USD", onchain=leaving), cfg).direction == Direction.LONG
+    small = OnchainFlow("BTC", 0, 1000, 24, 60_000, exchange_balance=500_000)  # 0.2 %: noise
+    assert smart_money.vote(snap(symbol="BTC/USD", onchain=small), cfg).direction == Direction.NONE
+    arriving = OnchainFlow("BTC", 4000, 0, 24, 60_000, exchange_balance=500_000)
+    assert smart_money.vote(snap(symbol="BTC/USD", onchain=arriving), cfg).direction == Direction.SHORT
+    stables_in = OnchainFlow("STABLES", 300e6, 0, 24, 0.92, exchange_balance=40e9)
+    v = smart_money.vote(snap(symbol="SOL/USD", market_flow=stables_in), cfg)
+    assert v.direction == Direction.LONG and v.confidence == 0.4
+    both = smart_money.vote(snap(symbol="BTC/USD", onchain=leaving, market_flow=stables_in), cfg)
+    assert both.direction == Direction.LONG and "confirmed" in both.reason
+
+
+def test_profiles():
+    from tradebot.engine.profiles import apply_profile
+    from tradebot.settings import load_config
+
+    cfg = load_config()
+    apply_profile(cfg, "normal")
+    changes = apply_profile(cfg, "aggressive")
+    assert cfg.risk.kraken.risk_per_trade_pct == 1.5 and cfg.risk.kraken.max_leverage == 3
+    assert cfg.strategy.kraken.leverage.full_consensus_only and changes
+    apply_profile(cfg, "normal")
+    assert cfg.risk.kraken.risk_per_trade_pct == 0.5 and cfg.risk.kraken.max_leverage == 2
+    with pytest.raises(KeyError):
+        apply_profile(cfg, "yolo")

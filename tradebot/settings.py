@@ -66,8 +66,11 @@ class ConvergenceCfg(_Model):
 class SmartMoneyKrakenCfg(_Model):
     enabled: bool = True
     window_hours: int = 24
-    min_net_flow_eur: float = 5_000_000
-    min_tx_eur: float = 250_000
+    min_net_flow_eur: float = 5_000_000  # net change of the coin's exchange balances over the window
+    min_net_flow_pct: float = 0.5  # ...and at least this % of those balances
+    stablecoin_signal: bool = True  # USDT/USDC on exchanges as market-wide buying power
+    stable_min_flow_eur: float = 100_000_000
+    snapshot_minutes: float = 30
     erc20: dict[str, tuple[str, int]] = {}
 
 
@@ -289,6 +292,7 @@ class BrokerRiskCfg(_Model):
 
 
 class RiskConfig(_Model):
+    profile: Literal["normal", "aggressive", "custom"] = "custom"  # normal/aggressive override the values below
     kraken: BrokerRiskCfg = BrokerRiskCfg()
     ibkr: BrokerRiskCfg = BrokerRiskCfg()
 
@@ -349,12 +353,17 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 def load_config(directory: Path | None = None) -> AppConfig:
     d = directory or config_dir()
-    return AppConfig(
+    cfg = AppConfig(
         strategy=StrategyConfig.model_validate(_load_yaml(d / "strategy.yaml")),
         risk=RiskConfig.model_validate(_load_yaml(d / "risk.yaml")),
         universe_ibkr=UniverseIBKR.model_validate(_load_yaml(d / "universe_ibkr.yaml")),
         wallet_labels=WalletLabels.model_validate(_load_yaml(d / "wallet_labels.yaml")),
     )
+    if cfg.risk.profile != "custom":
+        from tradebot.engine.profiles import apply_profile
+
+        apply_profile(cfg, cfg.risk.profile)
+    return cfg
 
 
 # --------------------------------------------------------------------------- secrets

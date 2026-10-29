@@ -59,7 +59,8 @@ class Bot:
             PoliteHttp(self.db, "amf", d.amf_min_interval_seconds),
         ]
         eth_key = self.secrets.etherscan_api_key.get_secret_value() if self.secrets.etherscan_api_key else None
-        onchain = OnchainClient(self.cfg.wallet_labels, self._http[0], self._http[1], eth_key)
+        onchain = OnchainClient(self.cfg.wallet_labels, self._http[0], self._http[1], eth_key, self.db,
+                                self.cfg.strategy.kraken.agents.smart_money.snapshot_minutes)
         self.data = DataHub(self.cfg, onchain, EdgarClient(self._http[2]), AmfClient(self._http[3], d.amf_api))
 
         if adapters is not None:
