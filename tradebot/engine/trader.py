@@ -104,6 +104,7 @@ class BrokerTrader:
         self.running = False
         self.entries_enabled = False
         self.last_scan: ScanResult | None = None
+        self.next_cycle_at: datetime | None = None
         self.last_votes: dict[str, VoteRecord] = {}
         self.states: dict[Mode, TraderState] = {Mode.TEST: TraderState(), Mode.LIVE: TraderState()}
         self._pending_entries: dict[str, PendingEntry] = {}
@@ -180,7 +181,9 @@ class BrokerTrader:
                 self.state.last_error = f"{type(exc).__name__}: {exc}"
                 self.log.exception("cycle failed")
             elapsed = asyncio.get_running_loop().time() - started
-            await asyncio.sleep(max(1.0, interval - elapsed))
+            wait = max(1.0, interval - elapsed)
+            self.next_cycle_at = self.clock() + timedelta(seconds=wait)
+            await asyncio.sleep(wait)
 
     async def cycle(self) -> None:
         async with self._lock:

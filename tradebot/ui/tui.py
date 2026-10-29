@@ -109,7 +109,8 @@ class TradebotApp(App):
                 lines.append(f"{b.value}: pas encore de scan")
                 continue
             reasons = ", ".join(f"{k} {v}" for k, v in r.top_reasons(3)) or "-"
-            lines.append(f"{b.value} {r.ts:%H:%M:%S}\n {r.scanned} analysés, {len(r.passed)} retenus "
+            nxt = f", prochain scan {t.next_cycle_at.astimezone():%H:%M}" if t.running and t.next_cycle_at else ""
+            lines.append(f"{b.value} {r.ts.astimezone():%H:%M:%S}{nxt}\n {r.scanned} analysés, {len(r.passed)} retenus "
                          f"({r.pass_rate:.0%})\n rejets: {reasons}")
         self.query_one("#scan", Static).update("\n".join(lines))
         votes = self.query_one("#votes", DataTable)
