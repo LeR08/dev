@@ -359,6 +359,10 @@ class BrokerAdapter(ABC):
     async def fx_to_eur(self, currency: str) -> float:
         return 1.0
 
+    def fx_rate(self, currency: str) -> float:
+        """Last known currency -> EUR rate, without network (for the UI and the paper engine)."""
+        return 1.0
+
     async def poll_fills(self) -> list[Fill]:
         """Fills since the last call (used to keep positions in sync)."""
         return []

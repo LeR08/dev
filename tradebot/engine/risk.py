@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import logging
+import math
 import secrets
 from collections import deque
 from dataclasses import dataclass, field, replace
@@ -270,7 +271,7 @@ class RiskManager:
             if len(acct.positions) + acct.open_entry_count >= cfg.max_open_positions:
                 return self._refuse(broker, req, f"max open positions ({cfg.max_open_positions}) reached")
 
-            lev = max(1.0, min(req.leverage, cfg.max_leverage, rules.max_leverage))
+            lev = float(max(1, math.floor(min(req.leverage, cfg.max_leverage, rules.max_leverage))))  # whole x
             if lev < req.leverage - 1e-9:
                 resized = True
             capital = self.capital(broker, acct)

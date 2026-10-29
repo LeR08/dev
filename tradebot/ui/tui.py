@@ -154,10 +154,11 @@ class TradebotApp(App):
                 q = t.data._quotes.get(p.symbol)
                 sign = -1 if p.side == "short" else 1
                 price = (q.bid if sign > 0 else q.ask) if q and q.bid > 0 and q.ask > 0 else None
-                pnl = (price - p.entry_price) * p.qty * sign - (p.fees or 0) if price else None
+                fx = t.adapter.fx_rate(p.currency)
+                pnl = (price - p.entry_price) * p.qty * sign * fx - (p.fees or 0) if price else None
                 pct = (price / p.entry_price - 1) * 100 * sign * (p.leverage or 1) if price else None
                 total += pnl or 0.0
-                rows.append((p.symbol, b.value, side_markup(p.side), f"{p.leverage or 1:.1f}x", f"{p.qty:.6g}", f"{p.entry_price:.6g}",
+                rows.append((p.symbol, b.value, side_markup(p.side), f"{p.leverage or 1:.0f}x", f"{p.qty:.6g}", f"{p.entry_price:.6g}",
                              "" if price is None else f"{price:.6g}", pnl_markup(pnl, ""),
                              pnl_markup(pct, " %"),
                              "" if p.take_profit_price is None else f"{p.take_profit_price:.6g}",
@@ -174,7 +175,7 @@ class TradebotApp(App):
             for p in closed[-limit:]:
                 sign = -1 if p.side == "short" else 1
                 pct = (p.exit_price / p.entry_price - 1) * 100 * sign * (p.leverage or 1) if p.exit_price else None
-                rows.append((as_utc(p.closed_at), (p.symbol, b.value, side_markup(p.side), f"{p.leverage or 1:.1f}x",
+                rows.append((as_utc(p.closed_at), (p.symbol, b.value, side_markup(p.side), f"{p.leverage or 1:.0f}x",
                              f"{p.entry_price:.6g}",
                              "" if p.exit_price is None else f"{p.exit_price:.6g}", pnl_markup(p.pnl, ""),
                              pnl_markup(pct, " %"), p.exit_reason or "",

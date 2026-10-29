@@ -144,3 +144,21 @@ def test_trade_plan_default_target_when_agent_has_none():
                            3.0, 0.85, Fees(0.0, 0.0))
     assert plan and plan.take_profit == pytest.approx(101.6) and plan.target > plan.take_profit
     assert plan.reward_risk == pytest.approx(1.6 / 0.5)
+
+
+def test_auto_leverage_is_whole_and_scanner_skips_stablecoins():
+    import numpy as np
+
+    from tradebot.engine.leverage import auto_leverage
+    from tradebot.engine.scanner import is_stablecoin
+    from tradebot.settings import LeverageCfg
+
+    rng = np.random.default_rng(2)
+    bars = make_bars(list(100 * np.exp(np.cumsum(rng.normal(0, 0.0015, 100)))))
+    for target in (1.0, 2.0, 3.0, 5.0, 20.0):
+        lev, _ = auto_leverage(bars, LeverageCfg(target_daily_vol_pct=target), 10, 1.0)
+        assert lev == int(lev) and 1 <= lev <= 10
+    for s in ("USDT/USDC", "EURC/USDC", "USDE/USDC", "RLUSD/USDC", "PAXG/USDC", "EUROP/USDC"):
+        assert is_stablecoin(s), s
+    for s in ("BTC/USDC", "ETH/USDC", "SOL/USDC", "SUI/USDC"):
+        assert not is_stablecoin(s), s

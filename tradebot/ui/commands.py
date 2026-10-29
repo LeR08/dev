@@ -113,7 +113,7 @@ class CommandProcessor:
                 sign = -1 if p.side == "short" else 1
                 price = (q.bid if sign > 0 else q.ask) if q else None
                 pnl = (price - p.entry_price) * p.qty * sign if price else None
-                rows.append([p.symbol, b.value, p.side.upper(), f"{p.leverage or 1:.1f}x", _f(p.qty, 6),
+                rows.append([p.symbol, b.value, p.side.upper(), f"{p.leverage or 1:.0f}x", _f(p.qty, 6),
                              _f(p.entry_price, 4), _f(price, 4), _f(pnl), _f(p.take_profit_price, 4),
                              _f(p.stop_price, 4), t.state.flags.get(p.symbol, "")])
         if not rows:
@@ -249,7 +249,7 @@ class CommandProcessor:
                 r_mult = (p.exit_price - p.entry_price) * sign / risk if risk and p.exit_price else None
                 held = (as_utc(p.closed_at) - as_utc(p.opened_at)) if p.closed_at else None
                 rows.append([as_utc(p.closed_at).astimezone().strftime("%d/%m %H:%M") if p.closed_at else "",
-                             p.symbol, p.side.upper(), f"{p.leverage or 1:.1f}x", ",".join(p.entry_agents or []),
+                             p.symbol, p.side.upper(), f"{p.leverage or 1:.0f}x", ",".join(p.entry_agents or []),
                              _f(p.entry_price, 6), _f(init, 6), _f(p.target_price, 6), _f(p.exit_price, 6),
                              "" if r_mult is None else f"{r_mult:+.2f}R", _f(p.pnl), _f(p.fees),
                              p.exit_reason or "", str(held).split(".")[0] if held else ""])

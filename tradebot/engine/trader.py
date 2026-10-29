@@ -365,7 +365,7 @@ class BrokerTrader:
                            reference_price=price, purpose=Purpose.ENTRY, leverage=lev)
         acct.fx = fx
         rd = self.risk.approve(self.broker, req, acct, rules, decision.size_factor)
-        self.db.update_decision(dec_id, (f"{rd.reason} {side.value} {rd.request.leverage:.1f}x" if rd.approved
+        self.db.update_decision(dec_id, (f"{rd.reason} {side.value} {rd.request.leverage:.0f}x" if rd.approved
                                          else f"refused: {rd.reason}"),
                                 rd.request.client_id if rd.request else None)
         if not rd.approved:
@@ -377,7 +377,7 @@ class BrokerTrader:
             self._pending_entries[order.client_id] = PendingEntry(order.id, symbol, self.clock(), decision,
                                                                   r.stop_loss, tp, order.qty * price * fx,
                                                                   side, r.leverage, plan.target)
-            self.log.info("entry %s %s %s qty=%s @ %s lev %.1fx (%s; %s, stop %s)", side.value.upper(), symbol,
+            self.log.info("entry %s %s %s qty=%s @ %s lev %.0fx (%s; %s, stop %s)", side.value.upper(), symbol,
                           decision.label, order.qty, price, r.leverage, lev_reason,
                           f"{decision.reason}; {plan_reason}", r.stop_loss)
 
@@ -449,7 +449,7 @@ class BrokerTrader:
             opened_at=f.ts, fees=fee_eur,
             entry_order_id=f.order_id, size_factor=decision.size_factor if decision else 1.0,
             entry_agents=list(decision.entering_agents) if decision else [])
-        self.log.info("position opened %s %s qty=%s @ %s (%.1fx)", side.value.upper(), f.symbol, f.qty, f.price,
+        self.log.info("position opened %s %s qty=%s @ %s (%.0fx)", side.value.upper(), f.symbol, f.qty, f.price,
                       pe.leverage if pe else 1.0)
 
     def _on_exit_fill(self, f: Fill, fee_eur: float, fx: float, mode: Mode) -> None:

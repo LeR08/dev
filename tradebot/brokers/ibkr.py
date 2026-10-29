@@ -376,6 +376,12 @@ class IBKRAdapter(BrokerAdapter):
         self._fx_cache[currency] = (rate, time.monotonic())
         return rate
 
+    def fx_rate(self, currency: str) -> float:
+        if currency == "EUR":
+            return 1.0
+        hit = self._fx_cache.get(currency)
+        return hit[0] if hit else self.cfg.fx_fallback_to_eur.get(currency, 1.0)
+
     async def stream(self, symbols: list[str], callback: QuoteCallback) -> None:
         ib = await self._ensure()
         tickers = {}

@@ -63,7 +63,7 @@ class DataHub:
         bridges = self.cfg.strategy.kraken.agents.arbitrage.bridges
         related = {s: q for s, q in self._quotes.items()
                    if base in s.split("/") or s.split("/")[0] in bridges}
-        flow = await self._onchain_flow(base, quote.mid)
+        flow = await self._onchain_flow(base, quote.mid * adapter.fx_rate(symbol.split("/")[1]))
         return Snapshot(broker="kraken", symbol=symbol, ts=self.clock(), bars=tuple(bars), quote=quote,
                         related_quotes=related, onchain=flow, taker_fee=taker_fee)
 

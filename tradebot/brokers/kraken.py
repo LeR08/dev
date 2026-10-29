@@ -1,4 +1,4 @@
-"""Kraken Pro adapter (crypto spot vs EUR).
+"""Kraken Pro adapter (crypto spot quoted in ``quote_currency``, USDC by default; accounting stays in EUR).
 
 * Public + private REST (api.kraken.com) and WebSocket v2 ticker stream.
 * Test mode: orders go to the internal paper engine fed by live Kraken order
@@ -127,8 +127,10 @@ class KrakenAdapter(BrokerAdapter):
         self._last_fill_poll = time.time()
         self._connected = False
         self._status = "unknown"
+        self._fx: dict[str, tuple[float, float]] = {}  # currency -> (EUR per unit, monotonic time)
         self.paper = paper or PaperEngine("kraken", paper_cash, pct_fee_fn(self._fee_for),
-                                          slippage_bps=cfg.execution.paper_slippage_bps, financing=cfg.financing)
+                                          slippage_bps=cfg.execution.paper_slippage_bps, financing=cfg.financing,
+                                          fx=self.fx_rate)
 
     # ------------------------------------------------------------------ basics
 
@@ -222,6 +224,7 @@ class KrakenAdapter(BrokerAdapter):
             if self.db is not None:
                 self.db.upsert_instrument("kraken", self._rules_from_pair(sym, p), {"altname": p["altname"]})
         await self._load_fees()
+        await self.fx_to_eur(self.cfg.quote_currency)
         self._connected = True
         log.info("Kraken connected: %d pairs, status %s", len(self._pairs), self._status, extra={"broker": "kraken"})
 
@@ -420,17 +423,46 @@ class KrakenAdapter(BrokerAdapter):
             return self.paper.equity(), self.paper.cash - self.paper.reserved_cash()
         q = self.cfg.quote_currency
         try:
-            # TradeBalance includes unrealised P&L of margin positions ("e") and free margin ("mf")
-            tb = await self._private("TradeBalance", {"asset": "Z" + q if q in ("EUR", "USD") else q})
+            # equity in EUR, whatever the quote currency: includes unrealised margin P&L ("e"), free margin ("mf")
+            tb = await self._private("TradeBalance", {"asset": "ZEUR"})
             return float(tb["e"]), float(tb.get("mf", tb["e"]))
         except (BrokerError, KeyError):
             pass
+        fx = await self.fx_to_eur(q)
         bals = await self.get_balances()
-        cash = bals.get(q, Balance(q, 0, 0)).total
-        syms = [f"{a}/{q}" for a in bals if a != q and f"{a}/{q}" in self._pairs]
+        cash = bals.get("EUR", Balance("EUR", 0, 0)).total + (bals[q].total * fx if q in bals and q != "EUR" else 0.0)
+        syms = [f"{a}/{q}" for a in bals if a not in (q, "EUR") and f"{a}/{q}" in self._pairs]
         quotes = await self.get_quotes(syms) if syms else {}
-        value = sum(bals[s.split("/")[0]].total * quotes[s].bid for s in syms if s in quotes)
+        value = sum(bals[s.split("/")[0]].total * quotes[s].bid * fx for s in syms if s in quotes)
         return cash + value, cash
+
+    # ------------------------------------------------------------------ currency
+
+    async def fx_to_eur(self, currency: str) -> float:
+        """EUR value of one unit of ``currency`` from Kraken's own ticker (USDC/EUR, EUR/USD...), cached 60 s."""
+        if currency == "EUR":
+            return 1.0
+        hit = self._fx.get(currency)
+        if hit and time.monotonic() - hit[1] < 60:
+            return hit[0]
+        rate = None
+        try:
+            if self.has_pair(f"{currency}/EUR"):
+                rate = (await self.get_quote(f"{currency}/EUR")).mid
+            elif self.has_pair(f"EUR/{currency}"):
+                rate = 1 / (await self.get_quote(f"EUR/{currency}")).mid
+        except (BrokerError, ZeroDivisionError):
+            rate = None
+        if rate is None or rate <= 0:
+            rate = hit[0] if hit else self.cfg.fx_fallback_to_eur.get(currency, 1.0)
+        self._fx[currency] = (rate, time.monotonic())
+        return rate
+
+    def fx_rate(self, currency: str) -> float:
+        if currency == "EUR":
+            return 1.0
+        hit = self._fx.get(currency)
+        return hit[0] if hit else self.cfg.fx_fallback_to_eur.get(currency, 1.0)
 
     # ------------------------------------------------------------------ orders
 

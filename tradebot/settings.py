@@ -31,10 +31,11 @@ class _Model(BaseModel):
 class KrakenScannerCfg(_Model):
     max_spread_bps: float = 30
     depth_levels: int = 10
-    min_depth_eur: float = 20_000
+    min_depth_eur: float = 20_000  # in the quote currency (USDC by default)
     low_liquidity_hours_utc: list[int] = []
     include_only: list[str] = []
     exclude: list[str] = []
+    exclude_stablecoins: bool = True  # USDC/USDT/EURC... barely move: nothing to trade
 
 
 class KrakenBarsCfg(_Model):
@@ -102,7 +103,8 @@ class KrakenExecCfg(_Model):
 
 
 class KrakenCfg(_Model):
-    quote_currency: str = "EUR"
+    quote_currency: str = "USDC"
+    fx_fallback_to_eur: dict[str, float] = {"USDC": 0.92, "USD": 0.92, "USDT": 0.92}
     leverage: LeverageCfg = LeverageCfg()
     financing: FinancingCfg = FinancingCfg(open_fee_bps=2.0, rollover_bps_per_4h=2.0)
     fee_tier: Literal["starter", "intermediate", "pro"] = "starter"
@@ -264,7 +266,7 @@ class BrokerRiskCfg(_Model):
     max_position_pct_half: float = Field(2.5, gt=0, le=100)
     max_open_positions: int = Field(5, ge=0)
     max_exposure_pct: float = Field(60.0, ge=0, le=1000)  # gross notional (longs + shorts) / equity
-    max_leverage: float = Field(2.0, ge=1, le=10)  # hard cap on account leverage per position
+    max_leverage: int = Field(2, ge=1, le=10)  # hard cap, whole number: 1 = no margin, 2..10x
     allow_short: bool = True
     stop_loss_pct: float = Field(3.0, gt=0, lt=100)
     daily_loss_limit_pct: float = Field(3.0, gt=0, le=100)

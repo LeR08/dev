@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
@@ -37,6 +38,18 @@ class ScanResult:
         return Counter(r.split(":")[0] for r in self.rejected.values()).most_common(n)
 
 
+STABLECOINS = {"USDT", "USDC", "DAI", "EURC", "EUROP", "EURQ", "EURR", "EURT", "USD1", "USDE", "USDG", "USDS",
+               "USDQ", "USDR", "USDP", "USDPT", "PYUSD", "TUSD", "FDUSD", "RLUSD", "GHO", "FRAX", "LUSD", "CASH",
+               "FIDD", "FRNT", "SOFID", "PAXG", "XAUT", "USD", "EUR", "GBP", "CHF", "AUD", "CAD", "JPY"}
+_FIAT_LIKE = re.compile(r"^(USD|EUR|GBP)|(USD|EUR)$")
+
+
+def is_stablecoin(symbol: str) -> bool:
+    """Fiat-pegged tokens (and gold tokens) trade in a tiny range: not worth a mean-reversion trade."""
+    base = symbol.split("/")[0].upper()
+    return base in STABLECOINS or bool(_FIAT_LIKE.search(base))
+
+
 class Scanner:
     def __init__(self, broker: Broker, cfg: KrakenScannerCfg | IBKRScannerCfg):
         self.broker = Broker(broker)
@@ -64,6 +77,8 @@ class Scanner:
                 return "excluded: not in include_only"
             if s.symbol in cfg.exclude:
                 return "excluded: config"
+            if cfg.exclude_stablecoins and is_stablecoin(s.symbol):
+                return "excluded: stablecoin"
             if s.book is None:
                 return "depth: no order book"
             depth = min(s.book.depth_notional(Side.BUY, cfg.depth_levels),

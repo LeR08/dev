@@ -211,7 +211,8 @@ class Bot:
     async def _fetch_kraken_history(self) -> None:
         kraken = self.adapters[Broker.KRAKEN]
         await self.ensure_connected(Broker.KRAKEN)
-        syms = self.cfg.strategy.kraken.scanner.include_only or ["BTC/EUR", "ETH/EUR", "SOL/EUR", "XRP/EUR"]
+        q = self.cfg.strategy.kraken.quote_currency
+        syms = self.cfg.strategy.kraken.scanner.include_only or [f"{b}/{q}" for b in ("BTC", "ETH", "SOL", "XRP")]
         extra = self.data.kraken_related_symbols(syms, kraken.has_pair)
         for s in [x for x in syms + extra if kraken.has_pair(x)]:
             try:

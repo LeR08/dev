@@ -160,8 +160,14 @@ def test_leverage_is_capped_and_multiplies_size():
     d = rm.approve(Broker.KRAKEN, entry(qty=1, leverage=5.0), acct(), RULES)
     assert d.approved and d.request.leverage == 2.0 and d.resized
     assert d.request.qty * 50_000 == pytest.approx(100.0, rel=1e-6)  # 5 % x 2
-    low = InstrumentRules("BTC/EUR", "EUR", min_qty=0.0001, qty_step=1e-8, max_leverage=1.5)
-    assert rm.approve(Broker.KRAKEN, entry(qty=1, leverage=5.0), acct(), low).request.leverage == 1.5
+    cfg = RiskConfig()
+    cfg.kraken.max_leverage = 10
+    rm10 = RiskManager(cfg)
+    low = InstrumentRules("BTC/EUR", "EUR", min_qty=0.0001, qty_step=1e-8, max_leverage=3)
+    assert rm10.approve(Broker.KRAKEN, entry(qty=1, leverage=5.0), acct(), low).request.leverage == 3.0
+    # leverage is always a whole number (Kraken margin: 2x..10x)
+    assert rm10.approve(Broker.KRAKEN, entry(qty=1, leverage=4.7), acct(), RULES).request.leverage == 4.0
+    assert rm10.approve(Broker.KRAKEN, entry(qty=1, leverage=1.9), acct(), RULES).request.leverage == 1.0
 
 
 def test_leverage_limited_by_free_margin():

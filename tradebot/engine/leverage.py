@@ -1,7 +1,7 @@
 """Automatic leverage from market movement (volatility targeting).
 
-leverage = target daily volatility / realised daily volatility, clamped to
-[1, max_leverage]: calm markets get more leverage, volatile markets less.
+leverage = target daily volatility / realised daily volatility, rounded down to a
+whole number and clamped to [1, max_leverage] (1x = no margin; margin is 2x..10x): calm markets get more leverage, volatile markets less.
 With ``full_consensus_only`` set, half-size signals (a single agent) trade at 1x.
 """
 
@@ -40,6 +40,6 @@ def auto_leverage(bars, cfg: LeverageCfg, max_leverage: float, size_factor: floa
     vol = realised_daily_vol_pct(bars, cfg.vol_lookback_bars)
     if vol is None:
         return 1.0, "volatility unknown: 1x"
-    lev = max(1.0, min(max_leverage, cfg.target_daily_vol_pct / vol))
-    lev = math.floor(lev * 10) / 10  # 0.1 steps, rounded down
-    return lev, f"daily vol {vol:.2f}% vs target {cfg.target_daily_vol_pct}% -> {lev:.1f}x"
+    # brokers only take whole leverage (Kraken: 2x..10x); round down, 1x = no margin
+    lev = float(max(1, math.floor(min(max_leverage, cfg.target_daily_vol_pct / vol))))
+    return lev, f"daily vol {vol:.2f}% vs target {cfg.target_daily_vol_pct}% -> {lev:.0f}x"

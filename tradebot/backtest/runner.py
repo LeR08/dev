@@ -111,7 +111,11 @@ class Backtester:
         return e.currency if e else "USD"
 
     def _fx(self, ccy: str) -> float:
-        return 1.0 if ccy == "EUR" else self.cfg.strategy.ibkr.fx_fallback_to_eur.get(ccy, 1.0)
+        if ccy == "EUR":
+            return 1.0
+        table = self.cfg.strategy.kraken.fx_fallback_to_eur if self.broker == Broker.KRAKEN \
+            else self.cfg.strategy.ibkr.fx_fallback_to_eur
+        return table.get(ccy, 1.0)
 
     def _rules(self, symbol: str) -> InstrumentRules:
         if self.broker == Broker.IBKR:
