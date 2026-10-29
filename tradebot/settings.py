@@ -260,7 +260,7 @@ class DataCfg(_Model):
 
 
 class StrategyConfig(_Model):
-    cycle_seconds: dict[str, float] = {"kraken": 900, "ibkr": 300}
+    cycle_seconds: dict[str, float] = {"kraken": 60, "ibkr": 300}
     trade_plan: TradePlanCfg = TradePlanCfg()
     paper_starting_balance_eur: dict[str, float] = {"kraken": 1000, "ibkr": 1000}
     consensus: ConsensusCfg = ConsensusCfg()

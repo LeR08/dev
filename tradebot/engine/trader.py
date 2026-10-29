@@ -37,7 +37,7 @@ from tradebot.engine.planning import atr, plan_trade
 from tradebot.engine.exits import ExitManager, ExitReason, PositionView
 from tradebot.engine.mode import ModeSwitch
 from tradebot.engine.risk import AccountState, PositionInfo, RiskEvent, RiskEventKind, RiskManager
-from tradebot.engine.scanner import InstrumentSnapshot, Scanner, ScanResult
+from tradebot.engine.scanner import InstrumentSnapshot, Scanner, ScanResult, is_stablecoin
 from tradebot.engine.snapshots import DataHub
 from tradebot.settings import AppConfig
 from tradebot.storage.db import Database, as_utc
@@ -277,8 +277,11 @@ class BrokerTrader:
             for s in symbols:
                 q = quotes.get(s)
                 book = None
+                # cheap checks first (one Ticker call covers ~50 pairs); order books only for survivors
                 prefilter_ok = q is not None and q.spread_bps <= sc.max_spread_bps and \
-                    (not sc.include_only or s in sc.include_only) and s not in sc.exclude
+                    (not sc.include_only or s in sc.include_only) and s not in sc.exclude and \
+                    not (sc.exclude_stablecoins and is_stablecoin(s)) and \
+                    q.volume * q.mid >= sc.min_volume_24h
                 if prefilter_ok:
                     try:
                         book = await self.adapter.get_orderbook(s, sc.depth_levels)

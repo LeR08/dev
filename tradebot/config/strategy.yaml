@@ -1,7 +1,7 @@
 # Strategy configuration. Reload at runtime with: config reload
 
 cycle_seconds:
-  kraken: 900                  # daily bars: a scan every 15 min is plenty (exits/stops checked each cycle)
+  kraken: 60                   # analysis every minute at most (a scan takes a few seconds)
   ibkr: 300
 
 # Separate simulated balance used in test mode (EUR, per broker).
