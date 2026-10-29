@@ -40,7 +40,9 @@ class ScanResult:
 
 STABLECOINS = {"USDT", "USDC", "DAI", "EURC", "EUROP", "EURQ", "EURR", "EURT", "USD1", "USDE", "USDG", "USDS",
                "USDQ", "USDR", "USDP", "USDPT", "PYUSD", "TUSD", "FDUSD", "RLUSD", "GHO", "FRAX", "LUSD", "CASH",
-               "FIDD", "FRNT", "SOFID", "PAXG", "XAUT", "USD", "EUR", "GBP", "CHF", "AUD", "CAD", "JPY"}
+               "FIDD", "FRNT", "SOFID", "PAXG", "XAUT", "USD", "EUR", "GBP", "CHF", "AUD", "CAD", "JPY",
+               "AUDX", "AUDD", "BRL1", "BRLA", "MXNB", "MXNT", "CADC", "XSGD", "XCHF", "TRYB", "GYEN", "ZCHF",
+               "EURCV", "EURI", "USDB", "USDM", "USTC"}
 _FIAT_LIKE = re.compile(r"^(USD|EUR|GBP)|(USD|EUR)$")
 
 

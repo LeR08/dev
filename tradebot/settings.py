@@ -31,7 +31,7 @@ class _Model(BaseModel):
 class KrakenScannerCfg(_Model):
     max_spread_bps: float = 30
     depth_levels: int = 10
-    min_depth_eur: float = 20_000  # in the quote currency (USDC by default)
+    min_depth_eur: float = 20_000  # in the quote currency (USD by default)
     low_liquidity_hours_utc: list[int] = []
     include_only: list[str] = []
     exclude: list[str] = []
@@ -103,7 +103,7 @@ class KrakenExecCfg(_Model):
 
 
 class KrakenCfg(_Model):
-    quote_currency: str = "USDC"
+    quote_currency: str = "USD"
     fx_fallback_to_eur: dict[str, float] = {"USDC": 0.92, "USD": 0.92, "USDT": 0.92}
     leverage: LeverageCfg = LeverageCfg()
     financing: FinancingCfg = FinancingCfg(open_fee_bps=2.0, rollover_bps_per_4h=2.0)

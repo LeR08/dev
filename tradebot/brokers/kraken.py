@@ -1,4 +1,4 @@
-"""Kraken Pro adapter (crypto spot quoted in ``quote_currency``, USDC by default; accounting stays in EUR).
+"""Kraken Pro adapter (crypto spot quoted in ``quote_currency``, USD by default; accounting stays in EUR).
 
 * Public + private REST (api.kraken.com) and WebSocket v2 ticker stream.
 * Test mode: orders go to the internal paper engine fed by live Kraken order

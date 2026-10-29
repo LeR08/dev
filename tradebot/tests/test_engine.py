@@ -158,7 +158,8 @@ def test_auto_leverage_is_whole_and_scanner_skips_stablecoins():
     for target in (1.0, 2.0, 3.0, 5.0, 20.0):
         lev, _ = auto_leverage(bars, LeverageCfg(target_daily_vol_pct=target), 10, 1.0)
         assert lev == int(lev) and 1 <= lev <= 10
-    for s in ("USDT/USDC", "EURC/USDC", "USDE/USDC", "RLUSD/USDC", "PAXG/USDC", "EUROP/USDC"):
+    for s in ("USDT/USDC", "EURC/USDC", "USDE/USDC", "RLUSD/USDC", "PAXG/USDC", "EUROP/USDC", "AUDX/USD",
+              "BRL1/USD", "MXNB/USD", "USDC/USD"):
         assert is_stablecoin(s), s
-    for s in ("BTC/USDC", "ETH/USDC", "SOL/USDC", "SUI/USDC"):
+    for s in ("BTC/USDC", "ETH/USDC", "SOL/USDC", "SUI/USDC", "AUDIO/USD", "BTC/USD"):
         assert not is_stablecoin(s), s

@@ -32,11 +32,12 @@ consensus:
   solo_agents: [arbitrage, convergence]
 
 kraken:
-  # Pairs traded against USDC (BTC/USDC, ETH/USDC...). Capital, P&L and risk limits stay in EUR,
-  # converted with Kraken's live USDC/EUR rate. Live mode needs a USDC balance on Kraken
-  # (or margin collateral) to trade these pairs.
-  quote_currency: USDC
-  fx_fallback_to_eur: {USDC: 0.92}   # only if the USDC/EUR ticker is unavailable
+  # Pairs traded against USD (BTC/USD, ETH/USD...): the most liquid quote on Kraken
+  # (BTC/USD ~5x the volume of BTC/EUR, ~16x BTC/USDC). Capital, P&L and risk limits stay
+  # in EUR, converted with Kraken's live EUR/USD rate. Live mode needs a USD balance on
+  # Kraken (or margin collateral) to trade these pairs. Alternatives: EUR, USDC, USDT.
+  quote_currency: USD
+  fx_fallback_to_eur: {USD: 0.92}    # only if the EUR/USD ticker is unavailable
   # Automatic leverage = target daily volatility / realised daily volatility,
   # clamped between 1x and risk.yaml max_leverage. Calm market -> more leverage,
   # volatile market -> less. Half-size signals (1 agent) keep half the size, so
@@ -55,11 +56,11 @@ kraken:
   scanner:
     max_spread_bps: 30
     depth_levels: 10
-    min_depth_eur: 20000       # notional on each side within depth_levels (quote currency, i.e. USDC)
+    min_depth_eur: 20000       # notional on each side within depth_levels (quote currency, i.e. USD)
     low_liquidity_hours_utc: []   # e.g. [2, 3, 4] -> no entries during those UTC hours
-    include_only: []           # restrict universe, e.g. ["BTC/USDC", "ETH/USDC"]
+    include_only: []           # restrict universe, e.g. ["BTC/USD", "ETH/USD"]
     exclude: []
-    exclude_stablecoins: true  # skip USDT/EURC/USDE... vs USDC: they barely move
+    exclude_stablecoins: true  # skip USDT/USDC/EURC... vs USD: they barely move
   bars:
     interval_minutes: 60       # 1 h bars: moves large enough to pay Kraken fees (15 min were not)
     lookback: 300
