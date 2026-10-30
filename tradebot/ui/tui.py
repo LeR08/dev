@@ -163,7 +163,7 @@ class TradebotApp(App):
                 rows.append((p.symbol, b.value, side_markup(p.side), f"{p.leverage or 1:.0f}x", f"{p.qty:.6g}", f"{p.entry_price:.6g}",
                              "" if price is None else f"{price:.6g}", pnl_markup(pnl, ""),
                              pnl_markup(pct, " %"),
-                             "" if p.take_profit_price is None else f"{p.take_profit_price:.6g}",
+                             "suiveur" if p.take_profit_price is None else f"{p.take_profit_price:.6g}",
                              "" if p.stop_price is None else f"{p.stop_price:.6g}", t.state.flags.get(p.symbol, "")))
         return rows, total
 
