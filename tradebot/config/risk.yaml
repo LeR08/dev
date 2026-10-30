@@ -1,0 +1,34 @@
+# Risk limits, enforced by the RiskManager in test AND live mode.
+# Change at runtime with: risk set <broker>.<key> <value>   (changes are logged)
+#
+# profile: custom      -> the values below are used as written
+#          normal      -> 0.5 % risk per trade, leverage <= 2x
+#          aggressive  -> 1.5 % risk per trade, positions up to 25 %, leverage <= 3x (only when chart
+#                         and on-chain agree), daily loss 6 %, drawdown 25 %. Switch live: `profile aggressive`
+profile: aggressive   # chosen by the operator; `profile normal` to calm down
+kraken:
+  max_position_pct_full: 10.0     # notional cap per position (before leverage)
+  max_position_pct_half: 5.0
+  risk_per_trade_pct: 0.5        # a stop-out costs at most 0.5 % of capital (half size: 0.25 %)
+  max_open_positions: 5
+  max_exposure_pct: 60.0         # gross notional (longs + shorts) in % of equity
+  max_leverage: 2                # whole number, 1 = no margin, up to 10; automatic leverage never exceeds it
+  allow_short: true
+  stop_loss_pct: 8.0             # hard maximum; the ATR stop is usually closer
+  daily_loss_limit_pct: 3.0
+  max_drawdown_pct: 15.0
+  max_orders_per_minute: 10
+  live_capital_cap_eur: null     # no default: live mode is refused until set
+ibkr:
+  max_position_pct_full: 10.0     # notional cap per position (before leverage)
+  max_position_pct_half: 5.0
+  risk_per_trade_pct: 0.5        # a stop-out costs at most 0.5 % of capital (half size: 0.25 %)
+  max_open_positions: 5
+  max_exposure_pct: 60.0         # gross notional (longs + shorts) in % of equity
+  max_leverage: 2                # whole number, 1 = no margin, up to 10; automatic leverage never exceeds it
+  allow_short: true
+  stop_loss_pct: 8.0             # hard maximum; the ATR stop is usually closer
+  daily_loss_limit_pct: 3.0
+  max_drawdown_pct: 15.0
+  max_orders_per_minute: 10
+  live_capital_cap_eur: null

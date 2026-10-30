@@ -1,0 +1,17 @@
+# IBKR watchlist. cash account, long only.
+# Fields: symbol, exchange (SMART), currency, primary_exchange, optional isin,
+# cusip (13F), amf_jeton (AMF BDIF issuer id, French issuers), earnings_dates.
+instruments:
+  - {symbol: AAPL, exchange: SMART, currency: USD, primary_exchange: NASDAQ, cusip: "037833100"}
+  - {symbol: MSFT, exchange: SMART, currency: USD, primary_exchange: NASDAQ, cusip: "594918104"}
+  - {symbol: KO,   exchange: SMART, currency: USD, primary_exchange: NYSE,   cusip: "191216100"}
+  - {symbol: PEP,  exchange: SMART, currency: USD, primary_exchange: NASDAQ, cusip: "713448108"}
+  - {symbol: MC,   exchange: SMART, currency: EUR, primary_exchange: SBF, isin: FR0000121014, amf_jeton: RS00001689}
+  - {symbol: RMS,  exchange: SMART, currency: EUR, primary_exchange: SBF, isin: FR0000052292, amf_jeton: RS00001472}
+  - {symbol: OR,   exchange: SMART, currency: EUR, primary_exchange: SBF, isin: FR0000120321, amf_jeton: RS00001556}
+  - {symbol: CSPX, exchange: SMART, currency: USD, primary_exchange: LSEETF}
+
+# Pairs for the relative-value agent (LONG the cheap leg only).
+pairs:
+  - [KO, PEP]
+  - [AAPL, MSFT]

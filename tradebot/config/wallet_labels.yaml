@@ -1,0 +1,24 @@
+# Exchange wallet labels used by the smart-money agent (balance snapshots).
+# The bot never claims a wallet owner beyond this list. These addresses are
+# widely published labels, but VERIFY each one yourself (etherscan.io /
+# mempool.space) before relying on it; add or remove freely - flows are only
+# computed on wallets present in both snapshots, so edits never look like flows.
+wallets:
+  ethereum:
+    - {address: "0x28c6c06298d514db089934071355e5743bf21d60", exchange: binance}   # Binance 14 (hot)
+    - {address: "0x21a31ee1afc51d94c2efccaa2092ad1028285549", exchange: binance}   # Binance 15
+    - {address: "0xdfd5293d8e347dfe59e90efd55b2956a1343963d", exchange: binance}   # Binance 16
+    - {address: "0xbe0eb53f46cd790cd13851d5eff43d12404d33e8", exchange: binance}   # Binance 7 (cold)
+    - {address: "0xf977814e90da44bfa03b6295a0616a897441acec", exchange: binance}   # Binance 8 (cold)
+    - {address: "0x71660c4005ba85c37ccec55d0c4493e66fe775d3", exchange: coinbase}  # Coinbase 1
+    - {address: "0xa9d1e08c7793af67e9d92fe308d5697fb81d3e43", exchange: coinbase}  # Coinbase 10
+    - {address: "0x2910543af39aba0cd09dbb2d50200b3e800a63d2", exchange: kraken}    # Kraken 1
+    - {address: "0x0a869d79a7052c7f1b55a8ebabbea3420f0d1e13", exchange: kraken}    # Kraken 2
+    - {address: "0xda9dfa130df4de4673b89022ee50ff26f6ea73cf", exchange: kraken}    # Kraken 13
+    - {address: "0x6cc5f688a315f3dc28a7781717a9a798a59fda7b", exchange: okx}       # OKX
+    - {address: "0x77134cbc06cb00b66f4c7e623d5fdbf6777635ec", exchange: bitfinex}  # Bitfinex hot
+  bitcoin:
+    - {address: "34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo", exchange: binance}             # Binance cold
+    - {address: "bc1qm34lsc65zpw79lxes69zkqmk6ee3ewf0j77s3h", exchange: binance}
+    - {address: "3M219KR5vEneNb47ewrPfWyb5jQ2DjxRP6", exchange: binance}
+    - {address: "bc1qgdjqv0av3q56jvd82tkdjpy7gdp9ut8tlqmgrpmv24sq90ecnvqqjwvw97", exchange: bitfinex}  # Bitfinex cold

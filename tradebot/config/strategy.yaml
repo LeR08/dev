@@ -1,0 +1,209 @@
+# Strategy configuration. Reload at runtime with: config reload
+
+cycle_seconds:
+  kraken: 60                   # analysis every minute at most (a scan takes a few seconds)
+  ibkr: 300
+
+# Separate simulated balance used in test mode (EUR, per broker).
+paper_starting_balance_eur:
+  kraken: 1000
+  ibkr: 1000
+
+# Entry filter, applied to every signal before the RiskManager:
+# * stop placed at stop_atr_mult x ATR (market noise), between min_stop_pct and
+#   risk.yaml stop_loss_pct (hard maximum);
+# * the trade is skipped unless (gain to take-profit - fees) >= min_reward_risk x
+#   (loss to stop + fees). Small targets that fees would eat are no longer traded.
+trade_plan:
+  min_reward_risk: 1.5
+  atr_period: 14
+  stop_atr_mult: 2.5
+  min_stop_pct: 0.5
+  default_target_atr_mult: 8   # expected move (ATR) for agents without a price target
+  trail_only_agents: [trend]   # trend trades: no take-profit, the trailing stop closes them
+
+consensus:
+  # Minimum number of LONG votes (with no AVOID) for a full-size position.
+  full_size_min_long: 2
+  # Size factor when exactly one agent votes LONG and the others NONE.
+  half_size_factor: 0.5
+  # Agents allowed to open a (half-size) trade alone. smart_money is not in the list:
+  # its signal could not be backtested (no free on-chain/insider history), so it only
+  # confirms (-> full size) or blocks (opposite vote) the price-based agents.
+  solo_agents: [arbitrage, convergence, trend]
+
+kraken:
+  # Pairs traded against USD (BTC/USD, ETH/USD...): the most liquid quote on Kraken
+  # (BTC/USD ~5x the volume of BTC/EUR, ~16x BTC/USDC). Capital, P&L and risk limits stay
+  # in EUR, converted with Kraken's live EUR/USD rate. Live mode needs a USD balance on
+  # Kraken (or margin collateral) to trade these pairs. Alternatives: EUR, USDC, USDT.
+  quote_currency: USD
+  fx_fallback_to_eur: {USD: 0.92}    # only if the EUR/USD ticker is unavailable
+  # Automatic leverage = target daily volatility / realised daily volatility,
+  # clamped between 1x and risk.yaml max_leverage. Calm market -> more leverage,
+  # volatile market -> less. Half-size signals (1 agent) keep half the size, so
+  # a 1-agent signal at 2x weighs the same as an unlevered 2-agent signal.
+  # full_consensus_only: true -> 1-agent signals always trade at 1x.
+  leverage:
+    enabled: true
+    target_daily_vol_pct: 2.0
+    vol_lookback_bars: 20        # 20 daily bars
+    full_consensus_only: false
+  financing:                     # Kraken margin costs (check your fee page)
+    open_fee_bps: 2              # 0.02 % of notional when a margin position opens
+    rollover_bps_per_4h: 2       # 0.02 % every 4 h on margin positions
+    maintenance_margin_pct: 50   # paper engine liquidation threshold
+  fee_tier: starter            # starter | intermediate | pro (call-counter limits)
+  scanner:
+    max_spread_bps: 30
+    depth_levels: 10
+    min_depth_eur: 20000       # notional on each side within depth_levels (quote currency, i.e. USD)
+    low_liquidity_hours_utc: []   # e.g. [2, 3, 4] -> no entries during those UTC hours
+    include_only: []           # restrict universe, e.g. ["BTC/USD", "ETH/USD"]
+    exclude: []
+    exclude_stablecoins: true  # skip USDT/USDC/EURC... vs USD: they barely move
+    min_volume_24h: 5000000    # USD; skips illiquid coins (violent wicks, slippage)
+  bars:
+    # Daily bars. Backtests on 24 liquid USD pairs (2 years): 15 min and 1 h moves are too
+    # small to pay Kraken's fees; daily bars were the only horizon positive in both a
+    # falling (-52 %) and a rising (+30 %) market. Kraken serves up to 720 daily bars.
+    interval_minutes: 1440
+    lookback: 300
+  agents:
+    arbitrage:
+      enabled: true
+      bridges: [BTC, ETH]      # triangle EUR -> X -> bridge -> EUR
+      min_edge_bps: 15         # net of three fees and slippage
+      slippage_bps: 5
+    convergence:
+      enabled: true
+      reference: vwap          # vwap | sma
+      window: 48
+      k_std: 2.0
+      volume_mult: 1.5
+      volume_window: 48
+      trend_window: 192        # trend filter: no LONG into a falling trend, no SHORT into a rising one
+      max_trend_pct: 2.0
+    smart_money:               # exchange balance snapshots (Etherscan + mempool.space), needs history to build up
+      enabled: true
+      window_hours: 24
+      min_net_flow_eur: 5000000  # net change of the coin's exchange balances...
+      min_net_flow_pct: 0.5      # ...and at least 0.5 % of them
+      stablecoin_signal: true    # USDT/USDC arriving on exchanges = buying power (all coins)
+      stable_min_flow_eur: 100000000
+      snapshot_minutes: 30
+      erc20:                     # tokens tracked on Ethereum: symbol -> [contract, decimals] (verify on etherscan.io)
+        LINK: ["0x514910771af9ca656af840dff83e8264ecf986ca", 18]
+        UNI: ["0x1f9840a85d5af5bf1d1762f925bdaddc4201f984", 18]
+        AAVE: ["0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9", 18]
+        LDO: ["0x5a98fcbea516cf06857215779fd812ca3bef1b32", 18]
+        PEPE: ["0x6982508145454ce325ddbe47a25d4ec3d2311933", 18]
+        SHIB: ["0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce", 18]
+    trend:                     # CTA-style breakout: close beyond the N-bar high/low with the EMAs aligned
+      enabled: true
+      fast: 20
+      slow: 100
+      breakout: 55
+      min_trend_gap_pct: 0.0
+  execution:
+    entry_timeout_seconds: 1800   # unfilled entry orders are cancelled after 30 min
+    exit_limit_timeout_seconds: 60
+    paper_slippage_bps: 5
+    validate_orders_in_test: true   # dry-run AddOrder(validate=true) when keys are present
+
+ibkr:
+  base_currency: EUR
+  leverage:
+    enabled: true
+    target_daily_vol_pct: 1.5
+    vol_lookback_bars: 20        # daily bars
+    full_consensus_only: false
+  financing:                     # requires an IBKR margin account for shorts / leverage
+    borrow_fee_pct_year: 3.0     # stock borrow fee for shorts (varies a lot per stock)
+    margin_interest_pct_year: 6.0
+    maintenance_margin_pct: 50
+  data_delay_minutes: 15
+  gateway:
+    host: 127.0.0.1
+    paper_port: 4002
+    live_port: 4001
+    client_id: 17
+    connect_timeout_seconds: 15
+  scanner:
+    max_spread_bps: 50
+    min_avg_daily_volume: 500000   # shares
+    avoid_open_close_minutes: 15
+    avoid_earnings_days: true
+  bars:
+    bar_size: "1 day"
+    duration: "1 Y"
+    intraday_bar_size: "15 mins"
+    intraday_duration: "5 D"
+  agents:
+    arbitrage:
+      enabled: true
+      lookback: 60
+      z_entry: 2.0
+    convergence:
+      enabled: true
+      reference: sma
+      window: 20
+      k_std: 2.0
+      volume_mult: 1.2
+      volume_window: 20
+      delay_penalty: 0.15      # confidence reduction for delayed data
+      trend_window: 100
+      max_trend_pct: 4.0
+    smart_money:
+      enabled: true
+      window_days: 14
+      cluster_min_insiders: 3
+      min_buy_value: 100000          # in instrument currency
+      heavy_sell_value: 2000000
+      heavy_sell_min_insiders: 3
+      ignore_planned_sales: true     # SEC 10b5-1 plans
+      institutions_13f: []           # filer CIKs whose 13F holdings are tracked
+  fees:
+    model: fixed               # fixed | tiered
+    us_per_share: 0.005
+    us_min_per_order: 1.0
+    us_max_pct: 1.0
+    eu_pct: 0.05
+    eu_min_per_order: 3.0
+  fx_fallback_to_eur:
+    USD: 0.92
+    GBP: 1.16
+    CHF: 1.06
+  execution:
+    entry_timeout_seconds: 1800
+    exit_limit_timeout_seconds: 300
+
+exits:
+  take_profit_fraction: 0.85
+  volume_spike:
+    bars: 3
+    mult: 3.0
+    stall_pct: 0.3             # |price change| over those bars below this % counts as stalling
+    only_in_profit: true       # only used to protect a gain
+  trailing:                    # let winners run, lock gains
+    enabled: true
+    breakeven_at_r: 1.0        # once the gain reaches 1x the initial risk, stop -> entry + fees
+    trail_atr_mult: 2.0        # then the stop follows the price 2 ATR behind
+  max_holding_hours:
+    kraken: 480                # 20 days: trend trades need weeks (a 72 h stop closed most of them)
+    ibkr: 240
+
+backtest:
+  spread_bps: 10
+  slippage_bps: 5
+  walk_forward:
+    folds: 4
+    train_fraction: 0.7
+    grid:
+      convergence.k_std: [1.5, 2.0, 2.5]
+
+data:
+  etherscan_min_interval_seconds: 0.4
+  edgar_min_interval_seconds: 0.15
+  amf_min_interval_seconds: 0.5
+  amf_api: "https://bdif.amf-france.org/back/api/v1"
