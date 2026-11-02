@@ -1,0 +1,42 @@
+# Risk limits, enforced by the RiskManager in test AND live mode.
+# Change at runtime with: risk set <broker>.<key> <value>   (changes are logged)
+#
+# profile: custom      -> the values below are used as written
+#          normal      -> 0.5 % risk per trade, leverage <= 2x
+#          aggressive  -> 1.5 % risk per trade, positions up to 25 %, leverage <= 3x (only when chart
+#                         and on-chain agree), daily loss 6 %, drawdown 25 %. Switch live: `profile aggressive`
+profile: aggressive   # chosen by the operator; `profile normal` to calm down
+
+# Before `reel kraken` / `live on kraken` is accepted (plus: API keys present, withdrawals disabled on
+# the key, live_capital_cap_eur set, no active risk halt, and the typed confirmation phrase).
+# The liquidity mode trades 2-6 times a year: 50 paper trades would never be reached, so 1 complete
+# paper trade (entry + exit) and 14 days in test mode are required instead.
+live_min_paper_trades: 1
+live_min_paper_days: 14
+kraken:
+  max_position_pct_full: 10.0     # notional cap per position (before leverage)
+  max_position_pct_half: 5.0
+  risk_per_trade_pct: 0.5        # a stop-out costs at most 0.5 % of capital (half size: 0.25 %)
+  max_open_positions: 5
+  max_exposure_pct: 60.0         # gross notional (longs + shorts) in % of equity
+  max_leverage: 2                # whole number, 1 = no margin, up to 10; automatic leverage never exceeds it
+  allow_short: true
+  allow_no_stop: true             # liquidity mode positions have no broker stop (operator's choice)
+  stop_loss_pct: 8.0             # hard maximum; the ATR stop is usually closer
+  daily_loss_limit_pct: 3.0
+  max_drawdown_pct: 15.0
+  max_orders_per_minute: 10
+  live_capital_cap_eur: null     # no default: live mode is refused until set
+ibkr:
+  max_position_pct_full: 10.0     # notional cap per position (before leverage)
+  max_position_pct_half: 5.0
+  risk_per_trade_pct: 0.5        # a stop-out costs at most 0.5 % of capital (half size: 0.25 %)
+  max_open_positions: 5
+  max_exposure_pct: 60.0         # gross notional (longs + shorts) in % of equity
+  max_leverage: 2                # whole number, 1 = no margin, up to 10; automatic leverage never exceeds it
+  allow_short: true
+  stop_loss_pct: 8.0             # hard maximum; the ATR stop is usually closer
+  daily_loss_limit_pct: 3.0
+  max_drawdown_pct: 15.0
+  max_orders_per_minute: 10
+  live_capital_cap_eur: null
