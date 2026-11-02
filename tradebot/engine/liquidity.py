@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
 from tradebot.agents.base import Direction, Vote
-from tradebot.brokers.base import Broker, BrokerError, OrderRequest, OrderType, PositionSide, Purpose, Side
+from tradebot.brokers.base import Broker, BrokerError, OrderRequest, OrderType, PositionSide, Purpose
 from tradebot.engine.consensus import ConsensusDecision
 from tradebot.engine.trader import BrokerTrader, PendingEntry
 
