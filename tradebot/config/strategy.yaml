@@ -33,6 +33,20 @@ consensus:
   solo_agents: [arbitrage, convergence, trend]
 
 kraken:
+  # mode: liquidity -> BTC or ETH (never both at once) while the stablecoin supply grows (DefiLlama),
+  #                    cash otherwise. Backtest 2020-2026 in the README / `backtest kraken`.
+  #       agents    -> the scanner + 4 agents swing strategy (lost money over 2022-2026 in backtests)
+  mode: liquidity
+  liquidity:
+    window_days: 30            # stablecoin supply change over 30 days (last completed day)
+    assets: [BTC, ETH]         # one position at a time, never both in the same direction
+    momentum_days: 30          # buy the one with the best 30-day return
+    tranche_pct: 5             # 5 % of capital per tranche
+    reinject_drop_pct: 33      # +1 tranche at every further -33 % from the last tranche price
+    max_tranches: null         # no limit (operator's choice)
+    leverage: 1                # 1 or 2; re-injections keep the entry leverage
+    decision_day: sunday       # entries/exits decided on Sundays (as backtested); re-injections any day
+    stop_loss: false           # no broker stop (operator's choice); account loss limits still apply
   # Pairs traded against USD (BTC/USD, ETH/USD...): the most liquid quote on Kraken
   # (BTC/USD ~5x the volume of BTC/EUR, ~16x BTC/USDC). Capital, P&L and risk limits stay
   # in EUR, converted with Kraken's live EUR/USD rate. Live mode needs a USD balance on

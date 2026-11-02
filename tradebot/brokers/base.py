@@ -70,6 +70,7 @@ class Purpose(StrEnum):
     STOP = "stop"
     TAKE_PROFIT = "take_profit"
     EMERGENCY = "emergency"
+    ADD = "add"  # scale into an existing position (re-injection)
 
 
 # --------------------------------------------------------------------------- errors
@@ -232,12 +233,14 @@ class OrderRequest:
     purpose: Purpose = Purpose.ENTRY
     client_id: str = field(default_factory=lambda: uuid.uuid4().hex)
     reference_price: float | None = None  # price used for risk sizing
+    no_stop: bool = False  # entry without broker stop (only if the risk config allows it)
     leverage: float = 1.0  # account leverage of the position this order opens/closes
     approval: Any = None  # set by RiskManager only
 
     @property
     def opens(self) -> bool:
-        return self.purpose == Purpose.ENTRY
+        """Opens or enlarges a position (entry or re-injection)."""
+        return self.purpose in (Purpose.ENTRY, Purpose.ADD)
 
     @property
     def position_side(self) -> PositionSide:

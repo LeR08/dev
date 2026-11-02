@@ -57,6 +57,7 @@ class PendingEntry:
     side: PositionSide = PositionSide.LONG
     leverage: float = 1.0
     target: float | None = None
+    purpose: Purpose = Purpose.ENTRY
 
 
 @dataclass
@@ -441,11 +442,15 @@ class BrokerTrader:
     def _on_entry_fill(self, f: Fill, fee_eur: float, mode: Mode) -> None:
         pe = self._pending_entries.pop(f.client_id, None)
         existing = [p for p in self.db.open_positions(self.broker, mode) if p.symbol == f.symbol]
-        if existing:  # partial fills accumulate into one position
+        if existing:  # partial fills and re-injections accumulate into one position
             p = existing[0]
             qty = p.qty + f.qty
+            extra = {}
+            if pe is not None and pe.purpose == Purpose.ADD:
+                extra = dict(tranches=(p.tranches or 1) + 1, last_add_price=f.price)
+                self.log.info("re-injection %s: tranche %d @ %s", f.symbol, extra["tranches"], f.price)
             self.db.update_position(p.id, qty=qty, entry_price=(p.entry_price * p.qty + f.price * f.qty) / qty,
-                                    fees=p.fees + fee_eur)
+                                    fees=p.fees + fee_eur, **extra)
             return
         decision = pe.decision if pe else None
         side = pe.side if pe else (PositionSide.LONG if f.side == Side.BUY else PositionSide.SHORT)
@@ -457,7 +462,7 @@ class BrokerTrader:
             target_price=(pe.target if pe and pe.target is not None else decision.target_price if decision else None),
             take_profit_price=pe.take_profit if pe else None,
             stop_price=pe.stop_loss if pe else None, initial_stop_price=pe.stop_loss if pe else None,
-            opened_at=f.ts, fees=fee_eur,
+            opened_at=f.ts, fees=fee_eur, tranches=1, last_add_price=f.price,
             entry_order_id=f.order_id, size_factor=decision.size_factor if decision else 1.0,
             entry_agents=list(decision.entering_agents) if decision else [])
         self.log.info("position opened %s %s qty=%s @ %s (%.0fx)", side.value.upper(), f.symbol, f.qty, f.price,
@@ -532,6 +537,7 @@ class BrokerTrader:
         if not positions:
             return
         exiting = {px.symbol for px in self._pending_exits.values()}
+        positions = [p for p in positions if self._rule_exits(p)]
         quotes = await self._quotes([p.symbol for p in positions])
         for p in positions:
             if p.symbol in exiting or p.symbol not in quotes:
@@ -583,6 +589,10 @@ class BrokerTrader:
             self.state.flags[p.symbol] = "STOP MISSING at broker — check manually"
             self.log.error("could not restore the stop on %s", p.symbol)
         return False
+
+    def _rule_exits(self, p) -> bool:
+        """Whether the agent exit rules (take-profit, trailing, time stop...) manage this position."""
+        return True
 
     async def _smart_vote(self, symbol: str, quote: Quote) -> Vote | None:
         cfgs = self.agent_cfgs()

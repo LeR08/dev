@@ -14,6 +14,8 @@ def load_config():
     """Tests run on the normal profile, whatever risk.yaml says."""
     cfg = _load_config()
     apply_profile(cfg, "normal")
+    cfg.strategy.kraken.mode = "agents"  # agent tests; liquidity mode has its own tests
+    cfg.strategy.kraken.quote_currency = "EUR"
     return cfg
 
 

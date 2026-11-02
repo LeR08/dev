@@ -64,6 +64,21 @@ bot backtest kraken 2026-01-01 2026-06-30
 | `report [day\|week\|all]` | P&L, win rate, drawdown, fees — by broker and mode, never mixed |
 | `config reload` | reload the YAML files |
 
+## Kraken liquidity mode (default)
+
+`kraken.mode: liquidity` in `strategy.yaml`. Every Sunday the bot reads the total stablecoin supply
+(DefiLlama, free): if it grew over 30 days (last completed day), it buys **BTC or ETH — never both** — the
+one with the best 30-day return, for **5 % of capital** (1× or 2× leverage). At every further **−33 %** from
+the last tranche price it re-injects 5 % at the same leverage. When the signal turns unfavourable (Sunday
+check), the whole position is closed. Long only, **no broker stop** (operator's choice, `allow_no_stop` in
+`risk.yaml`); account loss limits (daily loss / drawdown), the kill switch and test mode still apply — note
+that a −33 % crash in a single day at 2× can hit the daily loss limit before the re-injection.
+
+Research (Binance daily history as data source, Kraken fees 0.40 %/order + 0.10 % slippage, Kraken margin
+rollover): 2020-03 → 2023-06 +181 % (1×) / +339 % (2×); 2023-07 → 2026-11 +7 % / +7 %; the bulk of the
+gain is one ETH position held through 2021. `backtest kraken <from> <to>` replays the rules on Kraken data
+(~2 years). `kraken.mode: agents` switches back to the scanner + agents strategy.
+
 ## How it works
 
 ```

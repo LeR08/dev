@@ -104,6 +104,9 @@ class TradebotApp(App):
         # Analyse
         lines = []
         for b, t in bot.traders.items():
+            if hasattr(t, "status"):  # liquidity mode: no scan, one signal
+                lines.append(f"{b.value} {t.status.replace(' | ', chr(10) + ' ')}")
+                continue
             r = t.last_scan
             if r is None:
                 lines.append(f"{b.value}: pas encore de scan")

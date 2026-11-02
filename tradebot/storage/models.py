@@ -134,6 +134,8 @@ class PositionRow(_Tagged, Base):
     entry_order_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
     stop_order_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
     size_factor: Mapped[float] = mapped_column(Float, default=1.0)
+    tranches: Mapped[int] = mapped_column(Integer, default=1, server_default="1")
+    last_add_price: Mapped[float | None] = mapped_column(Float, nullable=True)
     entry_agents: Mapped[list] = mapped_column(JSON, default=list)
 
 

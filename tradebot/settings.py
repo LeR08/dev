@@ -115,7 +115,23 @@ class KrakenExecCfg(_Model):
     validate_orders_in_test: bool = True
 
 
+class LiquidityCfg(_Model):
+    """Liquidity mode: hold BTC or ETH (never both) while the stablecoin supply grows."""
+
+    window_days: int = 30
+    assets: list[str] = ["BTC", "ETH"]  # traded against kraken.quote_currency; one position at a time
+    momentum_days: int = 30  # when favourable, buy the asset with the best return over this window
+    tranche_pct: float = 5.0  # % of capital per tranche (before leverage)
+    reinject_drop_pct: float = 33.0  # add a tranche at every further -33 % from the last tranche price
+    max_tranches: int | None = None  # None = no limit
+    leverage: int = Field(1, ge=1, le=2)  # 1x or 2x; re-injections use the entry leverage
+    decision_day: Literal["sunday", "daily"] = "sunday"  # backtested on weekly (Sunday) decisions
+    stop_loss: bool = False  # operator's choice: no broker stop (account loss limits still apply)
+
+
 class KrakenCfg(_Model):
+    mode: Literal["agents", "liquidity"] = "liquidity"
+    liquidity: LiquidityCfg = LiquidityCfg()
     quote_currency: str = "USD"
     fx_fallback_to_eur: dict[str, float] = {"USDC": 0.92, "USD": 0.92, "USDT": 0.92}
     leverage: LeverageCfg = LeverageCfg()
@@ -284,6 +300,7 @@ class BrokerRiskCfg(_Model):
     max_exposure_pct: float = Field(60.0, ge=0, le=1000)  # gross notional (longs + shorts) / equity
     max_leverage: int = Field(2, ge=1, le=10)  # hard cap, whole number: 1 = no margin, 2..10x
     allow_short: bool = True
+    allow_no_stop: bool = False  # positions without broker stop (liquidity mode only, operator's choice)
     stop_loss_pct: float = Field(8.0, gt=0, lt=100)  # hard maximum stop distance; the ATR stop is usually closer
     daily_loss_limit_pct: float = Field(3.0, gt=0, le=100)
     max_drawdown_pct: float = Field(15.0, gt=0, le=100)

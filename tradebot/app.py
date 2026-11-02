@@ -17,10 +17,12 @@ from tradebot.data.amf import AmfClient
 from tradebot.data.cache import BarCache, PoliteHttp
 from tradebot.data.edgar import EdgarClient
 from tradebot.data.kraken_feed import KrakenFeed
+from tradebot.data.defillama import StablecoinSupply
 from tradebot.data.onchain import OnchainClient
 from tradebot.engine.mode import LivePreconditions, ModeSwitch, confirm_phrase
 from tradebot.engine.risk import RiskManager
 from tradebot.engine.snapshots import DataHub
+from tradebot.engine.liquidity import LiquidityTrader
 from tradebot.engine.trader import BrokerTrader
 from tradebot.logging_setup import set_mode_provider, setup_logging
 from tradebot.settings import AppConfig, Secrets, config_dir, home_dir, load_config
@@ -57,7 +59,9 @@ class Bot:
             PoliteHttp(self.db, "mempool", 0.5),
             PoliteHttp(self.db, "sec", d.edgar_min_interval_seconds, headers={"User-Agent": ua}),
             PoliteHttp(self.db, "amf", d.amf_min_interval_seconds),
+            PoliteHttp(self.db, "defillama", 1.0),
         ]
+        self.supply = StablecoinSupply(self._http[4])
         eth_key = self.secrets.etherscan_api_key.get_secret_value() if self.secrets.etherscan_api_key else None
         onchain = OnchainClient(self.cfg.wallet_labels, self._http[0], self._http[1], eth_key, self.db,
                                 self.cfg.strategy.kraken.agents.smart_money.snapshot_minutes)
@@ -73,8 +77,13 @@ class Bot:
                                bar_cache=self.bar_cache)
             self.adapters = {Broker.KRAKEN: kraken, Broker.IBKR: ibkr}
         self.agents = AgentPool(isolated=isolated_agents)
-        self.traders = {b: BrokerTrader(b, a, self.cfg, self.risk, self.mode, self.db, self.agents, self.data)
-                        for b, a in self.adapters.items()}
+        self.traders = {}
+        for b, a in self.adapters.items():
+            if b == Broker.KRAKEN and self.cfg.strategy.kraken.mode == "liquidity":
+                self.traders[b] = LiquidityTrader(b, a, self.cfg, self.risk, self.mode, self.db, self.agents,
+                                                  self.data, supply=self.supply)
+            else:
+                self.traders[b] = BrokerTrader(b, a, self.cfg, self.risk, self.mode, self.db, self.agents, self.data)
         kraken_adapter = self.adapters.get(Broker.KRAKEN)
         probe = getattr(kraken_adapter, "withdrawal_enabled", None)
         self.preconditions = LivePreconditions(self.db, self.secrets, self.risk, withdrawal_probe=probe)
@@ -187,6 +196,8 @@ class Bot:
     # ------------------------------------------------------------------ backtest
 
     async def backtest(self, broker: Broker, start: datetime, end: datetime) -> str:
+        if broker == Broker.KRAKEN and self.cfg.strategy.kraken.mode == "liquidity":
+            return await self._backtest_liquidity(start, end)
         if broker == Broker.KRAKEN:
             interval_min = self.cfg.strategy.kraken.bars.interval_minutes
             key = f"{interval_min}m"
@@ -208,6 +219,26 @@ class Bot:
         result = await asyncio.to_thread(bt.run, start, end)
         _, wf = await asyncio.to_thread(bt.walk_forward, start, end)
         return result.report() + "\n\n" + wf
+
+    async def _backtest_liquidity(self, start: datetime, end: datetime) -> str:
+        from tradebot.backtest.liquidity import report, run_liquidity
+
+        lc = self.cfg.strategy.kraken.liquidity
+        q = self.cfg.strategy.kraken.quote_currency
+        await self.ensure_connected(Broker.KRAKEN)
+        kraken = self.adapters[Broker.KRAKEN]
+        bars = {}
+        for a in lc.assets:
+            bars[f"{a}/{q}"] = await kraken.get_bars(f"{a}/{q}", 720)
+        supply = await self.supply.series()
+        first = max(min(b[0].ts for b in bars.values()) + timedelta(days=lc.momentum_days + 1), start)
+        fee = max(f.taker for f in [await kraken.get_fees(s) for s in bars])
+        trades, _, m = run_liquidity(bars, supply, lc, first, end, fee=fee)
+        lines = [report(m, f"Liquidity mode {first:%Y-%m-%d} -> {end:%Y-%m-%d} "
+                           f"(Kraken daily bars: ~2 years max; fee {fee * 100:.2f}%/order)")]
+        lines += [f"  {t.entry_ts:%Y-%m-%d} -> {t.exit_ts:%Y-%m-%d} {t.symbol:8} {t.pnl:+8.2f} EUR ({t.reason})"
+                  for t in trades]
+        return "\n".join(lines)
 
     async def _fetch_kraken_history(self) -> None:
         kraken = self.adapters[Broker.KRAKEN]

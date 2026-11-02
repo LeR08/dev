@@ -213,9 +213,11 @@ class PaperEngine:
         held = self.positions.get(req.symbol, _Pos()).qty
         fx = self.fx(rules.currency)
 
-        if req.purpose == Purpose.ENTRY:
-            if held != 0:
+        if req.purpose in (Purpose.ENTRY, Purpose.ADD):
+            if req.purpose == Purpose.ENTRY and held != 0:
                 return self._reject(order, "position already open (no pyramiding/flip)")
+            if req.purpose == Purpose.ADD and (held == 0 or (held > 0) != (req.side == Side.BUY)):
+                return self._reject(order, "re-injection needs an open position in the same direction")
             lev = max(1.0, req.leverage)
             price = req.limit_price or (ask if req.side == Side.BUY else bid) or 0
             needed = req.qty * price * fx / lev
@@ -309,7 +311,7 @@ class PaperEngine:
         pos = self.positions.get(order.symbol)
         delta = order.qty if order.side == Side.BUY else -order.qty
         opening = pos is None or pos.qty == 0 or (pos.qty > 0) == (delta > 0)
-        if opening and order.purpose != Purpose.ENTRY:
+        if opening and order.purpose not in (Purpose.ENTRY, Purpose.ADD):
             self._reject(order, "reduce-only: nothing left to close")  # e.g. a stale stop after a take-profit
             return None
         if not opening:

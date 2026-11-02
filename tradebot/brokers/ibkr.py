@@ -483,7 +483,11 @@ class IBKRAdapter(BrokerAdapter):
             raise OrderRejected(f"{req.symbol}: quantity rounds below {rules.min_qty} share(s)")
 
         action = "BUY" if req.side == Side.BUY else "SELL"
-        if req.opens:
+        if req.opens and req.stop_loss is None:  # re-injection / no-stop entry: a plain limit order
+            o = LimitOrder(action, qty, rules.round_price(req.limit_price, req.side))
+            o.orderRef, o.tif = req.client_id, "DAY"
+            orders = [o]
+        elif req.opens:
             # entry: long (BUY) or short (SELL, needs a margin account); children close the other way
             close_side = Side.SELL if req.side == Side.BUY else Side.BUY
             close_action = "SELL" if action == "BUY" else "BUY"
