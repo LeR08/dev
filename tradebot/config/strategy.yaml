@@ -45,7 +45,7 @@ kraken:
     reinject_drop_pct: 33      # +1 tranche at every further -33 % from the last tranche price
     max_tranches: null         # no limit (operator's choice)
     leverage: 1                # 1 or 2; re-injections keep the entry leverage
-    decision_day: sunday       # entries/exits decided on Sundays (as backtested); re-injections any day
+    decision_day: daily        # entries/exits evaluated every day (backtest: same results as weekly, more trades)
     stop_loss: false           # no broker stop (operator's choice); account loss limits still apply
   # Pairs traded against USD (BTC/USD, ETH/USD...): the most liquid quote on Kraken
   # (BTC/USD ~5x the volume of BTC/EUR, ~16x BTC/USDC). Capital, P&L and risk limits stay

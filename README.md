@@ -58,6 +58,7 @@ bot backtest kraken 2026-01-01 2026-06-30
 | `close <symbol>` / `close all [broker]` | close one / all positions |
 | `kill` (Ctrl+K in the TUI) | cancel all orders, close all positions, every broker → TEST (≤ 30 s) |
 | `live on <broker>` / `live off <broker>` | leave / return to test mode |
+| `reel [broker]` / `fictif [broker]` / `mode` | same in French (kraken by default) / show modes |
 | `risk show` / `risk set <broker>.<key> <value>` | view / change a limit (logged) |
 | `risk review <broker>` | clear a drawdown halt after manual review (stays in TEST) |
 | `backtest <broker> <from> <to>` | backtest + walk-forward report |
@@ -66,11 +67,11 @@ bot backtest kraken 2026-01-01 2026-06-30
 
 ## Kraken liquidity mode (default)
 
-`kraken.mode: liquidity` in `strategy.yaml`. Every Sunday the bot reads the total stablecoin supply
+`kraken.mode: liquidity` in `strategy.yaml` — full write-up in **STRATEGIE.md**. Every day the bot reads the total stablecoin supply
 (DefiLlama, free): if it grew over 30 days (last completed day), it buys **BTC or ETH — never both** — the
 one with the best 30-day return, for **5 % of capital** (1× or 2× leverage). At every further **−33 %** from
-the last tranche price it re-injects 5 % at the same leverage. When the signal turns unfavourable (Sunday
-check), the whole position is closed. Long only, **no broker stop** (operator's choice, `allow_no_stop` in
+the last tranche price it re-injects 5 % at the same leverage. When the signal turns unfavourable, the whole
+position is closed. Long only, **no broker stop** (operator's choice, `allow_no_stop` in
 `risk.yaml`); account loss limits (daily loss / drawdown), the kill switch and test mode still apply — note
 that a −33 % crash in a single day at 2× can hit the daily loss limit before the re-injection.
 

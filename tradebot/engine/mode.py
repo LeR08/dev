@@ -19,8 +19,6 @@ from tradebot.brokers.base import Broker, Mode, utcnow
 log = logging.getLogger(__name__)
 
 CONFIRM_PHRASE = "I ACCEPT REAL LOSSES ON {broker}"
-MIN_PAPER_TRADES = 50
-MIN_PAPER_DAYS = 14
 
 
 def confirm_phrase(broker: Broker | str) -> str:
@@ -129,11 +127,13 @@ class LivePreconditions:
     async def check(self, broker: Broker | str) -> list[Precondition]:
         broker = Broker(broker)
         out: list[Precondition] = []
+        need_n = self.risk.config.live_min_paper_trades
+        need_days = self.risk.config.live_min_paper_days
         n = self.db.count_closed_positions(broker, Mode.TEST)
-        out.append(Precondition("paper trades", n >= MIN_PAPER_TRADES, f"{n}/{MIN_PAPER_TRADES} closed paper trades"))
+        out.append(Precondition("paper trades", n >= need_n, f"{n}/{need_n} closed paper trades"))
         first = self.db.first_activity(broker, Mode.TEST)
         days = (self.clock() - first).total_seconds() / 86400 if first else 0.0
-        out.append(Precondition("paper duration", days >= MIN_PAPER_DAYS, f"{days:.1f}/{MIN_PAPER_DAYS} days in paper"))
+        out.append(Precondition("paper duration", days >= need_days, f"{days:.1f}/{need_days:g} days in paper"))
 
         if broker == Broker.KRAKEN:
             has = self.secrets.has_kraken_keys

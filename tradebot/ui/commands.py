@@ -21,6 +21,8 @@ HELP = """Commands
   close <symbol> | close all [broker]
   kill                           cancel all orders, close all positions, all brokers -> TEST
   live on <broker> | live off <broker>
+  reel [broker] | fictif [broker]  real money (after checks + typed phrase) | back to test mode (default)
+  mode                           test/real mode of each broker
   risk show | risk set <key> <value> | risk review <broker>
   backtest <broker> <from> <to>  e.g. backtest kraken 2026-01-01 2026-06-30
   report [day|week|all]
@@ -189,6 +191,19 @@ class CommandProcessor:
             return summary + "\nREFUSED: preconditions not met."
         self.pending_live = b
         return summary + f"\n\nTo continue, type exactly:\n  {confirm_phrase(b)}\n(anything else cancels)"
+
+    async def cmd_reel(self, args) -> str:
+        return await self.cmd_live(["on", args[0] if args else "kraken"])
+
+    async def cmd_fictif(self, args) -> str:
+        return await self.cmd_live(["off", args[0] if args else "kraken"])
+
+    cmd_real = cmd_reel
+    cmd_test = cmd_fictif
+
+    async def cmd_mode(self, args) -> str:
+        names = {Mode.TEST: "FICTIF (test, argent simulé)", Mode.LIVE: "RÉEL (argent réel)"}
+        return "\n".join(f"{b.value}: {names[self.bot.mode.mode(b)]}" for b in Broker)
 
     async def cmd_risk(self, args) -> str:
         if not args or args[0] == "show":

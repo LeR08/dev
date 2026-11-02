@@ -74,8 +74,25 @@ async def test_live_on_command_refuses_without_paper_history(make_bot):
     bot = make_bot()
     proc = CommandProcessor(bot)
     out = await proc.execute("live on kraken")
-    assert "REFUSED" in out and "0/50 closed paper trades" in out
+    assert "REFUSED" in out and "0/1 closed paper trades" in out and "0.0/14 days" in out
     assert not proc.awaiting_confirmation
+    assert bot.mode.mode(Broker.KRAKEN) == Mode.TEST
+
+
+async def test_reel_and_fictif_commands(make_bot, monkeypatch):
+    bot = make_bot()
+    proc = CommandProcessor(bot)
+    assert "FICTIF" in await proc.execute("mode")
+
+    async def all_ok(broker):
+        return [Precondition("all", True, "ok")]
+
+    monkeypatch.setattr(bot.preconditions, "check", all_ok)
+    out = await proc.execute("reel")  # kraken by default
+    assert "I ACCEPT REAL LOSSES ON KRAKEN" in out
+    await proc.execute("I ACCEPT REAL LOSSES ON KRAKEN")
+    assert bot.mode.mode(Broker.KRAKEN) == Mode.LIVE and "RÉEL" in await proc.execute("mode")
+    await proc.execute("fictif")
     assert bot.mode.mode(Broker.KRAKEN) == Mode.TEST
 
 

@@ -68,10 +68,14 @@ async def test_favourable_sunday_buys_the_strongest_one_tranche_no_stop(make_bot
     assert "FAVORABLE" in t.status
 
 
-async def test_no_entry_outside_sunday_or_when_unfavourable(make_bot):
-    _, t, k, _ = make_trader(make_bot, +2.0, SUNDAY - timedelta(days=2))
+async def test_daily_decisions_by_default_sunday_optional_and_unfavourable_stays_cash(make_bot):
+    _, t, k, _ = make_trader(make_bot, +2.0, SUNDAY - timedelta(days=2))  # Friday
     await t.cycle()
-    assert not k.placed
+    assert [r.purpose.value for r in k.placed] == ["entry"]  # daily analysis (default)
+    _, t1, k1, _ = make_trader(make_bot, +2.0, SUNDAY - timedelta(days=2))
+    t1.cfg.strategy.kraken.liquidity.decision_day = "sunday"
+    await t1.cycle()
+    assert not k1.placed
     _, t2, k2, _ = make_trader(make_bot, -1.0, SUNDAY)
     await t2.cycle()
     assert not k2.placed and "DÉFAVORABLE" in t2.status

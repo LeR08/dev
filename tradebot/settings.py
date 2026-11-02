@@ -125,7 +125,7 @@ class LiquidityCfg(_Model):
     reinject_drop_pct: float = 33.0  # add a tranche at every further -33 % from the last tranche price
     max_tranches: int | None = None  # None = no limit
     leverage: int = Field(1, ge=1, le=2)  # 1x or 2x; re-injections use the entry leverage
-    decision_day: Literal["sunday", "daily"] = "sunday"  # backtested on weekly (Sunday) decisions
+    decision_day: Literal["sunday", "daily"] = "daily"  # entries/exits evaluated every day
     stop_loss: bool = False  # operator's choice: no broker stop (account loss limits still apply)
 
 
@@ -310,6 +310,8 @@ class BrokerRiskCfg(_Model):
 
 class RiskConfig(_Model):
     profile: Literal["normal", "aggressive", "custom"] = "custom"  # normal/aggressive override the values below
+    live_min_paper_trades: int = Field(50, ge=0)  # closed paper trades required before `live on`
+    live_min_paper_days: float = Field(14, ge=0)  # days of paper trading required before `live on`
     kraken: BrokerRiskCfg = BrokerRiskCfg()
     ibkr: BrokerRiskCfg = BrokerRiskCfg()
 
