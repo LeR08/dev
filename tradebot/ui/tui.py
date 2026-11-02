@@ -7,6 +7,7 @@ Local only: no web server, no remote control port.
 
 from __future__ import annotations
 
+from rich.markup import escape
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.widgets import DataTable, Footer, Input, RichLog, Static
@@ -17,35 +18,61 @@ from tradebot.storage.db import as_utc
 from tradebot.ui.commands import CommandProcessor
 
 
+# Tokyo Night palette: soft on dark backgrounds, readable in Windows Terminal and cmd.exe
+GREEN, RED, PURPLE, BLUE, CYAN, ORANGE, GREY, FG = ("#9ece6a", "#f7768e", "#bb9af7", "#7aa2f7", "#7dcfff",
+                                                     "#ff9e64", "#565f89", "#c0caf5")
+THEME = "tokyo-night"
+
+
 def badge(mode: Mode) -> str:
-    return "[bold white on green] TEST [/]" if mode == Mode.TEST else "[bold white on red] LIVE [/]"
+    return f"[bold #1a1b26 on {GREEN}] FICTIF [/]" if mode == Mode.TEST else f"[bold #1a1b26 on {RED}] RÉEL [/]"
 
 
 def side_markup(side: str) -> str:
-    return "[green]LONG[/]" if side != "short" else "[magenta]SHORT[/]"
+    return f"[{GREEN}]LONG[/]" if side != "short" else f"[{PURPLE}]SHORT[/]"
 
 
 def pnl_markup(value: float | None, suffix: str = " €") -> str:
     if value is None:
         return ""
-    color = "green" if value > 0 else "red" if value < 0 else "white"
+    color = GREEN if value > 0 else RED if value < 0 else FG
     return f"[{color}]{value:+,.2f}{suffix}[/]"
+
+
+def change_markup(value: float | None) -> str:
+    if value is None:
+        return f"[{GREY}]—[/]"
+    color = GREEN if value > 0 else RED if value < 0 else FG
+    arrow = "▲" if value > 0 else "▼" if value < 0 else "•"
+    return f"[{color}]{arrow} {value:+.2f} %[/]"
+
+
+def status_markup(text: str) -> str:
+    out = escape(text)
+    out = out.replace("DÉFAVORABLE", f"[bold {RED}]DÉFAVORABLE[/]")
+    out = out.replace("→ FAVORABLE", f"→ [bold {GREEN}]FAVORABLE[/]")
+    for word, color in (("cible LONG", GREEN), ("cible SHORT", PURPLE), ("cible CASH", GREY)):
+        out = out.replace(word, f"[bold {color}]{word}[/]")
+    return out.replace(" | ", "\n ")
 
 
 class TradebotApp(App):
     TITLE = "tradebot"
     CSS = """
-    #header { height: 3; padding: 0 1; background: $panel; }
+    Screen { background: $background; }
+    #header { height: 3; padding: 0 1; background: $boost; color: $foreground; }
     #body { height: 1fr; }
-    #analyse { height: 2fr; min-height: 7; border: round $primary; }
-    #scan { width: 1fr; height: 100%; padding: 0 1; border-right: solid $primary-darken-2; }
-    #votes { width: 3fr; height: 100%; }
+    #analyse { height: 2fr; min-height: 7; border: round $primary; border-title-color: $primary; }
+    #scan { width: 1fr; height: 100%; padding: 0 1; border-right: solid $primary-darken-3; }
+    #votes { width: 2fr; height: 100%; }
     #positions-row { height: 2fr; min-height: 7; }
-    #open { width: 1fr; height: 100%; border: round $success; }
-    #closed { width: 1fr; height: 100%; border: round $warning; }
-    #log { height: 1fr; min-height: 4; border: round $secondary; }
+    #open { width: 1fr; height: 100%; border: round $success; border-title-color: $success; }
+    #closed { width: 1fr; height: 100%; border: round $warning; border-title-color: $warning; }
+    #log { height: 1fr; min-height: 4; border: round $secondary; border-title-color: $secondary; }
     #output { height: auto; min-height: 3; max-height: 10; border: round $accent; padding: 0 1; }
     #cmd { dock: bottom; }
+    DataTable > .datatable--header { background: $boost; color: $primary; text-style: bold; }
+    DataTable > .datatable--even-row { background: $surface; }
     """
     BINDINGS = [("ctrl+q", "quit", "Quitter"), ("ctrl+k", "kill", "Kill switch")]
 
@@ -59,7 +86,7 @@ class TradebotApp(App):
         yield Static(id="header")
         with Vertical(id="body"):
             with Horizontal(id="analyse"):
-                yield Static(id="scan", markup=False)
+                yield Static(id="scan")
                 yield DataTable(id="votes", zebra_stripes=True, cursor_type="none")
             with Horizontal(id="positions-row"):
                 yield DataTable(id="open", zebra_stripes=True, cursor_type="none")
@@ -69,11 +96,19 @@ class TradebotApp(App):
         yield Input(placeholder="commande (help, start kraken, status, kill, live on kraken ...)", id="cmd")
         yield Footer()
 
+    @property
+    def market_mode(self) -> bool:
+        return any(hasattr(t, "overview") for t in self.bot.traders.values())
+
     def on_mount(self) -> None:
+        self.theme = THEME
         self.query_one("#analyse").border_title = "Analyse"
         votes = self.query_one("#votes", DataTable)
-        votes.add_columns("heure", "broker", "symbole", "arbitrage", "convergence", "smart money", "tendance",
-                          "décision", "risque")
+        if self.market_mode:
+            votes.add_columns("crypto", "prix $", "1 h", "24 h", "7 jours", "30 jours", "rôle")
+        else:
+            votes.add_columns("heure", "broker", "symbole", "arbitrage", "convergence", "smart money", "tendance",
+                              "décision", "risque")
         opened = self.query_one("#open", DataTable)
         opened.border_title = "Positions en cours"
         opened.add_columns("symbole", "broker", "sens", "levier", "taille", "entrée", "prix", "P&L €", "P&L %",
@@ -96,16 +131,18 @@ class TradebotApp(App):
         parts = []
         for b, t in bot.traders.items():
             st = t.state
-            conn = "[green]●[/]" if bot.adapters[b].connected else "[red]●[/]"
-            parts.append(f"{b.value.upper():<6} {badge(t.mode)} {conn}  capital {st.equity:,.2f} €  "
-                         f"jour {pnl_markup(st.daily_pnl)}  {'en marche' if t.running else 'arrêté'}")
+            conn = f"[{GREEN}]●[/]" if bot.adapters[b].connected else f"[{RED}]●[/]"
+            run = f"[{GREEN}]en marche[/]" if t.running else f"[{GREY}]arrêté[/]"
+            parts.append(f"[bold {BLUE}]{b.value.upper():<6}[/] {badge(t.mode)} {conn}  capital "
+                         f"[bold]{st.equity:,.2f} €[/]  jour {pnl_markup(st.daily_pnl)}  {run}")
         self.query_one("#header", Static).update("\n".join(parts))
 
         # Analyse
         lines = []
         for b, t in bot.traders.items():
             if hasattr(t, "status"):  # liquidity mode: no scan, one signal
-                lines.append(f"{b.value} {t.status.replace(' | ', chr(10) + ' ')}")
+                nxt = f" · maj {t.next_cycle_at.astimezone():%H:%M:%S}" if t.running and t.next_cycle_at else ""
+                lines.append(f"[bold {BLUE}]{b.value}[/]{nxt}\n {status_markup(t.status)}")
                 continue
             r = t.last_scan
             if r is None:
@@ -113,19 +150,33 @@ class TradebotApp(App):
                 continue
             reasons = ", ".join(f"{k} {v}" for k, v in r.top_reasons(3)) or "-"
             nxt = f", prochain scan {t.next_cycle_at.astimezone():%H:%M}" if t.running and t.next_cycle_at else ""
-            lines.append(f"{b.value} {r.ts.astimezone():%H:%M:%S}{nxt}\n {r.scanned} analysés, {len(r.passed)} retenus "
-                         f"({r.pass_rate:.0%})\n rejets: {reasons}")
+            lines.append(f"[bold {BLUE}]{b.value}[/] {r.ts.astimezone():%H:%M:%S}{nxt}\n {r.scanned} analysés, "
+                         f"{len(r.passed)} retenus ({r.pass_rate:.0%})\n rejets: {escape(reasons)}")
         self.query_one("#scan", Static).update("\n".join(lines))
         votes = self.query_one("#votes", DataTable)
         votes.clear()
-        for d, vs in bot.db.last_decisions(15):
+        if self.market_mode:
+            for t in bot.traders.values():
+                for v in getattr(t, "overview", []):
+                    role = v.role
+                    if role:
+                        color = PURPLE if "SHORT" in role else GREEN
+                        role = f"[bold {color}]{role}[/]"
+                    price = "" if v.price is None else f"{v.price:,.6g}"
+                    votes.add_row(f"[bold {CYAN}]{v.symbol.split('/')[0]}[/]", price, change_markup(v.ch_1h),
+                                  change_markup(v.ch_24h), change_markup(v.ch_7d), change_markup(v.ch_30d), role)
+            votes.border_subtitle = "variations mises à jour à chaque cycle (60 s)"
+            decisions = []
+        else:
+            decisions = bot.db.last_decisions(15)
+        for d, vs in decisions:
             by = {v.agent: v for v in vs}
 
             def fmt(name: str) -> str:
                 v = by.get(name)
                 if not v:
                     return ""
-                color = {"LONG": "green", "SHORT": "magenta", "AVOID": "red"}.get(str(v.direction), "grey50")
+                color = {"LONG": GREEN, "SHORT": PURPLE, "AVOID": RED}.get(str(v.direction), GREY)
                 return f"[{color}]{v.direction} {v.confidence:.2f}[/]"
 
             votes.add_row(f"{as_utc(d.ts).astimezone():%H:%M:%S}", d.broker, d.symbol, fmt("arbitrage"),

@@ -1,4 +1,4 @@
-# Stratégie « liquidité » — Kraken (BTC / ETH)
+# Stratégie « liquidité » — Kraken (8 cryptos, position unique)
 
 Document de référence de la stratégie que le bot exécute par défaut sur Kraken
 (`kraken.mode: liquidity` dans `tradebot/config/strategy.yaml`).
@@ -8,7 +8,9 @@ Document de référence de la stratégie que le bot exécute par défaut sur Kra
 ## 1. Idée en une phrase
 
 Quand de l'argent frais entre dans la crypto, signe que l'offre totale de stablecoins augmente,
-le bot détient **BTC ou ETH**. Quand cet argent sort, il **revend et reste en cash**.
+le bot est **long** sur la crypto la plus forte de sa liste. Quand cet argent sort, il est **short** sur la
+plus faible. Il n'a **jamais qu'une seule position à la fois**, sur 8 cryptos uniquement :
+**BTC, ETH, SOL, XRP, BNB, DOGE, TRX, HYPE** (paires en USD sur Kraken, toutes ouvertes au long et au short sur marge).
 
 Pourquoi : les stablecoins (USDT, USDC…) sont la monnaie d'entrée du marché crypto.
 Une offre qui grossit signale des capitaux qui arrivent et peuvent acheter. Une offre qui diminue
@@ -22,7 +24,7 @@ positif sur la période de développement **et** sur la période de validation (
 | Donnée | Source | Usage |
 |---|---|---|
 | Offre totale de stablecoins (USD) | DefiLlama (`stablecoins.llama.fi`), sans clé | le signal |
-| Cours journaliers BTC/USD, ETH/USD | Kraken (API publique) | choix de l'actif, réinjections |
+| Cours des 8 cryptos (journaliers et horaires) | Kraken (API publique) | choix de la crypto, réinjections, tableau 1 h / 24 h / 7 j / 30 j |
 | Prix d'exécution | carnet d'ordres Kraken | ordres limite |
 | Taux EUR/USD | ticker Kraken | comptabilité en euros |
 
@@ -43,21 +45,26 @@ DÉFAVORABLE sinon
 
 ### 3.2 Entrée
 
-Chaque jour (`decision_day: daily`), si le signal est **FAVORABLE** et qu'aucune position n'est ouverte :
+Chaque jour (`decision_day: daily`), quand aucune position n'est ouverte :
 
-1. le bot compare BTC et ETH sur 30 jours et choisit **celui qui a le plus monté** ;
-2. il achète ce seul actif, **jamais les deux en même temps** ;
+1. signal **FAVORABLE** : **LONG** sur la crypto qui a **le plus monté** sur 30 jours ;
+2. signal **DÉFAVORABLE** : **SHORT** sur la crypto qui a **le plus baissé** sur 30 jours
+   (`allow_short: true` ; avec `false`, le bot reste en cash) ;
+   une seule position à la fois sur toute la liste ;
 3. taille : **5 % du capital** (`tranche_pct: 5`), multipliée par le levier ;
 4. ordre limite au prix acheteur (« post-only », frais maker). Non exécuté après 30 min, il est annulé
    puis retenté au cycle suivant.
 
 ### 3.3 Réinjection
 
-À chaque baisse de **33 %** par rapport au prix de la **dernière** tranche achetée, n'importe quel jour :
+À chaque mouvement de **33 % contre la position** par rapport au prix de la **dernière** tranche
+(baisse de 33 % pour un long, hausse de 33 % pour un short), n'importe quel jour :
 
 - le bot ajoute **5 % du capital**, au **même levier** que l'entrée ;
 - sans limite de nombre (`max_tranches: null`) ;
-- exemple pour un achat à 3 000 $ : réinjection à 2 010 $, puis à 1 347 $, puis à 902 $, etc.
+- exemple pour un long à 3 000 $ : réinjection à 2 010 $, puis à 1 347 $… ;
+  pour un short à 100 $ : réinjection à 133 $, puis à 177 $…
+- si le signal se retourne, les réinjections en attente sont annulées avec la position.
 
 ### 3.4 Levier
 
@@ -67,15 +74,15 @@ Chaque jour (`decision_day: daily`), si le signal est **FAVORABLE** et qu'aucune
 - Coût de la marge Kraken : environ 0,02 % toutes les 4 h sur la partie empruntée, soit environ 44 %/an.
   C'est pourquoi le 2× n'a rien apporté sur la période récente.
 
-### 3.5 Sortie
+### 3.5 Sortie et bascule
 
-Chaque jour, si le signal devient **DÉFAVORABLE**, toute la position est revendue
-(ordre limite, puis ordre au marché s'il n'est pas exécuté dans le délai prévu).
-La raison de sortie enregistrée est `liquidity_off`.
+Chaque jour, si la direction voulue change (long → short ou short → long), toute la position est fermée
+(ordre limite, puis ordre au marché s'il n'est pas exécuté dans le délai prévu ; raison `liquidity_off`).
+La position inverse s'ouvre aux cycles suivants, sur la crypto la plus forte (long) ou la plus faible (short).
 
 ### 3.6 Ce que la stratégie ne fait **pas**
 
-- pas de short (les tests montraient que les shorts font perdre, voir §8) ;
+- jamais deux positions en même temps ;
 - pas de stop-loss sur ces positions (choix de l'opérateur) ;
 - pas d'objectif de prix : la sortie dépend uniquement du signal.
 
@@ -122,7 +129,8 @@ Pour que `reel` soit accepté :
 Le bot revient **automatiquement en fictif** à chaque redémarrage, après `kill` ou `fictif`,
 si une limite de perte est touchée, et en cas d'erreur dans le traitement d'un ordre.
 
-En réel, il faut des **dollars (USD)** sur le compte Kraken pour acheter BTC/USD ou ETH/USD au comptant.
+En réel, il faut des **dollars (USD)** sur Kraken pour les longs au comptant ; les **shorts** se font sur marge
+(compte Kraken avec trading sur marge activé ; vos euros peuvent servir de garantie).
 
 ---
 
@@ -137,13 +145,12 @@ En réel, il faut des **dollars (USD)** sur le compte Kraken pour acheter BTC/US
 
 ## 7. Tableau de bord
 
-Le panneau **Analyse** affiche en permanence, par exemple :
+Le panneau **Analyse** est rafraîchi à chaque cycle (60 s) :
 
-```
-liquidité : stablecoins −2,69 % sur 30 j (298,4 Md$) → DÉFAVORABLE
-position : aucune (cash)
-décision : chaque jour
-```
+- à gauche, le signal, par exemple : `stablecoins −2,69 % sur 30 j (298,4 Md$) → DÉFAVORABLE → cible SHORT`,
+  avec la position en cours ;
+- à droite, les 8 cryptos : prix, variation sur **1 h, 24 h, 7 jours, 30 jours** (▲ vert / ▼ rouge) et rôle
+  (« candidat LONG », « candidat SHORT », « EN POSITION … »).
 
 Les panneaux **Positions en cours** et **Positions terminées** montrent le P&L de chaque position.
 Les réinjections augmentent le nombre de tranches et ajustent le prix moyen d'entrée.
@@ -170,7 +177,19 @@ pas de regard dans le futur.
 | mi-2023 → nov. 2026 | **+6,5 %**, pire baisse −3 % | **+5,8 %**, pire baisse −7 % |
 | Total 6,7 ans | +213 % (26 trades) | +387 % (26 trades) |
 
-### 8.3 Ce qui a été testé et rejeté
+### 8.3 Les 8 cryptos, une position unique (règles actuelles, 1×, quotidien)
+
+| | avril 2020 → mi-2023 | mi-2023 → nov. 2026 |
+|---|---|---|
+| BTC/ETH, long ou cash | +24 %, pire baisse −18 % | +6,5 %, −3 % |
+| 8 cryptos, long ou cash | +368 %, **pire baisse −80 %** | +21 %, −10 % |
+| **8 cryptos, long ou short (actuel)** | +374 %, **pire baisse −80 %** | +17,5 %, −11 % |
+
+Le gain de 2020-2023 vient surtout de DOGE en 2021. Sans stop, la position grossit énormément puis rend
+beaucoup : d'où la pire baisse de −80 %. Les shorts n'apportent presque rien (un peu moins bien sur la
+période récente). Les résultats dépendent aussi fortement de la date de départ (mars ou avril 2020).
+
+### 8.4 Ce qui a été testé et rejeté
 
 | Stratégie | Résultat sur 5 ans |
 |---|---|
@@ -201,8 +220,9 @@ pas de regard dans le futur.
 | Réglage | Valeur | Rôle |
 |---|---|---|
 | `window_days` | 30 | fenêtre de variation de l'offre de stablecoins |
-| `assets` | [BTC, ETH] | actifs tradés, un seul à la fois |
-| `momentum_days` | 30 | choix du plus fort des deux |
+| `assets` | [BTC, ETH, SOL, XRP, BNB, DOGE, TRX, HYPE] | liste tradée, une seule position à la fois |
+| `allow_short` | true | short de la plus faible quand c'est défavorable (false : cash) |
+| `momentum_days` | 30 | plus forte / plus faible sur 30 jours |
 | `tranche_pct` | 5 | % du capital par tranche |
 | `reinject_drop_pct` | 33 | baisse déclenchant une réinjection |
 | `max_tranches` | null | pas de limite de réinjections |

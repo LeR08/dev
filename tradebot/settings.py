@@ -116,10 +116,11 @@ class KrakenExecCfg(_Model):
 
 
 class LiquidityCfg(_Model):
-    """Liquidity mode: hold BTC or ETH (never both) while the stablecoin supply grows."""
+    """Liquidity mode: one position at a time on a fixed coin list, driven by the stablecoin supply."""
 
     window_days: int = 30
-    assets: list[str] = ["BTC", "ETH"]  # traded against kraken.quote_currency; one position at a time
+    assets: list[str] = ["BTC", "ETH", "SOL", "XRP", "BNB", "DOGE", "TRX", "HYPE"]  # one position at a time
+    allow_short: bool = True  # unfavourable signal: short the weakest coin (False: stay in cash)
     momentum_days: int = 30  # when favourable, buy the asset with the best return over this window
     tranche_pct: float = 5.0  # % of capital per tranche (before leverage)
     reinject_drop_pct: float = 33.0  # add a tranche at every further -33 % from the last tranche price

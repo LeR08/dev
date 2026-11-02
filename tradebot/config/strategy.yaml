@@ -39,10 +39,11 @@ kraken:
   mode: liquidity
   liquidity:
     window_days: 30            # stablecoin supply change over 30 days (last completed day)
-    assets: [BTC, ETH]         # one position at a time, never both in the same direction
-    momentum_days: 30          # buy the one with the best 30-day return
+    assets: [BTC, ETH, SOL, XRP, BNB, DOGE, TRX, HYPE]   # ONE position at a time on this list only
+    allow_short: true          # favourable: LONG the strongest; unfavourable: SHORT the weakest (false: cash)
+    momentum_days: 30          # strongest / weakest = best / worst 30-day return
     tranche_pct: 5             # 5 % of capital per tranche
-    reinject_drop_pct: 33      # +1 tranche at every further -33 % from the last tranche price
+    reinject_drop_pct: 33      # +1 tranche at every further 33 % move against the position (last tranche)
     max_tranches: null         # no limit (operator's choice)
     leverage: 1                # 1 or 2; re-injections keep the entry leverage
     decision_day: daily        # entries/exits evaluated every day (backtest: same results as weekly, more trades)

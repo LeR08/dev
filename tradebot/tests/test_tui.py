@@ -10,7 +10,7 @@ async def test_tui_shows_test_badges_and_runs_commands(make_bot):
     app = TradebotApp(bot)
     async with app.run_test() as pilot:
         header = str(app.query_one("#header", Static).render())
-        assert header.count("TEST") == 2 and "LIVE" not in header
+        assert header.count("FICTIF") == 2 and "RÉEL" not in header
         app.query_one("#cmd", Input).value = "risk show"
         await pilot.press("enter")
         await pilot.pause(0.5)

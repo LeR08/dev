@@ -37,6 +37,7 @@ def make_trader(make_bot, change, clock):
     cfg = bot.cfg
     cfg.strategy.kraken.mode = "liquidity"
     cfg.strategy.kraken.quote_currency = "USD"
+    cfg.strategy.kraken.liquidity.assets = ["BTC", "ETH"]
     k = bot.adapters[Broker.KRAKEN]
     k.symbols = ["BTC/USD", "ETH/USD"]
     k.bars["BTC/USD"] = make_bars([50_000.0 + 100 * i for i in range(40)], step=timedelta(days=1))  # +8 %
@@ -77,8 +78,9 @@ async def test_daily_decisions_by_default_sunday_optional_and_unfavourable_stays
     await t1.cycle()
     assert not k1.placed
     _, t2, k2, _ = make_trader(make_bot, -1.0, SUNDAY)
+    t2.cfg.strategy.kraken.liquidity.allow_short = False
     await t2.cycle()
-    assert not k2.placed and "DÉFAVORABLE" in t2.status
+    assert not k2.placed and "DÉFAVORABLE" in t2.status and "CASH" in t2.status
 
 
 async def test_reinjection_every_33_percent_then_exit_when_unfavourable(make_bot):
@@ -100,6 +102,7 @@ async def test_reinjection_every_33_percent_then_exit_when_unfavourable(make_bot
     assert len([r for r in k.placed if r.purpose.value == "add"]) == 1
     # next Sunday the signal is unfavourable -> exit the whole position
     now[0] = SUNDAY + timedelta(days=7)
+    t.cfg.strategy.kraken.liquidity.allow_short = False
     t.supply.value = -0.5
     await t.cycle()
     k.set_price("ETH/USD", pos.last_add_price * 1.01)
@@ -143,3 +146,47 @@ def test_risk_refuses_no_stop_unless_allowed():
     cfg.kraken.allow_no_stop = True
     d = RiskManager(cfg).approve(Broker.KRAKEN, req, acct)
     assert d.approved and d.request.stop_loss is None
+
+
+
+async def test_unfavourable_shorts_the_weakest_reinjects_against_and_flips(make_bot):
+    bot, t, k, now = make_trader(make_bot, -1.0, SUNDAY)
+    await t.cycle()
+    e = [r for r in k.placed if r.purpose.value == "entry"]
+    assert len(e) == 1 and e[0].symbol == "BTC/USD" and e[0].side.value == "sell"  # weakest 30-day return
+    assert e[0].stop_loss is None and "cible SHORT" in t.status
+    k.set_price("BTC/USD", 54_100.0)  # bid rises to our ask -> short filled
+    await t.cycle()
+    pos = bot.db.open_positions(Broker.KRAKEN, Mode.TEST)[0]
+    assert pos.side == "short" and pos.symbol == "BTC/USD"
+    # +34 % against the short (over two days) -> one more short tranche
+    now[0] = SUNDAY + timedelta(days=1)
+    k.set_price("BTC/USD", pos.entry_price * 1.2)
+    await t.cycle()
+    now[0] = SUNDAY + timedelta(days=2)
+    k.set_price("BTC/USD", pos.entry_price * 1.34)
+    await t.cycle()
+    adds = [r for r in k.placed if r.purpose.value == "add"]
+    assert len(adds) == 1 and adds[0].side.value == "sell"
+    # the signal turns favourable: close the short, then go long the strongest (never two positions)
+    now[0] = SUNDAY + timedelta(days=3)
+    t.supply.value = +1.5
+    k.set_price("BTC/USD", pos.entry_price * 1.33)
+    await t.cycle()
+    k.set_price("BTC/USD", pos.entry_price * 1.32)
+    await t.cycle()
+    assert bot.db.closed_positions(Broker.KRAKEN, Mode.TEST)[0].side == "short"
+    await t.cycle()
+    longs = [r for r in k.placed if r.purpose.value == "entry" and r.side.value == "buy"]
+    strongest = max(t.overview, key=lambda v: v.ch_30d).symbol  # BTC after its +32 % squeeze
+    assert len(longs) == 1 and longs[0].symbol == strongest
+    assert len(bot.db.open_positions(Broker.KRAKEN, Mode.TEST)) <= 1
+
+
+async def test_overview_has_changes_and_roles(make_bot):
+    _, t, k, _ = make_trader(make_bot, +2.0, SUNDAY)
+    await t.refresh_overview()
+    await t.liquidity_step()
+    eth = next(v for v in t.overview if v.symbol == "ETH/USD")
+    assert eth.ch_30d is not None and eth.ch_7d is not None and eth.ch_24h is not None
+    assert {v.symbol for v in t.overview} == {"BTC/USD", "ETH/USD"}

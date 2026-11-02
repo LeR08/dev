@@ -68,8 +68,8 @@ bot backtest kraken 2026-01-01 2026-06-30
 ## Kraken liquidity mode (default)
 
 `kraken.mode: liquidity` in `strategy.yaml` — full write-up in **STRATEGIE.md**. Every day the bot reads the total stablecoin supply
-(DefiLlama, free): if it grew over 30 days (last completed day), it buys **BTC or ETH — never both** — the
-one with the best 30-day return, for **5 % of capital** (1× or 2× leverage). At every further **−33 %** from
+(DefiLlama, free): if it grew over 30 days (last completed day), it goes **long** the strongest coin of
+BTC, ETH, SOL, XRP, BNB, DOGE, TRX, HYPE over 30 days, otherwise **short** the weakest — **one position at a time** — for **5 % of capital** (1× or 2× leverage). At every further **−33 %** from
 the last tranche price it re-injects 5 % at the same leverage. When the signal turns unfavourable, the whole
 position is closed. Long only, **no broker stop** (operator's choice, `allow_no_stop` in
 `risk.yaml`); account loss limits (daily loss / drawdown), the kill switch and test mode still apply — note

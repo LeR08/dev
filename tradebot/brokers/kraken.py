@@ -326,6 +326,11 @@ class KrakenAdapter(BrokerAdapter):
     async def get_bars(self, symbol: str, limit: int = 200) -> list[Bar]:
         return await self.feed.bars(symbol, self._pair(symbol)["altname"], self.cfg.bars.interval_minutes, limit)
 
+    async def get_hourly_bars(self, symbol: str, limit: int = 170) -> list[Bar]:
+        """Recent 1 h bars (dashboard % changes), not cached."""
+        bars = await self.feed.fetch_ohlc(self._pair(symbol)["altname"], 60)
+        return bars[-limit:]
+
     async def get_fees(self, symbol: str) -> Fees:
         return self._fee_for(symbol)
 
